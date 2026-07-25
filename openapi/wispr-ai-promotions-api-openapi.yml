@@ -1,0 +1,388 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Promotions API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Promotions
+paths:
+  /api/v1/promos/android_waitlist_rank:
+    get:
+      tags:
+      - Promotions
+      summary: Get Android Waitlist Rank
+      description: 'Get the current Android waitlist rank for the authenticated user.
+
+        Returns referral_code, current_rank, total_boost, referrals_count, and desktop_dictation_bonus_earned.'
+      operationId: get_android_waitlist_rank
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AndroidWaitlistRankResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/promos/android_waitlist/phone_number:
+    post:
+      tags:
+      - Promotions
+      summary: Submit Phone Number
+      description: 'Submit phone number for Android waitlist boost.
+
+        Awards 30,000 points on first submission.'
+      operationId: submit_phone_number
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneNumberSubmitRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BoostActionResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/promos/android_waitlist/verify_social_share:
+    post:
+      tags:
+      - Promotions
+      summary: Verify Social Share
+      description: 'Verify a social share screenshot and award boost points.
+
+
+        Upload a screenshot of your social media post about Wispr Flow.
+
+        The screenshot will be verified using AI to confirm:
+
+        - The post mentions Wispr Flow or contains a wisprflow.ai URL
+
+        - The post was actually published (not just composed)
+
+        - The platform (Twitter/X, LinkedIn, WhatsApp, or Slack)
+
+
+        Boost points awarded:
+
+        - Twitter/X: 50,000 points
+
+        - LinkedIn: 50,000 points
+
+        - WhatsApp: 20,000 points
+
+        - Slack: 20,000 points
+
+
+        Each platform can only be claimed once per user.
+
+
+        File requirements:
+
+        - PNG or JPEG format only
+
+        - Maximum file size: 20MB'
+      operationId: verify_social_share
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_verify_social_share_api_v1_promos_android_waitlist_verify_social_share_post'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BoostActionResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/promos/campaign/validate:
+    get:
+      tags:
+      - Promotions
+      summary: Validate Promo Code
+      description: Validate a promo code and return attribution info without applying it.
+      operationId: validate_promo_code
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: code
+        in: query
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 80
+          title: Code
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignPromoDetails'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/promos/campaign/apply:
+    post:
+      tags:
+      - Promotions
+      summary: Apply Promo Code
+      description: Validate and attach a promo code to the current user for their next checkout.
+      operationId: apply_promo_code
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplyPromoCodeRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignPromoDetails'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/promos/campaign/pending:
+    get:
+      tags:
+      - Promotions
+      summary: Get Pending Promo
+      description: 'Get the current user''s pending promo info (for paywall/onboarding display).
+
+
+        Returns 200 with campaign details if a pending promo exists, or 204 if not.'
+      operationId: get_pending_promo
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignPromoDetails'
+      security:
+      - ApiKeyHeaderPatched: []
+components:
+  schemas:
+    CampaignPromoDetails:
+      properties:
+        trial_days:
+          type: integer
+          title: Trial Days
+        source_name:
+          type: string
+          title: Source Name
+        attribution_message:
+          type: string
+          title: Attribution Message
+        code_id:
+          type: string
+          title: Code Id
+        campaign_id:
+          type: string
+          title: Campaign Id
+      type: object
+      required:
+      - trial_days
+      - source_name
+      - attribution_message
+      - code_id
+      - campaign_id
+      title: CampaignPromoDetails
+      description: Resolved promo details for a validated code and its campaign.
+    BoostActionResponse:
+      properties:
+        success:
+          type: boolean
+          title: Success
+        action:
+          type: string
+          title: Action
+        boost_earned:
+          type: integer
+          title: Boost Earned
+        current_rank:
+          type: integer
+          title: Current Rank
+        total_boost:
+          type: integer
+          title: Total Boost
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+      type: object
+      required:
+      - success
+      - action
+      - boost_earned
+      - current_rank
+      - total_boost
+      title: BoostActionResponse
+      description: Generic response for boost action endpoints
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ApplyPromoCodeRequest:
+      properties:
+        code:
+          type: string
+          maxLength: 80
+          minLength: 1
+          title: Code
+      type: object
+      required:
+      - code
+      title: ApplyPromoCodeRequest
+      description: Request to apply a promo code by its string.
+    AndroidWaitlistRankResponse:
+      properties:
+        referral_code:
+          type: string
+          title: Referral Code
+        current_rank:
+          type: integer
+          title: Current Rank
+        starting_rank:
+          type: integer
+          title: Starting Rank
+        total_boost:
+          type: integer
+          title: Total Boost
+        referrals_count:
+          type: integer
+          title: Referrals Count
+        desktop_dictation_bonus_earned:
+          type: boolean
+          title: Desktop Dictation Bonus Earned
+        phone_number_bonus_earned:
+          type: boolean
+          title: Phone Number Bonus Earned
+        current_desktop_words:
+          type: integer
+          title: Current Desktop Words
+        verified_share_twitter:
+          type: boolean
+          title: Verified Share Twitter
+        verified_share_whatsapp:
+          type: boolean
+          title: Verified Share Whatsapp
+        verified_share_linkedin:
+          type: boolean
+          title: Verified Share Linkedin
+        verified_share_slack:
+          type: boolean
+          title: Verified Share Slack
+        verified_share_discord:
+          type: boolean
+          title: Verified Share Discord
+      type: object
+      required:
+      - referral_code
+      - current_rank
+      - starting_rank
+      - total_boost
+      - referrals_count
+      - desktop_dictation_bonus_earned
+      - phone_number_bonus_earned
+      - current_desktop_words
+      - verified_share_twitter
+      - verified_share_whatsapp
+      - verified_share_linkedin
+      - verified_share_slack
+      - verified_share_discord
+      title: AndroidWaitlistRankResponse
+      description: Response schema for GET /promos/android_waitlist_rank
+    Body_verify_social_share_api_v1_promos_android_waitlist_verify_social_share_post:
+      properties:
+        screenshot:
+          type: string
+          contentMediaType: application/octet-stream
+          title: Screenshot
+      type: object
+      required:
+      - screenshot
+      title: Body_verify_social_share_api_v1_promos_android_waitlist_verify_social_share_post
+    PhoneNumberSubmitRequest:
+      properties:
+        phone_number:
+          type: string
+          pattern: ^\+[1-9]\d{6,14}$
+          title: Phone Number
+      type: object
+      required:
+      - phone_number
+      title: PhoneNumberSubmitRequest
+      description: Request schema for phone number boost submission
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

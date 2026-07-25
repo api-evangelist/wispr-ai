@@ -1,0 +1,669 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Calendar API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Calendar
+paths:
+  /api/v1/calendar/events/batch:
+    get:
+      tags:
+      - Calendar
+      summary: Get Events Batch
+      description: 'Return the authenticated user''s calendar events matching the given externalIds.
+
+
+        Designed for the desktop to re-fetch events linked to past notes whose local
+
+        calendar cache was pruned. No ``start_at_utc`` filter — past events are returned.
+
+        Cancelled events are included so the desktop can render the correct state.
+
+        A stranger''s ``externalId`` matches no row (query is ``user_id``-scoped).
+
+        Event order is unspecified; callers look events up by ``externalId``.'
+      operationId: get_events_batch
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: ids
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Comma-separated calendar ``externalId`` values to look up. At most 50 per request; missing ids are absent from the response.
+          title: Ids
+        description: Comma-separated calendar ``externalId`` values to look up. At most 50 per request; missing ids are absent from the response.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalendarEventBatchResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/calendar/sync:
+    get:
+      tags:
+      - Calendar
+      summary: Sync Calendar
+      description: "Return calendar events the desktop hasn't seen yet.\n\nTwo modes:\n\n* ``since`` provided — incremental: events with ``updated_at > since``,\n  ordered ascending by ``(updated_at, id)``. Stable across rows that\n  share an ``updated_at`` (e.g. webhook bulk fan-out).\n* ``since`` null — initial sync: all upcoming events\n  (``start_at_utc >= now``). Ordered ascending by ``(start_at_utc, id)``.\n\nThe response anchors on the server clock — desktop uses ``serverTime`` as\nthe next ``since``. Capped at ``SYNC_PAGE_LIMIT`` events per response;\nwhen more remain ``nextCursor`` is non-null and the caller should refetch\nimmediately with the same ``since`` and the new cursor."
+      operationId: sync_calendar
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: since
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: ISO 8601 timestamp from the previous response's `serverTime`. Omit on first sync to get all upcoming events.
+          title: Since
+        description: ISO 8601 timestamp from the previous response's `serverTime`. Omit on first sync to get all upcoming events.
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Pagination cursor from the previous response's `nextCursor`. Only meaningful when paired with the same `since` value.
+          title: Cursor
+        description: Pagination cursor from the previous response's `nextCursor`. Only meaningful when paired with the same `since` value.
+      - name: launch
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: When true, the desktop is signalling a genuine app launch; the server schedules a background incremental sync to catch the user up. Defaults false; routine change-pulls omit it.
+          default: false
+          title: Launch
+        description: When true, the desktop is signalling a genuine app launch; the server schedules a background incremental sync to catch the user up. Defaults false; routine change-pulls omit it.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyncResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/calendar/prereads/agentic_sync:
+    get:
+      tags:
+      - Calendar
+      summary: Sync Agentic Prereads
+      description: 'Return agentic pre-read deliverables the desktop has not synced yet.
+
+
+        Read-only: never dispatches a managed-agent session. The webhook writes
+
+        rows to ``preread_generation`` and bumps the ``agentic_prereads`` sync
+
+        resource; this endpoint is how the desktop ingests those rows.
+
+
+        Incremental mode (``since`` provided): rows with ``generated_at > since``,
+
+        ordered ascending by ``(generated_at, id)``. Initial mode (``since``
+
+        omitted): every successful agentic row for the user, regardless of event age.'
+      operationId: sync_agentic_prereads
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: since
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: ISO 8601 timestamp from the previous response's `serverTime`. Omit on first sync to receive all agentic deliverables for upcoming events.
+          title: Since
+        description: ISO 8601 timestamp from the previous response's `serverTime`. Omit on first sync to receive all agentic deliverables for upcoming events.
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Pagination cursor from the previous response's `nextCursor`. Only meaningful when paired with the same `since` value.
+          title: Cursor
+        description: Pagination cursor from the previous response's `nextCursor`. Only meaningful when paired with the same `since` value.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgenticPrereadSyncResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/calendar/events/{external_id}/preread:
+    get:
+      tags:
+      - Calendar
+      summary: Get Event Preread
+      description: 'Generate or dispatch a pre-read for an upcoming calendar event.
+
+
+        The desktop already has Google''s ``external_id`` from the sync payload, so
+
+        callers identify the event by that string rather than the internal UUID.
+
+        The query layer scopes by ``user_id`` — a stranger''s ``external_id``
+
+        matches no row.
+
+
+        When ``useAgenticPreread`` is false (the default), the handler
+
+        synchronously builds context and calls the LLM; the worst case is bounded
+
+        by the generator''s 30s Anthropic client timeout.
+
+
+        When ``useAgenticPreread`` is true, the handler dispatches a managed-agent
+
+        session in the background and returns an empty response immediately. The
+
+        desktop picks up the deliverable via the ``agentic_prereads`` sync resource once
+
+        the webhook completes.
+
+
+        Events that already ended are fetch-only: the latest stored pre-read is
+
+        returned as-is, and nothing is ever generated or dispatched for them.
+
+
+        Returns 404 only when the event isn''t eligible for a pre-read at all:
+
+
+        * No CalendarEvent for ``(user_id, external_id)``.
+
+        * The event is cancelled.
+
+        * The event already ended and has no stored pre-read.
+
+
+        When the event exists but the LLM-side generator fails (rate limits,
+
+        validation errors, transient outages), the response is still 200 with
+
+        a minimal calendar-derived fallback so the desktop can render the
+
+        pre-read card with baseline metadata instead of an empty failure
+
+        state. The generator already logged + counted the failure.'
+      operationId: get_event_preread
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: external_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: External Id
+      - name: useAgenticPreread
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: When true, dispatch a managed-agent pre-read session asynchronously and return an empty response. The desktop picks up the result via the ``agentic_prereads`` sync resource.
+          default: false
+          title: Useagenticpreread
+        description: When true, dispatch a managed-agent pre-read session asynchronously and return an empty response. The desktop picks up the result via the ``agentic_prereads`` sync resource.
+      - name: trigger
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Optional client-supplied hint describing why the pre-read is being fetched. Allowed values: precache, reminder, debug, sync. Used for telemetry only — unknown values fall through silently.'
+          title: Trigger
+        description: 'Optional client-supplied hint describing why the pre-read is being fetched. Allowed values: precache, reminder, debug, sync. Used for telemetry only — unknown values fall through silently.'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrereadResponse'
+        '429':
+          description: Too Many Requests
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/calendar/preread/feedback:
+    post:
+      tags:
+      - Calendar
+      summary: Submit Event Preread Feedback
+      description: 'Submit internal dogfood feedback on a cached pre-read.
+
+
+        Posts to a dedicated Slack channel. The server enriches the payload with
+
+        the calendar event''s start time (meeting date), the report timestamp, and
+
+        the latest Claude managed-agent session id when one exists for this event.'
+      operationId: submit_event_preread_feedback
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrereadFeedbackRequest'
+        required: true
+      responses:
+        '204':
+          description: Successful Response
+        '429':
+          description: Too Many Requests
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/calendar/resync:
+    post:
+      tags:
+      - Calendar
+      summary: Manual Resync
+      description: 'Debug-only: force a Google Calendar backfill for the current user.
+
+
+        Calls :meth:`CalendarService.backfill` which fetches the next
+
+        ``BACKFILL_WINDOW_DAYS`` of events from Google via the user''s existing
+
+        calendar connection and upserts them into ``calendar_event``. Idempotent
+
+        — re-running just refreshes the rows.
+
+
+        Surfaced from the desktop Meetings hub as an internal-only "Manual
+
+        Resync" affordance so internal users on a fresh local backend can
+
+        populate calendar data without re-doing the OAuth flow. Requires that
+
+        the user already has an active Google Calendar connection on *this*
+
+        backend.'
+      operationId: manual_resync
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResyncResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+components:
+  schemas:
+    PrereadResponse:
+      properties:
+        title:
+          type: string
+          title: Title
+        summary:
+          type: string
+          title: Summary
+        contentMd:
+          type: string
+          title: Contentmd
+        generatedAt:
+          type: string
+          format: date-time
+          title: Generatedat
+      type: object
+      required:
+      - title
+      - summary
+      - contentMd
+      - generatedAt
+      title: PrereadResponse
+      description: 'Response shape for ``GET /api/v1/calendar/events/{external_id}/preread``.
+
+
+        The endpoint generates the pre-read on-the-fly per request (no
+
+        persistence), so ``generated_at`` is the response timestamp.
+
+
+        ``title`` is a very short calendar-event-label suitable for a
+
+        notification card. ``summary`` is a single declarative sentence that
+
+        describes what the meeting is about — surfaced under the calendar
+
+        event title on the desktop hub.'
+    CalendarEventBatchResponse:
+      properties:
+        events:
+          items:
+            $ref: '#/components/schemas/CalendarEventDTO'
+          type: array
+          title: Events
+      type: object
+      required:
+      - events
+      title: CalendarEventBatchResponse
+      description: 'Response shape for ``GET /api/v1/calendar/events/batch``.
+
+
+        Returns events matching the requested ``externalId`` values. Missing ids
+
+        (not in the DB, or belonging to another user) are simply absent.'
+    AgenticPrereadSyncItemDTO:
+      properties:
+        title:
+          type: string
+          title: Title
+        summary:
+          type: string
+          title: Summary
+        contentMd:
+          type: string
+          title: Contentmd
+        generatedAt:
+          type: string
+          format: date-time
+          title: Generatedat
+        externalId:
+          type: string
+          title: Externalid
+      type: object
+      required:
+      - title
+      - summary
+      - contentMd
+      - generatedAt
+      - externalId
+      title: AgenticPrereadSyncItemDTO
+      description: One agentic pre-read deliverable keyed by the calendar event's ``external_id``.
+    AgenticPrereadSyncResponse:
+      properties:
+        agenticPrereads:
+          items:
+            $ref: '#/components/schemas/AgenticPrereadSyncItemDTO'
+          type: array
+          title: Agenticprereads
+        serverTime:
+          type: string
+          format: date-time
+          title: Servertime
+        nextCursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Nextcursor
+      type: object
+      required:
+      - agenticPrereads
+      - serverTime
+      title: AgenticPrereadSyncResponse
+      description: 'Response shape for ``GET /api/v1/calendar/prereads/agentic_sync``.
+
+
+        Mirrors the calendar sync cursor contract: desktop advances ``since`` to
+
+        ``serverTime`` once ``nextCursor`` is null.'
+    ParticipantDTO:
+      properties:
+        name:
+          type: string
+          title: Name
+        photoUrl:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Photourl
+        isSelf:
+          type: boolean
+          title: Isself
+          default: false
+      type: object
+      required:
+      - name
+      title: ParticipantDTO
+      description: 'Per-attendee detail for the desktop: display name, optional real profile photo, and self flag.
+
+
+        Carried alongside the legacy ``participants: list[str]`` (display-name-only) field so existing
+
+        consumers keep working; the desktop reads ``photoUrl`` / ``isSelf`` to render meeting avatars.'
+    PrereadFeedbackRequest:
+      properties:
+        externalId:
+          type: string
+          title: Externalid
+        rating:
+          type: string
+          enum:
+          - up
+          - down
+          title: Rating
+        feedback:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feedback
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+        reporterName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reportername
+        preread:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Preread
+      type: object
+      required:
+      - externalId
+      - rating
+      title: PrereadFeedbackRequest
+      description: Request shape for ``POST /api/v1/calendar/preread/feedback``.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    SyncResponse:
+      properties:
+        events:
+          items:
+            $ref: '#/components/schemas/CalendarEventDTO'
+          type: array
+          title: Events
+        serverTime:
+          type: string
+          format: date-time
+          title: Servertime
+        nextCursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Nextcursor
+      type: object
+      required:
+      - events
+      - serverTime
+      title: SyncResponse
+      description: 'Response shape for `GET /api/v1/calendar/sync` (Day 2).
+
+
+        Defined now so the contract is locked. `server_time` is the timestamp at which
+
+        the server produced the response — desktop should use this as the next `since` cursor.
+
+
+        When `next_cursor` is non-null, the desktop should refetch immediately with
+
+        ``since`` unchanged and ``cursor`` set to this value. When null, the result set
+
+        fits in a single page and the desktop advances to ``server_time`` as the next
+
+        ``since`` value.'
+    CalendarEventDTO:
+      properties:
+        externalId:
+          type: string
+          title: Externalid
+        title:
+          type: string
+          title: Title
+        startAtUtc:
+          type: string
+          format: date-time
+          title: Startatutc
+        endAtUtc:
+          type: string
+          format: date-time
+          title: Endatutc
+        conferenceUrl:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Conferenceurl
+        participants:
+          items:
+            type: string
+          type: array
+          title: Participants
+        participantDetails:
+          items:
+            $ref: '#/components/schemas/ParticipantDTO'
+          type: array
+          title: Participantdetails
+        status:
+          type: string
+          enum:
+          - active
+          - cancelled
+          title: Status
+          default: active
+        colorId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Colorid
+        selfResponseStatus:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Selfresponsestatus
+        updatedAt:
+          type: string
+          format: date-time
+          title: Updatedat
+      type: object
+      required:
+      - externalId
+      - title
+      - startAtUtc
+      - endAtUtc
+      - updatedAt
+      title: CalendarEventDTO
+      description: 'API contract for a calendar event mirrored from Google Calendar.
+
+
+        Field aliases serialize to camelCase for the desktop client. `populate_by_name=True`
+
+        accepts both snake_case and camelCase on input.'
+    ResyncResponse:
+      properties:
+        eventsCount:
+          type: integer
+          title: Eventscount
+        success:
+          type: boolean
+          title: Success
+      type: object
+      required:
+      - eventsCount
+      - success
+      title: ResyncResponse
+      description: 'Response shape for ``POST /api/v1/calendar/resync``.
+
+
+        Returned by the manual-resync debug endpoint. ``events_count`` is the
+
+        number of ``calendar_event`` rows present for the user after the
+
+        backfill completes.'
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

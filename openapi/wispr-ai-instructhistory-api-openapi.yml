@@ -1,0 +1,346 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics InstructHistory API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: InstructHistory
+paths:
+  /api/v1/instruct_history/upload:
+    post:
+      tags:
+      - InstructHistory
+      summary: Upload Instruct History
+      description: Upload instruct-history (route-classification) rows for a user.
+      operationId: upload_instruct_history
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadInstructHistoryRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadInstructHistoryResponse'
+        '429':
+          description: Too Many Requests
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+components:
+  schemas:
+    InstructHistoryStatus:
+      type: string
+      enum:
+      - succeeded
+      - classifier_failed
+      - classifier_timeout
+      - short_circuit_used
+      - route_error
+      - paste_failed
+      - cancelled
+      - no_text
+      - not_editable
+      title: InstructHistoryStatus
+      description: End-to-end outcome of the resolved dictation route.
+    ClassifierStatus:
+      type: string
+      enum:
+      - succeeded
+      - timeout
+      - short_circuit
+      - error
+      - not_invoked
+      title: ClassifierStatus
+      description: Outcome of the /llm/classify_intent call (null when classify-intent was not invoked).
+    InstructChatSessionRecord:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+      type: object
+      required:
+      - id
+      title: InstructChatSessionRecord
+    UploadInstructHistoryResponse:
+      properties:
+        num_rows_saved:
+          type: integer
+          title: Num Rows Saved
+        ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Ids
+        session_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Session Ids
+      type: object
+      required:
+      - num_rows_saved
+      - ids
+      title: UploadInstructHistoryResponse
+    InstructHistoryFeedback:
+      properties:
+        rating:
+          type: string
+          enum:
+          - up
+          - down
+          title: Rating
+        text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Text
+      type: object
+      required:
+      - rating
+      title: InstructHistoryFeedback
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ClassificationMode:
+      type: string
+      enum:
+      - autoClassify
+      - instructShortcut
+      title: ClassificationMode
+      description: How the dictation entered the classification flow.
+    UploadInstructHistoryRequest:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        instruct_chat_sessions:
+          items:
+            $ref: '#/components/schemas/InstructChatSessionRecord'
+          type: array
+          title: Instruct Chat Sessions
+        instruct_history_records:
+          items:
+            $ref: '#/components/schemas/InstructHistoryRecord'
+          type: array
+          title: Instruct History Records
+      type: object
+      required:
+      - user_id
+      - instruct_history_records
+      title: UploadInstructHistoryRequest
+    InstructToolCall:
+      properties:
+        name:
+          type: string
+          title: Name
+        input:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Input
+        output:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Output
+        latency_ms:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Latency Ms
+      type: object
+      required:
+      - name
+      title: InstructToolCall
+      description: 'One tool/route invocation within a dictation turn, in execution order.
+
+
+        ``input``/``output`` shapes are owned by the desktop per tool; server-side
+
+        enforcement would block adding a tool without a coordinated deploy.'
+    InstructHistoryRecord:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        transcript_entity_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Transcript Entity Id
+        polish_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Polish Id
+        was_auto_routed:
+          type: boolean
+          title: Was Auto Routed
+          default: false
+        classification_mode:
+          anyOf:
+          - $ref: '#/components/schemas/ClassificationMode'
+          - type: 'null'
+        short_circuit_route:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Short Circuit Route
+        routes_payload:
+          anyOf:
+          - items:
+              type: object
+            type: array
+          - type: 'null'
+          title: Routes Payload
+        context_payload:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Context Payload
+        config_payload:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Config Payload
+        classifier_route_data:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Classifier Route Data
+        classifier_model_version:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Classifier Model Version
+        classifier_used_provider:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Classifier Used Provider
+        classifier_latency_ms:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Classifier Latency Ms
+        classifier_status:
+          anyOf:
+          - $ref: '#/components/schemas/ClassifierStatus'
+          - type: 'null'
+        route_status:
+          anyOf:
+          - $ref: '#/components/schemas/InstructHistoryStatus'
+          - type: 'null'
+        route_error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Route Error
+        tool_calls:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/InstructToolCall'
+            type: array
+          - type: 'null'
+          title: Tool Calls
+        feedback:
+          anyOf:
+          - $ref: '#/components/schemas/InstructHistoryFeedback'
+          - type: 'null'
+        instruct_session_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Instruct Session Id
+        session_turn_index:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Session Turn Index
+        app_version:
+          type: string
+          title: App Version
+      type: object
+      required:
+      - id
+      - app_version
+      title: InstructHistoryRecord
+      description: 'One client-uploaded route-classification row.
+
+
+        A single dictation turn can run a *sequence* of tools (the realtime voice
+
+        path chains them — e.g. query_user_local_data -> instruct -> paste).
+
+        ``tool_calls`` is that execution log: one self-describing element per call
+
+        with its own ``name``, input, output and latency. ``classifier_*`` fields
+
+        describe the single classify-intent step (gRPC/HTTP path; the realtime path
+
+        has no separate classifier). ``instruct_session_id``/``session_turn_index``
+
+        group turns of one instruct chat back-and-forth.'
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

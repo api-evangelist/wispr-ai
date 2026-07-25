@@ -1,0 +1,1119 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Meetings API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Meetings
+paths:
+  /api/v1/meetings/sync:
+    post:
+      tags:
+      - Meetings
+      summary: Sync Meetings
+      description: "Reconcile the client's meetings against the server and return the delta.\n\nGated on cloud-sync via the ``require_cloud_sync`` dependency. Acks the\nclient's pushed meetings, pulls the server-side changes the client is\nmissing, and echoes the sync watermark the client should resume from.\n\nArgs:\n    sync_request:     The client's pushed meetings, watermark, and cursor.\n    current_user:     The authenticated caller.\n    meetings_service: Service that performs the reconciliation.\n    storage:          Backing store for meeting transcripts.\n\nReturns:\n    The acked meetings, the pulled delta, the next watermark, and the\n    pagination cursor.\n\nRaises:\n    HTTPException:\n        401: the authenticated token carries no user id.\n        422: a pushed field exceeds its size cap.\n        500: reconciliation fails unexpectedly (the original error is\n            logged with a truncated message and full traceback, then\n            wrapped)."
+      operationId: sync_meetings
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: content-length
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Content-Length
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MeetingSyncRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeetingSyncResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/meetings/{meeting_id}:
+    delete:
+      tags:
+      - Meetings
+      summary: Delete Meeting
+      description: 'Soft-delete a meeting and reap its transcript blobs from S3.
+
+
+        Flips ``is_deleted=true``, then best-effort-deletes everything under
+
+        ``users/{user_id}/meetings/transcripts/{meeting_id}/`` plus the legacy
+
+        flat key. Bumps the sync timestamp so other devices observe the
+
+        deletion on their next pull.
+
+
+        Returns 204 on both first-delete and idempotent re-delete. Returns
+
+        404 for unknown meetings and meetings owned by another user (we do
+
+        not leak existence to non-owners).'
+      operationId: delete_meeting
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: meeting_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Meeting Id
+      responses:
+        '204':
+          description: Successful Response
+        '404':
+          description: Meeting not found or owned by another user
+        '500':
+          description: S3 transcript cleanup failed; the meeting row may already be marked deleted. Retry is safe — the cleanup leg is idempotent.
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/meetings/{meeting_id}/upload-url:
+    post:
+      tags:
+      - Meetings
+      summary: Create Meeting Upload Url
+      description: 'Mint a presigned S3 POST for a meeting''s refine audio + create the job.
+
+
+        The ``uploaded`` pipeline: the desktop uploads the encoded audio directly
+
+        to S3 with the returned presigned POST, then deletes its local copy. The
+
+        reconciliation poller picks the object up (by ``audio_s3_key`` on the
+
+        job), submits it to Soniox, and drives completion. Re-minting for a
+
+        meeting still awaiting its first upload refreshes the same job row (the
+
+        desktop''s pre-upload retry); it won''t disturb an in-flight or completed
+
+        job.
+
+
+        Errors map as:
+
+
+        * 404 — meeting doesn''t exist for this user (or is deleted).
+
+        * 413 — ``size_bytes`` exceeds :data:`REFINE_MAX_AUDIO_BYTES`.
+
+        * 415 — unsupported audio content type (only ``audio/ogg`` / ``audio/wav``).'
+      operationId: create_meeting_upload_url
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: meeting_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Meeting Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MeetingUploadUrlRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeetingUploadUrlResponse'
+        '429':
+          description: Too Many Requests
+        '503':
+          description: Refine start temporarily unavailable — retry
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/meetings/{meeting_id}/status:
+    get:
+      tags:
+      - Meetings
+      summary: Get Meeting Status
+      description: 'Report a meeting''s refine progress and inline what the client is missing.
+
+
+        The desktop polls this as a recovery channel parallel to sync, passing the
+
+        refine status it currently believes (``transcribing`` or ``summarizing``).
+
+        The server returns its own job status and inlines the refined transcript
+
+        and/or content only when it is ahead of the client. A 404 means the meeting
+
+        doesn''t exist on the server, so the client re-pushes it via sync.'
+      operationId: get_meeting_status
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: meeting_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Meeting Id
+      - name: client_status
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/RefineJobStatus'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeetingStatusResponse'
+        '404':
+          description: Meeting not found for this user
+        '429':
+          description: Too Many Requests
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/meetings/{meeting_id}/refined-transcript:
+    get:
+      tags:
+      - Meetings
+      summary: Get Refined Transcript Download Url
+      description: "Mint a presigned S3 GET for a meeting's refined-transcript NDJSON.\n\nThe desktop calls this when a pull row's ``refined_uploaded_at`` stamp\nbeats its locally persisted fetched-through stamp, then downloads\n``refined.ndjson`` straight from S3 — the bytes never transit the API.\nPresign-only: no ``meeting_refine_jobs`` side effects (same contract as\nthe live-transcript / speaker-observations presigns).\n\nArgs:\n    meeting_id: Meeting whose refined transcript to fetch.\n    user:       Authenticated caller; the row lookup is scoped to their id.\n    db:         Request-scoped executor (replica read).\n\nReturns:\n    The presigned GET URL and its absolute expiry.\n\nRaises:\n    HTTPException:\n        403: Cloud Sync is disabled for the user.\n        404: Meeting missing/foreign/deleted, transcript erased, or no\n            ``refined_uploaded_at`` stamp yet."
+      operationId: get_refined_transcript_download_url
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: meeting_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Meeting Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeetingRefinedTranscriptUrlResponse'
+        '403':
+          description: Cloud Sync must be enabled
+        '404':
+          description: Meeting not found, deleted, transcript erased, or no refined transcript yet
+        '429':
+          description: Too Many Requests
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/meetings/{meeting_id}/speaker-observations/upload-url:
+    post:
+      tags:
+      - Meetings
+      summary: Create Speaker Observations Upload Url
+      description: 'Mint a presigned S3 POST for a meeting''s speaker-observation log.
+
+
+        Sibling to :func:`create_meeting_upload_url` but with no job side
+
+        effects: it never touches ``meeting_refine_jobs`` (the audio route''s
+
+        upsert revives failed/abandoned jobs and clobbers the audio key — a
+
+        stuck observation artifact must not delay or disturb the transcript).
+
+        The key is server-composed via :func:`speaker_observations_key`, never
+
+        derived from client input. The client PUTs the artifact directly to S3;
+
+        Phase-1 transcript persistence reads it from S3 on demand (no confirm leg).
+
+
+        Errors map as:
+
+
+        * 404 — meeting doesn''t exist for this user (or is deleted).
+
+        * 413 — ``size_bytes`` exceeds :data:`SPEAKER_OBS_MAX_BYTES`.
+
+        * 415 — content type is not ``application/x-ndjson``.'
+      operationId: create_speaker_observations_upload_url
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: meeting_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Meeting Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpeakerObservationsUploadUrlRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeetingUploadUrlResponse'
+        '429':
+          description: Too Many Requests
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/meetings/{meeting_id}/live-transcript/upload-url:
+    post:
+      tags:
+      - Meetings
+      summary: Create Live Transcript Upload Url
+      description: 'Mint a presigned S3 POST for a meeting''s live-transcript NDJSON.
+
+
+        Sibling to :func:`create_speaker_observations_upload_url`: the desktop
+
+        PUTs ``live.ndjson`` directly to S3 instead of inlining it in the sync
+
+        body. Same no-job-side-effects contract — it never touches
+
+        ``meeting_refine_jobs``. The key is server-composed via
+
+        :func:`live_ndjson_key`, never derived from client input.
+
+
+        Errors map as:
+
+
+        * 404 — meeting doesn''t exist for this user (or is deleted).
+
+        * 413 — ``size_bytes`` exceeds :data:`LIVE_TRANSCRIPT_MAX_BYTES`.
+
+        * 415 — content type is not ``application/x-ndjson``.'
+      operationId: create_live_transcript_upload_url
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: meeting_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Meeting Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LiveTranscriptUploadUrlRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeetingUploadUrlResponse'
+        '429':
+          description: Too Many Requests
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    SpeakerPerson:
+      properties:
+        name:
+          type: string
+          title: Name
+        origin:
+          type: string
+          enum:
+          - platform
+          - calendar
+          - user
+          - merged_cal_platform
+          - self
+          - llm
+          title: Origin
+        platform:
+          anyOf:
+          - type: string
+            maxLength: 120
+          - type: 'null'
+          title: Platform
+        participantId:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Participantid
+      additionalProperties: false
+      type: object
+      required:
+      - name
+      - origin
+      title: SpeakerPerson
+      description: 'One person in :attr:`SpeakerMap.people`, keyed by a plain uuid4 string.
+
+
+        ``platform`` is immutable after mint; ``origin`` changes only via the
+
+        calendar-merge upgrade (``platform`` → ``merged_cal_platform``); a rename
+
+        (any origin, including a machine-minted person) changes only ``name``.
+
+        ``origin="self"`` represents the meeting owner ("you").
+
+        ``participantId`` is the server-derived stable calendar-attendee key —
+
+        deliberately NOT an email (nothing PII-bearing rides the map) and NOT the
+
+        ``calendar_participant`` row id (those rows are replaced on every calendar
+
+        re-sync); present only on ``calendar`` / ``merged_cal_platform`` people.'
+    MeetingStatusResponse:
+      properties:
+        refine_status:
+          anyOf:
+          - $ref: '#/components/schemas/RefineJobStatus'
+          - type: 'null'
+        refined_transcript:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Refined Transcript
+        speaker_map:
+          anyOf:
+          - $ref: '#/components/schemas/SpeakerMap'
+          - type: 'null'
+        content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Content
+        summary:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Summary
+        notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Notes
+      type: object
+      required:
+      - refine_status
+      title: MeetingStatusResponse
+      description: 'Refine-progress snapshot the desktop pulls as a backstop to sync.
+
+
+        The client polls ``GET /meetings/{id}/status`` with the refine
+
+        status it currently believes, and the server inlines whatever the
+
+        client is missing. ``refine_status`` is the server''s job status, or
+
+        ``None`` when no refine job row exists for the meeting (the client
+
+        then has nothing to wait for). ``RefineJobStatus`` is a ``StrEnum``,
+
+        so it serializes to its string value on the wire.
+
+
+        ``refined_transcript`` / ``content`` are inlined only when the
+
+        server is ahead of the client (see ``MeetingsService.get_meeting_status``);
+
+        both stay ``None`` otherwise, on a deleted meeting, and whenever the
+
+        refined blob is absent, undecodable, or empty.'
+    MeetingUploadUrlRequest:
+      properties:
+        content_type:
+          type: string
+          title: Content Type
+          description: Audio MIME type; one of audio/ogg, audio/wav
+        size_bytes:
+          type: integer
+          exclusiveMinimum: 0.0
+          title: Size Bytes
+          description: Encoded audio size in bytes
+        context:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Context
+          description: Client meeting context (dictionary, participants, meeting metadata) reused server-side to enrich the refined transcript + summary. The same envelope the client sends on the live transcription WS.
+        include_google_contact_names:
+          type: boolean
+          title: Include Google Contact Names
+          description: 'Feature payload option: add per-user Google Contacts display names as weak refine terms.'
+          default: false
+        include_workspace_directory_names:
+          type: boolean
+          title: Include Workspace Directory Names
+          description: 'Feature payload option: add per-user workspace directory display names as weak refine terms.'
+          default: false
+      type: object
+      required:
+      - content_type
+      - size_bytes
+      title: MeetingUploadUrlRequest
+      description: Request for a presigned S3 slot to upload a meeting's refine audio.
+    RefineJobStatus:
+      type: string
+      enum:
+      - awaiting_audio
+      - transcribing
+      - summarizing
+      - complete
+      - failed
+      - abandoned
+      title: RefineJobStatus
+    MeetingSyncRequest:
+      properties:
+        last_sync_time:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Sync Time
+          description: Unix timestamp in ms of the most recent server change the client has seen
+        hard_refresh:
+          type: boolean
+          title: Hard Refresh
+          description: When true, ignore last_sync_time and return up to 1000 meetings from server regardless of modified_at
+          default: false
+        cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cursor
+          description: Opaque pagination cursor from the previous response's next_cursor. Refetch with the same last_sync_time and this cursor until next_cursor is null.
+        meetings:
+          items:
+            $ref: '#/components/schemas/SyncMeeting-Input'
+          type: array
+          title: Meetings
+      type: object
+      required:
+      - meetings
+      title: MeetingSyncRequest
+      description: Request model for meeting synchronization.
+    SyncMeeting-Input:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        title:
+          type: string
+          title: Title
+        created_at:
+          type: string
+          title: Created At
+        modified_at:
+          type: string
+          title: Modified At
+        content:
+          type: string
+          title: Content
+        is_deleted:
+          type: boolean
+          title: Is Deleted
+          default: false
+        finalized:
+          type: boolean
+          title: Finalized
+          default: false
+        calendar_external_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Calendar External Id
+        transcript_deleted_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Transcript Deleted At
+        refined_transcript:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Refined Transcript
+          readOnly: true
+        refine_status:
+          anyOf:
+          - $ref: '#/components/schemas/RefineJobStatus'
+          - type: 'null'
+          readOnly: true
+        refined_uploaded_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Refined Uploaded At
+          readOnly: true
+        slug:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Slug
+          readOnly: true
+        visibility:
+          anyOf:
+          - $ref: '#/components/schemas/NoteVisibility'
+          - type: 'null'
+          readOnly: true
+        notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Notes
+        summary:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Summary
+        live_transcript_uploaded:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Live Transcript Uploaded
+        calendar_event_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Calendar Event Id
+        ended_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Ended At
+        speaker_map:
+          anyOf:
+          - $ref: '#/components/schemas/SpeakerMap'
+          - type: 'null'
+        import_source:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Import Source
+      type: object
+      required:
+      - id
+      - title
+      - created_at
+      - modified_at
+      - content
+      title: SyncMeeting
+      description: 'Model for meeting data in sync requests.
+
+
+        The live transcript is uploaded out-of-band via a presigned S3 PUT;
+
+        the client then sets ``live_transcript_uploaded`` on its next sync and
+
+        the server stamps the server-internal ``live_uploaded_at`` watermark
+
+        without the bytes. The live transcript is never inlined on the wire —
+
+        cross-device live view is unsupported.
+
+
+        ``refined_transcript`` is pull-only. The server inlines the
+
+        refined NDJSON body when ``refined_uploaded_at`` advanced past the
+
+        client''s watermark. The payload is one ``TranscriptEntry`` per line; the
+
+        field is named without a content-type suffix because the client treats it as
+
+        "refined transcript", not "refined JSON". Skipped on hard refresh —
+
+        a 100-meeting backlog × 200 KB each would blow up the response when
+
+        a device catches up after a long offline window.
+
+
+        ``refined_uploaded_at`` rides every pull (hard refresh included,
+
+        which skips the inline bytes) as the client''s reconciliation
+
+        signal: when the row''s stamp beats the client''s locally persisted
+
+        fetched-through stamp, it downloads the bytes out-of-band via
+
+        ``GET /meetings/{id}/refined-transcript``. Response-only — a push
+
+        carrying it never writes the column. ``live_uploaded_at`` stays
+
+        deliberately NOT on the wire: cross-device live view is
+
+        unsupported, so clients have no use for that watermark.'
+    MeetingRefinedTranscriptUrlResponse:
+      properties:
+        url:
+          type: string
+          pattern: ^https?://
+          format: uri
+          title: Url
+        expires_at:
+          type: string
+          format: date-time
+          title: Expires At
+          description: Absolute UTC expiry of the presigned GET
+      type: object
+      required:
+      - url
+      - expires_at
+      title: MeetingRefinedTranscriptUrlResponse
+      description: 'Presigned S3 GET for a meeting''s refined-transcript NDJSON.
+
+
+        The download twin of :class:`MeetingUploadUrlResponse` (same shape as the
+
+        notes ``NoteImageKey`` payload): the desktop calls
+
+        ``GET /meetings/{id}/refined-transcript`` when a pull row''s
+
+        ``refined_uploaded_at`` stamp beats its locally persisted fetched-through
+
+        stamp, then downloads ``refined.ndjson`` straight from S3 — the bytes
+
+        never transit the API.'
+    SyncMeeting-Output:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        title:
+          type: string
+          title: Title
+        created_at:
+          type: string
+          title: Created At
+        modified_at:
+          type: string
+          title: Modified At
+        content:
+          type: string
+          title: Content
+        is_deleted:
+          type: boolean
+          title: Is Deleted
+          default: false
+        finalized:
+          type: boolean
+          title: Finalized
+          default: false
+        calendar_external_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Calendar External Id
+        transcript_deleted_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Transcript Deleted At
+        refined_transcript:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Refined Transcript
+          readOnly: true
+        refine_status:
+          anyOf:
+          - $ref: '#/components/schemas/RefineJobStatus'
+          - type: 'null'
+          readOnly: true
+        refined_uploaded_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Refined Uploaded At
+          readOnly: true
+        slug:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Slug
+          readOnly: true
+        visibility:
+          anyOf:
+          - $ref: '#/components/schemas/NoteVisibility'
+          - type: 'null'
+          readOnly: true
+        notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Notes
+        summary:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Summary
+        live_transcript_uploaded:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Live Transcript Uploaded
+        calendar_event_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Calendar Event Id
+        ended_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Ended At
+        speaker_map:
+          anyOf:
+          - $ref: '#/components/schemas/SpeakerMap'
+          - type: 'null'
+        import_source:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Import Source
+      type: object
+      required:
+      - id
+      - title
+      - created_at
+      - modified_at
+      - content
+      title: SyncMeeting
+      description: 'Model for meeting data in sync requests.
+
+
+        The live transcript is uploaded out-of-band via a presigned S3 PUT;
+
+        the client then sets ``live_transcript_uploaded`` on its next sync and
+
+        the server stamps the server-internal ``live_uploaded_at`` watermark
+
+        without the bytes. The live transcript is never inlined on the wire —
+
+        cross-device live view is unsupported.
+
+
+        ``refined_transcript`` is pull-only. The server inlines the
+
+        refined NDJSON body when ``refined_uploaded_at`` advanced past the
+
+        client''s watermark. The payload is one ``TranscriptEntry`` per line; the
+
+        field is named without a content-type suffix because the client treats it as
+
+        "refined transcript", not "refined JSON". Skipped on hard refresh —
+
+        a 100-meeting backlog × 200 KB each would blow up the response when
+
+        a device catches up after a long offline window.
+
+
+        ``refined_uploaded_at`` rides every pull (hard refresh included,
+
+        which skips the inline bytes) as the client''s reconciliation
+
+        signal: when the row''s stamp beats the client''s locally persisted
+
+        fetched-through stamp, it downloads the bytes out-of-band via
+
+        ``GET /meetings/{id}/refined-transcript``. Response-only — a push
+
+        carrying it never writes the column. ``live_uploaded_at`` stays
+
+        deliberately NOT on the wire: cross-device live view is
+
+        unsupported, so clients have no use for that watermark.'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    SpeakerObservationsUploadUrlRequest:
+      properties:
+        content_type:
+          type: string
+          title: Content Type
+          description: Observation-log MIME type; must be application/x-ndjson
+        size_bytes:
+          type: integer
+          exclusiveMinimum: 0.0
+          title: Size Bytes
+          description: NDJSON body size in bytes
+      type: object
+      required:
+      - content_type
+      - size_bytes
+      title: SpeakerObservationsUploadUrlRequest
+      description: 'Request for a presigned S3 slot to upload a meeting''s speaker-observation log.
+
+
+        Distinct from :class:`MeetingUploadUrlRequest`: NDJSON not audio, an
+
+        8 MiB cap not 500 MiB, and no ``context`` passthrough — this artifact
+
+        carries observations the server reduces into canonical speakers, not
+
+        refine/summary context.'
+    SpeakerMap:
+      properties:
+        people:
+          additionalProperties:
+            $ref: '#/components/schemas/SpeakerPerson'
+          type: object
+          maxProperties: 512
+          title: People
+        assignments:
+          additionalProperties:
+            $ref: '#/components/schemas/SpeakerAssignment'
+          type: object
+          maxProperties: 512
+          title: Assignments
+      additionalProperties: false
+      type: object
+      title: SpeakerMap
+      description: 'The ``meetings.speaker_map`` blob (nullable JSONB on the meeting row).
+
+
+        ``people`` is keyed by person id (a plain uuid4 string, minted by whoever
+
+        creates the person); ``assignments`` is keyed by ``refined_id`` (the
+
+        transcript ``speaker.id``, serialized as a string key).'
+    NoteVisibility:
+      type: string
+      enum:
+      - anyone_with_link
+      - domain
+      - invited_only
+      title: NoteVisibility
+    MeetingUploadUrlResponse:
+      properties:
+        url:
+          type: string
+          title: Url
+        fields:
+          additionalProperties:
+            type: string
+          type: object
+          title: Fields
+        expires_at:
+          type: string
+          title: Expires At
+          description: ISO-8601 UTC expiry of the presigned POST
+      type: object
+      required:
+      - url
+      - fields
+      - expires_at
+      title: MeetingUploadUrlResponse
+      description: 'Presigned S3 POST the desktop uses to upload refine audio directly.
+
+
+        The S3 object key is carried inside ``fields[''key'']`` per the S3
+
+        presigned-POST contract, so it is not duplicated as a top-level field.'
+    MeetingSyncResponse:
+      properties:
+        acked:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Acked
+        pull:
+          items:
+            $ref: '#/components/schemas/SyncMeeting-Output'
+          type: array
+          title: Pull
+        sync_time:
+          type: string
+          title: Sync Time
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Cursor
+          description: Non-null when more changed meetings remain; refetch with it and the same last_sync_time.
+      type: object
+      required:
+      - acked
+      - pull
+      - sync_time
+      title: MeetingSyncResponse
+      description: Response model for meeting synchronization.
+    LiveTranscriptUploadUrlRequest:
+      properties:
+        content_type:
+          type: string
+          title: Content Type
+          description: Live-transcript MIME type; must be application/x-ndjson
+        size_bytes:
+          type: integer
+          exclusiveMinimum: 0.0
+          title: Size Bytes
+          description: NDJSON body size in bytes
+      type: object
+      required:
+      - content_type
+      - size_bytes
+      title: LiveTranscriptUploadUrlRequest
+      description: 'Request for a presigned S3 slot to upload a meeting''s live-transcript NDJSON.
+
+
+        Sibling to :class:`SpeakerObservationsUploadUrlRequest`: same NDJSON
+
+        content type, but the 64 MiB ``LIVE_TRANSCRIPT_MAX_BYTES`` cap and a
+
+        distinct server-composed key.'
+    SpeakerAssignment:
+      properties:
+        consensus:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Consensus
+        user:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: User
+        mic:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Mic
+        dom:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Dom
+        llm:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Llm
+      additionalProperties: false
+      type: object
+      title: SpeakerAssignment
+      description: 'One ``refined_id``''s person slots in :attr:`SpeakerMap.assignments`.
+
+
+        Machine slots — ``dom`` (tile consensus), ``mic`` (reserved for the
+
+        owner/mic channel), ``llm`` (post-summary LLM consensus) — are written only
+
+        by the server, each mechanism rewriting only its own slot. ``consensus`` is
+
+        the dual-written legacy ALIAS of the winning machine slot
+
+        (``dom ?? mic ?? llm``) so pre-v2 clients keep resolving; a stored pre-v2
+
+        row carrying only ``consensus`` is normalized to ``dom`` at parse (the
+
+        legacy slot was only ever written by the tile-consensus fold). ``user`` is
+
+        written only from the client half of a sync-push composition. Resolution
+
+        ladder: ``user > dom > mic > llm > consensus``. A merge is two ids'' user
+
+        slots pointing at one person; an un-merge clears the user slot so
+
+        resolution falls back to the machine slots.'
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

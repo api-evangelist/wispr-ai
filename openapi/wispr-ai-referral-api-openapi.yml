@@ -1,0 +1,437 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Referral API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Referral
+paths:
+  /api/v1/referral/credits:
+    get:
+      tags:
+      - Referral
+      summary: Get Total Credits
+      description: Get the reward status for a user.
+      operationId: get_total_credits
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/referral/:
+    get:
+      tags:
+      - Referral
+      summary: Get Referrals Info
+      description: 'Get comprehensive referral information for a user including:
+
+        - Their referral code (generated if needed)
+
+        - The name of who referred them (referer_name)
+
+        - List of people they have referred (referrals)'
+      operationId: get_referrals_info
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReferralInfoResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/referral/self-refer:
+    post:
+      tags:
+      - Referral
+      summary: Send Generic Download Email
+      description: 'Send a generic download email to a user.
+
+        refer_to should be either "ios" or "desktop".'
+      operationId: send_generic_download_email
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelfReferRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/referral/refer:
+    post:
+      tags:
+      - Referral
+      summary: Refer Emails
+      description: 'Sends referral emails to a list of emails.
+
+        Populates the referral table with the pending referrals.'
+      operationId: refer_emails
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReferEmailsRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/referral/regenerate:
+    post:
+      tags:
+      - Referral
+      summary: Regenerate Referral Code
+      description: Regenerate the user's referral code based on their current first name.
+      operationId: regenerate_referral_code
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReferralCodeResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/referral/{user_id}:
+    get:
+      tags:
+      - Referral
+      summary: Get Referral Code
+      description: Get a referral code for a user.
+      operationId: get_referral_code
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: User Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/referral/apply:
+    post:
+      tags:
+      - Referral
+      summary: Apply Referral Code
+      operationId: apply_referral_code
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplyReferralCodeRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/referral/download-link:
+    post:
+      tags:
+      - Referral
+      summary: Send Download Link
+      description: 'Send a download link email to a recipient for a specific platform.
+
+        This endpoint is unauthenticated and rate-limited.'
+      operationId: send_download_link
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DirectDownloadLinkRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/referral/student-challenge/leaderboard:
+    get:
+      tags:
+      - Referral
+      summary: Get Student Challenge Leaderboard
+      description: 'Get the student referral challenge leaderboard.
+
+        Only readable by users bucketed into the `leaderboard` variant of the `student-referral-challenge`
+
+        PostHog experiment — the same enrollment that surfaces this leaderboard in the client. Eligibility
+
+        (variant, school domain, and challenge window) is resolved server-side in one call, keyed on the
+
+        user''s id (the client''s PostHog distinct id), so it can''t be spoofed by the caller. Fails closed
+
+        (403) on any PostHog error, non-`leaderboard` variant, or missing/invalid domain.
+
+        Returns first_name, last_initial (only), referral_count, and is_current_user (never a user id).'
+      operationId: get_student_challenge_leaderboard
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentChallengeLeaderboardResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+components:
+  schemas:
+    DirectDownloadLinkRequest:
+      properties:
+        platform:
+          $ref: '#/components/schemas/src__backend_service__schemas__api__referral__Platform'
+        recipient_email:
+          type: string
+          format: email
+          title: Recipient Email
+      type: object
+      required:
+      - platform
+      - recipient_email
+      title: DirectDownloadLinkRequest
+    SelfReferRequest:
+      properties:
+        refer_to:
+          type: string
+          title: Refer To
+      type: object
+      required:
+      - refer_to
+      title: SelfReferRequest
+    StudentChallengeLeaderboardMember:
+      properties:
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+        last_initial:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Initial
+        referral_count:
+          type: integer
+          title: Referral Count
+        is_current_user:
+          type: boolean
+          title: Is Current User
+      type: object
+      required:
+      - referral_count
+      - is_current_user
+      title: StudentChallengeLeaderboardMember
+    ReferralCodeResponse:
+      properties:
+        referral_code:
+          type: string
+          title: Referral Code
+      type: object
+      required:
+      - referral_code
+      title: ReferralCodeResponse
+    ApplyReferralCodeRequest:
+      properties:
+        referrer_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Referrer Code
+        dub_click_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Dub Click Id
+        check_credits:
+          type: boolean
+          title: Check Credits
+          default: false
+      type: object
+      title: ApplyReferralCodeRequest
+    ReferEmailsRequest:
+      properties:
+        emails:
+          items:
+            type: string
+            format: email
+          type: array
+          title: Emails
+      type: object
+      required:
+      - emails
+      title: ReferEmailsRequest
+    StudentChallengeLeaderboardResponse:
+      properties:
+        members:
+          items:
+            $ref: '#/components/schemas/StudentChallengeLeaderboardMember'
+          type: array
+          title: Members
+      type: object
+      required:
+      - members
+      title: StudentChallengeLeaderboardResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    src__backend_service__schemas__api__referral__Platform:
+      type: string
+      enum:
+      - ios
+      - mac-apple
+      - mac-intel
+      - windows
+      title: Platform
+      description: Valid platforms for download links
+    ReferralInfoResponse:
+      properties:
+        referral_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Referral Code
+        referer_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Referer Name
+        referrals:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/Referral'
+            type: array
+          - type: 'null'
+          title: Referrals
+      type: object
+      title: ReferralInfoResponse
+    Referral:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        status:
+          type: string
+          title: Status
+        credits:
+          type: integer
+          title: Credits
+        avatar_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Avatar Url
+        is_student:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Student
+        student_challenge_status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Student Challenge Status
+        referee_created_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Referee Created At
+      type: object
+      required:
+      - email
+      - status
+      - credits
+      title: Referral
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

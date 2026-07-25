@@ -1,0 +1,924 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Meeting Share API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Meeting Share
+paths:
+  /api/v1/meetings/shared:
+    get:
+      tags:
+      - Meeting Share
+      summary: List Shared Meeting Notes
+      description: Return notes shared with the authenticated caller.
+      operationId: list_shared_meeting_notes
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 10
+          title: Limit
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            minLength: 1
+            maxLength: 128
+          - type: 'null'
+          title: Cursor
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SharedNoteListResponse'
+        '401':
+          description: Not authenticated
+        '429':
+          description: Too many requests — try again later
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/meetings/shared/{slug}:
+    get:
+      tags:
+      - Meeting Share
+      summary: Resolve Shared Meeting Note
+      description: 'Resolve a share slug to the note payload.
+
+
+        Auth is optional and Cloud Sync is NOT required: an anyone-with-link note must
+
+        be viewable by anonymous callers, so the only protection on this path is a
+
+        per-IP rate limit. When a valid token is present we additionally honor the
+
+        owner / invited-recipient / domain-match access tiers; anonymous callers can
+
+        only ever read anyone-with-link notes.
+
+
+        Returns 404 for both unknown slugs and accessible-but-no-access cases to prevent
+
+        information leakage about share existence.'
+      operationId: resolve_shared_meeting_note
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: slug
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Slug
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SharedNoteResponse'
+        '404':
+          description: Slug not found or caller has no access (indistinguishable)
+        '429':
+          description: Too many requests — try again later
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/meetings/shared/{slug}/transcript:
+    get:
+      tags:
+      - Meeting Share
+      summary: Get Shared Meeting Note Transcript
+      description: 'Return the refined transcript + speaker map for a shared note.
+
+
+        Same access model as resolving the note itself: auth optional, no Cloud Sync
+
+        gate, per-IP rate limit, and 404 for unknown slug and no-access alike. An
+
+        accessible note whose transcript is absent, unreadable, or retention-erased
+
+        resolves 200 with ``transcript: null`` — the cases are deliberately
+
+        indistinguishable and the client shows its empty state.'
+      operationId: get_shared_meeting_note_transcript
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: slug
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Slug
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SharedNoteTranscriptResponse'
+        '404':
+          description: Slug not found or caller has no access (indistinguishable)
+        '429':
+          description: Too many requests — try again later
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/meetings/shared/{slug}/share:
+    get:
+      tags:
+      - Meeting Share
+      summary: Get Shared Note Share State
+      description: "Return share state (owner, recipients, visibility, caller role) for a shared note.\n\nSame access model as resolving the note itself: auth optional, no Cloud Sync\ngate, per-IP rate limit, and 404 for unknown slug and no-access alike (no\nexistence leak). Disclosure is least-privilege: recipient emails are shown\nonly to the owner and explicitly-invited recipients — domain and link viewers\nget an empty ``recipients`` list — and the owner's email is null for anonymous\ncallers. Read-only by construction: share mutation stays on the owner-gated\n/{meeting_id}/share routes.\n\nArgs:\n    slug:  Share slug from the public note URL.\n    user:  Optionally authenticated caller (``Depends(get_optional_authenticated_user)``).\n    db:    Database executor (``Depends(get_db_executor)``).\n\nReturns:\n    The share state with the caller's resolved role.\n\nRaises:\n    HTTPException:\n        404: unknown slug or caller has no access (indistinguishable)."
+      operationId: get_shared_note_share_state
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: slug
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Slug
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SharedNoteShareStateResponse'
+        '404':
+          description: Slug not found or caller has no access (indistinguishable)
+        '429':
+          description: Too many requests — try again later
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/meetings/{meeting_id}/share:
+    get:
+      tags:
+      - Meeting Share
+      summary: Get Meeting Share State
+      description: 'Return full share state for a meeting the caller owns.
+
+
+        Pure read: returns 404 until sharing has been enabled (POST /{meeting_id}/share).
+
+        The slug is only ever minted by the dedicated create route, never as a side
+
+        effect of a read.'
+      operationId: get_meeting_share_state
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: meeting_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Meeting Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShareStateResponse'
+        '401':
+          description: Not authenticated
+        '403':
+          description: Cloud Sync not enabled
+        '404':
+          description: Meeting not found, owned by another user, or not yet shared
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - Meeting Share
+      summary: Upsert Meeting Share
+      description: 'Create or update the share for a meeting the caller owns. Idempotent.
+
+
+        The single write entry point for share state: the first call mints the slug
+
+        with the requested visibility, later calls just update visibility — so
+
+        "share publicly" is one round trip.'
+      operationId: upsert_meeting_share
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: meeting_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Meeting Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpsertShareRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShareStateResponse'
+        '401':
+          description: Not authenticated
+        '403':
+          description: Cloud Sync not enabled
+        '404':
+          description: Meeting not found or owned by another user
+        '422':
+          description: domain visibility requires an enterprise account
+  /api/v1/meetings/{meeting_id}/share/recipients:
+    post:
+      tags:
+      - Meeting Share
+      summary: Add Meeting Share Recipients
+      description: 'Invite one or more recipients to an already-created share in a single call.
+
+
+        Each recipient is processed independently and tallied in the response: an
+
+        address the owner''s enterprise policy bars from external sharing is counted
+
+        under ``not_eligible`` rather than failing the whole request, and a malformed
+
+        address or self-invite is counted under ``failed``. Operates on an existing
+
+        share only — returns 404 if the meeting hasn''t been shared yet (create the link
+
+        first via PUT /{meeting_id}/share). The response carries the refreshed share
+
+        state, so no follow-up GET is needed.'
+      operationId: add_meeting_share_recipients
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: meeting_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Meeting Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddRecipientsRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddRecipientsResponse'
+        '401':
+          description: Not authenticated
+        '403':
+          description: Cloud Sync not enabled
+        '404':
+          description: Meeting not found, owned by another user, or not yet shared
+        '422':
+          description: Empty recipients list, or more than the per-request maximum
+        '429':
+          description: Too many recipient adds — try again later
+  /api/v1/meetings/{meeting_id}/share/recipients/{email}:
+    delete:
+      tags:
+      - Meeting Share
+      summary: Delete Meeting Share Recipient
+      description: 'Hard-delete a recipient by email, revoking their invited access immediately.
+
+
+        (meeting_id, email) is the recipient''s natural key — the same key add uses — so
+
+        clients never need a surrogate id round trip.'
+      operationId: delete_meeting_share_recipient
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: meeting_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Meeting Id
+      - name: email
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Email
+      responses:
+        '204':
+          description: Successful Response
+        '401':
+          description: Not authenticated
+        '403':
+          description: Cloud Sync not enabled
+        '404':
+          description: Meeting or recipient not found, or owned by another user
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    SharedTodo:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        title:
+          type: string
+          title: Title
+        status:
+          $ref: '#/components/schemas/TodoStatus'
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+      type: object
+      required:
+      - id
+      - title
+      - status
+      - created_at
+      title: SharedTodo
+      description: An action item attached to a shared note (read-only projection).
+    NoteEmailStatus:
+      type: string
+      enum:
+      - pending
+      - sent
+      - error
+      title: NoteEmailStatus
+    ShareStateResponse:
+      properties:
+        slug:
+          type: string
+          title: Slug
+        visibility:
+          $ref: '#/components/schemas/NoteVisibility'
+        owner:
+          $ref: '#/components/schemas/Owner'
+        recipients:
+          items:
+            $ref: '#/components/schemas/RecipientEntry'
+          type: array
+          title: Recipients
+      type: object
+      required:
+      - slug
+      - visibility
+      - owner
+      - recipients
+      title: ShareStateResponse
+      description: 'Full share state: slug, visibility, owner, and invited recipients.'
+    Profile:
+      properties:
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+        avatar_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Avatar Url
+      type: object
+      required:
+      - first_name
+      - last_name
+      - avatar_url
+      title: Profile
+      description: Enriched Flow profile fields when a participant email matches an existing user.
+    ShareRecipientInput:
+      properties:
+        email:
+          type: string
+          maxLength: 350
+          title: Email
+        role:
+          $ref: '#/components/schemas/NoteShareRole'
+          default: viewer
+      type: object
+      required:
+      - email
+      title: ShareRecipientInput
+      description: 'A single recipient in a batch invite request.
+
+
+        ``email`` is a plain string (not ``EmailStr``) on purpose: a malformed address
+
+        is reported per-recipient in the response ``failed`` count rather than 422-ing
+
+        the whole batch. Format is validated in the service layer.'
+    Owner:
+      properties:
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+        role:
+          $ref: '#/components/schemas/NoteShareRole'
+          default: owner
+        profile:
+          anyOf:
+          - $ref: '#/components/schemas/Profile'
+          - type: 'null'
+      type: object
+      required:
+      - email
+      title: Owner
+      description: Derived owner of the shared note — not stored as a recipient row.
+    NoteVisibility:
+      type: string
+      enum:
+      - anyone_with_link
+      - domain
+      - invited_only
+      title: NoteVisibility
+    SharedNoteListItem:
+      properties:
+        slug:
+          type: string
+          title: Slug
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+        content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Content
+        notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Notes
+        summary:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Summary
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        modified_at:
+          type: string
+          format: date-time
+          title: Modified At
+        owner:
+          $ref: '#/components/schemas/Owner'
+        caller_role:
+          $ref: '#/components/schemas/NoteShareRole'
+      type: object
+      required:
+      - slug
+      - title
+      - content
+      - created_at
+      - modified_at
+      - owner
+      - caller_role
+      title: SharedNoteListItem
+      description: Shared note row (full content) for authenticated "Shared with me" lists.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    SharedNoteTranscriptResponse:
+      properties:
+        transcript:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Transcript
+        speaker_map:
+          anyOf:
+          - $ref: '#/components/schemas/SpeakerMap'
+          - type: 'null'
+      type: object
+      required:
+      - transcript
+      - speaker_map
+      title: SharedNoteTranscriptResponse
+      description: 'Refined transcript + speaker map for a shared note the caller can access.
+
+
+        ``transcript`` is the refined ``TranscriptEntry`` NDJSON text — the same body the
+
+        meeting-status endpoint inlines as ``refined_transcript``. ``None`` covers absent,
+
+        unreadable, and retention-erased alike, so viewers can''t distinguish them.'
+    UpsertShareRequest:
+      properties:
+        visibility:
+          $ref: '#/components/schemas/NoteVisibility'
+      type: object
+      required:
+      - visibility
+      title: UpsertShareRequest
+      description: Request to set a shared note's visibility.
+    TodoStatus:
+      type: string
+      enum:
+      - open
+      - in_progress
+      - done
+      title: TodoStatus
+    RecipientEntry:
+      properties:
+        email:
+          type: string
+          title: Email
+        role:
+          $ref: '#/components/schemas/NoteShareRole'
+        email_status:
+          $ref: '#/components/schemas/NoteEmailStatus'
+        profile:
+          anyOf:
+          - $ref: '#/components/schemas/Profile'
+          - type: 'null'
+      type: object
+      required:
+      - email
+      - role
+      - email_status
+      title: RecipientEntry
+      description: A single invited recipient in the share state response.
+    AddRecipientsResponse:
+      properties:
+        succeeded:
+          type: integer
+          title: Succeeded
+        failed:
+          type: integer
+          title: Failed
+        not_eligible:
+          type: integer
+          title: Not Eligible
+        share:
+          $ref: '#/components/schemas/ShareStateResponse'
+      type: object
+      required:
+      - succeeded
+      - failed
+      - not_eligible
+      - share
+      title: AddRecipientsResponse
+      description: "Outcome of a batch recipient add.\n\nEvery unique email in the request lands in exactly one bucket:\n- ``succeeded``: now an invited recipient (newly added, or already present).\n- ``not_eligible``: barred by the owner's enterprise note-sharing policy — an\n  external recipient while the org restricts sharing outside the enterprise.\n- ``failed``: rejected for any other reason (malformed email, owner self-invite,\n  unsupported role).\n\n``share`` carries the refreshed share state so the client needs no follow-up GET."
+    NoteShareRole:
+      type: string
+      enum:
+      - owner
+      - contributor
+      - viewer
+      title: NoteShareRole
+    AddRecipientsRequest:
+      properties:
+        recipients:
+          items:
+            $ref: '#/components/schemas/ShareRecipientInput'
+          type: array
+          maxItems: 50
+          minItems: 1
+          title: Recipients
+      type: object
+      required:
+      - recipients
+      title: AddRecipientsRequest
+      description: Batch request to invite recipients to a shared note.
+    SharedNoteListResponse:
+      properties:
+        notes:
+          items:
+            $ref: '#/components/schemas/SharedNoteListItem'
+          type: array
+          title: Notes
+        has_more:
+          type: boolean
+          title: Has More
+          default: false
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Cursor
+      type: object
+      required:
+      - notes
+      title: SharedNoteListResponse
+      description: Notes shared with the authenticated caller.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    SpeakerPerson:
+      properties:
+        name:
+          type: string
+          title: Name
+        origin:
+          type: string
+          enum:
+          - platform
+          - calendar
+          - user
+          - merged_cal_platform
+          - self
+          - llm
+          title: Origin
+        platform:
+          anyOf:
+          - type: string
+            maxLength: 120
+          - type: 'null'
+          title: Platform
+        participantId:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Participantid
+      additionalProperties: false
+      type: object
+      required:
+      - name
+      - origin
+      title: SpeakerPerson
+      description: 'One person in :attr:`SpeakerMap.people`, keyed by a plain uuid4 string.
+
+
+        ``platform`` is immutable after mint; ``origin`` changes only via the
+
+        calendar-merge upgrade (``platform`` → ``merged_cal_platform``); a rename
+
+        (any origin, including a machine-minted person) changes only ``name``.
+
+        ``origin="self"`` represents the meeting owner ("you").
+
+        ``participantId`` is the server-derived stable calendar-attendee key —
+
+        deliberately NOT an email (nothing PII-bearing rides the map) and NOT the
+
+        ``calendar_participant`` row id (those rows are replaced on every calendar
+
+        re-sync); present only on ``calendar`` / ``merged_cal_platform`` people.'
+    SharedNoteResponse:
+      properties:
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+        content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Content
+        notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Notes
+        summary:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Summary
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        modified_at:
+          type: string
+          format: date-time
+          title: Modified At
+        owner:
+          $ref: '#/components/schemas/Owner'
+        caller_role:
+          $ref: '#/components/schemas/NoteShareRole'
+        todos:
+          items:
+            $ref: '#/components/schemas/SharedTodo'
+          type: array
+          title: Todos
+          default: []
+      type: object
+      required:
+      - title
+      - content
+      - created_at
+      - modified_at
+      - owner
+      - caller_role
+      title: SharedNoteResponse
+      description: Shared note payload returned to a caller with resolved access.
+    SpeakerMap:
+      properties:
+        people:
+          additionalProperties:
+            $ref: '#/components/schemas/SpeakerPerson'
+          type: object
+          maxProperties: 512
+          title: People
+        assignments:
+          additionalProperties:
+            $ref: '#/components/schemas/SpeakerAssignment'
+          type: object
+          maxProperties: 512
+          title: Assignments
+      additionalProperties: false
+      type: object
+      title: SpeakerMap
+      description: 'The ``meetings.speaker_map`` blob (nullable JSONB on the meeting row).
+
+
+        ``people`` is keyed by person id (a plain uuid4 string, minted by whoever
+
+        creates the person); ``assignments`` is keyed by ``refined_id`` (the
+
+        transcript ``speaker.id``, serialized as a string key).'
+    SharedNoteShareStateResponse:
+      properties:
+        slug:
+          type: string
+          title: Slug
+        visibility:
+          $ref: '#/components/schemas/NoteVisibility'
+        owner:
+          $ref: '#/components/schemas/Owner'
+        recipients:
+          items:
+            $ref: '#/components/schemas/RecipientEntry'
+          type: array
+          title: Recipients
+        caller_role:
+          $ref: '#/components/schemas/NoteShareRole'
+      type: object
+      required:
+      - slug
+      - visibility
+      - owner
+      - recipients
+      - caller_role
+      title: SharedNoteShareStateResponse
+      description: 'Share state for a shared note as seen by any caller the access walk admits.
+
+
+        Disclosure is scoped to how the caller was admitted: ``recipients`` is
+
+        populated only for the owner and explicitly-invited recipients — domain and
+
+        link viewers get an empty list. ``owner.email`` is additionally null for
+
+        anonymous callers.'
+    SpeakerAssignment:
+      properties:
+        consensus:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Consensus
+        user:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: User
+        mic:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Mic
+        dom:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Dom
+        llm:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Llm
+      additionalProperties: false
+      type: object
+      title: SpeakerAssignment
+      description: 'One ``refined_id``''s person slots in :attr:`SpeakerMap.assignments`.
+
+
+        Machine slots — ``dom`` (tile consensus), ``mic`` (reserved for the
+
+        owner/mic channel), ``llm`` (post-summary LLM consensus) — are written only
+
+        by the server, each mechanism rewriting only its own slot. ``consensus`` is
+
+        the dual-written legacy ALIAS of the winning machine slot
+
+        (``dom ?? mic ?? llm``) so pre-v2 clients keep resolving; a stored pre-v2
+
+        row carrying only ``consensus`` is normalized to ``dom`` at parse (the
+
+        legacy slot was only ever written by the tile-consensus fold). ``user`` is
+
+        written only from the client half of a sync-push composition. Resolution
+
+        ladder: ``user > dom > mic > llm > consensus``. A merge is two ids'' user
+
+        slots pointing at one person; an un-merge clears the user slot so
+
+        resolution falls back to the machine slots.'
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

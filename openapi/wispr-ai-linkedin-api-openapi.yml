@@ -1,0 +1,166 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics LinkedIn API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: LinkedIn
+paths:
+  /api/v1/linkedin/connect:
+    get:
+      tags:
+      - LinkedIn
+      summary: Linkedin Connect
+      description: 'Begin the LinkedIn OAuth flow: redirect the user to LinkedIn''s consent screen.'
+      operationId: linkedin_connect
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: source
+        in: query
+        required: false
+        schema:
+          type: string
+          default: unknown
+          title: Source
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/linkedin/status:
+    get:
+      tags:
+      - LinkedIn
+      summary: Linkedin Status
+      description: Return the caller's LinkedIn connection state.
+      operationId: linkedin_status
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkedInStatusResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/linkedin/disconnect:
+    post:
+      tags:
+      - LinkedIn
+      summary: Linkedin Disconnect
+      description: Remove the caller's LinkedIn integration; best-effort delete the signal first.
+      operationId: linkedin_disconnect
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkedInDisconnectResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    LinkedInStatusResponse:
+      properties:
+        connected:
+          type: boolean
+          title: Connected
+        linkedin_member_id_suffix:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Linkedin Member Id Suffix
+        is_top_user:
+          type: boolean
+          title: Is Top User
+        last_sync_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Sync At
+        status:
+          anyOf:
+          - type: string
+            enum:
+            - pending
+            - active
+            - failed
+          - type: 'null'
+          title: Status
+      type: object
+      required:
+      - connected
+      - linkedin_member_id_suffix
+      - is_top_user
+      - last_sync_at
+      - status
+      title: LinkedInStatusResponse
+      description: The user's LinkedIn connection status and last sync metadata.
+    LinkedInDisconnectResponse:
+      properties:
+        disconnected:
+          type: boolean
+          title: Disconnected
+        was_connected:
+          type: boolean
+          title: Was Connected
+      type: object
+      required:
+      - disconnected
+      - was_connected
+      title: LinkedInDisconnectResponse
+      description: The result of a LinkedIn disconnect request.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

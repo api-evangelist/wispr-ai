@@ -1,0 +1,46 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics SMS API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: SMS
+paths:
+  /api/v1/sms/handle-incoming-sms:
+    post:
+      tags:
+      - SMS
+      summary: Handle Incoming Sms
+      description: Handle incoming SMS webhook from Twilio
+      operationId: handle_incoming_sms
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/sms/user-sms:
+    get:
+      tags:
+      - SMS
+      summary: Check User Has Sms Events
+      description: Check if the current authenticated user has any SMS events
+      operationId: check_user_has_sms_events
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+components:
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

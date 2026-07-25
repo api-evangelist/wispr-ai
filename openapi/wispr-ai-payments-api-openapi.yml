@@ -1,0 +1,1034 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Payments API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Payments
+paths:
+  /api/v1/payment/enterprise/switch-plan:
+    post:
+      tags:
+      - Payments
+      summary: Switch Enterprise Plan
+      description: 'Switch an enterprise subscription to a new plan.
+
+
+        This endpoint:
+
+        1. Validates the user is an admin
+
+        2. Validates the new plan is valid and different from current
+
+        3. Updates the subscription in Stripe
+
+        4. Updates the database record
+
+        5. Returns the updated subscription details'
+      operationId: switch_enterprise_plan
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SwitchPlanRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/payment/support/switch-plan:
+    post:
+      tags:
+      - Payments
+      summary: Switch Support Plan
+      operationId: switch_support_plan
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: email
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The email of the user to switch the plan for
+          title: Email
+        description: The email of the user to switch the plan for
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SwitchPlanRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/payment/switch-plan:
+    post:
+      tags:
+      - Payments
+      summary: Switch Plan
+      operationId: switch_plan
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SwitchPlanRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/payment/create_enterprise_checkout_session:
+    post:
+      tags:
+      - Payments
+      summary: Create Enterprise Checkout Session
+      description: 'Create an enterprise Stripe Checkout session.
+
+
+        Optional GA4 params for attribution tracking.'
+      operationId: create_enterprise_checkout_session
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: currency
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/Currency'
+          description: 'Deprecated: ignored for pricing. The checkout currency is resolved server-side from the caller''s IP (WP-7177). Retained only for backwards compatibility with existing clients.'
+          deprecated: true
+          default: usd
+        description: 'Deprecated: ignored for pricing. The checkout currency is resolved server-side from the caller''s IP (WP-7177). Retained only for backwards compatibility with existing clients.'
+        deprecated: true
+      - name: ga4_client_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: GA4 client_id for attribution tracking
+          title: Ga4 Client Id
+        description: GA4 client_id for attribution tracking
+      - name: platform
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Platform for attribution tracking
+          title: Platform
+        description: Platform for attribution tracking
+      - name: fbp
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Meta _fbp cookie value
+          title: Fbp
+        description: Meta _fbp cookie value
+      - name: fbc
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Meta _fbc click ID cookie value
+          title: Fbc
+        description: Meta _fbc click ID cookie value
+      - name: utm_source
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: UTM source parameter
+          title: Utm Source
+        description: UTM source parameter
+      - name: utm_medium
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: UTM medium parameter
+          title: Utm Medium
+        description: UTM medium parameter
+      - name: utm_campaign
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: UTM campaign parameter
+          title: Utm Campaign
+        description: UTM campaign parameter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEnterpriseCheckoutRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/payment/create-checkout-session:
+    post:
+      tags:
+      - Payments
+      summary: Create Checkout Session
+      description: Create a Stripe Checkout session.
+      operationId: create_checkout_session
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: plan
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/StripeProductOption'
+      - name: custom_redirect
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+          title: Custom Redirect
+      - name: promo_code
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Promo Code
+      - name: currency
+        in: query
+        required: false
+        schema:
+          type: string
+          default: usd
+          title: Currency
+      - name: variant
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            maxLength: 64
+            pattern: ^[a-zA-Z0-9_-]+$
+          - type: 'null'
+          description: Optional pricing-experiment variant claim. Re-validated server-side against the registry; invalid or stale claims fall back to canonical pricing.
+          title: Variant
+        description: Optional pricing-experiment variant claim. Re-validated server-side against the registry; invalid or stale claims fall back to canonical pricing.
+      - name: ga4_client_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: GA4 client_id for attribution tracking
+          title: Ga4 Client Id
+        description: GA4 client_id for attribution tracking
+      - name: platform
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Platform for attribution tracking
+          title: Platform
+        description: Platform for attribution tracking
+      - name: fbp
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Meta _fbp cookie value
+          title: Fbp
+        description: Meta _fbp cookie value
+      - name: fbc
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Meta _fbc click ID cookie value
+          title: Fbc
+        description: Meta _fbc click ID cookie value
+      - name: utm_source
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: UTM source parameter
+          title: Utm Source
+        description: UTM source parameter
+      - name: utm_medium
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: UTM medium parameter
+          title: Utm Medium
+        description: UTM medium parameter
+      - name: utm_campaign
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: UTM campaign parameter
+          title: Utm Campaign
+        description: UTM campaign parameter
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/payment/create-bank-transfer-invoice:
+    post:
+      tags:
+      - Payments
+      summary: Create Bank Transfer Invoice
+      operationId: create_bank_transfer_invoice
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: plan
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/StripeProductOption'
+      - name: currency
+        in: query
+        required: false
+        schema:
+          type: string
+          default: usd
+          title: Currency
+      - name: country
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/EUCountry'
+          default: NL
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/payment/success:
+    get:
+      tags:
+      - Payments
+      summary: Success
+      description: Handle a successful payment.
+      operationId: success
+      parameters:
+      - name: session_id
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Session Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/payment/cancel:
+    get:
+      tags:
+      - Payments
+      summary: Cancel
+      description: 'Handle a cancelled Stripe checkout. Stripe always substitutes
+
+        ``{CHECKOUT_SESSION_ID}`` in the registered cancel_url before redirecting,
+
+        so a legitimate hit always carries a ``session_id``. Declaring it required
+
+        lets FastAPI 422 bot/crawler traffic at the boundary (no Stripe call, no
+
+        template render) and closes the log-amplification vector on this
+
+        unauthenticated endpoint. Value-level garbage (``undefined``, ``null``,
+
+        unreplaced ``{CHECKOUT_SESSION_ID}`` literals) is filtered in the service.
+
+        No bearer tokens are accepted here — the Stripe session_id is the
+
+        capability token.'
+      operationId: cancel
+      parameters:
+      - name: session_id
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Session Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/payment/error:
+    get:
+      tags:
+      - Payments
+      summary: Error
+      description: Handle a successful payment.
+      operationId: error
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/payment/webhook:
+    post:
+      tags:
+      - Payments
+      summary: Webhook Received
+      description: Handle a Stripe webhook.
+      operationId: webhook_received
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/payment/metadata-webhook:
+    post:
+      tags:
+      - Payments
+      summary: Metadata Webhook Received
+      description: Handle a Stripe webhook.
+      operationId: metadata_webhook_received
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/payment/revenuecat/webhook:
+    post:
+      tags:
+      - Payments
+      summary: Revenuecat Webhook Received
+      description: Handle a RevenueCat webhook.
+      operationId: revenuecat_webhook_received
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/payment/customer-portal:
+    get:
+      tags:
+      - Payments
+      summary: Customer Portal
+      description: Redirect to the customer portal.
+      operationId: customer_portal
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/payment/enterprise-portal:
+    get:
+      tags:
+      - Payments
+      summary: Enterprise Portal
+      description: Redirect to the customer portal.
+      operationId: enterprise_portal
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/payment/subscription:
+    delete:
+      tags:
+      - Payments
+      summary: Cancel Subscription
+      operationId: cancel_subscription
+      security:
+      - ApiKeyHeaderPatched: []
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+    get:
+      tags:
+      - Payments
+      summary: Get Subscription Details
+      operationId: get_subscription_details
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: device_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The device ID of the user
+          title: Device Id
+        description: The device ID of the user
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/payment/subscription-watch/start:
+    post:
+      tags:
+      - Payments
+      summary: Subscription Watch Start
+      description: Start (or atomically replace) a billing subscription invalidation watch session.
+      operationId: subscription_watch_start
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionWatchStartResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/payment/subscription-watch/stream:
+    get:
+      tags:
+      - Payments
+      summary: Subscription Watch Stream
+      description: SSE stream of ``subscription_changed`` invalidations for billing UI (20m TTL).
+      operationId: subscription_watch_stream
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: X-Billing-Watch-Token
+        in: header
+        required: true
+        schema:
+          type: string
+          title: X-Billing-Watch-Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            text/event-stream:
+              schema:
+                type: string
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/payment/create-promotion-code:
+    post:
+      tags:
+      - Payments
+      summary: Create Promotion Code
+      operationId: create_promotion_code
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: coupon_code
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Coupon Code
+      - name: email
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Email
+      - name: expires_in_days
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 30
+          title: Expires In Days
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/payment/pricing/by-ip:
+    get:
+      tags:
+      - Payments
+      summary: Pricing By Ip
+      description: Return location-aware pricing for the caller's IP (or provided IP override).
+      operationId: pricing_by_ip
+      parameters:
+      - name: variant
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            maxLength: 64
+            pattern: ^[a-zA-Z0-9_-]+$
+          - type: 'null'
+          description: Optional pricing-experiment variant claim. Returns variant-specific price IDs for the resolved currency; invalid or stale claims fall back to canonical pricing.
+          title: Variant
+        description: Optional pricing-experiment variant claim. Returns variant-specific price IDs for the resolved currency; invalid or stale claims fall back to canonical pricing.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PricingByIpResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/payment/pricing/by-currency:
+    get:
+      tags:
+      - Payments
+      summary: Pricing By Currency
+      description: 'Return the catalog pricing grid for an explicit currency, without an IP lookup.
+
+
+        Powers the current-plan billing card, which prices in the subscription''s own currency
+
+        rather than the caller''s geo-IP currency. Public catalog pricing only — no user data.'
+      operationId: pricing_by_currency
+      parameters:
+      - name: currency
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/Currency'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrencyPricingResponse'
+        '404':
+          description: No pricing available for the requested currency
+        '429':
+          description: Too Many Requests
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/payment/currency/by-country-code:
+    get:
+      tags:
+      - Payments
+      summary: Get Currency By Country Code
+      description: Return the currency for a given country code.
+      operationId: get_currency_by_country_code
+      parameters:
+      - name: country_code
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Country Code
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/payment/migrate-subscription:
+    post:
+      tags:
+      - Payments
+      summary: Migrate Subscription
+      description: "Migrate the current user's subscription (personal or enterprise) to a new currency.\n\n- If the user belongs to an enterprise (has `enterprise_id`), attempt to migrate\n  the enterprise subscription.\n- Otherwise, migrate the user's personal subscription."
+      operationId: migrate_subscription
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: target_currency
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/Currency'
+      - name: user_id
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: User Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    CurrencyPricingResponse:
+      properties:
+        currency:
+          type: string
+          title: Currency
+        FLOW_PRO_MONTHLY:
+          $ref: '#/components/schemas/ProductPricingResponse'
+        FLOW_PRO_YEARLY:
+          $ref: '#/components/schemas/ProductPricingResponse'
+        FLOW_STUDENT_MONTHLY:
+          $ref: '#/components/schemas/ProductPricingResponse'
+        FLOW_STUDENT_YEARLY:
+          $ref: '#/components/schemas/ProductPricingResponse'
+        FLOW_BUSINESS_MONTHLY:
+          $ref: '#/components/schemas/ProductPricingResponse'
+        FLOW_BUSINESS_YEARLY:
+          $ref: '#/components/schemas/ProductPricingResponse'
+      type: object
+      required:
+      - currency
+      - FLOW_PRO_MONTHLY
+      - FLOW_PRO_YEARLY
+      - FLOW_STUDENT_MONTHLY
+      - FLOW_STUDENT_YEARLY
+      - FLOW_BUSINESS_MONTHLY
+      - FLOW_BUSINESS_YEARLY
+      title: CurrencyPricingResponse
+      description: Pricing for all Flow products in a single currency.
+    EUCountry:
+      type: string
+      enum:
+      - NL
+      - DE
+      - FR
+      - BE
+      - ES
+      - IE
+      title: EUCountry
+    IPLocation:
+      properties:
+        ip:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ip
+        country_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Country Code
+        country_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Country Name
+      type: object
+      title: IPLocation
+      description: Geographic location resolved from an IP address.
+    CreateEnterpriseCheckoutRequest:
+      properties:
+        plan:
+          $ref: '#/components/schemas/StripeProductOption'
+        seats:
+          type: integer
+          title: Seats
+        add_billing_info:
+          type: boolean
+          title: Add Billing Info
+          default: false
+      type: object
+      required:
+      - plan
+      - seats
+      title: CreateEnterpriseCheckoutRequest
+    StripeProductOption:
+      type: string
+      enum:
+      - FLOW_PRO_MONTHLY
+      - FLOW_PRO_YEARLY
+      - FLOW_STUDENT_MONTHLY
+      - FLOW_STUDENT_YEARLY
+      - FLOW_TEAM_MONTHLY
+      - FLOW_TEAM_YEARLY
+      - FLOW_BUSINESS_MONTHLY
+      - FLOW_BUSINESS_YEARLY
+      title: StripeProductOption
+    SubscriptionWatchStartResponse:
+      properties:
+        watch_token:
+          type: string
+          title: Watch Token
+          description: Opaque token; send as ``X-Billing-Watch-Token`` on the SSE stream.
+        expires_at:
+          type: string
+          format: date-time
+          title: Expires At
+          description: UTC wall-clock time when the watch session ends.
+      type: object
+      required:
+      - watch_token
+      - expires_at
+      title: Subscription watch start response
+      description: Response from ``POST /api/v1/payment/subscription-watch/start``.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    Currency:
+      type: string
+      enum:
+      - usd
+      - gbp
+      - eur
+      - inr
+      - cad
+      - cny
+      - aud
+      - rub
+      - pln
+      - brl
+      - ils
+      - try
+      - jpy
+      - chf
+      - mxn
+      - aed
+      - sek
+      - sgd
+      - zar
+      - nzd
+      - thb
+      - twd
+      - czk
+      - krw
+      title: Currency
+      description: Supported billing currencies as lowercase ISO 4217 codes.
+    PricingByIpResponse:
+      properties:
+        ip:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ip
+        location:
+          anyOf:
+          - $ref: '#/components/schemas/IPLocation'
+          - type: 'null'
+        currency:
+          type: string
+          title: Currency
+        flag:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Flag
+        pricing:
+          $ref: '#/components/schemas/CurrencyPricingResponse'
+      type: object
+      required:
+      - currency
+      - pricing
+      title: PricingByIpResponse
+      description: Full response for the GET /pricing/by-ip endpoint.
+    ProductPricingResponse:
+      properties:
+        product_id:
+          type: string
+          title: Product Id
+        price_id:
+          type: string
+          title: Price Id
+        price:
+          type: integer
+          title: Price
+        currency_factor:
+          type: integer
+          title: Currency Factor
+      type: object
+      required:
+      - product_id
+      - price_id
+      - price
+      - currency_factor
+      title: ProductPricingResponse
+      description: Stripe pricing details for a single product.
+    SwitchPlanRequest:
+      properties:
+        plan:
+          type: string
+          title: Plan
+      type: object
+      required:
+      - plan
+      title: Switch Plan Request
+      description: Request model for switching enterprise plans.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

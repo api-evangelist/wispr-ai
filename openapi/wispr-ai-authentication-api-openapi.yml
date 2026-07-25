@@ -1,0 +1,1613 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Authentication API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Authentication
+paths:
+  /health:
+    get:
+      tags:
+      - Authentication
+      summary: Health
+      operationId: health
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /version:
+    get:
+      tags:
+      - Authentication
+      summary: Version
+      operationId: version
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /warmup:
+    get:
+      tags:
+      - Authentication
+      summary: Warmup
+      operationId: warmup
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+  /google/sign_in:
+    get:
+      tags:
+      - Authentication
+      summary: Google Sign In
+      operationId: google_sign_in
+      parameters:
+      - name: source
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Source
+      - name: is_platform_user
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+          title: Is Platform User
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /apple/sign_in:
+    get:
+      tags:
+      - Authentication
+      summary: Apple Sign In
+      operationId: apple_sign_in
+      parameters:
+      - name: source
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Source
+      - name: is_platform_user
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+          title: Is Platform User
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /microsoft/sign_in:
+    get:
+      tags:
+      - Authentication
+      summary: Microsoft Sign In
+      operationId: microsoft_sign_in
+      parameters:
+      - name: source
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Source
+      - name: is_platform_user
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+          title: Is Platform User
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /sso/sign_in:
+    get:
+      tags:
+      - Authentication
+      summary: Sso Sign In
+      operationId: sso_sign_in
+      parameters:
+      - name: source
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Source
+      - name: email
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+      - name: is_platform_user
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+          title: Is Platform User
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /authkit/google/sign_in:
+    get:
+      tags:
+      - Authentication
+      summary: Authkit Google Sign In
+      operationId: authkit_google_sign_in
+      parameters:
+      - name: source
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Source
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /authkit/sso/sign_in:
+    get:
+      tags:
+      - Authentication
+      summary: Authkit Sso Sign In
+      operationId: authkit_sso_sign_in
+      parameters:
+      - name: source
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Source
+      - name: email
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /authkit/google/callback:
+    get:
+      tags:
+      - Authentication
+      summary: Authkit Google Callback
+      operationId: authkit_google_callback
+      parameters:
+      - name: source
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Source
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            text/html:
+              schema:
+                type: string
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /authkit/sso/callback:
+    get:
+      tags:
+      - Authentication
+      summary: Authkit Sso Callback
+      operationId: authkit_sso_callback
+      parameters:
+      - name: source
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Source
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            text/html:
+              schema:
+                type: string
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /google/login:
+    get:
+      tags:
+      - Authentication
+      summary: Google Callback
+      operationId: google_callback
+      parameters:
+      - name: source
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Source
+      - name: is_platform_user
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+          title: Is Platform User
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            text/html:
+              schema:
+                type: string
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /apple/login:
+    get:
+      tags:
+      - Authentication
+      summary: Apple Callback
+      operationId: apple_callback
+      parameters:
+      - name: source
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Source
+      - name: is_platform_user
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+          title: Is Platform User
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            text/html:
+              schema:
+                type: string
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /microsoft/login:
+    get:
+      tags:
+      - Authentication
+      summary: Microsoft Callback
+      operationId: microsoft_callback
+      parameters:
+      - name: source
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Source
+      - name: is_platform_user
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+          title: Is Platform User
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            text/html:
+              schema:
+                type: string
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /sso/callback:
+    get:
+      tags:
+      - Authentication
+      summary: Sso Callback
+      description: 'Handle SSO callback for both SP-initiated and IdP-initiated flows.
+
+
+        SP-initiated: Has session parameter → uses PKCE-enabled Supabase client
+
+        IdP-initiated: No session parameter → uses admin Supabase client
+
+        AuthKit tracer: state parameter without session → AuthKit callback, with legacy fallback'
+      operationId: sso_callback
+      parameters:
+      - name: source
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Source
+      - name: is_platform_user
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+          title: Is Platform User
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            text/html:
+              schema:
+                type: string
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /user_status:
+    get:
+      tags:
+      - Authentication
+      summary: User Status
+      operationId: user_status
+      parameters:
+      - name: email
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Email
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserStatusResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /email_verification_status:
+    get:
+      tags:
+      - Authentication
+      summary: Email Verification Status
+      description: "Check if a user's email is verified by checking the email_confirmed_at field.\n\nArgs:\n    user_id: The Supabase user ID\n\nReturns:\n    A response with the is_verified status"
+      operationId: email_verification_status
+      parameters:
+      - name: user_id
+        in: query
+        required: true
+        schema:
+          type: string
+          title: User Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /signup:
+    post:
+      tags:
+      - Authentication
+      summary: Signup
+      operationId: signup
+      parameters:
+      - name: trial_promo
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Trial Promo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupUserRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /signup_raw_email:
+    post:
+      tags:
+      - Authentication
+      summary: Signup Raw Email
+      operationId: signup_raw_email
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RawEmailSignupRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /confirm_raw_email:
+    get:
+      tags:
+      - Authentication
+      summary: Confirm Email
+      operationId: confirm_email
+      parameters:
+      - name: email
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Email
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /add_to_waitlist:
+    post:
+      tags:
+      - Authentication
+      summary: Add To Waitlist
+      operationId: add_to_waitlist
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddToWaitlistRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /email/signup:
+    post:
+      tags:
+      - Authentication
+      summary: Sign Up With Email
+      operationId: sign_up_with_email
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupWithEmailRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /email/signup-captcha:
+    post:
+      tags:
+      - Authentication
+      summary: Sign Up With Email Captcha
+      operationId: sign_up_with_email_captcha
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupWithEmailCaptchaRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /email/signin:
+    post:
+      tags:
+      - Authentication
+      summary: Sign In With Email
+      operationId: sign_in_with_email
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SigninWithEmailRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SigninWithEmailResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /email/signin-captcha:
+    post:
+      tags:
+      - Authentication
+      summary: Sign In With Email Captcha
+      operationId: sign_in_with_email_captcha
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SigninWithEmailCaptchaRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SigninWithEmailResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /email/login:
+    get:
+      tags:
+      - Authentication
+      summary: Email Callback
+      description: Handle email verification callback from Supabase.
+      operationId: email_callback
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            text/html:
+              schema:
+                type: string
+  /email/reset-password-callback:
+    get:
+      tags:
+      - Authentication
+      summary: Reset Password Callback
+      operationId: reset_password_callback
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            text/html:
+              schema:
+                type: string
+  /email/reset-password:
+    post:
+      tags:
+      - Authentication
+      summary: Reset Password
+      operationId: reset_password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /email/request-reset-password:
+    post:
+      tags:
+      - Authentication
+      summary: Request Reset Password
+      description: "Request a password reset email for a user.\n\nArgs:\n    reset_request: The request containing the user's email\n    authentication_service: Authentication service instance\n    supabase_client: Supabase client instance\n\nReturns:\n    JSON response indicating success/failure of the request"
+      operationId: request_reset_password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestResetPasswordRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /email/request-reset-password-captcha:
+    post:
+      tags:
+      - Authentication
+      summary: Request Reset Password Captcha
+      description: "Request a password reset email for a user.\n\nArgs:\n    reset_request: The request containing the user's email and captcha token\n    authentication_service: Authentication service instance\n    supabase_client: Supabase client instance\n\nReturns:\n    JSON response indicating success/failure of the request"
+      operationId: request_reset_password_captcha
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestResetPasswordCaptchaRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /email/resend-verification-email:
+    post:
+      tags:
+      - Authentication
+      summary: Resend Verification Email
+      operationId: resend_verification_email
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResendVerificationEmailRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /email/resend-verification-email-captcha:
+    post:
+      tags:
+      - Authentication
+      summary: Resend Verification Email Captcha
+      operationId: resend_verification_email_captcha
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResendVerificationEmailCaptchaRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /email/validate:
+    get:
+      tags:
+      - Authentication
+      summary: Validate Email
+      description: "Validate an email address using Twilio SendGrid's API for signup.\n\nArgs:\n    email: The email address to validate\n\nReturns:\n    A JSON response with the validation result (dictionary with \"verdict\" and \"score\") and status code"
+      operationId: validate_email
+      parameters:
+      - name: email
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Email
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /.well-known/apple-app-site-association:
+    get:
+      tags:
+      - Authentication
+      summary: Apple App Site Association
+      description: Returns the Apple App Site Association file.
+      operationId: apple_app_site_association
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /email/create-user:
+    post:
+      tags:
+      - Authentication
+      summary: Create User
+      description: 'Admin endpoint to create a new user and send them a password reset email.
+
+        Only accessible by Wispr admins (@wispr.ai emails).'
+      operationId: create_user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '429':
+          description: Too Many Requests
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /device/complete:
+    post:
+      tags:
+      - Authentication
+      summary: Device Complete
+      description: 'Called by the web app after successful auth to submit tokens for a device code.
+
+        Pushes tokens to a Redis list — the Server-Sent Events (SSE) stream picks them up instantly via BLPOP.'
+      operationId: device_complete
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviceCodeCompleteRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /device/stream:
+    get:
+      tags:
+      - Authentication
+      summary: Device Stream
+      description: 'Server-Sent Events (SSE) endpoint — desktop holds this connection open until tokens arrive or timeout.
+
+        Uses Redis BLPOP (blocking list pop) to block until data is pushed, with 25s cycles
+
+        for Application Load Balancer (ALB) heartbeats.'
+      operationId: device_stream
+      parameters:
+      - name: device_code
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Device Code
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /device/poll:
+    get:
+      tags:
+      - Authentication
+      summary: Device Poll
+      description: 'Fallback polling endpoint — desktop uses this if the SSE connection drops.
+
+        Checks both the main list (LPOP) and the delivered key (GETDEL) in case
+
+        BLPOP consumed the token but the SSE stream died before delivery.'
+      operationId: device_poll
+      parameters:
+      - name: device_code
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Device Code
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceAuthResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    SignupWithEmailRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        password:
+          type: string
+          title: Password
+        full_name:
+          type: string
+          title: Full Name
+        device_code:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Device Code
+      type: object
+      required:
+      - email
+      - password
+      - full_name
+      title: SignupWithEmailRequest
+      description: Email-and-password signup request, optionally tied to a device code.
+    RequestResetPasswordRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+      type: object
+      required:
+      - email
+      title: RequestResetPasswordRequest
+      description: Request to send a password-reset email to the given address.
+    ResetPasswordRequest:
+      properties:
+        access_token:
+          type: string
+          title: Access Token
+        refresh_token:
+          type: string
+          title: Refresh Token
+        new_password:
+          type: string
+          title: New Password
+      type: object
+      required:
+      - access_token
+      - refresh_token
+      - new_password
+      title: ResetPasswordRequest
+      description: Password-reset request authenticated by access and refresh tokens.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    SigninWithEmailRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        password:
+          type: string
+          title: Password
+        is_platform_user:
+          type: boolean
+          title: Is Platform User
+          default: false
+        workos_capable:
+          type: boolean
+          title: Workos Capable
+          default: false
+        mcp_login_state:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mcp Login State
+        provision:
+          type: boolean
+          title: Provision
+          default: true
+      type: object
+      required:
+      - email
+      - password
+      title: SigninWithEmailRequest
+      description: Email-and-password sign-in request with platform and WorkOS flags.
+    SignupWithEmailCaptchaRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        password:
+          type: string
+          title: Password
+        full_name:
+          type: string
+          title: Full Name
+        captcha_token:
+          type: string
+          title: Captcha Token
+        device_code:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Device Code
+        redirect_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Redirect Url
+      type: object
+      required:
+      - email
+      - password
+      - full_name
+      - captcha_token
+      title: SignupWithEmailCaptchaRequest
+      description: Email-and-password signup request guarded by a required captcha token.
+    SigninWithEmailCaptchaRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        password:
+          type: string
+          title: Password
+        is_platform_user:
+          type: boolean
+          title: Is Platform User
+          default: false
+        workos_capable:
+          type: boolean
+          title: Workos Capable
+          default: false
+        mcp_login_state:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mcp Login State
+        provision:
+          type: boolean
+          title: Provision
+          default: true
+        captcha_token:
+          type: string
+          title: Captcha Token
+      type: object
+      required:
+      - email
+      - password
+      - captcha_token
+      title: SigninWithEmailCaptchaRequest
+      description: Email sign-in request that additionally carries a captcha token.
+    ResendVerificationEmailCaptchaRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        captcha_token:
+          type: string
+          title: Captcha Token
+        redirect_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Redirect Url
+      type: object
+      required:
+      - email
+      - captcha_token
+      title: ResendVerificationEmailCaptchaRequest
+      description: Resend-verification request guarded by a required captcha token.
+    CreateUserRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        first_name:
+          type: string
+          title: First Name
+        last_name:
+          type: string
+          title: Last Name
+      type: object
+      required:
+      - email
+      - first_name
+      - last_name
+      title: CreateUserRequest
+      description: Minimal user-creation payload (email and name).
+    DeviceCodeCompleteRequest:
+      properties:
+        device_code:
+          type: string
+          format: uuid
+          title: Device Code
+        access_token:
+          type: string
+          title: Access Token
+        refresh_token:
+          type: string
+          title: Refresh Token
+        dub_click_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Dub Click Id
+        referral:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Referral
+        promo_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Promo Code
+        fbp:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Fbp
+        fbc:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Fbc
+        team_invite_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Invite Code
+        utm:
+          anyOf:
+          - $ref: '#/components/schemas/UtmParams'
+          - type: 'null'
+      type: object
+      required:
+      - device_code
+      - access_token
+      - refresh_token
+      title: DeviceCodeCompleteRequest
+      description: Request completing a device-code auth flow with tokens and attribution.
+    SignupUserRequest:
+      properties:
+        access_token:
+          type: string
+          title: Access Token
+          default: ''
+        first_name:
+          type: string
+          title: First Name
+        last_name:
+          type: string
+          title: Last Name
+        dub_click_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Dub Click Id
+        referral:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Referral
+        promo_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Promo Code
+        team_invite_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Invite Code
+        utm:
+          anyOf:
+          - $ref: '#/components/schemas/UtmParams'
+          - type: 'null'
+      type: object
+      required:
+      - first_name
+      - last_name
+      title: SignupUserRequest
+      description: Signup payload for an OAuth-authenticated user, with attribution fields.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    RequestResetPasswordCaptchaRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        captcha_token:
+          type: string
+          title: Captcha Token
+      type: object
+      required:
+      - email
+      - captcha_token
+      title: RequestResetPasswordCaptchaRequest
+      description: Password-reset-email request guarded by a required captcha token.
+    AddToWaitlistRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        device_type:
+          type: string
+          title: Device Type
+      type: object
+      required:
+      - email
+      - device_type
+      title: AddToWaitlistRequest
+      description: Request to add an email to the waitlist for a given device type.
+    UserStatusResponse:
+      properties:
+        exists:
+          type: boolean
+          title: Exists
+        provider:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Provider
+        verified:
+          type: boolean
+          title: Verified
+        enforce_sso:
+          type: boolean
+          title: Enforce Sso
+        scim_managed:
+          type: boolean
+          title: Scim Managed
+      type: object
+      required:
+      - exists
+      - provider
+      - verified
+      - enforce_sso
+      - scim_managed
+      title: UserStatusResponse
+      description: Account-existence and auth-provider status for a queried email.
+    ResendVerificationEmailRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+      type: object
+      required:
+      - email
+      title: ResendVerificationEmailRequest
+      description: Request to resend the verification email to the given address.
+    DeviceAuthResponse:
+      properties:
+        status:
+          type: string
+          enum:
+          - complete
+          - pending
+          - timeout
+          title: Status
+        access_token:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+        refresh_token:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Refresh Token
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+        onboarding_completed:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Onboarding Completed
+        dub_click_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Dub Click Id
+        referral:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Referral
+        promo_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Promo Code
+        fbp:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Fbp
+        fbc:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Fbc
+        team_invite_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Invite Code
+      type: object
+      required:
+      - status
+      title: DeviceAuthResponse
+      description: 'Device-auth poll result: status plus tokens and attribution when complete.'
+    SigninWithEmailResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+        access_token:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+        refresh_token:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Refresh Token
+        redirect_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Redirect Url
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        onboarding_completed:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Onboarding Completed
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+      type: object
+      required:
+      - message
+      title: SigninWithEmailResponse
+      description: 'Sign-in result: tokens, profile fields, and an optional error message.'
+    RawEmailSignupRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        first_name:
+          type: string
+          title: First Name
+        last_name:
+          type: string
+          title: Last Name
+        dub_click_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Dub Click Id
+        referral:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Referral
+        promo_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Promo Code
+        utm:
+          anyOf:
+          - $ref: '#/components/schemas/UtmParams'
+          - type: 'null'
+      type: object
+      required:
+      - email
+      - first_name
+      - last_name
+      title: RawEmailSignupRequest
+      description: Lightweight email signup capturing name and attribution fields.
+    UtmParams:
+      properties:
+        utm_source:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Utm Source
+        utm_medium:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Utm Medium
+        utm_campaign:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Utm Campaign
+      type: object
+      title: UtmParams
+      description: UTM attribution parameters carried through signup.
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

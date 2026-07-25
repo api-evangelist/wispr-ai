@@ -1,0 +1,388 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Dictionary API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Dictionary
+paths:
+  /api/v1/dictionary/personal:
+    get:
+      tags:
+      - Dictionary
+      summary: Get Personal Dictionary
+      description: Get a user's personal dictionary.
+      operationId: get_personal_dictionary
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+    post:
+      tags:
+      - Dictionary
+      summary: Update Personal Dictionary
+      description: Add a word to a user's personal dictionary.
+      operationId: update_personal_dictionary
+      requestBody:
+        content:
+          application/json:
+            schema:
+              items:
+                $ref: '#/components/schemas/DictionaryItem'
+              type: array
+              title: Dictionary
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/dictionary/team:
+    get:
+      tags:
+      - Dictionary
+      summary: Get Team Dictionary
+      description: Get a user's team's dictionary.
+      operationId: get_team_dictionary
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+    post:
+      tags:
+      - Dictionary
+      summary: Create Team Dictionary Item
+      description: Create a team dictionary item.
+      operationId: create_team_dictionary_item
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTeamDictionaryItem'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/dictionary/team/bulk:
+    post:
+      tags:
+      - Dictionary
+      summary: Bulk Create Team Dictionary Items
+      description: Bulk create team dictionary items with upsert semantics.
+      operationId: bulk_create_team_dictionary_items
+      requestBody:
+        content:
+          application/json:
+            schema:
+              items:
+                $ref: '#/components/schemas/CreateTeamDictionaryItem'
+              type: array
+              title: Items
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkCreateTeamDictionaryResult'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/dictionary/team/update:
+    post:
+      tags:
+      - Dictionary
+      summary: Update Team Dictionary Item
+      description: Update a team dictionary item.
+      operationId: update_team_dictionary_item
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTeamDictionaryItem'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/dictionary/team/{word_id}:
+    delete:
+      tags:
+      - Dictionary
+      summary: Delete Team Dictionary Item
+      description: Delete a team dictionary item.
+      operationId: delete_team_dictionary_item
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: word_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Word Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    BulkCreateTeamDictionaryResult:
+      properties:
+        success:
+          type: boolean
+          title: Success
+        imported_count:
+          type: integer
+          title: Imported Count
+        duplicate_count:
+          type: integer
+          title: Duplicate Count
+      type: object
+      required:
+      - success
+      - imported_count
+      - duplicate_count
+      title: BulkCreateTeamDictionaryResult
+      description: Result summary of a bulk team dictionary import (imported and duplicate counts).
+    CreateTeamDictionaryItem:
+      properties:
+        word:
+          type: string
+          maxLength: 255
+          title: Word
+        replacement:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Replacement
+        replacement_html:
+          anyOf:
+          - type: string
+            maxLength: 4000
+          - type: 'null'
+          title: Replacement Html
+        is_manual:
+          type: boolean
+          title: Is Manual
+        frequency_used:
+          type: integer
+          title: Frequency Used
+        last_used:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Used
+        source:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Source
+        is_snippet:
+          type: boolean
+          title: Is Snippet
+      type: object
+      required:
+      - word
+      - is_manual
+      - frequency_used
+      - source
+      - is_snippet
+      title: CreateTeamDictionaryItem
+      description: Request payload for creating a single team dictionary item.
+    UpdateTeamDictionaryItem:
+      properties:
+        word_id:
+          type: string
+          format: uuid
+          title: Word Id
+        word:
+          type: string
+          title: Word
+        replacement:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Replacement
+        replacement_html:
+          anyOf:
+          - type: string
+            maxLength: 4000
+          - type: 'null'
+          title: Replacement Html
+        is_snippet:
+          type: boolean
+          title: Is Snippet
+      type: object
+      required:
+      - word_id
+      - word
+      - is_snippet
+      title: UpdateTeamDictionaryItem
+      description: Request payload for updating an existing team dictionary item.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    DictionaryItem:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        team_dictionary_id:
+          type: string
+          format: uuid
+          title: Team Dictionary Id
+        word:
+          type: string
+          title: Word
+        replacement:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Replacement
+        replacement_html:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Replacement Html
+        is_manual:
+          type: boolean
+          title: Is Manual
+        created_at:
+          type: string
+          title: Created At
+        modified_at:
+          type: string
+          title: Modified At
+        is_deleted:
+          type: boolean
+          title: Is Deleted
+        frequency_used:
+          type: integer
+          title: Frequency Used
+        last_used:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Used
+        source:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Source
+        observed_source:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Observed Source
+        is_snippet:
+          type: boolean
+          title: Is Snippet
+      type: object
+      required:
+      - id
+      - team_dictionary_id
+      - word
+      - is_manual
+      - created_at
+      - modified_at
+      - is_deleted
+      - frequency_used
+      - is_snippet
+      title: DictionaryItem
+      description: A team dictionary word or snippet entry as returned to clients.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

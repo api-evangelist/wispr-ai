@@ -1,0 +1,2425 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Enterprise API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Enterprise
+paths:
+  /api/v1/enterprise/audit-logs:
+    get:
+      tags:
+      - Enterprise
+      summary: Get Audit Logs
+      description: 'Paginated, filter-bounded audit log for an enterprise, newest first.
+
+
+        Authorization scoping: the ``enterprise_id`` override is honored only for Wispr
+
+        internal admins. For everyone else the route resolves to the caller''s own
+
+        enterprise (admin required); a customer supplying a different enterprise''s id
+
+        gets 404 rather than a cross-tenant read.'
+      operationId: get_audit_logs
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: start
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+          title: Start
+      - name: end
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+          title: End
+      - name: event_types
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              $ref: '#/components/schemas/AuditAction'
+          - type: 'null'
+          title: Event Types
+      - name: actor_user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Actor User Id
+      - name: target_user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Target User Id
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 50
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      - name: enterprise_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          description: Wispr-internal-admin override. Customer enterprise admins must omit this and the route resolves to their own enterprise; a foreign id from a customer returns 404.
+          title: Enterprise Id
+        description: Wispr-internal-admin override. Customer enterprise admins must omit this and the route resolves to their own enterprise; a foreign id from a customer returns 404.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditLogTableResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/enterprise/create:
+    post:
+      tags:
+      - Enterprise
+      summary: Create Enterprise New
+      description: Create a new enterprise.
+      operationId: create_enterprise_new
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEnterpriseRequestNew'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise:
+    get:
+      tags:
+      - Enterprise
+      summary: Get Enterprise
+      description: Get the enterprise ID for the authenticated user if they belong to one.
+      operationId: get_enterprise
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+    patch:
+      tags:
+      - Enterprise
+      summary: Update Enterprise
+      description: Update enterprise details. Only accessible by admins.
+      operationId: update_enterprise
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateEnterpriseRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/settings:
+    patch:
+      tags:
+      - Enterprise
+      summary: Update Enterprise Settings
+      description: Update enterprise settings. Only accessible by admins.
+      operationId: update_enterprise_settings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateEnterpriseSettingsRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/members:
+    get:
+      tags:
+      - Enterprise
+      summary: Get Members
+      description: Get all members of the user's enterprise.
+      operationId: get_members
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MembersResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/members/table:
+    get:
+      tags:
+      - Enterprise
+      summary: Get Members Table
+      description: 'Paginated enterprise members table for the admin portal.
+
+
+        Authorization scoping: when ``enterprise_id`` is omitted, the route derives
+
+        it from ``ensure_enterprise_member`` (default behavior for the customer-
+
+        facing admin portal). When supplied, the override is restricted to Wispr
+
+        internal admins via ``ensure_internal_admin_with_role``. The ``team_id``
+
+        query parameter only narrows the resulting set further via the
+
+        active-membership join.'
+      operationId: get_members_table
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: enterprise_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          description: Wispr-internal-admin override. Customer enterprise admins must omit this and the route resolves to their own enterprise.
+          title: Enterprise Id
+        description: Wispr-internal-admin override. Customer enterprise admins must omit this and the route resolves to their own enterprise.
+      - name: search
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            maxLength: 200
+          - type: 'null'
+          title: Search
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - enum:
+            - active
+            - trialing
+            type: string
+          - type: 'null'
+          title: Status
+      - name: team_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Team Id
+      - name: sort_by
+        in: query
+        required: false
+        schema:
+          enum:
+          - name
+          - email
+          - status
+          - team
+          - role
+          - totalWords
+          - wpm
+          - lastUsedAt
+          type: string
+          default: totalWords
+          title: Sort By
+      - name: sort_dir
+        in: query
+        required: false
+        schema:
+          enum:
+          - asc
+          - desc
+          type: string
+          default: desc
+          title: Sort Dir
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 200
+          minimum: 1
+          default: 25
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      - name: words_window
+        in: query
+        required: false
+        schema:
+          enum:
+          - all_time
+          - last_7_days
+          - last_30_days
+          - this_month
+          - last_month
+          - this_year
+          type: string
+          default: all_time
+          title: Words Window
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnterpriseMembersTableResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/enterprise/members/count:
+    get:
+      tags:
+      - Enterprise
+      summary: Get Members Count
+      description: 'Unfiltered enterprise member count, respecting the protected-enterprise
+
+        admin-roles visibility rule so the page header''s denominator matches what
+
+        the table can ever surface to the caller.'
+      operationId: get_members_count
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnterpriseMembersCountResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/domain-status:
+    get:
+      tags:
+      - Enterprise
+      summary: Get Domain Status
+      description: Get the status of the user's domain.
+      operationId: get_domain_status
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/domain-info:
+    get:
+      tags:
+      - Enterprise
+      summary: Get Domain Info
+      description: 'Gets info associated with the user''s domain, or the domain the the enterprise they are part of.
+
+        This is possible distinct from the info associated with they''re team. The returned values are
+
+        the users on that domain, the team members associated with the team that has that domain, etc.'
+      operationId: get_domain_info
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/my-current-ip:
+    get:
+      tags:
+      - Enterprise
+      summary: Get My Current Ip
+      description: 'Returns the caller''s anti-spoofed egress IP.
+
+
+        Used by the admin-portal lockout-guard modal so a (potentially locked-out)
+
+        admin can read what IP they appear from before editing the allowlist.
+
+        Listed in IP_ALLOWLIST_EXEMPT_PATHS so it remains reachable from outside
+
+        the enterprise allowlist — that is the entire point.'
+      operationId: get_my_current_ip
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MyCurrentIpResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/domains/verifications:
+    get:
+      tags:
+      - Enterprise
+      summary: List Domain Verifications
+      description: 'Read-only list of the admin''s enterprise domains and their verification status.
+
+
+        Verification itself (issuing and checking the TXT record) is performed by a
+
+        Wispr superadmin via the internal API; team admins see status only.'
+      operationId: list_domain_verifications
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListDomainVerificationsResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/domains/{domain_id}/initiate-verification:
+    post:
+      tags:
+      - Enterprise
+      summary: Initiate Domain Verification
+      description: Issue (or reuse) a DNS TXT token for domain ownership verification. Admin-only.
+      operationId: initiate_domain_verification
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: domain_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Domain Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DomainVerificationInitiateResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/enterprise/domains/{domain_id}/check-verification:
+    post:
+      tags:
+      - Enterprise
+      summary: Check Domain Verification
+      description: Query public DNS and flip the domain to verified on exact token match. Admin-only.
+      operationId: check_domain_verification
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: domain_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Domain Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DomainVerificationStatus'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/enterprise/domains/{domain_id}/capture-policy:
+    patch:
+      tags:
+      - Enterprise
+      summary: Update Domain Capture Policy
+      description: Set the per-domain capture policy. Admin-only; domain must belong to the caller's enterprise.
+      operationId: update_domain_capture_policy
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: domain_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Domain Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDomainCapturePolicyRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DomainVerificationStatus'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/enterprise/members/{user_id}:
+    get:
+      tags:
+      - Enterprise
+      summary: Get Member Detail
+      description: 'Single-member detail payload for the admin-portal member-detail page.
+
+
+        Returns the same row shape as ``/members/table`` — lifetime ``totalWords``
+
+        and ``lastUsedAt`` from ``user_stats`` plus ``role`` and ``joinedAt``.
+
+        Filter-aware chart totals come from ``/insights/words-dictated`` and
+
+        ``/insights/desktop-apps`` so this endpoint stays Postgres-only and
+
+        parameter-free.
+
+
+        Access model mirrors the team-insights endpoints: a Wispr internal admin
+
+        bypasses the enterprise-membership check and can view any user; a regular
+
+        enterprise admin is scoped to their own tenant. For regular admins both
+
+        404 paths (user doesn''t exist / user in another enterprise) share an
+
+        identical Postgres latency profile so timing cannot distinguish them.'
+      operationId: get_member_detail
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: user_id of the enterprise member to fetch.
+          title: User Id
+        description: user_id of the enterprise member to fetch.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnterpriseMemberDetailResponse'
+        '404':
+          description: Member not found (or in a different enterprise from the caller).
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Enterprise
+      summary: Remove Member
+      description: Remove a member from the enterprise. Only accessible by admins.
+      operationId: remove_member
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: User Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Enterprise
+      summary: Update Member Role
+      description: 'Update the role of a member in the enterprise. Only accessible by admins.
+
+        Disabled if the enterprise has no billing (everyone is an admin).'
+      operationId: update_member_role
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: User Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMemberRoleRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/enterprise/members/{user_id}/support:
+    delete:
+      tags:
+      - Enterprise
+      summary: Remove Member Support
+      description: Remove a member from the enterprise. Only accessible by support team.
+      operationId: remove_member_support
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: User Id
+      - name: enterprise_id
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Enterprise
+      summary: Update Member Role Support
+      description: Update the role of a member in the enterprise. Only accessible by support team.
+      operationId: update_member_role_support
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: User Id
+      - name: enterprise_id
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMemberRoleRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/enterprise/self-invite:
+    post:
+      tags:
+      - Enterprise
+      summary: Self Invite
+      description: Request the admins to invite the user to the enterprise.
+      operationId: self_invite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelfInviteRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SelfInviteResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/contact-admin:
+    post:
+      tags:
+      - Enterprise
+      summary: Contact Admin
+      description: Contact the admins of the enterprise. If invite_email is provided, the contact form is an invite request.
+      operationId: contact_admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactAdminRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactAdminResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/invitations:
+    get:
+      tags:
+      - Enterprise
+      summary: Get Invitations
+      description: Get all invitations for the user's enterprise. Only accessible by enterprise admins.
+      operationId: get_invitations
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvitesResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+    post:
+      tags:
+      - Enterprise
+      summary: Invite User
+      description: Invite a user to join the enterprise. Only accessible by admins.
+      operationId: invite_user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InviteRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InviteResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/invitations/bulk:
+    post:
+      tags:
+      - Enterprise
+      summary: Bulk Invite Users
+      description: Invite multiple users to join the enterprise. Only accessible by admins.
+      operationId: bulk_invite_users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkInviteRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkInviteResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/invitations/bulk/support:
+    post:
+      tags:
+      - Enterprise
+      summary: Bulk Invite Users Support
+      description: Invite multiple users to join the enterprise. Only accessible by support team.
+      operationId: bulk_invite_users_support
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: enterprise_id
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkInviteRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkInviteResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/enterprise/invitations/{email}:
+    delete:
+      tags:
+      - Enterprise
+      summary: Revoke Invitation
+      description: Revoke an invitation to join the enterprise. Only accessible by admins.
+      operationId: revoke_invitation
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: email
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Email
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RevokeInvitationRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/enterprise/invitations/{email}/support:
+    delete:
+      tags:
+      - Enterprise
+      summary: Revoke Invitation Support
+      description: Revoke an invitation to join the enterprise. Only accessible by support team.
+      operationId: revoke_invitation_support
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: email
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Email
+      - name: enterprise_id
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/enterprise/sso:
+    post:
+      tags:
+      - Enterprise
+      summary: Setup Sso
+      description: Setup SSO for the enterprise.
+      operationId: setup_sso
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/sso/connect:
+    get:
+      tags:
+      - Enterprise
+      summary: Connect Sso
+      description: Connect Wispr to your SSO provider.
+      operationId: connect_sso
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/hipaa-baa:
+    post:
+      tags:
+      - Enterprise
+      summary: Sign Enterprise Hipaa Baa
+      description: Sign a HIPAA Business Associate Agreement for the entire enterprise.
+      operationId: sign_enterprise_hipaa_baa
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignHipaaBaaRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+    delete:
+      tags:
+      - Enterprise
+      summary: Revoke Enterprise Hipaa Baa
+      description: Revoke a HIPAA Business Associate Agreement for the entire enterprise.
+      operationId: revoke_enterprise_hipaa_baa
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/invitations/my:
+    get:
+      tags:
+      - Enterprise
+      summary: Get My Invitations
+      description: Get all invitations for the user.
+      operationId: get_my_invitations
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/invitations/accept:
+    post:
+      tags:
+      - Enterprise
+      summary: Accept Enterprise Invite
+      description: Accept an enterprise invitation by invite ID.
+      operationId: accept_enterprise_invite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AcceptEnterpriseInviteRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/join-requests:
+    get:
+      tags:
+      - Enterprise
+      summary: Get Join Requests
+      description: Get all join requests for the user's enterprise. Only accessible by enterprise admins.
+      operationId: get_join_requests
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/JoinRequest'
+                type: array
+                title: Response Get Join Requests Api V1 Enterprise Join Requests Get
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/join-requests/my:
+    get:
+      tags:
+      - Enterprise
+      summary: Get My Join Requests
+      description: Get join requests for a user
+      operationId: get_my_join_requests
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/JoinRequest'
+                type: array
+                title: Response Get My Join Requests Api V1 Enterprise Join Requests My Get
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/join-requests/accept:
+    post:
+      tags:
+      - Enterprise
+      summary: Accept Join Request
+      description: Accept a join request and add the user to the enterprise.
+      operationId: accept_join_request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AcceptJoinRequestRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/join-requests/bulk-accept:
+    post:
+      tags:
+      - Enterprise
+      summary: Bulk Accept Join Request
+      description: Accept multiple join requests for an enterprise with optimized bulk processing.
+      operationId: bulk_accept_join_request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkAcceptJoinRequestRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/join-requests/delete:
+    post:
+      tags:
+      - Enterprise
+      summary: Reject Join Request
+      description: Reject a join request
+      operationId: reject_join_request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteJoinRequestRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/check-eligibility:
+    post:
+      tags:
+      - Enterprise
+      summary: Check Enterprise Eligibility
+      description: Get the eligibility status of the user for an enterprise.
+      operationId: check_enterprise_eligibility
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckEnterpriseEligibilityRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/invite-link:
+    get:
+      tags:
+      - Enterprise
+      summary: Get Team Invite Link
+      description: Get or create a shareable invite link for the enterprise. Only accessible by admins.
+      operationId: get_team_invite_link
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamInviteLinkResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/invite-link/accept:
+    post:
+      tags:
+      - Enterprise
+      summary: Accept Team Invite Link
+      description: Accept a team invite link and join the enterprise.
+      operationId: accept_team_invite_link
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AcceptTeamInviteLinkRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/rejoin:
+    post:
+      tags:
+      - Enterprise
+      summary: Rejoin
+      description: Rejoin the most recent enterprise the user was a member of. Gives the user a 24-hour trial regardless of team_trial_given.
+      operationId: rejoin
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/next-invoice:
+    get:
+      tags:
+      - Enterprise
+      summary: Get Next Invoice
+      description: Get the next invoice for the user's enterprise.
+      operationId: get_next_invoice
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/my-seat-info:
+    get:
+      tags:
+      - Enterprise
+      summary: Get My Seat Info
+      description: Get the seat type for the user's enterprise.
+      operationId: get_my_seat_info
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/enterprise/workos/webhook:
+    post:
+      tags:
+      - Enterprise
+      summary: Workos Webhook
+      description: Handle a WorkOS webhook.
+      operationId: workos_webhook
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/enterprise/scim:
+    get:
+      tags:
+      - Enterprise
+      summary: Setup Scim
+      description: Setup SCIM for the enterprise.
+      operationId: setup_scim
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+components:
+  schemas:
+    DomainCapturePolicy:
+      type: string
+      enum:
+      - unset
+      - 'off'
+      - require
+      title: DomainCapturePolicy
+      description: 'Whether unclaimed users on a verified domain are required to request to join the enterprise.
+
+
+        ``unset`` indicates the admin has not chosen a policy — distinct from explicitly ``off``.
+
+        Both ``off`` and ``require`` require a DNS-verified domain before they may be set;
+
+        ``unset`` is the only value allowed when no domain has been verified yet.
+
+        ``off`` means that they have intentionally turned off domain capture so users can keep using flow without being prompted to join the enterprise.'
+    AuditLogEntry:
+      properties:
+        event_id:
+          type: string
+          title: Event Id
+          description: Stable per-event id, deterministic from the source row and action (e.g. `<uuid>:member.added`).
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp
+        action:
+          $ref: '#/components/schemas/AuditAction'
+        actor_user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Actor User Id
+          description: Who performed the action; null when the source actor column is null.
+        actor_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Actor Email
+        actor_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Actor Name
+        target_user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Target User Id
+          description: Who the action was performed on.
+        target_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Target Email
+        target_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Target Name
+        method:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Method
+          description: Source-specific method (membership add/removal method); null for join-request events.
+        source:
+          type: string
+          title: Source
+          description: The table the event was derived from.
+      type: object
+      required:
+      - event_id
+      - timestamp
+      - action
+      - actor_user_id
+      - actor_email
+      - actor_name
+      - target_user_id
+      - target_email
+      - target_name
+      - method
+      - source
+      title: AuditLogEntry
+      description: One derived audit event for the enterprise admin audit log.
+    SelfInviteResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+        should_refetch:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Should Refetch
+      type: object
+      required:
+      - message
+      title: SelfInviteResponse
+      description: Response model for self-invite endpoint
+    BulkInviteRequest:
+      properties:
+        invites:
+          items:
+            $ref: '#/components/schemas/InviteRequest'
+          type: array
+          title: Invites
+      type: object
+      required:
+      - invites
+      title: BulkInviteRequest
+    CreateEnterpriseRequestNew:
+      properties:
+        name:
+          type: string
+          title: Name
+        autoInviteUsers:
+          type: boolean
+          title: Autoinviteusers
+          default: true
+      type: object
+      required:
+      - name
+      title: CreateEnterpriseRequestNew
+    EnterpriseMemberRowResponse:
+      properties:
+        userId:
+          type: string
+          title: Userid
+        firstName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Firstname
+        lastName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Lastname
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+        role:
+          anyOf:
+          - $ref: '#/components/schemas/EnterpriseRole'
+          - type: 'null'
+        status:
+          type: string
+          enum:
+          - active
+          - trialing
+          title: Status
+        trialEndsAt:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Trialendsat
+        teamId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Teamid
+        teamName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Teamname
+        teamRole:
+          anyOf:
+          - $ref: '#/components/schemas/TeamMemberRole'
+          - type: 'null'
+          description: The user's per-team membership role on the joined ``teamId``. ``admin`` or ``member`` when the user has an active team membership; ``null`` when they have no active membership (pending) or the stored role is an unrecognized legacy value. Distinct from the enterprise-level ``role`` field above.
+        totalWords:
+          type: integer
+          title: Totalwords
+        wordsInWindow:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Wordsinwindow
+        wpm:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Wpm
+        lastUsedAt:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Lastusedat
+        joinedAt:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Joinedat
+      type: object
+      required:
+      - userId
+      - firstName
+      - lastName
+      - email
+      - role
+      - status
+      - trialEndsAt
+      - teamId
+      - teamName
+      - totalWords
+      - wordsInWindow
+      - wpm
+      - lastUsedAt
+      - joinedAt
+      title: EnterpriseMemberRowResponse
+      description: "One row of the admin-portal enterprise members table.\n\n``trialEndsAt`` is set only when ``status == \"trialing\"``; the field is\nomitted (``None``) for active members.\n\n``lastUsedAt`` is unix seconds (``GREATEST(desktop_last_transcript_timestamp,\nmobile_last_transcript_timestamp)``). ``None`` when the user has never\ndictated on either platform. ``wpm`` and ``lastUsedAt`` are lifetime values\nregardless of the active ``words_window`` — only the words column varies.\n\n``joinedAt`` is unix seconds of ``MIN(user_team_membership.added_at)`` across\nall membership rows for this user in this enterprise (active + soft-deleted)\nso it survives team moves. ``None`` when no membership rows exist (e.g. an\nSSO-provisioned user not yet placed on any team).\n\n``wpm`` is the user's lifetime average words-per-minute (``UserStats.words_per_minute``).\n``None`` when the user has no dictation history so the UI can render an em-dash\ninstead of a meaningless ``0 WPM``.\n\n``wordsInWindow`` mirrors ``totalWords`` but for the request's ``words_window``:\n  * ``None`` exactly when ``words_window == \"all_time\"`` — the UI should\n    read ``totalWords`` for the cell. ``None`` here means \"this field is\n    not in play for this request\"; it must not be used as a substitute for\n    zero.\n  * ``0`` when a window is active and the user has no dictations inside it\n    — the UI should render ``0`` (not an em-dash).\n  * Positive integer otherwise."
+    ListDomainVerificationsResponse:
+      properties:
+        domains:
+          items:
+            $ref: '#/components/schemas/DomainVerificationStatus'
+          type: array
+          title: Domains
+      type: object
+      required:
+      - domains
+      title: ListDomainVerificationsResponse
+      description: Response returned by the admin ``GET /domains/verifications`` endpoint.
+    BulkInviteResponse:
+      properties:
+        successful:
+          items:
+            $ref: '#/components/schemas/InviteResponse'
+          type: array
+          title: Successful
+        failed:
+          items:
+            $ref: '#/components/schemas/BulkInviteFailedItem'
+          type: array
+          title: Failed
+      type: object
+      required:
+      - successful
+      - failed
+      title: BulkInviteResponse
+      description: Response model for bulk invite operation
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    InviteRequest:
+      properties:
+        email:
+          type: string
+          title: Email
+        role:
+          type: string
+          title: Role
+          default: admin
+      type: object
+      required:
+      - email
+      title: InviteRequest
+    AcceptJoinRequestRequest:
+      properties:
+        join_request_id:
+          type: string
+          title: Join Request Id
+      type: object
+      required:
+      - join_request_id
+      title: AcceptJoinRequestRequest
+    AuditLogTableResponse:
+      properties:
+        rows:
+          items:
+            $ref: '#/components/schemas/AuditLogEntry'
+          type: array
+          title: Rows
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - rows
+      - total
+      title: AuditLogTableResponse
+      description: Paginated audit-log payload. `total` is the filtered event count before pagination.
+    InvitesResponse:
+      properties:
+        invitations:
+          items:
+            $ref: '#/components/schemas/InviteResponse'
+          type: array
+          title: Invitations
+      type: object
+      required:
+      - invitations
+      title: InvitesResponse
+      description: Response model for list of invitations
+    MyCurrentIpResponse:
+      properties:
+        ip:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ip
+      type: object
+      required:
+      - ip
+      title: MyCurrentIpResponse
+      description: Response for GET /api/v1/enterprise/my-current-ip — returns the caller's anti-spoofed egress IP.
+    BulkInviteFailedItem:
+      properties:
+        email:
+          type: string
+          title: Email
+        error:
+          type: string
+          title: Error
+      type: object
+      required:
+      - email
+      - error
+      title: BulkInviteFailedItem
+      description: Response model for a failed bulk invite item
+    ContactAdminResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - message
+      title: ContactAdminResponse
+      description: Response model for contact admin endpoint
+    UpdateEnterpriseRequest:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+        logo:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Logo
+      type: object
+      title: UpdateEnterpriseRequest
+    DomainVerificationStatus:
+      properties:
+        domain_id:
+          type: string
+          title: Domain Id
+        enterprise_id:
+          type: string
+          title: Enterprise Id
+        domain:
+          type: string
+          title: Domain
+        verified:
+          type: boolean
+          title: Verified
+        verified_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Verified At
+          description: ISO-8601 timestamp of verification, or ``null`` if unverified.
+        verification_initiated_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Verification Initiated At
+          description: ISO-8601 timestamp of when the token was first issued, or ``null`` if never initiated.
+        last_verification_check_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Verification Check At
+          description: ISO-8601 timestamp of the last DNS poll, or ``null`` if never polled.
+        verification_attempts:
+          type: integer
+          title: Verification Attempts
+          description: Number of DNS check attempts made against this domain.
+        token_active:
+          type: boolean
+          title: Token Active
+          description: True iff a verification token is currently issued and the domain is not yet verified.
+        record:
+          anyOf:
+          - $ref: '#/components/schemas/DomainVerificationRecord'
+          - type: 'null'
+          description: The TXT record to publish. Populated only on superadmin reads while unverified; always ``null`` on admin-facing reads.
+        domain_capture_policy:
+          $ref: '#/components/schemas/DomainCapturePolicy'
+          description: Per-domain capture policy. ``unset`` while unverified; ``off``/``require`` once verified.
+      type: object
+      required:
+      - domain_id
+      - enterprise_id
+      - domain
+      - verified
+      - verified_at
+      - verification_initiated_at
+      - last_verification_check_at
+      - verification_attempts
+      - token_active
+      - record
+      - domain_capture_policy
+      title: DomainVerificationStatus
+      description: 'Per-domain verification state returned by the enterprise and internal APIs.
+
+
+        The ``record`` field is populated only on superadmin (internal) reads while
+
+        the domain is still unverified. Admin-facing reads always set it to ``None``.'
+    UpdateDomainCapturePolicyRequest:
+      properties:
+        policy:
+          $ref: '#/components/schemas/DomainCapturePolicy'
+      type: object
+      required:
+      - policy
+      title: UpdateDomainCapturePolicyRequest
+    CheckEnterpriseEligibilityRequest:
+      properties:
+        email:
+          type: string
+          title: Email
+      type: object
+      required:
+      - email
+      title: CheckEnterpriseEligibilityRequest
+    BulkAcceptJoinRequestRequest:
+      properties:
+        join_request_ids:
+          items:
+            type: string
+          type: array
+          title: Join Request Ids
+      type: object
+      required:
+      - join_request_ids
+      title: BulkAcceptJoinRequestRequest
+    EnterpriseMembersTableResponse:
+      properties:
+        rows:
+          items:
+            $ref: '#/components/schemas/EnterpriseMemberRowResponse'
+          type: array
+          title: Rows
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - rows
+      - total
+      title: EnterpriseMembersTableResponse
+      description: 'Paginated payload for ``GET /api/v1/enterprise/members/table``.
+
+
+        ``total`` reflects the count *after* search/status/team filters but
+
+        *before* pagination — the frontend uses it for the page-count widget.'
+    DeleteJoinRequestRequest:
+      properties:
+        join_request_id:
+          type: string
+          title: Join Request Id
+      type: object
+      required:
+      - join_request_id
+      title: DeleteJoinRequestRequest
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    DomainVerificationRecord:
+      properties:
+        type:
+          type: string
+          title: Type
+          description: DNS record type. Always ``"TXT"`` for this flow.
+        host:
+          type: string
+          title: Host
+          description: Fully-qualified DNS name to publish the TXT record at.
+        value:
+          type: string
+          title: Value
+          description: Exact TXT record value to publish (our DNS token).
+      type: object
+      required:
+      - type
+      - host
+      - value
+      title: DomainVerificationRecord
+      description: TXT record the customer must publish to prove ownership of a domain.
+    MemberResponse:
+      properties:
+        userId:
+          type: string
+          title: Userid
+        firstName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Firstname
+        lastName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Lastname
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+        role:
+          anyOf:
+          - $ref: '#/components/schemas/EnterpriseRole'
+          - type: 'null'
+        avatarUrl:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Avatarurl
+        enterpriseId:
+          type: string
+          title: Enterpriseid
+        teamTrialGiven:
+          type: boolean
+          title: Teamtrialgiven
+        trialEndsAt:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Trialendsat
+        gracePeriodEndsAt:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Graceperiodendsat
+        hasIndividualSubscription:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Hasindividualsubscription
+      type: object
+      required:
+      - userId
+      - firstName
+      - lastName
+      - email
+      - role
+      - avatarUrl
+      - enterpriseId
+      - teamTrialGiven
+      - trialEndsAt
+      title: MemberResponse
+      description: 'Response model for a single enterprise member.
+
+
+        NOTE: ``firstName``, ``lastName``, ``email``, ``role``, and ``avatarUrl`` are
+
+        Optional because the underlying ``User`` columns (``first_name``, ``last_name``,
+
+        ``email``, ``enterprise_role``, ``avatar_url`` in ``models/user.py``) are all
+
+        nullable. Prior to switching this endpoint to ``MembersResponse.model_validate``,
+
+        a runtime no-op ``cast()`` let nulls flow through to clients, so any user with a
+
+        partial profile would 500 the endpoint if these were declared non-Optional here.'
+    EnterpriseMembersCountResponse:
+      properties:
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - total
+      title: EnterpriseMembersCountResponse
+      description: 'Payload for ``GET /api/v1/enterprise/members/count``.
+
+
+        ``total`` ignores search/status/team filters. It still respects the
+
+        protected-enterprise admin-roles restriction so a non-admin viewer of a
+
+        protected enterprise sees the same reduced denominator the table query
+
+        enforces.'
+    TeamMemberRole:
+      type: string
+      enum:
+      - admin
+      - member
+      title: TeamMemberRole
+      description: 'Per-team membership role stored in ``UserTeamMembership.role``.
+
+
+        Distinct from the enterprise-level role on ``User.enterprise_role`` — a user
+
+        can be an enterprise ``superadmin`` while being a team-level ``member``, or
+
+        vice versa.'
+    AcceptEnterpriseInviteRequest:
+      properties:
+        invite_id:
+          type: string
+          title: Invite Id
+      type: object
+      required:
+      - invite_id
+      title: AcceptEnterpriseInviteRequest
+    RevokeInvitationRequest:
+      properties:
+        enterprise_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Enterprise Id
+      type: object
+      title: RevokeInvitationRequest
+    UpdateMemberRoleRequest:
+      properties:
+        role:
+          type: string
+          title: Role
+          default: admin
+      type: object
+      title: UpdateMemberRoleRequest
+    AcceptTeamInviteLinkRequest:
+      properties:
+        code:
+          type: string
+          title: Code
+      type: object
+      required:
+      - code
+      title: AcceptTeamInviteLinkRequest
+    EnterpriseMemberDetailResponse:
+      properties:
+        userId:
+          type: string
+          title: Userid
+        firstName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Firstname
+        lastName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Lastname
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+        role:
+          anyOf:
+          - $ref: '#/components/schemas/EnterpriseRole'
+          - type: 'null'
+        status:
+          type: string
+          enum:
+          - active
+          - trialing
+          title: Status
+        trialEndsAt:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Trialendsat
+        teamId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Teamid
+        teamName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Teamname
+        teamRole:
+          anyOf:
+          - $ref: '#/components/schemas/TeamMemberRole'
+          - type: 'null'
+          description: The user's per-team membership role on the joined ``teamId``. ``admin`` or ``member`` when the user has an active team membership; ``null`` when they have no active membership (pending) or the stored role is an unrecognized legacy value. Distinct from the enterprise-level ``role`` field above.
+        totalWords:
+          type: integer
+          title: Totalwords
+        wordsInWindow:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Wordsinwindow
+        wpm:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Wpm
+        lastUsedAt:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Lastusedat
+        joinedAt:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Joinedat
+      type: object
+      required:
+      - userId
+      - firstName
+      - lastName
+      - email
+      - role
+      - status
+      - trialEndsAt
+      - teamId
+      - teamName
+      - totalWords
+      - wordsInWindow
+      - wpm
+      - lastUsedAt
+      - joinedAt
+      title: EnterpriseMemberDetailResponse
+      description: 'Payload for ``GET /api/v1/enterprise/members/{user_id}``.
+
+
+        Inherits the full row shape (so a frontend can populate the detail header
+
+        from a cached row optimistically). No extra fields today — the dictation
+
+        rank that previously lived here was removed; the filter-aware chart totals
+
+        come from ``/insights/words-dictated`` and ``/insights/desktop-apps``.'
+    JoinRequest:
+      properties:
+        id:
+          type: string
+          title: Id
+        user_id:
+          type: string
+          title: User Id
+        user_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Email
+        user_first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User First Name
+        user_last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Last Name
+        user_avatar_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Avatar Url
+        enterprise_id:
+          type: string
+          title: Enterprise Id
+        status:
+          type: string
+          enum:
+          - pending
+          - approved
+          - rejected
+          title: Status
+        created_at:
+          type: string
+          title: Created At
+        modified_at:
+          type: string
+          title: Modified At
+        approved_by_user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Approved By User Id
+        approved_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Approved At
+        rejected_by_user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Rejected By User Id
+        rejected_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Rejected At
+        teamTrialGiven:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Teamtrialgiven
+        trialEndsAt:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Trialendsat
+        hasIndividualSubscription:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Hasindividualsubscription
+      type: object
+      required:
+      - id
+      - user_id
+      - user_email
+      - user_first_name
+      - user_last_name
+      - user_avatar_url
+      - enterprise_id
+      - status
+      - created_at
+      - modified_at
+      title: JoinRequest
+      description: Response model for an enterprise join request
+    InviteStatus:
+      type: string
+      enum:
+      - pending
+      - accepted
+      - expired
+      - error
+      - removed
+      - revoked
+      - admin_removed
+      - scim_removed
+      title: InviteStatus
+      description: Status of an enterprise invitation
+    InviteResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+        email:
+          type: string
+          title: Email
+        status:
+          $ref: '#/components/schemas/InviteStatus'
+        expiresAt:
+          type: string
+          title: Expiresat
+        role:
+          $ref: '#/components/schemas/EnterpriseRole'
+        enterprise_id:
+          type: string
+          title: Enterprise Id
+        invitedBy:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Invitedby
+        acceptedAt:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Acceptedat
+        revokedAt:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Revokedat
+        removedAt:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Removedat
+      type: object
+      required:
+      - id
+      - email
+      - status
+      - expiresAt
+      - role
+      - enterprise_id
+      title: InviteResponse
+      description: Response model for a single invitation
+    UpdateEnterpriseSettingsRequest:
+      properties:
+        settings:
+          type: object
+          title: Settings
+      type: object
+      required:
+      - settings
+      title: UpdateEnterpriseSettingsRequest
+    MembersResponse:
+      properties:
+        members:
+          items:
+            $ref: '#/components/schemas/MemberResponse'
+          type: array
+          title: Members
+      type: object
+      required:
+      - members
+      title: MembersResponse
+      description: Response model for list of enterprise members
+    SelfInviteRequest:
+      properties:
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - message
+      title: SelfInviteRequest
+      description: Request model for self-invite to enterprise
+    AuditAction:
+      type: string
+      enum:
+      - member.added
+      - member.removed
+      - join_request.approved
+      - join_request.rejected
+      title: AuditAction
+      description: The audit events v1 derives at read time from existing enterprise tables.
+    ContactAdminRequest:
+      properties:
+        invite_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Invite Email
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - message
+      title: ContactAdminRequest
+      description: Request model for contacting enterprise admins
+    TeamInviteLinkResponse:
+      properties:
+        code:
+          type: string
+          title: Code
+        invite_url:
+          type: string
+          title: Invite Url
+        enterprise_id:
+          type: string
+          title: Enterprise Id
+      type: object
+      required:
+      - code
+      - invite_url
+      - enterprise_id
+      title: TeamInviteLinkResponse
+      description: Response model for a team invite link
+    EnterpriseRole:
+      type: string
+      enum:
+      - admin
+      - member
+      - superadmin
+      - it_admin
+      title: EnterpriseRole
+    SignHipaaBaaRequest:
+      properties:
+        legal_name:
+          type: string
+          title: Legal Name
+      type: object
+      required:
+      - legal_name
+      title: SignHipaaBaaRequest
+    DomainVerificationInitiateResponse:
+      properties:
+        domain_id:
+          type: string
+          title: Domain Id
+        enterprise_id:
+          type: string
+          title: Enterprise Id
+        domain:
+          type: string
+          title: Domain
+        verified:
+          type: boolean
+          title: Verified
+        verified_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Verified At
+        verification_initiated_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Verification Initiated At
+        record:
+          anyOf:
+          - $ref: '#/components/schemas/DomainVerificationRecord'
+          - type: 'null'
+      type: object
+      required:
+      - domain_id
+      - enterprise_id
+      - domain
+      - verified
+      - verified_at
+      - verification_initiated_at
+      - record
+      title: DomainVerificationInitiateResponse
+      description: 'Response returned by the superadmin ``initiate-verification`` endpoint.
+
+
+        Narrower than :class:`DomainVerificationStatus` — does not expose check
+
+        counters or capture policy, only what is needed to issue the TXT record.'
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

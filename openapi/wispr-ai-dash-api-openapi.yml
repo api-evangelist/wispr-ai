@@ -1,0 +1,275 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Dash API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Dash
+paths:
+  /api/v1/dash/api:
+    post:
+      tags:
+      - Dash
+      summary: Dash Api
+      operationId: dash_api
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/dash/client_api:
+    post:
+      tags:
+      - Dash
+      summary: Client Api
+      description: 'Client-facing API endpoint that uses JWT token authentication.
+
+        Functionally identical to /api but uses client tokens for authentication.'
+      operationId: client_api
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/dash/warmup_dash:
+    get:
+      tags:
+      - Dash
+      summary: Warmup Dash
+      operationId: warmup_dash
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/dash/generate_access_token:
+    post:
+      tags:
+      - Dash
+      summary: Generate Access Token
+      operationId: generate_access_token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/dash/chrome_extension/client_key:
+    post:
+      tags:
+      - Dash
+      summary: Chrome Extension Client Key
+      description: "Pre-auth bootstrap endpoint for the Chrome extension.\n\nThe extension does NOT have an org API key. It exchanges an install ID for a short-lived `client_key`\n(JWT) which can be used to connect to `/client_ws` or `/client_ws_v2`.\n\n**Preferred (header-based):** pass the token via the ``Sec-WebSocket-Protocol`` header::\n\n    new WebSocket(url, [\"access_token\", clientKey])\n\n**Legacy (query-param):** ``/client_ws?client_key=<JWT>`` is still supported for\nbackward compatibility but is discouraged because tokens in URLs can appear in\nserver access logs."
+      operationId: chrome_extension_client_key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChromeExtensionClientKeyRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChromeExtensionClientKeyResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/dash/revoke_token:
+    post:
+      tags:
+      - Dash
+      summary: Revoke User Token
+      operationId: revoke_user_token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RevokeTokenRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/dash/webflow_demo/generate_token:
+    post:
+      tags:
+      - Dash
+      summary: Generate Webflow Token
+      operationId: generate_webflow_token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    TokenResponse:
+      properties:
+        access_token:
+          type: string
+          title: Access Token
+        expires_in:
+          type: integer
+          title: Expires In
+      type: object
+      required:
+      - access_token
+      - expires_in
+      title: TokenResponse
+    TokenRequest:
+      properties:
+        client_id:
+          type: string
+          title: Client Id
+        duration_secs:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Duration Secs
+          default: 3600
+        metadata:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Metadata
+      type: object
+      required:
+      - client_id
+      title: TokenRequest
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ChromeExtensionClientKeyRequest:
+      properties:
+        client_id:
+          type: string
+          title: Client Id
+        extension_version:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Extension Version
+        build_channel:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Build Channel
+      type: object
+      required:
+      - client_id
+      title: ChromeExtensionClientKeyRequest
+      description: Pre-auth request from the Chrome extension to mint a short-lived `client_key`.
+    RevokeTokenRequest:
+      properties:
+        access_token:
+          type: string
+          title: Access Token
+      type: object
+      required:
+      - access_token
+      title: RevokeTokenRequest
+    ChromeExtensionClientKeyResponse:
+      properties:
+        client_key:
+          type: string
+          title: Client Key
+        expires_in:
+          type: integer
+          title: Expires In
+      type: object
+      required:
+      - client_key
+      - expires_in
+      title: ChromeExtensionClientKeyResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

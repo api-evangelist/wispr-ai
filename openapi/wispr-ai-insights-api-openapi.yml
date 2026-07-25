@@ -1,0 +1,309 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Insights API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Insights
+paths:
+  /api/v1/insights:
+    get:
+      tags:
+      - Insights
+      summary: Get Insights
+      description: Return stats data for the Insights tab (no heatmap).
+      operationId: get_insights
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InsightsResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/insights/heatmap:
+    get:
+      tags:
+      - Insights
+      summary: Get Heatmap
+      description: Return heatmap data for a date range. Defaults to the last 365 days.
+      operationId: get_heatmap
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: since
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+          title: Since
+      - name: until
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+          title: Until
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HeatmapResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/insights/desktop-corrections-backfill:
+    post:
+      tags:
+      - Insights
+      summary: Desktop Corrections Backfill
+      description: One-shot backfill of desktop_total_words_corrected from client SQLite history.
+      operationId: desktop_corrections_backfill
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StatsBackfillRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+components:
+  schemas:
+    HeatmapDay:
+      properties:
+        date:
+          type: string
+          format: date
+          title: Date
+        desktop_words:
+          type: integer
+          title: Desktop Words
+        mobile_words:
+          type: integer
+          title: Mobile Words
+        desktop_apps:
+          anyOf:
+          - additionalProperties:
+              type: integer
+            type: object
+          - type: 'null'
+          title: Desktop Apps
+        mobile_apps:
+          anyOf:
+          - additionalProperties:
+              type: integer
+            type: object
+          - type: 'null'
+          title: Mobile Apps
+      type: object
+      required:
+      - date
+      - desktop_words
+      - mobile_words
+      title: HeatmapDay
+      description: Per-day data for the calendar heatmap.
+    HeatmapResponse:
+      properties:
+        days:
+          items:
+            $ref: '#/components/schemas/HeatmapDay'
+          type: array
+          title: Days
+        account_created_at:
+          type: string
+          format: date
+          title: Account Created At
+      type: object
+      required:
+      - days
+      - account_created_at
+      title: HeatmapResponse
+      description: Heatmap data for a date range.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    InsightsResponse:
+      properties:
+        words_per_minute:
+          type: number
+          title: Words Per Minute
+        wpm_percentile:
+          type: number
+          maximum: 99.9
+          minimum: 0.0
+          title: Wpm Percentile
+        wpm_buckets:
+          items:
+            type: number
+          type: array
+          title: Wpm Buckets
+          description: 'Keyboard-typist WPM bucket boundaries (one per quantile in wpm_bucket_quantiles). Log-normal fit to the typing-speed distribution in Dhakal et al., ''Observations on Typing from 136 Million Keystrokes'' (CHI 2018): N=168,960, mean 51.56 WPM, SD 20.20 WPM. Intentionally the slower keyboard cohort so dictating users surface as exceptional. Clients use these with wpm_bucket_quantiles to recompute percentile locally after an optimistic WPM update.'
+        wpm_bucket_quantiles:
+          items:
+            type: number
+          type: array
+          title: Wpm Bucket Quantiles
+          description: Quantile labels (0.0-1.0) matching wpm_buckets one-to-one; currently 1-94 at 1% intervals then 95.0-99.9 at 0.1%. Shipped alongside the buckets so clients stay in sync if the backend reshapes the distribution.
+        desktop_total_words_corrected:
+          type: integer
+          title: Desktop Total Words Corrected
+        mobile_total_words_corrected:
+          type: integer
+          title: Mobile Total Words Corrected
+        desktop_total_dictionary_replacements:
+          type: integer
+          title: Desktop Total Dictionary Replacements
+        mobile_total_dictionary_replacements:
+          type: integer
+          title: Mobile Total Dictionary Replacements
+        total_words:
+          type: integer
+          title: Total Words
+        desktop_total_words:
+          type: integer
+          title: Desktop Total Words
+        mobile_total_words:
+          type: integer
+          title: Mobile Total Words
+        monthly_word_delta_percent:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Monthly Word Delta Percent
+        previous_month_total_words:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Previous Month Total Words
+        desktop_usage:
+          items:
+            $ref: '#/components/schemas/AppCategoryUsage'
+          type: array
+          title: Desktop Usage
+        desktop_total_apps_used:
+          type: integer
+          title: Desktop Total Apps Used
+        current_streak:
+          type: integer
+          title: Current Streak
+        longest_streak:
+          type: integer
+          title: Longest Streak
+      type: object
+      required:
+      - words_per_minute
+      - wpm_percentile
+      - desktop_total_words_corrected
+      - mobile_total_words_corrected
+      - desktop_total_dictionary_replacements
+      - mobile_total_dictionary_replacements
+      - total_words
+      - desktop_total_words
+      - mobile_total_words
+      - desktop_usage
+      - desktop_total_apps_used
+      - current_streak
+      - longest_streak
+      title: InsightsResponse
+      description: Stats-only insights data (no heatmap).
+    StatsBackfillRequest:
+      properties:
+        desktop_words_corrected_delta:
+          type: integer
+          minimum: 0.0
+          title: Desktop Words Corrected Delta
+      type: object
+      required:
+      - desktop_words_corrected_delta
+      title: StatsBackfillRequest
+      description: Desktop client sends a pre-aggregated correction delta for backfilling user_stats.
+    AppCategoryUsage:
+      properties:
+        key:
+          type: string
+          title: Key
+        category:
+          type: string
+          title: Category
+        word_count:
+          type: integer
+          minimum: 0.0
+          title: Word Count
+        dictation_count:
+          type: integer
+          minimum: 0.0
+          title: Dictation Count
+        percentage:
+          type: number
+          maximum: 100.0
+          minimum: 0.0
+          title: Percentage
+      type: object
+      required:
+      - key
+      - category
+      - word_count
+      - dictation_count
+      - percentage
+      title: AppCategoryUsage
+      description: Word and dictation count breakdown for one app category.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

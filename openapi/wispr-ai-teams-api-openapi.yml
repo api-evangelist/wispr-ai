@@ -1,0 +1,706 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Teams API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Teams
+paths:
+  /api/v1/cost-centers/{cost_center_id}/teams:
+    post:
+      tags:
+      - Teams
+      summary: Create Team
+      description: 'Create a new team under a cost center.
+
+
+        The caller must be an enterprise admin or an active member of some team
+
+        in the cost center.'
+      operationId: create_team
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: cost_center_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Cost Center Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTeamRequest'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/enterprise/{enterprise_id}/teams:
+    get:
+      tags:
+      - Teams
+      summary: List Teams
+      description: 'List all active teams for an enterprise.
+
+
+        Any user in the enterprise can call this — including pending users with
+
+        ``enterprise_id`` set but no team membership, who need this list to render
+
+        the desktop team picker. Cross-enterprise callers receive 404 (not 403)
+
+        to avoid leaking enterprise existence.'
+      operationId: list_teams
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/teams/{team_id}:
+    get:
+      tags:
+      - Teams
+      summary: Get Team
+      description: 'Get a single team by id.
+
+
+        The caller must be an enterprise admin or an active member of the team.
+
+        Cross-enterprise callers receive 404 (not 403) to avoid leaking existence.'
+      operationId: get_team
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: team_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Team Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Teams
+      summary: Update Team
+      description: 'Rename a team.
+
+
+        The caller must be an enterprise admin or team admin.'
+      operationId: update_team
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: team_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Team Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTeamRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Teams
+      summary: Disband Team
+      description: 'Disband a team (soft-delete).
+
+
+        Sets ``team.status=disbanded`` and soft-removes all active memberships with
+
+        ``removal_method=team_disbanded``. The caller must be an enterprise admin
+
+        or the cost center''s ``billing_owner_user_id``.'
+      operationId: disband_team
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: team_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Team Id
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/teams/{team_id}/members:
+    post:
+      tags:
+      - Teams
+      summary: Move Member To Team
+      description: 'Move an enterprise user into this team from their current team.
+
+
+        The caller must be an enterprise admin or an admin of the destination
+
+        team. After the move, the refreshed team and its member count are returned.'
+      operationId: move_member_to_team
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: team_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Team Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoveMemberRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/teams/{team_id}/members/{user_id}:
+    patch:
+      tags:
+      - Teams
+      summary: Update Team Member Role
+      description: 'Set the per-team role of a member already on the team.
+
+
+        Caller must be an enterprise admin OR the cost center''s billing owner.
+
+        Refuses to demote the team''s last effective admin (counting enterprise-level
+
+        superadmins/it_admins) when the team still has other active members.'
+      operationId: update_team_member_role
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: team_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Team Id
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: User Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTeamMemberRoleRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamMembershipResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/teams/{team_id}/cost-center:
+    patch:
+      tags:
+      - Teams
+      summary: Move Team To Cost Center
+      description: 'Reassign a team to a different cost center within the same enterprise.
+
+
+        Caller must be an enterprise admin. The destination CC must be in a live
+
+        billing status and belong to the same enterprise. The source CC must
+
+        retain at least one team after the move.'
+      operationId: move_team_to_cost_center
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: team_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Team Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoveTeamToCostCenterRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/teams/{team_id}/join:
+    post:
+      tags:
+      - Teams
+      summary: Join Team
+      description: 'Pending enterprise member self-selects into a team via the desktop picker.
+
+
+        Multi-team enterprises leave new SCIM/auto-add users in a pending state
+
+        (no team membership). The desktop client renders a team picker; selecting
+
+        a team calls this endpoint, which inserts the membership with
+
+        ``add_method=team_picker`` and reconciles seats for the team''s cost
+
+        center outside the DB transaction.
+
+
+        Returns 400 when the user has no enterprise, 404 when the team is
+
+        missing, disbanded, or in another enterprise, and 409 when the user
+
+        already has an active membership in the enterprise.'
+      operationId: join_team
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: team_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Team Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/me/active-cost-center:
+    get:
+      tags:
+      - Teams
+      summary: Get Active Cost Center For Caller
+      description: 'Return the caller''s cost center plus active members of every team in it.
+
+
+        Powers the create-department dialog''s cost-center-scoped picker — callers
+
+        can pull any active member of their CC into a new team (intra-CC move).
+
+        Each member row carries its ``team_id`` so the frontend can scope the
+
+        successor-admin field to caller''s old teammates only.
+
+
+        404 if the caller has no active team membership (e.g. orphaned by SCIM
+
+        provisioning before placement; or after their only team was disbanded).'
+      operationId: get_active_cost_center_for_caller
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActiveCostCenterResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+components:
+  schemas:
+    TeamResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        name:
+          type: string
+          title: Name
+        cost_center_id:
+          type: string
+          format: uuid
+          title: Cost Center Id
+        cost_center_name:
+          type: string
+          title: Cost Center Name
+        enterprise_id:
+          type: string
+          format: uuid
+          title: Enterprise Id
+        status:
+          type: string
+          title: Status
+        member_count:
+          type: integer
+          title: Member Count
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        billing_owner_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Billing Owner Email
+      type: object
+      required:
+      - id
+      - name
+      - cost_center_id
+      - cost_center_name
+      - enterprise_id
+      - status
+      - member_count
+      - created_at
+      title: TeamResponse
+      description: Team details with live member count.
+    ActiveCostCenterMemberResponse:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+        team_id:
+          type: string
+          format: uuid
+          title: Team Id
+        team_name:
+          type: string
+          title: Team Name
+        team_role:
+          anyOf:
+          - $ref: '#/components/schemas/TeamMemberRole'
+          - type: 'null'
+        enterprise_role:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Enterprise Role
+        is_effective_team_admin:
+          type: boolean
+          title: Is Effective Team Admin
+          description: True when this member counts as an admin on their current team — team-role admin OR enterprise-role in admin/superadmin/it_admin.
+      type: object
+      required:
+      - user_id
+      - email
+      - first_name
+      - last_name
+      - team_id
+      - team_name
+      - team_role
+      - enterprise_role
+      - is_effective_team_admin
+      title: ActiveCostCenterMemberResponse
+      description: 'One active member of a team in the caller''s current cost center.
+
+
+        Powers the cost-center-scoped member picker in the create-department dialog:
+
+        callers can pull anyone in their CC into a new team (an intra-CC move).
+
+        ``team_id`` is the member''s *current* team within the CC, used to filter
+
+        successor-admin candidates to caller''s old teammates.'
+    MoveMemberRequest:
+      properties:
+        user_id:
+          type: string
+          maxLength: 80
+          minLength: 1
+          title: User Id
+      type: object
+      required:
+      - user_id
+      title: MoveMemberRequest
+      description: Pull an existing enterprise user into this team from whichever team they're on now.
+    UpdateTeamRequest:
+      properties:
+        name:
+          type: string
+          maxLength: 120
+          minLength: 1
+          title: Name
+      type: object
+      required:
+      - name
+      title: UpdateTeamRequest
+    TeamListResponse:
+      properties:
+        teams:
+          items:
+            $ref: '#/components/schemas/TeamResponse'
+          type: array
+          title: Teams
+      type: object
+      required:
+      - teams
+      title: TeamListResponse
+    CreateTeamRequest:
+      properties:
+        name:
+          type: string
+          maxLength: 120
+          minLength: 1
+          title: Name
+        member_user_ids:
+          items:
+            type: string
+          type: array
+          maxItems: 500
+          title: Member User Ids
+        successor_admin_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Successor Admin Email
+      type: object
+      required:
+      - name
+      title: CreateTeamRequest
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    MoveTeamToCostCenterRequest:
+      properties:
+        cost_center_id:
+          type: string
+          format: uuid
+          title: Cost Center Id
+      type: object
+      required:
+      - cost_center_id
+      title: MoveTeamToCostCenterRequest
+      description: Reassign a team to a different cost center within the same enterprise.
+    ActiveCostCenterResponse:
+      properties:
+        cost_center_id:
+          type: string
+          format: uuid
+          title: Cost Center Id
+        cost_center_name:
+          type: string
+          title: Cost Center Name
+        caller_team_id:
+          type: string
+          format: uuid
+          title: Caller Team Id
+        caller_is_effective_team_admin:
+          type: boolean
+          title: Caller Is Effective Team Admin
+        members:
+          items:
+            $ref: '#/components/schemas/ActiveCostCenterMemberResponse'
+          type: array
+          title: Members
+      type: object
+      required:
+      - cost_center_id
+      - cost_center_name
+      - caller_team_id
+      - caller_is_effective_team_admin
+      - members
+      title: ActiveCostCenterResponse
+      description: 'Caller''s active cost center plus all active members of teams within it.
+
+
+        Returned by ``GET /me/active-cost-center``. The create-department dialog
+
+        uses ``members`` (excluding the caller) to populate the picker. Successor
+
+        admins are filtered client-side to members with ``team_id == caller_team_id``.'
+    TeamMemberRole:
+      type: string
+      enum:
+      - admin
+      - member
+      title: TeamMemberRole
+      description: 'Per-team membership role stored in ``UserTeamMembership.role``.
+
+
+        Distinct from the enterprise-level role on ``User.enterprise_role`` — a user
+
+        can be an enterprise ``superadmin`` while being a team-level ``member``, or
+
+        vice versa.'
+    UpdateTeamMemberRoleRequest:
+      properties:
+        role:
+          $ref: '#/components/schemas/TeamMemberRole'
+      type: object
+      required:
+      - role
+      title: UpdateTeamMemberRoleRequest
+      description: Set the per-team membership role for a user already on the team.
+    TeamMembershipResponse:
+      properties:
+        team_id:
+          type: string
+          format: uuid
+          title: Team Id
+        user_id:
+          type: string
+          title: User Id
+        role:
+          anyOf:
+          - $ref: '#/components/schemas/TeamMemberRole'
+          - type: 'null'
+      type: object
+      required:
+      - team_id
+      - user_id
+      - role
+      title: TeamMembershipResponse
+      description: A single ``UserTeamMembership`` row exposed to admin clients.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

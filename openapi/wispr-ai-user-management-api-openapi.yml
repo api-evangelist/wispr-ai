@@ -1,0 +1,1132 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics User Management API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: User Management
+paths:
+  /api/v1/user/profile:
+    get:
+      tags:
+      - User Management
+      summary: Get User Profile
+      description: Get a user's profile information.
+      operationId: get_user_profile
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+    put:
+      tags:
+      - User Management
+      summary: Update User Profile
+      description: Update a user's profile information (first name and last name).
+      operationId: update_user_profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/user/user-id:
+    get:
+      tags:
+      - User Management
+      summary: Get User Id
+      description: Get a user's ID.
+      operationId: get_user_id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/user/preferences:
+    get:
+      tags:
+      - User Management
+      summary: Get User Preference
+      description: Get a user's preferences.
+      operationId: get_user_preference
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+    post:
+      tags:
+      - User Management
+      summary: Update User Preference
+      description: Update a user's preferences.
+      operationId: update_user_preference
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPreference'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/user/onboarding-answers:
+    post:
+      tags:
+      - User Management
+      summary: Save Onboarding Answers
+      description: 'Store onboarding answers and mark fulfilled intents.
+
+
+        Called by the web SPA after signup completes and the user row is provisioned.'
+      operationId: save_onboarding_answers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitOnboardingAnswersRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OnboardingAnswersResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/user/dictionary:
+    get:
+      tags:
+      - User Management
+      summary: Get User Dictionary
+      description: Get a user's dictionary.
+      operationId: get_user_dictionary
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+    post:
+      tags:
+      - User Management
+      summary: Update User Dictionary
+      description: Add a word to a user's dictionary.
+      operationId: update_user_dictionary
+      requestBody:
+        content:
+          application/json:
+            schema:
+              items:
+                $ref: '#/components/schemas/DictionaryItemOld'
+              type: array
+              title: Dictionary
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+    delete:
+      tags:
+      - User Management
+      summary: Delete User Dictionary
+      description: Delete a user's dictionary.
+      operationId: delete_user_dictionary
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/user/dictionary/{word_id}:
+    delete:
+      tags:
+      - User Management
+      summary: Delete Word In Dictionary
+      description: Delete a word from a user's dictionary.
+      operationId: delete_word_in_dictionary
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: word_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Word Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/user/student_status:
+    get:
+      tags:
+      - User Management
+      summary: Get Student Status
+      description: Get a user's student status.
+      operationId: get_student_status
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/user/update_student_status:
+    post:
+      tags:
+      - User Management
+      summary: Update Student Status
+      description: "Update a user's student status.\n\nArgs:\n    email (EmailStr): The user's email address.\n    is_student (bool): Whether the user is a student.\n    from_now (bool, optional): If True, the trial period will be calculated from the current time.\n        If False, the trial period will be calculated from the original reference point. Defaults to False.\n\nReturns:\n    ORJSONResponse: The result of the update operation."
+      operationId: update_student_status
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Body_update_student_status_api_v1_user_update_student_status_post'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /api/v1/user/onboarding_complete:
+    post:
+      tags:
+      - User Management
+      summary: Onboarding Complete
+      description: Mark onboarding completed and activate trial if eligible and claimed.
+      operationId: onboarding_complete
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: platform
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Platform for attribution tracking
+          title: Platform
+        description: Platform for attribution tracking
+      - name: trial_variant
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/TrialVariant'
+          - type: 'null'
+          description: Trial variant for experiment. None = auto-grant (legacy/control)
+          title: Trial Variant
+        description: Trial variant for experiment. None = auto-grant (legacy/control)
+      - name: ga4_client_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: GA4 client_id for attribution tracking
+          title: Ga4 Client Id
+        description: GA4 client_id for attribution tracking
+      - name: fbp
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Meta _fbp cookie value
+          title: Fbp
+        description: Meta _fbp cookie value
+      - name: fbc
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Meta _fbc click ID cookie value
+          title: Fbc
+        description: Meta _fbc click ID cookie value
+      - name: utm_source
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: UTM source parameter
+          title: Utm Source
+        description: UTM source parameter
+      - name: utm_medium
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: UTM medium parameter
+          title: Utm Medium
+        description: UTM medium parameter
+      - name: utm_campaign
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: UTM campaign parameter
+          title: Utm Campaign
+        description: UTM campaign parameter
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/user/claim_trial_extension:
+    post:
+      tags:
+      - User Management
+      summary: Claim Trial Extension
+      description: 'Claim a trial extension day for dictating 100+ words.
+
+        Users can claim once per day, up to 7 days total, within 7 days of onboarding.'
+      operationId: claim_trial_extension
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/user/user_stats:
+    get:
+      tags:
+      - User Management
+      summary: Get User Stats
+      description: Get a user's stats.
+      operationId: get_user_stats
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/user/hipaa-baa:
+    get:
+      tags:
+      - User Management
+      summary: Get Hipaa Baa Status
+      description: Get the status of a HIPAA Business Associate Agreement.
+      operationId: get_hipaa_baa_status
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+    post:
+      tags:
+      - User Management
+      summary: Sign Hipaa Baa
+      description: Sign a HIPAA Business Associate Agreement.
+      operationId: sign_hipaa_baa
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignHipaaBaaRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+    delete:
+      tags:
+      - User Management
+      summary: Revoke Hipaa Baa
+      description: Revoke a HIPAA Business Associate Agreement.
+      operationId: revoke_hipaa_baa
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/user/request_push_notification:
+    post:
+      tags:
+      - User Management
+      summary: Request Push Notification
+      description: Request a push notification.
+      operationId: request_push_notification
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Body_request_push_notification_api_v1_user_request_push_notification_post'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/user/register_device:
+    post:
+      tags:
+      - User Management
+      summary: Register Device
+      description: Register a device.
+      operationId: register_device
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterDeviceRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/user/registered_devices:
+    get:
+      tags:
+      - User Management
+      summary: Get Registered Devices
+      description: Get a list of platforms the user has registered.
+      operationId: get_registered_devices
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/user/export_data:
+    get:
+      tags:
+      - User Management
+      summary: Export User Data
+      description: 'Export all data associated with a user''s email address.
+
+        Returns a JSON file containing all user data from main_db, usage_db, and platform_db.
+
+
+        This endpoint requires root API key authentication.'
+      operationId: export_user_data
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: email
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The email address of the user to export data for
+          format: email
+          title: Email
+        description: The email address of the user to export data for
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/user/trial_status:
+    get:
+      tags:
+      - User Management
+      summary: Get Trial Status
+      description: Get a user's trial status.
+      operationId: get_trial_status
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+components:
+  schemas:
+    RegisterDeviceRequest:
+      properties:
+        device_id:
+          type: string
+          title: Device Id
+        device_type:
+          type: string
+          title: Device Type
+        device_manufacturer:
+          type: string
+          title: Device Manufacturer
+        device_model:
+          type: string
+          title: Device Model
+        device_os_name:
+          type: string
+          title: Device Os Name
+        device_os_version:
+          type: string
+          title: Device Os Version
+        device_family:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Device Family
+        device_sku:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Device Sku
+        baseboard_product:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Baseboard Product
+        device_info_status:
+          anyOf:
+          - $ref: '#/components/schemas/DeviceInfoStatus'
+          - type: 'null'
+      type: object
+      required:
+      - device_id
+      - device_type
+      - device_manufacturer
+      - device_model
+      - device_os_name
+      - device_os_version
+      title: RegisterDeviceRequest
+    OnboardingAnswersResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - message
+      title: OnboardingAnswersResponse
+      description: Acknowledgement response after onboarding answers are submitted.
+    DictionaryItemOld:
+      properties:
+        id:
+          type: string
+          title: Id
+        team_dictionary_id:
+          type: string
+          title: Team Dictionary Id
+          default: 00000000-0000-0000-0000-000000000000
+        word:
+          type: string
+          title: Word
+        replacement:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Replacement
+        is_manual:
+          type: boolean
+          title: Is Manual
+        created_at:
+          type: string
+          title: Created At
+        modified_at:
+          type: string
+          title: Modified At
+        is_deleted:
+          type: boolean
+          title: Is Deleted
+        frequency_used:
+          type: integer
+          title: Frequency Used
+          default: 0
+        last_used:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Used
+        source:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Source
+        is_snippet:
+          type: boolean
+          title: Is Snippet
+          default: false
+      type: object
+      required:
+      - id
+      - word
+      - is_manual
+      - created_at
+      - modified_at
+      - is_deleted
+      - source
+      title: DictionaryItemOld
+    PolishInstructions:
+      properties:
+        default:
+          additionalProperties:
+            type: boolean
+          type: object
+          title: Default
+          default: {}
+        custom:
+          additionalProperties:
+            type: boolean
+          type: object
+          title: Custom
+          default: {}
+      type: object
+      title: PolishInstructions
+      description: Saved toggle rules for Polish transforms (built-in defaults + custom).
+    UserProfileResponse:
+      properties:
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+      type: object
+      title: UserProfileResponse
+    SubmitOnboardingAnswersRequest:
+      properties:
+        answers:
+          additionalProperties:
+            anyOf:
+            - type: string
+            - items:
+                type: string
+              type: array
+            - type: boolean
+            - type: integer
+          type: object
+          title: Answers
+        fulfilled_intents:
+          items:
+            $ref: '#/components/schemas/OnboardingIntent'
+          type: array
+          title: Fulfilled Intents
+          default: []
+      type: object
+      required:
+      - answers
+      title: SubmitOnboardingAnswersRequest
+      description: Request body carrying the user's onboarding answers and fulfilled intents.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    UserPreferencesUpdate:
+      properties:
+        privacy_mode:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Privacy Mode
+        share_data:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Share Data
+        cloud_sync:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Cloud Sync
+        output_languages:
+          anyOf:
+          - items:
+              type: string
+              enum:
+              - ''
+              - en
+              - engb
+              - enca
+              - zh
+              - zhcn
+              - de
+              - dech
+              - es
+              - ru
+              - ko
+              - fr
+              - ja
+              - pt
+              - tr
+              - pl
+              - ca
+              - nl
+              - ar
+              - sv
+              - it
+              - id
+              - hi
+              - hien
+              - fi
+              - vi
+              - he
+              - uk
+              - el
+              - ms
+              - cs
+              - ro
+              - da
+              - hu
+              - ta
+              - 'no'
+              - th
+              - ur
+              - hr
+              - bg
+              - lt
+              - la
+              - mi
+              - ml
+              - cy
+              - sk
+              - te
+              - fa
+              - lv
+              - bn
+              - sr
+              - az
+              - sl
+              - kn
+              - et
+              - mk
+              - br
+              - eu
+              - is
+              - hy
+              - ne
+              - mn
+              - bs
+              - kk
+              - sq
+              - sw
+              - gl
+              - mr
+              - pa
+              - si
+              - km
+              - sn
+              - yo
+              - so
+              - af
+              - oc
+              - ka
+              - be
+              - tg
+              - sd
+              - gu
+              - am
+              - yi
+              - lo
+              - uz
+              - fo
+              - ht
+              - ps
+              - tk
+              - nn
+              - mt
+              - sa
+              - lb
+              - my
+              - bo
+              - tl
+              - mg
+              - as
+              - tt
+              - haw
+              - ln
+              - ha
+              - ba
+              - jv
+              - su
+              - yue
+            type: array
+          - type: 'null'
+          title: Output Languages
+        personalization_styles:
+          anyOf:
+          - $ref: '#/components/schemas/PersonalizationStyles'
+          - type: 'null'
+        personalizationOnboardingCompleted:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Personalizationonboardingcompleted
+        polish_instructions:
+          anyOf:
+          - $ref: '#/components/schemas/PolishInstructions'
+          - type: 'null'
+        auto_cleanup_level:
+          anyOf:
+          - type: string
+            enum:
+            - none
+            - light
+            - medium
+            - high
+            - full
+          - type: 'null'
+          title: Auto Cleanup Level
+        local_data_policy:
+          anyOf:
+          - type: string
+            enum:
+            - store_normally
+            - delete_after_24h
+            - never_store
+          - type: 'null'
+          title: Local Data Policy
+        notetaker_transcript_retention:
+          anyOf:
+          - $ref: '#/components/schemas/NotetakerTranscriptRetention'
+          - type: 'null'
+        fulfilled_intents:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/OnboardingIntent'
+            type: array
+          - type: 'null'
+          title: Fulfilled Intents
+        ui_locale:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ui Locale
+      type: object
+      title: UserPreferencesUpdate
+      description: 'Model for partial updates to user preferences.
+
+        All fields are optional but when present must follow the same validation rules as UserPreferences.'
+    PersonalizationStyles:
+      properties:
+        personal:
+          $ref: '#/components/schemas/PersonalizationStyle'
+          default: formal
+        work:
+          $ref: '#/components/schemas/PersonalizationStyle'
+          default: formal
+        email:
+          $ref: '#/components/schemas/PersonalizationStyle'
+          default: formal
+        other:
+          $ref: '#/components/schemas/PersonalizationStyle'
+          default: formal
+        unset:
+          $ref: '#/components/schemas/PersonalizationStyle'
+          default: default
+      type: object
+      title: PersonalizationStyles
+    Body_update_student_status_api_v1_user_update_student_status_post:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        is_student:
+          type: boolean
+          title: Is Student
+        from_now:
+          type: boolean
+          title: From Now
+          default: false
+      type: object
+      required:
+      - email
+      - is_student
+      title: Body_update_student_status_api_v1_user_update_student_status_post
+    TrialVariant:
+      type: string
+      enum:
+      - control
+      - opt_in_claimed
+      - opt_in_declined
+      title: TrialVariant
+    Body_request_push_notification_api_v1_user_request_push_notification_post:
+      properties:
+        device_token:
+          type: string
+          title: Device Token
+        state:
+          type: integer
+          title: State
+      type: object
+      required:
+      - device_token
+      - state
+      title: Body_request_push_notification_api_v1_user_request_push_notification_post
+    UserProfile:
+      properties:
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+      type: object
+      title: UserProfile
+      description: 'Model for user profile information.
+
+        Kept this seperated from UserPreference in case we have more user profile related fields in the future.'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    DeviceInfoStatus:
+      type: string
+      enum:
+      - ok
+      - partial
+      - missing
+      - access_denied
+      - error
+      title: DeviceInfoStatus
+    NotetakerTranscriptRetention:
+      type: string
+      enum:
+      - never_delete
+      - 1_day
+      - 7_days
+      - 30_days
+      - 90_days
+      - 180_days
+      - 365_days
+      title: NotetakerTranscriptRetention
+    OnboardingIntent:
+      type: string
+      enum:
+      - spend_time_typing
+      - flow_use_case
+      - about_yourself
+      - work_environment
+      - language_preference
+      - attribution
+      - privacy_consent
+      - personalization_styles
+      - personalization_styles_default
+      - trial_activation
+      - voice_profile
+      - product_value_prop
+      title: OnboardingIntent
+    UserPreference:
+      properties:
+        preferences:
+          $ref: '#/components/schemas/UserPreferencesUpdate'
+        modified_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Modified At
+      type: object
+      required:
+      - preferences
+      title: UserPreference
+    SignHipaaBaaRequest:
+      properties:
+        legal_name:
+          type: string
+          title: Legal Name
+      type: object
+      required:
+      - legal_name
+      title: SignHipaaBaaRequest
+    PersonalizationStyle:
+      type: string
+      enum:
+      - formal
+      - casual
+      - veryCasual
+      - excited
+      - genz
+      - default
+      title: PersonalizationStyle
+      description: Represents the style for personalization settings.
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

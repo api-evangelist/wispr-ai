@@ -1,0 +1,323 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Typing Test API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Typing Test
+paths:
+  /api/v1/typing-test/submit-score:
+    post:
+      tags:
+      - Typing Test
+      summary: Submit Score
+      description: Submit a typing test score. Validates keystrokes server-side and records the attempt.
+      operationId: submit_score
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitScoreRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TypingTestResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/typing-test/leaderboard:
+    get:
+      tags:
+      - Typing Test
+      summary: Get Leaderboard
+      description: Fetch the current typing test leaderboard. Optionally includes caller's rank via JWT or email.
+      operationId: get_leaderboard
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 10
+          minimum: 1
+          default: 3
+          title: Limit
+      - name: email
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            maxLength: 80
+          - type: 'null'
+          title: Email
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeaderboardResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/typing-test/passage:
+    get:
+      tags:
+      - Typing Test
+      summary: Get Passage
+      description: Fetch a random typing test passage for a given language.
+      operationId: get_passage
+      parameters:
+      - name: language
+        in: query
+        required: false
+        schema:
+          type: string
+          maxLength: 10
+          default: en
+          title: Language
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PassageResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    LeaderboardEntry:
+      properties:
+        rank:
+          type: integer
+          title: Rank
+        display_name:
+          type: string
+          title: Display Name
+        typing_wpm:
+          type: integer
+          title: Typing Wpm
+      type: object
+      required:
+      - rank
+      - display_name
+      - typing_wpm
+      title: LeaderboardEntry
+      description: A single leaderboard entry.
+    Keystroke:
+      properties:
+        key:
+          type: string
+          maxLength: 20
+          title: Key
+        time:
+          type: integer
+          minimum: 0.0
+          title: Time
+          description: Timestamp in milliseconds
+      type: object
+      required:
+      - key
+      - time
+      title: Keystroke
+      description: A single keystroke event with key and timestamp.
+    PassageResponse:
+      properties:
+        id:
+          type: integer
+          title: Id
+        language:
+          type: string
+          title: Language
+        text:
+          type: string
+          title: Text
+      type: object
+      required:
+      - id
+      - language
+      - text
+      title: PassageResponse
+      description: Response schema for GET /typing-test/passage
+    TypingTestResponse:
+      properties:
+        stats:
+          anyOf:
+          - $ref: '#/components/schemas/UserTypingTestStats'
+          - type: 'null'
+        leaderboard:
+          $ref: '#/components/schemas/LeaderboardResponse'
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+        submission_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Submission Id
+      type: object
+      required:
+      - leaderboard
+      title: TypingTestResponse
+      description: Response for the submit-score endpoint.
+    SubmitScoreRequest:
+      properties:
+        email:
+          anyOf:
+          - type: string
+            maxLength: 80
+            format: email
+          - type: 'null'
+          title: Email
+        display_name:
+          anyOf:
+          - type: string
+            maxLength: 100
+          - type: 'null'
+          title: Display Name
+        passage_id:
+          type: integer
+          minimum: 1.0
+          title: Passage Id
+        typed_text:
+          type: string
+          maxLength: 1000
+          title: Typed Text
+        keystrokes:
+          items:
+            $ref: '#/components/schemas/Keystroke'
+          type: array
+          maxItems: 2000
+          title: Keystrokes
+        voice_wpm:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Voice Wpm
+        voice_accuracy:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Voice Accuracy
+        limit:
+          type: integer
+          maximum: 10.0
+          minimum: 1.0
+          title: Limit
+          default: 3
+      type: object
+      required:
+      - passage_id
+      - typed_text
+      - keystrokes
+      title: SubmitScoreRequest
+      description: Request schema for POST /typing-test/submit-score
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    LeaderboardResponse:
+      properties:
+        top_ranked:
+          items:
+            $ref: '#/components/schemas/LeaderboardEntry'
+          type: array
+          title: Top Ranked
+        me:
+          anyOf:
+          - $ref: '#/components/schemas/LeaderboardEntry'
+          - type: 'null'
+      type: object
+      required:
+      - top_ranked
+      title: LeaderboardResponse
+      description: Leaderboard with top ranked users and the caller's best.
+    UserTypingTestStats:
+      properties:
+        typing_wpm:
+          type: integer
+          title: Typing Wpm
+        typing_accuracy:
+          type: number
+          title: Typing Accuracy
+        voice_wpm:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Voice Wpm
+        voice_accuracy:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Voice Accuracy
+        is_new_best:
+          type: boolean
+          title: Is New Best
+      type: object
+      required:
+      - typing_wpm
+      - typing_accuracy
+      - is_new_best
+      title: UserTypingTestStats
+      description: Caller's stats from their most recent attempt (or just-submitted attempt).
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

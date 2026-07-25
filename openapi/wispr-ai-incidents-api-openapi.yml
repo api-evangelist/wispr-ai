@@ -1,0 +1,95 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Incidents API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Incidents
+paths:
+  /api/v1/incidents/status:
+    get:
+      tags:
+      - Incidents
+      summary: Get Incident Status
+      description: 'Return the current incident/outage status for the caller''s region.
+
+
+        No auth required. On any lookup failure the endpoint returns 200 with
+
+        ``client_region="us"`` and ``incident_status=null`` so the pre-login
+
+        screen is never blocked by a status-check error.'
+      operationId: get_incident_status
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncidentStatusResponse'
+components:
+  schemas:
+    IncidentStatusDetail:
+      properties:
+        state:
+          type: string
+          enum:
+          - degraded
+          - outage
+          title: State
+        message:
+          type: string
+          title: Message
+        affected_regions:
+          items:
+            type: string
+            enum:
+            - us
+            - europe
+            - apac
+          type: array
+          title: Affected Regions
+        started_at:
+          type: string
+          format: date-time
+          title: Started At
+        incident_url:
+          type: string
+          title: Incident Url
+      type: object
+      required:
+      - state
+      - message
+      - affected_regions
+      - started_at
+      - incident_url
+      title: IncidentStatusDetail
+      description: Active incident details returned in the status response.
+    IncidentStatusResponse:
+      properties:
+        client_region:
+          type: string
+          enum:
+          - us
+          - europe
+          - apac
+          title: Client Region
+        incident_status:
+          anyOf:
+          - $ref: '#/components/schemas/IncidentStatusDetail'
+          - type: 'null'
+      type: object
+      required:
+      - client_region
+      - incident_status
+      title: IncidentStatusResponse
+      description: Response for the unauthenticated incident-status endpoint.
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

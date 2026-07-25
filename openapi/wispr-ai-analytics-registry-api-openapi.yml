@@ -1,0 +1,499 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Analytics Registry API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Analytics Registry
+paths:
+  /api/v1/analytics-registry/events:
+    get:
+      tags:
+      - Analytics Registry
+      summary: List Events
+      operationId: list_events
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/AnalyticsEventResponse'
+                type: array
+                title: Response List Events Api V1 Analytics Registry Events Get
+      security:
+      - ApiKeyHeaderPatched: []
+    post:
+      tags:
+      - Analytics Registry
+      summary: Batch Save Events
+      operationId: batch_save_events
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchSaveRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchSaveResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/analytics-registry/global-properties:
+    get:
+      tags:
+      - Analytics Registry
+      summary: Get Global Properties
+      operationId: get_global_properties
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsEventResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+    patch:
+      tags:
+      - Analytics Registry
+      summary: Save Global Properties
+      operationId: save_global_properties
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              title: Data
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsEventResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/analytics-registry/publish/preview:
+    get:
+      tags:
+      - Analytics Registry
+      summary: Publish Preview
+      operationId: publish_preview
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/analytics-registry/publish:
+    post:
+      tags:
+      - Analytics Registry
+      summary: Publish
+      operationId: publish
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeSetResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/analytics-registry/change-sets/{change_set_id}/mark-implemented:
+    post:
+      tags:
+      - Analytics Registry
+      summary: Mark Implemented
+      operationId: mark_implemented
+      parameters:
+      - name: change_set_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Change Set Id
+      - name: X-Webhook-Secret
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Webhook-Secret
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    AnalyticsPlatform:
+      type: string
+      enum:
+      - desktop
+      - ios
+      - android
+      title: AnalyticsPlatform
+      description: Client platform an analytics event is emitted from.
+    AnalyticsEventUpdate:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Event ID to update
+        name:
+          anyOf:
+          - type: string
+            maxLength: 255
+            minLength: 1
+          - type: 'null'
+          title: Name
+          description: Display name for the event
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the event
+        trigger:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Trigger
+          description: Description of when this event fires
+        properties_schema:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Properties Schema
+          description: JSON schema for event properties
+        platforms:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/AnalyticsPlatform'
+            type: array
+          - type: 'null'
+          title: Platforms
+          description: Platforms where this event is used
+        lifecycle_state:
+          anyOf:
+          - $ref: '#/components/schemas/AnalyticsLifecycleState'
+          - type: 'null'
+          description: Lifecycle state of the event
+      type: object
+      required:
+      - id
+      title: AnalyticsEventUpdate
+      description: Partial-update payload for an existing analytics event, keyed by id.
+    ChangeSetStatus:
+      type: string
+      enum:
+      - created
+      - published
+      - merged
+      title: ChangeSetStatus
+      description: Status of a change set within the publish pipeline.
+    AnalyticsEventStatus:
+      type: string
+      enum:
+      - needs_publish
+      - not_implemented
+      - implemented
+      title: AnalyticsEventStatus
+      description: Client-implementation status of an analytics event.
+    BatchSaveRequest:
+      properties:
+        creates:
+          items:
+            $ref: '#/components/schemas/AnalyticsEventBase'
+          type: array
+          title: Creates
+          description: New events to create
+        updates:
+          items:
+            $ref: '#/components/schemas/AnalyticsEventUpdate'
+          type: array
+          title: Updates
+          description: Existing events to update
+      type: object
+      title: BatchSaveRequest
+      description: Batch of event creates and updates to apply in one request.
+    AnalyticsLifecycleState:
+      type: string
+      enum:
+      - draft
+      - active
+      - deprecated
+      title: AnalyticsLifecycleState
+      description: Lifecycle stage of an analytics event definition.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    AnalyticsEventBase:
+      properties:
+        event_key:
+          anyOf:
+          - type: string
+            maxLength: 255
+            minLength: 1
+          - type: 'null'
+          title: Event Key
+          description: Immutable internal identifier; auto-generated from name if omitted
+        name:
+          type: string
+          maxLength: 255
+          minLength: 1
+          title: Name
+          description: Display name for the event
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the event
+        trigger:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Trigger
+          description: Description of when this event fires
+        properties_schema:
+          type: object
+          title: Properties Schema
+          description: JSON schema for event properties
+        platforms:
+          items:
+            $ref: '#/components/schemas/AnalyticsPlatform'
+          type: array
+          title: Platforms
+          description: Platforms where this event is used
+        lifecycle_state:
+          $ref: '#/components/schemas/AnalyticsLifecycleState'
+          description: Lifecycle state of the event
+          default: draft
+      type: object
+      required:
+      - name
+      title: AnalyticsEventBase
+      description: Shared analytics event fields used as the create payload.
+    ChangeSetResponse:
+      properties:
+        change_set_id:
+          type: string
+          title: Change Set Id
+          description: Unique identifier for the change set
+        status:
+          $ref: '#/components/schemas/ChangeSetStatus'
+        snapshot:
+          type: object
+          title: Snapshot
+          description: Immutable snapshot of the analytics registry
+        last_error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Error
+          description: Error message if the change set failed
+        created_by:
+          type: string
+          title: Created By
+          description: User ID who created this change set
+        created_by_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created By Name
+          description: Full name of the user who created this change set
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        modified_at:
+          type: string
+          format: date-time
+          title: Modified At
+      type: object
+      required:
+      - change_set_id
+      - status
+      - snapshot
+      - created_by
+      - created_at
+      - modified_at
+      title: ChangeSetResponse
+      description: A registry change set with its status, snapshot, and audit fields.
+    AnalyticsEventResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        event_key:
+          type: string
+          title: Event Key
+        name:
+          type: string
+          title: Name
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        trigger:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Trigger
+        properties_schema:
+          type: object
+          title: Properties Schema
+        platforms:
+          items:
+            $ref: '#/components/schemas/AnalyticsPlatform'
+          type: array
+          title: Platforms
+        lifecycle_state:
+          $ref: '#/components/schemas/AnalyticsLifecycleState'
+          default: draft
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        modified_at:
+          type: string
+          format: date-time
+          title: Modified At
+        created_by:
+          type: string
+          title: Created By
+        updated_by:
+          type: string
+          title: Updated By
+        created_by_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created By Name
+          description: Full name of the user who created this event
+        updated_by_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Updated By Name
+          description: Full name of the user who last updated this event
+        last_published_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Published At
+        status:
+          $ref: '#/components/schemas/AnalyticsEventStatus'
+          description: Implementation status of the event
+      type: object
+      required:
+      - id
+      - event_key
+      - name
+      - created_at
+      - modified_at
+      - created_by
+      - updated_by
+      - status
+      title: AnalyticsEventResponse
+      description: A fully hydrated analytics event, including audit and status fields.
+    BatchSaveResponse:
+      properties:
+        created:
+          items:
+            $ref: '#/components/schemas/AnalyticsEventResponse'
+          type: array
+          title: Created
+          description: Newly created events
+        updated:
+          items:
+            $ref: '#/components/schemas/AnalyticsEventResponse'
+          type: array
+          title: Updated
+          description: Updated events
+        errors:
+          items:
+            type: string
+          type: array
+          title: Errors
+          description: Any errors encountered
+      type: object
+      title: BatchSaveResponse
+      description: 'Result of a batch save: created and updated events plus any errors.'
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

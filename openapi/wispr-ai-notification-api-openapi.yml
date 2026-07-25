@@ -1,0 +1,517 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Notification API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Notification
+paths:
+  /api/v1/notification:
+    get:
+      tags:
+      - Notification
+      summary: Get Notifications
+      description: 'Get paginated list of notifications for the current user.
+
+        Returns the number of unread notifications and the paginated list.'
+      operationId: get_notifications
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: is_archived
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Filter by archived status
+          default: false
+          title: Is Archived
+        description: Filter by archived status
+      - name: platform
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/NotificationPlatformType'
+          - type: 'null'
+          description: Filter by platform type (desktop, ios, both)
+          title: Platform
+        description: Filter by platform type (desktop, ios, both)
+      - name: last_notification_read_time
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Timestamp of last read notification as Unix timestamp in milliseconds. Example: 1763423065738'
+          title: Last Notification Read Time
+        description: 'Timestamp of last read notification as Unix timestamp in milliseconds. Example: 1763423065738'
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 10
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/notification/archive:
+    post:
+      tags:
+      - Notification
+      summary: Archive Notification
+      description: Archive a notification. Only the owner of the notification can archive it.
+      operationId: archive_notification
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArchiveNotificationRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/notification/archive_all:
+    post:
+      tags:
+      - Notification
+      summary: Archive All Notifications
+      description: Archive all notifications for the current user.
+      operationId: archive_all_notifications
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/notification/create:
+    post:
+      tags:
+      - Notification
+      summary: Create Notification
+      description: Creates a notification for the current user - Called by the client on certain event triggers
+      operationId: create_notification
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationCreateRequest'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/notification/internal/create:
+    post:
+      tags:
+      - Notification
+      summary: Create Internal Notification
+      description: 'Internal endpoint to create a notification for specified user(s).
+
+        Used in the admin dashboard to send notifications to users.
+
+        This endpoint can only be accessed by wispr.ai admins.'
+      operationId: create_internal_notification
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternalNotificationCreateRequest'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/notification/internal/{notification_id}:
+    delete:
+      tags:
+      - Notification
+      summary: Delete Notification
+      description: 'Internal endpoint to delete a notification by ID.
+
+        This endpoint is protected by the root API key and is meant for internal use only.'
+      operationId: delete_notification
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: notification_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Notification Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/notification/internal/announce:
+    post:
+      tags:
+      - Notification
+      summary: Create Announcement
+      description: 'Internal endpoint to create an announcement notification for all users.
+
+        Used in the admin dashboard to send notifications to all users.
+
+        This endpoint can only be accessed by wispr.ai admins.'
+      operationId: create_announcement
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkAnnouncementCreateRequest'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/notification/send-ios:
+    post:
+      tags:
+      - Notification
+      summary: Send Ios Download Link
+      operationId: send_ios_download_link
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendSMSRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+components:
+  schemas:
+    NotificationListResponse:
+      properties:
+        notifications:
+          items:
+            $ref: '#/components/schemas/NotificationResponse'
+          type: array
+          title: Notifications
+        unread_count:
+          type: integer
+          title: Unread Count
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - notifications
+      - unread_count
+      - total
+      title: NotificationListResponse
+      description: A page of notifications with unread and total counts.
+    NotificationResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        type:
+          $ref: '#/components/schemas/NotificationType'
+        key:
+          type: string
+          title: Key
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+        text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Text
+        ios_title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ios Title
+        ios_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ios Text
+        platform_type:
+          $ref: '#/components/schemas/NotificationPlatformType'
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        is_archived:
+          type: boolean
+          title: Is Archived
+      type: object
+      required:
+      - id
+      - type
+      - key
+      - title
+      - text
+      - ios_title
+      - ios_text
+      - platform_type
+      - created_at
+      - is_archived
+      title: NotificationResponse
+      description: A single notification as returned to the client.
+    NotificationPlatformType:
+      type: string
+      enum:
+      - desktop
+      - ios
+      - both
+      title: NotificationPlatformType
+      description: Client platform(s) a notification targets.
+    SendSMSRequest:
+      properties:
+        country_code:
+          type: string
+          title: Country Code
+        number:
+          type: string
+          title: Number
+      type: object
+      required:
+      - country_code
+      - number
+      title: SendSMSRequest
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    InternalNotificationCreateRequest:
+      properties:
+        emails:
+          items:
+            type: string
+            format: email
+          type: array
+          title: Emails
+        notification:
+          $ref: '#/components/schemas/NotificationCreateRequest'
+      type: object
+      required:
+      - emails
+      - notification
+      title: InternalNotificationCreateRequest
+      description: Internal admin request to send a notification to specific email addresses.
+    BulkAnnouncementCreateRequest:
+      properties:
+        key:
+          type: string
+          title: Key
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+        text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Text
+        ios_title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ios Title
+        ios_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ios Text
+        platform_type:
+          $ref: '#/components/schemas/NotificationPlatformType'
+          default: desktop
+      type: object
+      required:
+      - key
+      title: BulkAnnouncementCreateRequest
+      description: Internal admin request to broadcast an announcement notification to all users.
+    ArchiveNotificationRequest:
+      properties:
+        notification_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Notification Ids
+      type: object
+      required:
+      - notification_ids
+      title: ArchiveNotificationRequest
+      description: Request to archive a set of notifications by id.
+    NotificationCreateRequest:
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationType'
+        key:
+          type: string
+          title: Key
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+        text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Text
+        ios_title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ios Title
+        ios_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ios Text
+        platform_type:
+          $ref: '#/components/schemas/NotificationPlatformType'
+          default: desktop
+      type: object
+      required:
+      - type
+      - key
+      title: NotificationCreateRequest
+      description: Request body describing a notification to create.
+    NotificationType:
+      type: string
+      enum:
+      - achievement
+      - referral
+      - announcement
+      title: NotificationType
+      description: Category of a user notification.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

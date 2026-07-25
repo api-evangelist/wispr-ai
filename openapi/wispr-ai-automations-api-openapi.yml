@@ -1,0 +1,377 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Automations API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Automations
+paths:
+  /api/v1/automations/sync:
+    post:
+      tags:
+      - Automations
+      summary: Sync Automations
+      description: Pull the user's server-authored automations (delta on ``modified_at``, capped + paged).
+      operationId: sync_automations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AutomationSyncRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AutomationSyncResponse'
+        '429':
+          description: Too Many Requests
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/automations/send-email:
+    post:
+      tags:
+      - Automations
+      summary: Send Email
+      description: 'Send an email via the authenticated user''s connected Google Automations account.
+
+
+        Backs the todo send-email automation card. The sender is the principal;
+
+        recipients come from the body. Handled failures return 200 with
+
+        ``successful=false`` + an ``error`` code so the client can render a specific
+
+        toast; only auth/ratelimit/validation/unexpected map to non-2xx.'
+      operationId: send_email
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AutomationSendEmailRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendEmailResponse'
+        '429':
+          description: Too Many Requests
+        '503':
+          description: Service temporarily unavailable
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/automations/add-calendar:
+    post:
+      tags:
+      - Automations
+      summary: Add Calendar Event
+      description: 'Create an event via the authenticated user''s connected Google Automations account.
+
+
+        Backs the todo add-calendar automation card. The organizer is the
+
+        principal; attendees and description are optional. Handled failures return 200
+
+        with ``successful=false`` + an ``error`` code so the client can render a specific
+
+        toast; only auth/ratelimit/validation/unexpected map to non-2xx.'
+      operationId: add_calendar_event
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AutomationAddCalendarRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddCalendarEventResponse'
+        '429':
+          description: Too Many Requests
+        '503':
+          description: Service temporarily unavailable
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+components:
+  schemas:
+    SendEmailResponse:
+      properties:
+        successful:
+          type: boolean
+          title: Successful
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+      type: object
+      required:
+      - successful
+      title: SendEmailResponse
+      description: 'Result of sending mail via a connector. ``successful`` is the only payload;
+
+        ``error`` carries a stable code the client maps to a toast (see ``GoogleAutomationsConnector.send_email``).'
+    AutomationSendEmailRequest:
+      properties:
+        to:
+          items:
+            type: string
+            format: email
+          type: array
+          maxItems: 50
+          minItems: 1
+          title: To
+        subject:
+          type: string
+          maxLength: 998
+          title: Subject
+        body:
+          type: string
+          maxLength: 100000
+          title: Body
+      type: object
+      required:
+      - to
+      - subject
+      - body
+      title: AutomationSendEmailRequest
+      description: 'Body for ``POST /api/v1/automations/send-email`` — sends mail via the user''s
+
+        connected Google Automations account. Recipients are caller-supplied; the
+
+        *sender* is always the authenticated principal''s connected account (never taken
+
+        from the body).'
+    AutomationSyncResponse:
+      properties:
+        automations:
+          items:
+            $ref: '#/components/schemas/AutomationOut'
+          type: array
+          title: Automations
+        sync_time:
+          type: string
+          title: Sync Time
+        next_page_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Page Cursor
+      type: object
+      required:
+      - automations
+      - sync_time
+      title: AutomationSyncResponse
+      description: 'Response for ``POST /api/v1/automations/sync``.
+
+
+        ``automations`` is the server→client pull. ``sync_time`` is the server snapshot
+
+        high-water mark (Unix ms); the client persists it as the next ``last_sync_time``
+
+        only when ``next_page_cursor`` is null. While ``next_page_cursor`` is non-null,
+
+        the client keeps its previous ``last_sync_time`` and sends ``next_page_cursor``
+
+        to continue the same capped pull.'
+    AutomationAddCalendarRequest:
+      properties:
+        title:
+          type: string
+          maxLength: 1024
+          minLength: 1
+          title: Title
+        start:
+          type: string
+          format: date-time
+          title: Start
+        end:
+          type: string
+          format: date-time
+          title: End
+        attendees:
+          items:
+            type: string
+            format: email
+          type: array
+          maxItems: 50
+          title: Attendees
+        description:
+          anyOf:
+          - type: string
+            maxLength: 100000
+          - type: 'null'
+          title: Description
+      type: object
+      required:
+      - title
+      - start
+      - end
+      title: AutomationAddCalendarRequest
+      description: 'Body for ``POST /api/v1/automations/add-calendar`` — creates an event on the
+
+        user''s connected Google Automations account. ``start``/``end`` are ISO 8601
+
+        datetimes (a bare value without offset is treated as UTC by the connector).
+
+        Attendees and description are optional; the organizer is always the
+
+        authenticated principal.'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    AutomationOut:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        entity_kind:
+          type: string
+          title: Entity Kind
+        entity_id:
+          type: string
+          format: uuid
+          title: Entity Id
+        kind:
+          type: string
+          title: Kind
+        payload:
+          type: object
+          title: Payload
+        created_at:
+          type: string
+          title: Created At
+      type: object
+      required:
+      - id
+      - entity_kind
+      - entity_id
+      - kind
+      - payload
+      - created_at
+      title: AutomationOut
+      description: 'One automation a managed agent determined for an entity (``send_email`` /
+
+        ``add_calendar`` / ``no_action``). ``(entity_kind, entity_id)`` is the polymorphic
+
+        target — ``''todo''`` here, but the row supports other kinds later. ``payload`` is the
+
+        kind-specific data as stored; ``kind`` mirrors ``payload[''kind'']``. ``created_at`` is
+
+        Unix ms (symmetric with the todo timestamps).'
+    AutomationSyncRequest:
+      properties:
+        last_sync_time:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Sync Time
+          description: Unix timestamp in ms of the most recent server change the client has seen
+        page_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Page Cursor
+          description: Opaque cursor from a previous paged response. While this is set, keep last_sync_time unchanged and pass this value to continue the same pull snapshot.
+        hard_refresh:
+          type: boolean
+          title: Hard Refresh
+          description: When true, ignore last_sync_time and pull all of the user's automations regardless of it
+          default: false
+      type: object
+      title: AutomationSyncRequest
+      description: 'Envelope for ``POST /api/v1/automations/sync``.
+
+
+        Pull-only: automations are server-authored (written by the managed-agent
+
+        completion handler), so there is NO pushed-items field — the client only ever
+
+        pulls. Mirrors the cursor/paging shape of ``TodoSyncRequest`` minus the push.'
+    AddCalendarEventResponse:
+      properties:
+        successful:
+          type: boolean
+          title: Successful
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+      type: object
+      required:
+      - successful
+      title: AddCalendarEventResponse
+      description: 'Result of creating a calendar event via a connector. ``successful`` is the only
+
+        payload; ``error`` carries a stable code the client maps to a toast (see
+
+        ``GoogleAutomationsConnector.add_calendar_event``).'
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

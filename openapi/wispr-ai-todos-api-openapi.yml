@@ -1,0 +1,292 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Todos API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Todos
+paths:
+  /api/v1/todos/sync:
+    post:
+      tags:
+      - Todos
+      summary: Sync Todos
+      description: 'Bidirectionally sync the user''s todos (whole-row, LWW on ``modified_at``).
+
+
+        Ingest is INSERT-adopt with guards: a pushed id that exists under another user,
+
+        or whose non-null ``meeting_id`` isn''t the caller''s, is omitted from ``acked``
+
+        so the client retries; everything else is created/updated. The pull carries
+
+        every todo the user owns (capped), including tombstones.'
+      operationId: sync_todos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TodoSyncRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TodoSyncResponse'
+        '429':
+          description: Too Many Requests
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+components:
+  schemas:
+    SyncTodoRequest:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        meeting_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Meeting Id
+        title:
+          type: string
+          title: Title
+        status:
+          $ref: '#/components/schemas/TodoStatus'
+        is_archived:
+          type: boolean
+          title: Is Archived
+          default: false
+        is_deleted:
+          type: boolean
+          title: Is Deleted
+          default: false
+        created_at:
+          type: string
+          title: Created At
+        modified_at:
+          type: string
+          title: Modified At
+          description: Unix timestamp in ms of the client's edit (whole-row LWW key for this resource)
+      type: object
+      required:
+      - id
+      - title
+      - status
+      - created_at
+      - modified_at
+      title: SyncTodoRequest
+      description: 'One pushed todo on ``POST /api/v1/todos/sync``.
+
+
+        Mirrors ``SyncNoteRequest`` (lenient, NOT ``extra="forbid"``): the resource
+
+        carries the whole row and gains fields over time, so an unknown field must not
+
+        422 the batch. ``meeting_id`` is ``UUID | None`` (B3): an ad-hoc todo has none,
+
+        and the SQL tuple-IN pair-probe can''t match NULL — the service uses a
+
+        ``user_id``-scoped ``id IN (...)`` probe instead.
+
+
+        ``modified_at`` is the client-supplied edit time (Unix ms, as a string — same
+
+        wire shape as ``SyncNoteRequest.modified_at``); it is the sole LWW key,
+
+        whole-row replace, compared against the row''s ``modified_at``. ``status`` is
+
+        constrained to :class:`TodoStatus` and rejected at parse time (422) on a bad
+
+        value — a closed set, unlike the lenient open-ended fields.'
+    TodoSyncResponse:
+      properties:
+        acked:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Acked
+        todos:
+          items:
+            $ref: '#/components/schemas/SyncTodo'
+          type: array
+          title: Todos
+        sync_time:
+          type: string
+          title: Sync Time
+        next_page_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Page Cursor
+      type: object
+      required:
+      - acked
+      - todos
+      - sync_time
+      title: TodoSyncResponse
+      description: 'Response for ``POST /api/v1/todos/sync``.
+
+
+        ``acked`` is the subset of pushed ids the server accepted: a created/updated
+
+        row, OR an existing-and-owned row that lost LWW (it exists, so the client stops
+
+        retrying and lets the newer server value pull down). An id that could NOT be
+
+        adopted — it exists under another user, or its non-null ``meeting_id`` isn''t the
+
+        caller''s (FK race) — is omitted so the client retries. ``todos`` is the
+
+        server→client pull. ``sync_time`` is the server snapshot high-water mark (Unix
+
+        ms); the client persists it as the next ``last_sync_time`` only when
+
+        ``next_page_cursor`` is null. While ``next_page_cursor`` is non-null, the
+
+        client keeps its previous ``last_sync_time`` and sends ``next_page_cursor`` to
+
+        continue the same capped pull.'
+    SyncTodo:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        meeting_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Meeting Id
+        title:
+          type: string
+          title: Title
+        status:
+          $ref: '#/components/schemas/TodoStatus'
+        is_archived:
+          type: boolean
+          title: Is Archived
+          default: false
+        is_deleted:
+          type: boolean
+          title: Is Deleted
+          default: false
+        created_at:
+          type: string
+          title: Created At
+        modified_at:
+          type: string
+          title: Modified At
+      type: object
+      required:
+      - id
+      - title
+      - status
+      - created_at
+      - modified_at
+      title: SyncTodo
+      description: 'One todo on the ``/todos/sync`` pull. The whole row travels (existence,
+
+        title, status, archive, tombstone) — todos are not projected from note content,
+
+        so the row is the single source of truth.
+
+
+        ``meeting_id`` is nullable: set ⟹ from that meeting; NULL ⟹ ad-hoc. Timestamps
+
+        are Unix ms strings (symmetric with the request side). The pull includes
+
+        ``is_deleted`` rows so the client can converge a tombstone.'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    TodoStatus:
+      type: string
+      enum:
+      - open
+      - in_progress
+      - done
+      title: TodoStatus
+    TodoSyncRequest:
+      properties:
+        last_sync_time:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Sync Time
+          description: Unix timestamp in ms of the most recent server change the client has seen
+        page_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Page Cursor
+          description: Opaque cursor from a previous paged response. While this is set, keep last_sync_time unchanged and pass this value to continue the same pull snapshot.
+        hard_refresh:
+          type: boolean
+          title: Hard Refresh
+          description: When true, ignore last_sync_time and pull all of the user's todos regardless of it
+          default: false
+        todos:
+          items:
+            $ref: '#/components/schemas/SyncTodoRequest'
+          type: array
+          title: Todos
+      type: object
+      required:
+      - todos
+      title: TodoSyncRequest
+      description: Envelope for ``POST /api/v1/todos/sync``.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

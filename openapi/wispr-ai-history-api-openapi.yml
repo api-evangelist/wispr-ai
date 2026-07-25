@@ -1,0 +1,1493 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics History API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: History
+paths:
+  /history/report:
+    post:
+      tags:
+      - History
+      summary: Feedback History
+      operationId: feedback_history
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HistoryFeedbackRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /history/upload:
+    post:
+      tags:
+      - History
+      summary: Upload History
+      operationId: upload_history
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: platform
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/AttributionPlatform'
+          - type: 'null'
+          description: Attribution platform (e.g. desktop_mac, desktop_windows)
+          title: Platform
+        description: Attribution platform (e.g. desktop_mac, desktop_windows)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadHistoryRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /history/stats:
+    get:
+      tags:
+      - History
+      summary: Get History Stats
+      description: Get user's history statistics
+      operationId: get_history_stats
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+    post:
+      tags:
+      - History
+      summary: Overwrite History Stats
+      description: 'Overwrite user''s history stats. This should only be called by the client
+
+        when the remote user stats data are corrupted and should be overwritten
+
+        with the local data. Client is responsible for ensuring that the local stats
+
+        are preferred before calling this endpoint.'
+      operationId: overwrite_history_stats
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OverwriteHistoryStatsRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /history/context-stats:
+    get:
+      tags:
+      - History
+      summary: Get Context Stats
+      description: 'Get cross-device context stats (email, ai, work, personal_messaging, document, other)
+
+        derived from ClickHouse usage_History.'
+      operationId: get_context_stats
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContextStatsResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+  /history/stats/enterprise:
+    get:
+      tags:
+      - History
+      summary: Get Enterprise History Stats
+      description: 'Get history statistics for all users in the enterprise.
+
+        Accessible by any enterprise member (admin or non-admin).
+
+        Used for the enterprise usage dashboard and leaderboard.
+
+
+        Podiums and the 4-week historical leaderboard are served by dedicated endpoints:
+
+        ``GET /history/stats/enterprise/podiums`` and
+
+        ``GET /history/stats/enterprise/weekly-ranks``.
+
+
+        Note: This endpoint returns all metrics regardless of subscription tier.
+
+        The frontend is responsible for controlling access to individual metrics
+
+        based on subscription level and admin status:
+
+        - Admins can see aggregate metrics (total words, team size, etc.)
+
+        - Only Enterprise tier admins can see individual teammate breakdowns
+
+        - Non-admin Enterprise members can see the leaderboard with blurred teammate values
+
+        Non-Enterprise admins will see the data but the frontend will blur/hide individual
+
+        metrics and show an upgrade prompt.'
+      operationId: get_enterprise_history_stats
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: sort_by
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/EnterpriseSortBy'
+          - type: 'null'
+          description: Column to sort/paginate by. Defaults to total_words.
+          title: Sort By
+        description: Column to sort/paginate by. Defaults to total_words.
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/EnterpriseSortOrder'
+          description: Sort direction
+          default: desc
+        description: Sort direction
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Pagination offset. Used only when ``limit`` is set.
+          default: 0
+          title: Offset
+        description: Pagination offset. Used only when ``limit`` is set.
+      - name: limit
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+            maximum: 1000
+            minimum: 1
+          - type: 'null'
+          description: Page size for leaderboard-style pagination. Omit to return the full enterprise roster (no SQL LIMIT). Pass with offset to fetch a page.
+          title: Limit
+        description: Page size for leaderboard-style pagination. Omit to return the full enterprise roster (no SQL LIMIT). Pass with offset to fetch a page.
+      - name: sort_near_user
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: User ID to center the page around
+          title: Sort Near User
+        description: User ID to center the page around
+      - name: omit
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/EnterpriseUsageOmit'
+          description: Optional sections to omit for smaller payloads. Repeat the parameter (e.g. omit=apps&omit=daily_word_counts). `apps` skips app ARRAY columns in Postgres and removes app lists from JSON. `daily_word_counts` skips the ClickHouse query and omits that array from JSON.
+          default: []
+          title: Omit
+        description: Optional sections to omit for smaller payloads. Repeat the parameter (e.g. omit=apps&omit=daily_word_counts). `apps` skips app ARRAY columns in Postgres and removes app lists from JSON. `daily_word_counts` skips the ClickHouse query and omits that array from JSON.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnterpriseUsageResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /history/stats/enterprise/weekly-ranks:
+    get:
+      tags:
+      - History
+      summary: Get Enterprise Weekly Ranks
+      description: 'Return the 4-week historical leaderboard for the caller''s enterprise.
+
+
+        Backed by the same Redis-cached rankings the dashboard already uses; the cache key
+
+        rotates after the Sunday 23:45 UTC ``reset_weekly_words`` cron (TTL 8 days). Like
+
+        podiums, membership is not part of the key,
+
+        so removed or new members may appear in cached data until the entry expires.
+
+
+        Auth + ``hideLeaderboard`` checks run before Redis; on a cache hit the handler skips the
+
+        full-roster Postgres query.
+
+
+        Note: Like ``GET /history/stats/enterprise``, this does not enforce subscription tier;
+
+        the client is responsible for tier-based gating of leaderboard features.'
+      operationId: get_enterprise_weekly_ranks
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnterpriseWeeklyRanksResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+  /history/stats/enterprise/podiums:
+    get:
+      tags:
+      - History
+      summary: Get Enterprise Podiums
+      description: 'Return the top-6 podiums for every ranked metric for the caller''s enterprise.
+
+
+        Cached in Redis for 5 minutes. Unlike weekly ranks, invalidation is TTL-only (no membership
+
+        hash in the key), so removed members can appear until the cache entry expires.
+
+
+        Note: Like ``GET /history/stats/enterprise``, this does not enforce subscription tier;
+
+        the client is responsible for tier-based gating of leaderboard features.
+
+
+        Auth + ``hideLeaderboard`` checks run before Redis; on a cache hit the handler skips the
+
+        full-roster Postgres query.'
+      operationId: get_enterprise_podiums
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnterprisePodiumsResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+  /history/mobile-words-this-week:
+    post:
+      tags:
+      - History
+      summary: Write Mobile Words This Week
+      description: Write mobile words this week to the database.
+      operationId: write_mobile_words_this_week
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: words_this_week
+        in: query
+        required: true
+        schema:
+          type: integer
+          title: Words This Week
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    WeeklyLeaderboardEntry:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+        rank:
+          type: integer
+          title: Rank
+          description: 1-based rank. Unique, no ties.
+        total_words:
+          type: integer
+          title: Total Words
+      type: object
+      required:
+      - user_id
+      - first_name
+      - last_name
+      - rank
+      - total_words
+      title: WeeklyLeaderboardEntry
+      description: A single user's rank and word total for one historical week.
+    ContextStatsItem:
+      properties:
+        domain:
+          type: string
+          title: Domain
+        total_words:
+          type: integer
+          title: Total Words
+        first_dictation_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Dictation At
+        last_dictation_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Dictation At
+      type: object
+      required:
+      - domain
+      - total_words
+      title: ContextStatsItem
+    PodiumUser:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+        rank:
+          type: integer
+          title: Rank
+          description: 1-based rank within this metric's leaderboard.
+        value:
+          anyOf:
+          - type: integer
+          - type: number
+          title: Value
+          description: The user's value for this metric (e.g. word count, day streak, or words-per-minute). Integer for counts/streaks; float for WPM.
+      type: object
+      required:
+      - user_id
+      - email
+      - first_name
+      - last_name
+      - rank
+      - value
+      title: PodiumUser
+      description: A single podium entry for a specific leaderboard metric.
+    AllTimePodiums:
+      properties:
+        total_words:
+          $ref: '#/components/schemas/MetricPodium'
+        desktop_words:
+          $ref: '#/components/schemas/MetricPodium'
+        mobile_words:
+          $ref: '#/components/schemas/MetricPodium'
+        day_streak:
+          $ref: '#/components/schemas/MetricPodium'
+        words_per_minute:
+          $ref: '#/components/schemas/MetricPodium'
+      type: object
+      title: AllTimePodiums
+      description: Top 6 users (plus the caller) for each all-time leaderboard metric.
+    OverwriteHistoryStatsRequest:
+      properties:
+        weekStreak:
+          type: integer
+          title: Weekstreak
+        dayStreak:
+          type: integer
+          title: Daystreak
+        totalWords:
+          type: integer
+          title: Totalwords
+        totalDuration:
+          type: number
+          title: Totalduration
+        totalNonEmptyDuration:
+          type: number
+          title: Totalnonemptyduration
+        averageWPM:
+          type: number
+          title: Averagewpm
+        wordsThisWeek:
+          type: integer
+          title: Wordsthisweek
+        lastTranscriptTimestamp:
+          type: number
+          title: Lasttranscripttimestamp
+        totalApps:
+          items:
+            type: string
+          type: array
+          title: Totalapps
+        desktopTotalWords:
+          type: integer
+          title: Desktoptotalwords
+        mobileTotalWords:
+          type: integer
+          title: Mobiletotalwords
+        desktopTotalDuration:
+          type: number
+          title: Desktoptotalduration
+        mobileTotalDuration:
+          type: number
+          title: Mobiletotalduration
+        desktopTotalNonEmptyDuration:
+          type: number
+          title: Desktoptotalnonemptyduration
+        mobileTotalNonEmptyDuration:
+          type: number
+          title: Mobiletotalnonemptyduration
+        desktopAverageWPM:
+          type: number
+          title: Desktopaveragewpm
+        mobileAverageWPM:
+          type: number
+          title: Mobileaveragewpm
+        desktopWordsThisWeek:
+          type: integer
+          title: Desktopwordsthisweek
+        mobileWordsThisWeek:
+          type: integer
+          title: Mobilewordsthisweek
+        desktopLastTranscriptTimestamp:
+          type: number
+          title: Desktoplasttranscripttimestamp
+        mobileLastTranscriptTimestamp:
+          type: number
+          title: Mobilelasttranscripttimestamp
+        desktopTotalApps:
+          items:
+            type: string
+          type: array
+          title: Desktoptotalapps
+        mobileTotalApps:
+          items:
+            type: string
+          type: array
+          title: Mobiletotalapps
+      type: object
+      required:
+      - weekStreak
+      - dayStreak
+      - totalWords
+      - totalDuration
+      - totalNonEmptyDuration
+      - averageWPM
+      - wordsThisWeek
+      - lastTranscriptTimestamp
+      - totalApps
+      - desktopTotalWords
+      - mobileTotalWords
+      - desktopTotalDuration
+      - mobileTotalDuration
+      - desktopTotalNonEmptyDuration
+      - mobileTotalNonEmptyDuration
+      - desktopAverageWPM
+      - mobileAverageWPM
+      - desktopWordsThisWeek
+      - mobileWordsThisWeek
+      - desktopLastTranscriptTimestamp
+      - mobileLastTranscriptTimestamp
+      - desktopTotalApps
+      - mobileTotalApps
+      title: OverwriteHistoryStatsRequest
+    EnrichedUserStats:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+        stats:
+          $ref: '#/components/schemas/UserStats'
+        daily_word_counts:
+          items:
+            $ref: '#/components/schemas/DailyWordCountData'
+          type: array
+          title: Daily Word Counts
+      type: object
+      required:
+      - user_id
+      - email
+      - first_name
+      - last_name
+      - stats
+      - daily_word_counts
+      title: EnrichedUserStats
+      description: User statistics enriched with profile information
+    EnterpriseUsageResponse:
+      properties:
+        users:
+          items:
+            $ref: '#/components/schemas/EnrichedUserStats'
+          type: array
+          title: Users
+        total_count:
+          type: integer
+          title: Total Count
+          description: Users counted in the ranked leaderboard query (those with stats rows).
+          default: 0
+        team_member_count:
+          type: integer
+          title: Team Member Count
+          description: Total members on the enterprise team (roster size).
+          default: 0
+        offset:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Offset
+          description: Pagination offset when a page size was requested; null for full-roster responses.
+        limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Limit
+          description: Page size when paginated; null when the client omitted limit (full roster).
+      type: object
+      required:
+      - users
+      title: EnterpriseUsageResponse
+      description: Response model for enterprise usage statistics
+    DailyWordCountData:
+      properties:
+        day:
+          type: string
+          title: Day
+        wordcount:
+          type: integer
+          title: Wordcount
+      type: object
+      required:
+      - day
+      - wordcount
+      title: DailyWordCountData
+      description: Daily word count data for usage charts
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    UploadHistoryRequest:
+      properties:
+        history:
+          items:
+            $ref: '#/components/schemas/Record'
+          type: array
+          title: History
+        ga4_client_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ga4 Client Id
+          description: GA4 client identifier (desktop_client_id or app_instance_id)
+      type: object
+      required:
+      - history
+      title: UploadHistoryRequest
+      description: 'Request for uploading history records.
+
+
+        The specific attribution platform (e.g. desktop_mac, desktop_windows) is
+
+        passed as a query parameter, not in the body. Per-record platform fields
+
+        only distinguish desktop/ios/android and lack OS specificity.
+
+
+        The destination user is the authenticated caller — never trust a client-
+
+        supplied user identifier. Any extra fields (e.g. legacy clients still
+
+        sending ``userId``) are silently ignored by Pydantic.'
+    MetricPodium:
+      properties:
+        top_entries:
+          items:
+            $ref: '#/components/schemas/PodiumUser'
+          type: array
+          title: Top Entries
+          description: Top min(6, total_users_ranked) PodiumUser rows by rank (ascending).
+        requesting_user_entry:
+          anyOf:
+          - $ref: '#/components/schemas/PodiumUser'
+          - type: 'null'
+          description: The caller's row when they are outside the top 6; null when the caller is already in top_entries or is not ranked for this metric.
+      type: object
+      title: MetricPodium
+      description: Top users for one leaderboard metric, plus the caller's entry when outside the top 6.
+    HistoryFeedbackRequest:
+      properties:
+        userEmail:
+          type: string
+          title: Useremail
+        transcriptEntityId:
+          type: string
+          title: Transcriptentityid
+        status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status
+        asrText:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Asrtext
+        formattedText:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Formattedtext
+        serverFinalizedText:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Serverfinalizedtext
+        pastedText:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Pastedtext
+        feedback:
+          type: string
+          title: Feedback
+        audio:
+          anyOf:
+          - type: string
+            contentMediaType: application/octet-stream
+          - type: 'null'
+          title: Audio
+        logs:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          title: Logs
+        usedFallbackAsr:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Usedfallbackasr
+        usedFallbackFormatting:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Usedfallbackformatting
+        architecture:
+          type: string
+          title: Architecture
+        region:
+          type: string
+          title: Region
+        codec:
+          $ref: '#/components/schemas/Codec'
+          default: wav
+        platform:
+          $ref: '#/components/schemas/src__common__constants__Platform'
+          default: desktop
+        imageData:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Imagedata
+        imageType:
+          anyOf:
+          - $ref: '#/components/schemas/ImageType'
+          - type: 'null'
+        appVersion:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Appversion
+        selectedLanguages:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Selectedlanguages
+      type: object
+      required:
+      - userEmail
+      - transcriptEntityId
+      - feedback
+      title: HistoryFeedbackRequest
+    ContextStatsResponse:
+      properties:
+        contexts:
+          items:
+            $ref: '#/components/schemas/ContextStatsItem'
+          type: array
+          title: Contexts
+      type: object
+      required:
+      - contexts
+      title: ContextStatsResponse
+    EnterprisePodiumsResponse:
+      properties:
+        podiums:
+          $ref: '#/components/schemas/LeaderboardPodiums'
+          description: Top 6 users for each leaderboard metric plus the caller's entry when they are outside the top 6, grouped by time window (``all_time`` with 5 categories, ``this_week`` with 3).
+      type: object
+      required:
+      - podiums
+      title: EnterprisePodiumsResponse
+      description: Response model for GET /history/stats/enterprise/podiums.
+    EnterpriseWeeklyRanksResponse:
+      properties:
+        weekly_ranks:
+          items:
+            $ref: '#/components/schemas/WeeklyLeaderboard'
+          type: array
+          title: Weekly Ranks
+          description: 4 historical completed weeks of ranked leaderboards, newest first (index 0 = most recently closed week). Weeks are Sunday–Saturday UTC; a week is treated as closed after the Sunday 23:45 UTC reset_weekly_words cron. Enterprise-scoped. Current-week totals/rank are on each user's stats (words_this_week, words_this_week_rank).
+      type: object
+      required:
+      - weekly_ranks
+      title: EnterpriseWeeklyRanksResponse
+      description: Response model for GET /history/stats/enterprise/weekly-ranks.
+    LeaderboardPodiums:
+      properties:
+        all_time:
+          $ref: '#/components/schemas/AllTimePodiums'
+        this_week:
+          $ref: '#/components/schemas/ThisWeekPodiums'
+      type: object
+      title: LeaderboardPodiums
+      description: Top 6 users per leaderboard category (plus the caller), split by time window.
+    ThisWeekPodiums:
+      properties:
+        total_words:
+          $ref: '#/components/schemas/MetricPodium'
+        desktop_words:
+          $ref: '#/components/schemas/MetricPodium'
+        mobile_words:
+          $ref: '#/components/schemas/MetricPodium'
+      type: object
+      title: ThisWeekPodiums
+      description: 'Top 6 users (plus the caller) for each this-week leaderboard metric.
+
+
+        Streak and WPM are intentionally excluded — they''re all-time only.'
+    Record:
+      properties:
+        transcriptEntityId:
+          type: string
+          title: Transcriptentityid
+        asrText:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Asrtext
+        formattedText:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Formattedtext
+        serverFinalizedText:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Serverfinalizedtext
+        pastedText:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Pastedtext
+        formattingDivergenceScore:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Formattingdivergencescore
+        textboxContents:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Textboxcontents
+        editedText:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Editedtext
+        editedTextUnbounded:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Editedtextunbounded
+        timestamp:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Timestamp
+        audio:
+          anyOf:
+          - type: string
+            contentMediaType: application/octet-stream
+          - type: 'null'
+          title: Audio
+        opusChunks:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Opuschunks
+        builtInAudio:
+          anyOf:
+          - type: string
+            contentMediaType: application/octet-stream
+          - type: 'null'
+          title: Builtinaudio
+        screenshot:
+          anyOf:
+          - type: string
+            contentMediaType: application/octet-stream
+          - type: 'null'
+          title: Screenshot
+        additionalContext:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Additionalcontext
+        status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status
+        app:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: App
+        url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Url
+        e2eLatency:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: E2Elatency
+        shareType:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sharetype
+        needsUploading:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Needsuploading
+        duration:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Duration
+        speechDuration:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Speechduration
+        numWords:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Numwords
+        appVersion:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Appversion
+        toneMatchedText:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tonematchedtext
+        toneMatchPairs:
+          anyOf:
+          - items:
+              type: object
+            type: array
+          - type: 'null'
+          title: Tonematchpairs
+        isArchived:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Isarchived
+        feedback:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feedback
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
+        micDevice:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Micdevice
+        defaultAsrText:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Defaultasrtext
+        fallbackAsrText:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Fallbackasrtext
+        defaultFormattedText:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Defaultformattedtext
+        fallbackFormattedText:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Fallbackformattedtext
+        fallbackAsrDivergenceScore:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Fallbackasrdivergencescore
+        fallbackFormattingDivergenceScore:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Fallbackformattingdivergencescore
+        detectedLanguage:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Detectedlanguage
+        averageLogProb:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Averagelogprob
+        axText:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Axtext
+        axHTML:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Axhtml
+        desiredAsr:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Desiredasr
+        desiredFormatted:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Desiredformatted
+        userEditMetaData:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Usereditmetadata
+        calledExternalAsr:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Calledexternalasr
+        transcriptOrigin:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Transcriptorigin
+        platform:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Platform
+          default: desktop
+        transcriptCommand:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Transcriptcommand
+        personalizationStyleSettings:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Personalizationstylesettings
+        numWordsCorrected:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Numwordscorrected
+        numDictionaryReplacements:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Numdictionaryreplacements
+        timezoneOffsetMinutes:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Timezoneoffsetminutes
+        contentObservationEndReason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Contentobservationendreason
+        contentObservationEndLastKeystroke:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Contentobservationendlastkeystroke
+        editDistanceToDictated:
+          anyOf:
+          - type: number
+            minimum: 0.0
+          - type: 'null'
+          title: Editdistancetodictated
+        audio_encoding:
+          anyOf:
+          - type: string
+            maxLength: 16
+          - type: 'null'
+          title: Audio Encoding
+      type: object
+      required:
+      - transcriptEntityId
+      - shareType
+      - needsUploading
+      - appVersion
+      title: Record
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    WeeklyLeaderboard:
+      properties:
+        week_start:
+          type: string
+          title: Week Start
+          description: Sunday of the week (UTC), ISO YYYY-MM-DD. Historical closed weeks only; current week is never emitted.
+        total_users_ranked:
+          type: integer
+          title: Total Users Ranked
+          description: Number of current enterprise members ranked for this week. Equal to team_member_count — independent of pagination (offset/limit/sort_near_user).
+        top_entries:
+          items:
+            $ref: '#/components/schemas/WeeklyLeaderboardEntry'
+          type: array
+          title: Top Entries
+          description: Top min(6, total_users_ranked) rows by rank (ascending). Ranks are unique (ROW_NUMBER-style) with user_id ASC tiebreak.
+        requesting_user_entry:
+          anyOf:
+          - $ref: '#/components/schemas/WeeklyLeaderboardEntry'
+          - type: 'null'
+          description: The caller's row when they are outside the top 6; null when the caller is already in top_entries or when total_users_ranked <= 6.
+      type: object
+      required:
+      - week_start
+      - total_users_ranked
+      - top_entries
+      - requesting_user_entry
+      title: WeeklyLeaderboard
+      description: Compact leaderboard for one historical completed week.
+    EnterpriseSortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: EnterpriseSortOrder
+      description: Sort direction for enterprise leaderboard.
+    src__common__constants__Platform:
+      type: string
+      enum:
+      - desktop
+      - ios
+      - android
+      title: Platform
+    Codec:
+      type: string
+      enum:
+      - opus
+      - wav
+      - aac
+      title: Codec
+    UserStats:
+      properties:
+        total_words:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Total Words
+          default: 0
+        total_duration:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Total Duration
+          default: 0
+        total_non_empty_duration:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Total Non Empty Duration
+          default: 0
+        words_per_minute:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Words Per Minute
+          default: 0
+        week_streak:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Week Streak
+          default: 1
+        day_streak:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Day Streak
+          default: 1
+        words_this_week:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Words This Week
+          default: 0
+        last_transcript_timestamp:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Transcript Timestamp
+        desktop_total_words:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Desktop Total Words
+          default: 0
+        mobile_total_words:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Mobile Total Words
+          default: 0
+        desktop_total_duration:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Desktop Total Duration
+          default: 0
+        mobile_total_duration:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Mobile Total Duration
+          default: 0
+        desktop_total_non_empty_duration:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Desktop Total Non Empty Duration
+          default: 0
+        mobile_total_non_empty_duration:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Mobile Total Non Empty Duration
+          default: 0
+        desktop_words_per_minute:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Desktop Words Per Minute
+          default: 0
+        mobile_words_per_minute:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Mobile Words Per Minute
+          default: 0
+        desktop_day_streak:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Desktop Day Streak
+          default: 1
+        mobile_day_streak:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Mobile Day Streak
+          default: 1
+        desktop_week_streak:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Desktop Week Streak
+          default: 1
+        mobile_week_streak:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Mobile Week Streak
+          default: 1
+        desktop_words_this_week:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Desktop Words This Week
+          default: 0
+        mobile_words_this_week:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Mobile Words This Week
+          default: 0
+        desktop_last_transcript_timestamp:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Desktop Last Transcript Timestamp
+        mobile_last_transcript_timestamp:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mobile Last Transcript Timestamp
+        total_apps:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Total Apps
+        desktop_total_apps:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Desktop Total Apps
+        mobile_total_apps:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Mobile Total Apps
+        first_weekly_limit_hit_at:
+          anyOf:
+          - type: integer
+            format: int64
+          - type: 'null'
+          title: First Weekly Limit Hit At
+          description: Unix epoch timestamp of the first time the user crossed the weekly soft cap.
+        total_words_rank:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Total Words Rank
+        desktop_words_rank:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Desktop Words Rank
+        mobile_words_rank:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Mobile Words Rank
+        words_per_minute_rank:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Words Per Minute Rank
+        day_streak_rank:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Day Streak Rank
+        words_this_week_rank:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Words This Week Rank
+        desktop_words_this_week_rank:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Desktop Words This Week Rank
+        mobile_words_this_week_rank:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Mobile Words This Week Rank
+        words_this_week_rank_change:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Words This Week Rank Change
+      type: object
+      title: UserStats
+    EnterpriseSortBy:
+      type: string
+      enum:
+      - total_words
+      - words_per_minute
+      - day_streak
+      - desktop_words
+      - mobile_words
+      - words_this_week
+      - desktop_words_this_week
+      - mobile_words_this_week
+      title: EnterpriseSortBy
+      description: Sortable metrics for enterprise leaderboard pagination.
+    EnterpriseUsageOmit:
+      type: string
+      enum:
+      - apps
+      - daily_word_counts
+      title: EnterpriseUsageOmit
+      description: Optional sections to omit from GET /history/stats/enterprise (smaller payloads).
+    ImageType:
+      type: string
+      enum:
+      - image/png
+      - image/jpeg
+      - image/bmp
+      - image/webp
+      title: ImageType
+    AttributionPlatform:
+      type: string
+      enum:
+      - web
+      - desktop_mac
+      - desktop_windows
+      - ios
+      - android
+      title: AttributionPlatform
+      description: 'Valid platforms for attribution event tracking.
+
+
+        Desktop clients must use specific variants (DESKTOP_MAC, DESKTOP_WINDOWS).'
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

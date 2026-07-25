@@ -1,0 +1,354 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Polish API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Polish
+paths:
+  /api/v1/polish/upload:
+    post:
+      tags:
+      - Polish
+      summary: Upload Polish
+      description: Upload polish records for a user.
+      operationId: upload_polish
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadPolishRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadPolishResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+components:
+  schemas:
+    PolishStatus:
+      type: string
+      enum:
+      - succeeded
+      - long_text
+      - short_text
+      - timeout
+      - error
+      - cancelled
+      - no_changes
+      - not_editable
+      - no_text
+      - no_instructions
+      title: PolishStatus
+      description: Outcome of a Polish text-refinement request.
+    UploadPolishResponse:
+      properties:
+        num_rows_saved:
+          type: integer
+          title: Num Rows Saved
+        ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Ids
+      type: object
+      required:
+      - num_rows_saved
+      - ids
+      title: UploadPolishResponse
+      description: Response confirming how many polish records were saved and their ids.
+    PolishRecord:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        polish_initial_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Polish Initial Text
+        polished_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Polished Text
+        polish_initial_word_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Polish Initial Word Count
+        polished_word_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Polished Word Count
+        app:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: App
+        processing_time:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Processing Time
+        status:
+          anyOf:
+          - $ref: '#/components/schemas/PolishStatus'
+          - type: 'null'
+        polish_undone:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Polish Undone
+          default: false
+        instruction:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Instruction
+        app_version:
+          type: string
+          title: App Version
+        model_version:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model Version
+        used_provider:
+          anyOf:
+          - $ref: '#/components/schemas/OpenAIProviderConfig'
+          - $ref: '#/components/schemas/CerebrasProviderConfig'
+          - $ref: '#/components/schemas/AnthropicProviderConfig'
+          - type: 'null'
+          title: Used Provider
+        diff_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Diff Count
+        feedback:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feedback
+        prompt_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prompt Name
+        shortcut_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Shortcut Key
+        instruct_history_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Instruct History Id
+      type: object
+      required:
+      - id
+      - app_version
+      title: PolishRecord
+      description: 'A single polish record: the original text, its polished result, and metadata.'
+    CerebrasProviderConfig:
+      properties:
+        kind:
+          type: string
+          enum:
+          - cerebras
+          title: Kind
+          default: cerebras
+        model:
+          type: string
+          title: Model
+      type: object
+      required:
+      - model
+      title: CerebrasProviderConfig
+      description: Provider config for a Cerebras-backed model.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    OpenAIProviderConfig:
+      properties:
+        kind:
+          type: string
+          enum:
+          - openai
+          title: Kind
+          default: openai
+        model:
+          anyOf:
+          - type: string
+          - type: string
+            enum:
+            - gpt-4.1
+            - gpt-4.1-mini
+            - gpt-4.1-nano
+            - gpt-4.1-2025-04-14
+            - gpt-4.1-mini-2025-04-14
+            - gpt-4.1-nano-2025-04-14
+            - o3-mini
+            - o3-mini-2025-01-31
+            - o1
+            - o1-2024-12-17
+            - o1-preview
+            - o1-preview-2024-09-12
+            - o1-mini
+            - o1-mini-2024-09-12
+            - gpt-4o
+            - gpt-4o-2024-11-20
+            - gpt-4o-2024-08-06
+            - gpt-4o-2024-05-13
+            - gpt-4o-audio-preview
+            - gpt-4o-audio-preview-2024-10-01
+            - gpt-4o-audio-preview-2024-12-17
+            - gpt-4o-mini-audio-preview
+            - gpt-4o-mini-audio-preview-2024-12-17
+            - gpt-4o-search-preview
+            - gpt-4o-mini-search-preview
+            - gpt-4o-search-preview-2025-03-11
+            - gpt-4o-mini-search-preview-2025-03-11
+            - chatgpt-4o-latest
+            - gpt-4o-mini
+            - gpt-4o-mini-2024-07-18
+            - gpt-4-turbo
+            - gpt-4-turbo-2024-04-09
+            - gpt-4-0125-preview
+            - gpt-4-turbo-preview
+            - gpt-4-1106-preview
+            - gpt-4-vision-preview
+            - gpt-4
+            - gpt-4-0314
+            - gpt-4-0613
+            - gpt-4-32k
+            - gpt-4-32k-0314
+            - gpt-4-32k-0613
+            - gpt-3.5-turbo
+            - gpt-3.5-turbo-16k
+            - gpt-3.5-turbo-0301
+            - gpt-3.5-turbo-0613
+            - gpt-3.5-turbo-1106
+            - gpt-3.5-turbo-0125
+            - gpt-3.5-turbo-16k-0613
+          - type: string
+            enum:
+            - o1-pro
+            - o1-pro-2025-03-19
+            - computer-use-preview
+            - computer-use-preview-2025-03-11
+          title: Model
+      type: object
+      required:
+      - model
+      title: OpenAIProviderConfig
+      description: Provider config for an OpenAI-backed model.
+    AnthropicProviderConfig:
+      properties:
+        kind:
+          type: string
+          enum:
+          - anthropic
+          title: Kind
+          default: anthropic
+        model:
+          anyOf:
+          - type: string
+            enum:
+            - claude-opus-4-7
+            - claude-mythos-preview
+            - claude-opus-4-6
+            - claude-sonnet-4-6
+            - claude-haiku-4-5
+            - claude-haiku-4-5-20251001
+            - claude-opus-4-5
+            - claude-opus-4-5-20251101
+            - claude-sonnet-4-5
+            - claude-sonnet-4-5-20250929
+            - claude-opus-4-1
+            - claude-opus-4-1-20250805
+            - claude-opus-4-0
+            - claude-opus-4-20250514
+            - claude-sonnet-4-0
+            - claude-sonnet-4-20250514
+            - claude-3-haiku-20240307
+          - type: string
+          title: Model
+      type: object
+      required:
+      - model
+      title: AnthropicProviderConfig
+      description: Provider config for an Anthropic-backed model.
+    UploadPolishRequest:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        polish_records:
+          items:
+            $ref: '#/components/schemas/PolishRecord'
+          type: array
+          title: Polish Records
+      type: object
+      required:
+      - user_id
+      - polish_records
+      title: UploadPolishRequest
+      description: Request payload for bulk-uploading polish records for a user.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

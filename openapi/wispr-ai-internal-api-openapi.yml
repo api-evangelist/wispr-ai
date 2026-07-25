@@ -1,0 +1,6051 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Internal API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Internal
+paths:
+  /api/v1/internal/billing-ops/operations:
+    get:
+      tags:
+      - Internal
+      summary: List Operations
+      description: List every registered operation along with its JSON schema for the form renderer.
+      operationId: list_operations
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListOperationsResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/internal/billing-ops/preview:
+    post:
+      tags:
+      - Internal
+      summary: Preview
+      description: Validate input and run the op's preview.
+      operationId: preview
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreviewRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PreviewResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/internal/billing-ops/commit:
+    post:
+      tags:
+      - Internal
+      summary: Commit
+      description: Execute the op and emit a structured log line. No DB write.
+      operationId: commit
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommitRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommitResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/internal/billing-ops/cost-centers/{enterprise_id}:
+    get:
+      tags:
+      - Internal
+      summary: List Cost Centers For Enterprise
+      description: 'List cost centers under ``enterprise_id`` for the operator-UI picker.
+
+
+        The UI auto-selects the only cost_center when an enterprise has exactly
+
+        one; with multiple, the operator must pick which cost_center the op
+
+        targets. Rows come back sorted by ``created_at`` ascending.'
+      operationId: list_cost_centers_for_enterprise
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCostCentersResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/billing-ops/invoices/{cost_center_id}:
+    get:
+      tags:
+      - Internal
+      summary: List Recent Invoices For Cost Center
+      description: 'Return the latest draft + latest open Stripe invoices for a cost_center.
+
+
+        Powers the operator-UI invoice picker. The ``open`` slot subsumes
+
+        past_due (Stripe treats past_due as ``open`` past its due_date); acting on
+
+        it inside ``add_po_to_invoice`` triggers the void-and-reissue path, so the
+
+        UI surfaces a "will void and re-issue" warning when that card is picked.
+
+        The ``draft`` slot is editable in place. Either or both may be ``null``.'
+      operationId: list_recent_invoices_for_cost_center
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: cost_center_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Cost Center Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListRecentInvoicesResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/meetings/{meeting_id}/attribution/live:
+    get:
+      tags:
+      - Internal
+      summary: Get Meeting Attribution Live
+      description: Return the exact stored live-transcript NDJSON body.
+      operationId: get_meeting_attribution_live
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: meeting_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Meeting Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/x-ndjson: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/meetings/{meeting_id}/attribution/refined:
+    get:
+      tags:
+      - Internal
+      summary: Get Meeting Attribution Refined
+      description: Return the exact stored refined-transcript NDJSON body.
+      operationId: get_meeting_attribution_refined
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: meeting_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Meeting Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/x-ndjson: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/meetings/{meeting_id}/attribution/refined-raw:
+    get:
+      tags:
+      - Internal
+      summary: Get Meeting Attribution Refined Raw
+      description: Return the exact stored archived refine JSON body.
+      operationId: get_meeting_attribution_refined_raw
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: meeting_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Meeting Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/meetings/{meeting_id}/attribution/speaker-observations:
+    get:
+      tags:
+      - Internal
+      summary: Get Meeting Attribution Speaker Observations
+      description: Return the exact stored speaker-observation NDJSON body.
+      operationId: get_meeting_attribution_speaker_observations
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: meeting_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Meeting Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/x-ndjson: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/meetings/{meeting_id}/attribution/speaker-consensus/preview:
+    post:
+      tags:
+      - Internal
+      summary: Preview Meeting Speaker Consensus
+      description: Run one explicitly selected, non-persistent consensus preview.
+      operationId: preview_meeting_speaker_consensus
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: meeting_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Meeting Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConsensusPreviewRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsensusPreviewResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/meetings/{meeting_id}/attribution/audio-url:
+    get:
+      tags:
+      - Internal
+      summary: Get Meeting Attribution Audio Url
+      description: Return a scoped presigned audio URL when the meeting has audio.
+      operationId: get_meeting_attribution_audio_url
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: meeting_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Meeting Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeetingAudioUrlResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/cost-centers/preview-provision:
+    post:
+      tags:
+      - Internal
+      summary: Internal Preview Cost Center Provision
+      description: Server-computed preview of a sales-led cost-center provisioning. No writes, no Stripe mutations.
+      operationId: internal_preview_cost_center_provision
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternalCostCenterProvisionRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalCostCenterProvisionPreviewResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/internal/cost-centers/provision:
+    post:
+      tags:
+      - Internal
+      summary: Internal Provision Cost Center
+      description: 'Provision a sales-led cost center for a target enterprise.
+
+
+        Creates the team + membership swap + a send_invoice Stripe subscription at the
+
+        standard annual Enterprise price, with the invoice emailed to the picked user.
+
+        Provision-or-revert: a stripe_create or stamp failure auto-reverts (rolls back
+
+        the rows, restores the prior membership, cancels the orphaned subscription) and
+
+        is safe to retry; only an invoice_send failure leaves the cost center ACTIVE for
+
+        a manual finalize/send.'
+      operationId: internal_provision_cost_center
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternalCostCenterProvisionRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalCostCenterProvisionResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/internal/marketing/flow-state/generate:
+    post:
+      tags:
+      - Internal
+      summary: Generate Flow State Profiles
+      description: Kick off a background job that builds per-user Flow State profiles.
+      operationId: generate_flow_state_profiles
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateFlowStateRequest'
+        required: true
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketingJobResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/internal/marketing/flow-state/generate-send:
+    post:
+      tags:
+      - Internal
+      summary: Generate And Send Flow State Emails
+      description: Enqueue a generate+send job for all eligible Flow State profiles.
+      operationId: generate_and_send_flow_state_emails
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateAndSendFlowStateRequest'
+        required: true
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketingJobResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/internal/marketing/flow-state/send:
+    post:
+      tags:
+      - Internal
+      summary: Send Flow State Emails
+      description: Kick off a background job that dispatches Flow State events to Customer.io.
+      operationId: send_flow_state_emails
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendFlowStateRequest'
+        required: true
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketingJobResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/internal/marketing/flow-state/months/{reporting_month}:
+    get:
+      tags:
+      - Internal
+      summary: Get Flow State Month Summary
+      description: Return month-level Flow State generation/send state for the admin portal.
+      operationId: get_flow_state_month_summary
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: reporting_month
+        in: path
+        required: true
+        schema:
+          type: string
+          format: date
+          description: First day of the reporting month.
+          title: Reporting Month
+        description: First day of the reporting month.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowStateMonthSummaryResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/marketing/flow-state/preview:
+    post:
+      tags:
+      - Internal
+      summary: Preview Flow State Profiles
+      description: Return generated profile rows for review before dispatch.
+      operationId: preview_flow_state_profiles
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FlowStatePreviewRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowStateProfilePreviewResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/internal/marketing/flow-state/jobs/{job_id}:
+    get:
+      tags:
+      - Internal
+      summary: Get Flow State Job
+      description: Return the latest persisted state of a marketing job.
+      operationId: get_flow_state_job
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Job Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketingJobStatusResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/enterprises/create:
+    post:
+      tags:
+      - Internal
+      summary: Internal Create Enterprise
+      description: 'Create a new enterprise for a given name/domain, and set the given email as the admin user.
+
+        Creates a new user, enterprise, and Stripe customer.
+
+
+        Only accessible by Wispr admins (@wispr.ai emails).'
+      operationId: internal_create_enterprise
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEnterpriseFromAdminRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/internal/enterprises/create-pilot:
+    post:
+      tags:
+      - Internal
+      summary: Create Enterprise Pilot
+      description: Create a new enterprise pilot with a user, enterprise, and discounted subscription.
+      operationId: create_enterprise_pilot
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: currency
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/Currency'
+          default: usd
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEnterprisePilotRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/enterprises/create-sales-led:
+    post:
+      tags:
+      - Internal
+      summary: Create Sales Led Enterprise
+      description: 'Create a sales-led enterprise with deferred invoicing.
+
+
+        Creates the enterprise, Stripe subscription, and a draft invoice.
+
+        The invoice stays as a draft until sales unpauses collection via /send-invoice (below).'
+      operationId: create_sales_led_enterprise
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSalesLedEnterpriseRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateSalesLedEnterpriseResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/internal/enterprises/create-sales-led-custom-billing:
+    post:
+      tags:
+      - Internal
+      summary: Create Sales Led Enterprise Custom Billing
+      description: 'Create a sales-led enterprise with a negotiated custom billing config.
+
+
+        Superadmin-gated counterpart to /create-sales-led: takes the same payload
+
+        plus a required `custom_billing_config`. Splitting it out keeps the auth
+
+        escalation visible in the route signature and OpenAPI, matching the
+
+        sensitivity of /billing-configs/create.'
+      operationId: create_sales_led_enterprise_custom_billing
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSalesLedEnterpriseCustomBillingRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateSalesLedEnterpriseResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/internal/enterprises/{enterprise_id}/send-invoice:
+    post:
+      tags:
+      - Internal
+      summary: Send Enterprise Invoice
+      description: Send a pending invoice for a sales-led enterprise with PO number.
+      operationId: send_enterprise_invoice
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendInvoiceRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendInvoiceResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/enterprises/{enterprise_id}/pending-invoice:
+    get:
+      tags:
+      - Internal
+      summary: Get Pending Invoice
+      description: Check if an enterprise has a pending draft invoice (internal admin only).
+      operationId: get_pending_invoice
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PendingInvoiceResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/enterprises/{enterprise_id}/update-pilot-end:
+    patch:
+      tags:
+      - Internal
+      summary: Update Enterprise Pilot End
+      description: 'Update the pilot end date for an enterprise (internal admin only).
+
+
+        The new pilot_end must be at least 24 hours in the future.
+
+        Updates Stripe subscription trial_end and all enterprise users'' trial_ends_at.'
+      operationId: update_enterprise_pilot_end
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePilotEndRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatePilotEndResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/enterprises/{enterprise_id}/reactivate-pilot:
+    post:
+      tags:
+      - Internal
+      summary: Reactivate Enterprise Pilot
+      description: 'Reactivate a canceled enterprise pilot (internal admin only).
+
+
+        Resolves the admin email + primary domain server-side from the enterprise''s
+
+        existing records, then delegates to the standard create-pilot flow. Use
+
+        update-pilot-end instead when a live subscription still exists.'
+      operationId: reactivate_enterprise_pilot
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReactivateEnterprisePilotRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/enterprises/pilots:
+    get:
+      tags:
+      - Internal
+      summary: List Enterprise Pilots
+      description: "List enterprise pilots with optional filtering (internal admin only).\n\nArgs:\n    status_filter: Filter option - 'active' (future pilot_end), 'expired' (past pilot_end or canceled), or omit for all"
+      operationId: list_enterprise_pilots
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          description: Maximum number of results
+          default: 20
+          title: Limit
+        description: Maximum number of results
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Number of results to skip
+          default: 0
+          title: Offset
+        description: Number of results to skip
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - enum:
+            - active
+            - expired
+            type: string
+          - type: 'null'
+          description: 'Filter by status: ''active'', ''expired'', or omit for all'
+          title: Status
+        description: 'Filter by status: ''active'', ''expired'', or omit for all'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnterprisePilotsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/enterprises:
+    get:
+      tags:
+      - Internal
+      summary: Search Enterprises
+      description: Search enterprises by name or ID (internal admin only).
+      operationId: search_enterprises
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: search
+        in: query
+        required: true
+        schema:
+          type: string
+          minLength: 2
+          description: Search term for enterprise name or ID
+          title: Search
+        description: Search term for enterprise name or ID
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          description: Maximum number of results
+          default: 50
+          title: Limit
+        description: Maximum number of results
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Number of results to skip
+          default: 0
+          title: Offset
+        description: Number of results to skip
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllEnterprisesResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/enterprises/{enterprise_id}/members:
+    get:
+      tags:
+      - Internal
+      summary: Get Enterprise Members
+      description: Get members of an enterprise with pagination, search, and sort (internal admin only).
+      operationId: get_enterprise_members
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 500
+          minimum: 1
+          description: Maximum number of members to return
+          default: 100
+          title: Limit
+        description: Maximum number of members to return
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Number of members to skip
+          default: 0
+          title: Offset
+        description: Number of members to skip
+      - name: search
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            maxLength: 200
+          - type: 'null'
+          description: Case-insensitive search across name and email
+          title: Search
+        description: Case-insensitive search across name and email
+      - name: sort_by
+        in: query
+        required: false
+        schema:
+          enum:
+          - name
+          - email
+          - joinedAt
+          - role
+          type: string
+          default: name
+          title: Sort By
+      - name: sort_dir
+        in: query
+        required: false
+        schema:
+          enum:
+          - asc
+          - desc
+          type: string
+          default: asc
+          title: Sort Dir
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnterpriseMembersResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Internal
+      summary: Add Users To Enterprise
+      description: "Add user(s) to an enterprise (internal admin only).\n\n- If a user is not in any enterprise: onboards them to the enterprise\n- If a user is already in this enterprise: skips them (included in skipped_count)\n- If a user is in a different enterprise: marks as failed\n- If a user is not found and create_missing_users is False: marks as failed\n- If a user is not found and create_missing_users is True: creates Supabase auth\n  account and DB user, then adds them to the enterprise\n\nPartial success: Adds all users that can be added and returns details about failures."
+      operationId: add_users_to_enterprise
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddUsersToEnterpriseRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddUsersToEnterpriseResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/enterprise/{enterprise_id}:
+    get:
+      tags:
+      - Internal
+      summary: Get Enterprise Details
+      description: Get enterprise details including domains (internal admin only).
+      operationId: get_enterprise_details
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnterpriseDetailsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/add-enterprise-domain:
+    post:
+      tags:
+      - Internal
+      summary: Add Enterprise Domain
+      description: 'Add a domain to an enterprise (internal admin only).
+
+
+        If the enterprise has SSO enabled (workos_org_id), the domain will also be synced to WorkOS.
+
+        The response includes a `workos_synced` field indicating whether the sync was successful.'
+      operationId: add_enterprise_domain
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddEnterpriseDomainRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddEnterpriseDomainResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/internal/enterprises/{enterprise_id}/domains/{domain_id}/toggle-deleted:
+    patch:
+      tags:
+      - Internal
+      summary: Toggle Domain Deleted
+      description: 'Toggle domain deleted status for an enterprise (internal admin only).
+
+
+        When deleted=true, the domain is hidden from customer settings,
+
+        auto-invite is disabled for that domain, and the domain is removed from WorkOS SSO.'
+      operationId: toggle_domain_deleted
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      - name: domain_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Domain Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ToggleDomainDeletedRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToggleDomainDeletedResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/enterprises/{enterprise_id}/preserve-seats:
+    patch:
+      tags:
+      - Internal
+      summary: Update Preserve Contracted Seats
+      description: Toggle preserve_contracted_seats for an enterprise (internal admin only).
+      operationId: update_preserve_contracted_seats
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePreserveContractedSeatsRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/enterprises/{enterprise_id}/workos-directory-id:
+    patch:
+      tags:
+      - Internal
+      summary: Update Workos Directory Id
+      description: Set or unlink workos_directory_id for an enterprise (internal admin only).
+      operationId: update_workos_directory_id
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateWorkosDirectoryIdRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/enterprises/{enterprise_id}/sync-workos:
+    post:
+      tags:
+      - Internal
+      summary: Sync Enterprise Domains To Workos
+      description: 'Sync all active (non-deleted) domains for an enterprise to WorkOS (internal admin only).
+
+
+        Use this endpoint to retry WorkOS sync if a previous add/toggle operation
+
+        reported workos_synced=false.'
+      operationId: sync_enterprise_domains_to_workos
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyncDomainsToWorkosResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/enterprises/{enterprise_id}/members/upload:
+    post:
+      tags:
+      - Internal
+      summary: Add Users To Enterprise File Upload
+      description: 'Upload a file to bulk add users to an enterprise (internal admin only).
+
+
+        When create_missing_users is False (default): plain text with emails separated
+
+        by commas or newlines. No header row, no role column. All users added as members.
+
+
+        When create_missing_users is True: CSV with email,first_name,last_name columns.
+
+        Header row is optional. Users not found in the DB will have accounts created
+
+        before being added to the enterprise.'
+      operationId: add_users_to_enterprise_file_upload
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      - name: create_missing_users
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+          title: Create Missing Users
+      - name: role
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/EnterpriseRole'
+          default: member
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_add_users_to_enterprise_file_upload_api_v1_internal_enterprises__enterprise_id__members_upload_post'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddUsersToEnterpriseResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/enterprises/{enterprise_id}/members/remove:
+    post:
+      tags:
+      - Internal
+      summary: Remove Users From Enterprise
+      description: 'Remove user(s) from an enterprise by email (internal admin only).
+
+
+        Looks up users by email and removes those that belong to this enterprise.
+
+        Users not found or not in this enterprise are skipped.'
+      operationId: remove_users_from_enterprise
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RemoveUsersFromEnterpriseRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoveUsersFromEnterpriseResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/enterprises/{enterprise_id}/members/remove/upload:
+    post:
+      tags:
+      - Internal
+      summary: Remove Users From Enterprise File Upload
+      description: 'Upload a file to bulk remove users from an enterprise (internal admin only).
+
+
+        Removes users from the enterprise, clears their enterprise association,
+
+        updates Stripe seats, and triggers all necessary side effects.
+
+
+        File format: plain text with emails separated by commas or newlines.'
+      operationId: remove_users_from_enterprise_file_upload
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_remove_users_from_enterprise_file_upload_api_v1_internal_enterprises__enterprise_id__members_remove_upload_post'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoveUsersFromEnterpriseResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/enterprises/{enterprise_id}/members/update-role:
+    patch:
+      tags:
+      - Internal
+      summary: Update User Enterprise Role
+      description: 'Update a single user''s role in an enterprise (internal admin only).
+
+
+        - User must exist and be in this enterprise
+
+        - Cannot demote if it would leave enterprise with zero admins'
+      operationId: update_user_enterprise_role
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUsersRoleRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateUsersRoleResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/enterprises/{enterprise_id}/members/update-role-bulk:
+    post:
+      tags:
+      - Internal
+      summary: Update User Roles File Upload
+      description: 'Upload a CSV/text file to bulk update user roles (internal admin only).
+
+
+        File format: plain text with emails separated by commas or newlines.
+
+        Role is specified as a query parameter.'
+      operationId: update_user_roles_file_upload
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      - name: role
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/EnterpriseRole'
+          description: 'Target role: ''admin'' or ''member'''
+        description: 'Target role: ''admin'' or ''member'''
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_update_user_roles_file_upload_api_v1_internal_enterprises__enterprise_id__members_update_role_bulk_post'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateUsersRoleResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/billing-configs:
+    get:
+      tags:
+      - Internal
+      summary: List Billing Configs
+      description: List all enterprise billing configs (internal admin only).
+      operationId: list_billing_configs
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnterpriseBillingConfigListResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/internal/billing-configs/create:
+    post:
+      tags:
+      - Internal
+      summary: Create Billing Config
+      description: Create a new enterprise billing config (internal admin only).
+      operationId: create_billing_config
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnterpriseBillingConfigCreate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnterpriseBillingConfigResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/internal/billing-configs/{config_id}:
+    patch:
+      tags:
+      - Internal
+      summary: Update Billing Config
+      description: Update an enterprise billing config (internal admin only).
+      operationId: update_billing_config
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: config_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Config Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnterpriseBillingConfigUpdate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnterpriseBillingConfigResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Internal
+      summary: Delete Billing Config
+      description: Delete an enterprise billing config (internal admin only).
+      operationId: delete_billing_config
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: config_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Config Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/public-domains:
+    get:
+      tags:
+      - Internal
+      summary: Get Public Domains
+      description: Get the public/webmail domain list (internal admin only).
+      operationId: get_public_domains
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicDomainsListResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/internal/blocked-domains:
+    get:
+      tags:
+      - Internal
+      summary: Get Blocked Domains
+      description: Get all blocked domains (internal admin only).
+      operationId: get_blocked_domains
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlockedDomainsListResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/internal/blocked-domains/create:
+    post:
+      tags:
+      - Internal
+      summary: Create Blocked Domain
+      description: Add a domain to the block list (internal admin only).
+      operationId: create_blocked_domain
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddBlockedDomainRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddBlockedDomainResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/internal/blocked-domains/{blocked_domain_id}:
+    delete:
+      tags:
+      - Internal
+      summary: Delete Blocked Domain
+      description: Remove a domain from the block list (internal admin only).
+      operationId: delete_blocked_domain
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: blocked_domain_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Blocked Domain Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/enterprises/{enterprise_id}/sync-directory-users:
+    post:
+      tags:
+      - Internal
+      summary: Sync Enterprise Directory Users
+      description: 'Sync a single enterprise''s DB users with its WorkOS SCIM directory.
+
+
+        Dispatches the sync as a background task and returns immediately.
+
+        Search Sentry logs (project flow-backend) for ''directory_sync_completed'' to see results.'
+      operationId: sync_enterprise_directory_users
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DirectorySyncStartedResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/enterprises/{enterprise_id}/sync-directory-users/preview:
+    get:
+      tags:
+      - Internal
+      summary: Preview Enterprise Directory Users
+      description: 'Dry-run preview of a single enterprise''s directory sync.
+
+
+        Computes the link/provision/remove diff against WorkOS without mutating
+
+        anything, so the admin can confirm before running the actual sync.'
+      operationId: preview_enterprise_directory_users
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DirectorySyncPreview'
+        '429':
+          description: Rate limit exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/enterprises/sync-all-directory-users:
+    post:
+      tags:
+      - Internal
+      summary: Sync All Enterprise Directory Users
+      description: 'Sync all enterprises that have a WorkOS directory with their SCIM directory users.
+
+
+        Dispatches the sync as a background task and returns immediately.
+
+        Search Sentry logs (project flow-backend) for ''directory_sync_all_completed'' to see results.'
+      operationId: sync_all_enterprise_directory_users
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DirectorySyncStartedResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/internal/promo/campaigns:
+    get:
+      tags:
+      - Internal
+      summary: List Promo Campaigns
+      operationId: list_promo_campaigns
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 200
+          minimum: 1
+          default: 50
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Internal
+      summary: Create Promo Campaign
+      operationId: create_promo_campaign
+      security:
+      - ApiKeyHeaderPatched: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCampaignRequest'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignListItem'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/promo/campaigns/{campaign_id}:
+    get:
+      tags:
+      - Internal
+      summary: Get Promo Campaign
+      operationId: get_promo_campaign
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: campaign_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Campaign Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignListItem'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Internal
+      summary: Update Promo Campaign
+      operationId: update_promo_campaign
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: campaign_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Campaign Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCampaignRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignListItem'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/promo/campaigns/{campaign_id}/codes:
+    get:
+      tags:
+      - Internal
+      summary: List Promo Codes
+      operationId: list_promo_codes
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: campaign_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Campaign Id
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 200
+          minimum: 1
+          default: 50
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CodeListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Internal
+      summary: Create Promo Codes
+      operationId: create_promo_codes
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: campaign_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Campaign Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCodesRequest'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCodesResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/promo/campaigns/{campaign_id}/codes/export:
+    get:
+      tags:
+      - Internal
+      summary: Export Promo Codes Csv
+      operationId: export_promo_codes_csv
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: campaign_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Campaign Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/promo/codes/{code_id}:
+    patch:
+      tags:
+      - Internal
+      summary: Toggle Promo Code Active
+      operationId: toggle_promo_code_active
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: code_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Code Id
+      - name: is_active
+        in: query
+        required: true
+        schema:
+          type: boolean
+          title: Is Active
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CodeListItem'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/promo/redemptions:
+    get:
+      tags:
+      - Internal
+      summary: List Promo Redemptions
+      operationId: list_promo_redemptions
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 200
+          minimum: 1
+          default: 50
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      - name: campaign_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Campaign Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RedemptionListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/enterprises/{enterprise_id}/settings:
+    patch:
+      tags:
+      - Internal
+      summary: Internal Update Enterprise Settings
+      description: 'Override customer-settable enterprise settings (any @wispr.ai admin, for
+
+        support fixups). Gate keys (usageExportAllowed, zdrLocked, restrictDomainAccess)
+
+        are not accepted here — use PATCH /enterprises/{id}/gates. Per-key compliance
+
+        enforcement (e.g. ZDR cannot be flipped when zdrLocked is True except by a
+
+        superadmin) lives in update_settings.'
+      operationId: internal_update_enterprise_settings
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateEnterpriseSettingsRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/enterprises/{enterprise_id}/gates:
+    patch:
+      tags:
+      - Internal
+      summary: Internal Update Enterprise Gates
+      description: 'Update Wispr-controlled enterprise gates. Any @wispr.ai admin can flip keys in
+
+        ADMIN_GATES; SUPERADMIN_GATES require an @wispr.ai superadmin (enforced inside
+
+        update_gates).'
+      operationId: internal_update_enterprise_gates
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateEnterpriseGatesRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/enterprises/{enterprise_id}/disband:
+    post:
+      tags:
+      - Internal
+      summary: Internal Disband Enterprise
+      description: Disband an enterprise. Cancels Stripe subscription, removes all members, and sends a Slack notification.
+      operationId: internal_disband_enterprise
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DisbandEnterpriseRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisbandEnterpriseResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/referral/apply:
+    post:
+      tags:
+      - Internal
+      summary: Admin Apply Referral
+      description: Apply a referral code to a user on their behalf. Admin only.
+      operationId: admin_apply_referral
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminApplyReferralRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminApplyReferralResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/internal/domains/{domain_id}/initiate-verification:
+    post:
+      tags:
+      - Internal
+      summary: Internal Initiate Domain Verification
+      description: Issue (or reuse) a DNS TXT token for domain ownership verification.
+      operationId: internal_initiate_domain_verification
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: domain_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Domain Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DomainVerificationInitiateResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/domains/{domain_id}/check-verification:
+    post:
+      tags:
+      - Internal
+      summary: Internal Check Domain Verification
+      description: Query public DNS and flip the domain to verified on exact token match.
+      operationId: internal_check_domain_verification
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: domain_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Domain Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DomainVerificationStatus'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/domains/{domain_id}/verification-status:
+    get:
+      tags:
+      - Internal
+      summary: Internal Get Domain Verification Status
+      description: Return current verification status (including TXT record) for a single domain.
+      operationId: internal_get_domain_verification_status
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: domain_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Domain Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DomainVerificationStatus'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/users/trial-end:
+    patch:
+      tags:
+      - Internal
+      summary: Internal Update User Trial End
+      description: Override a user's personal trial end date (support action). Capped at 365 days.
+      operationId: internal_update_user_trial_end
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserTrialEndRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateUserTrialEndResponse'
+        '400':
+          description: trial_end is in the past or exceeds the 365-day cap.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+        '404':
+          description: No user found for the supplied email.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+        '429':
+          description: Rate limit exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/internal/memory/search:
+    post:
+      tags:
+      - Internal
+      summary: Admin Search User Memories
+      description: 'Super-admin: semantic-search voice memory for a list of users by a context query.
+
+
+        Reads private cross-user memory — restricted to Wispr super-admins.'
+      operationId: admin_search_user_memories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminMemorySearchRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminMemorySearchResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/internal/memory/list:
+    post:
+      tags:
+      - Internal
+      summary: Admin List User Memories
+      description: 'Super-admin: list all stored voice memories for a list of users.
+
+
+        Reads private cross-user memory — restricted to Wispr super-admins.'
+      operationId: admin_list_user_memories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminMemoryListRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminMemoryListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/internal/users/lookup:
+    get:
+      tags:
+      - Internal
+      summary: Admin Lookup User
+      description: Look up a user by email or user_id and return their profile and subscription info.
+      operationId: admin_lookup_user
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: q
+        in: query
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          description: Email address or user_id to look up
+          title: Q
+        description: Email address or user_id to look up
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminUserLookupResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/internal/users/stripe-customer-id:
+    post:
+      tags:
+      - Internal
+      summary: Admin Update Stripe Customer Id
+      description: Overwrite a user's stripe_customer_id (dry-run by default).
+      operationId: admin_update_stripe_customer_id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminUpdateStripeCustomerIdRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminUpdateStripeCustomerIdResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+components:
+  schemas:
+    ProvisionedCostCenterSummary:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - id
+      - name
+      title: ProvisionedCostCenterSummary
+      description: The cost center created by a successful provision.
+    EnterpriseDomainItem:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        domain:
+          type: string
+          title: Domain
+        deleted:
+          type: boolean
+          title: Deleted
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        domain_capture_policy:
+          type: string
+          enum:
+          - unset
+          - 'off'
+          - require
+          title: Domain Capture Policy
+      type: object
+      required:
+      - id
+      - domain
+      - deleted
+      - created_at
+      - domain_capture_policy
+      title: EnterpriseDomainItem
+      description: Response model for an enterprise domain.
+    MeetingAudioUrlResponse:
+      properties:
+        url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Url
+      type: object
+      title: MeetingAudioUrlResponse
+      description: Presigned GET URL for one meeting's audio, if present.
+    ProvisionedInvoiceSummary:
+      properties:
+        stripe_invoice_id:
+          type: string
+          title: Stripe Invoice Id
+        status:
+          type: string
+          enum:
+          - sent
+          - already_paid
+          title: Status
+      type: object
+      required:
+      - stripe_invoice_id
+      - status
+      title: ProvisionedInvoiceSummary
+      description: The invoice sent (or already paid) by a successful provision.
+    EnterprisePilotsResponse:
+      properties:
+        pilots:
+          items:
+            $ref: '#/components/schemas/EnterprisePilotItem'
+          type: array
+          title: Pilots
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - pilots
+      - total
+      title: EnterprisePilotsResponse
+      description: Response model for listing enterprise pilots.
+    SyncDomainsToWorkosResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+        workos_synced:
+          type: boolean
+          title: Workos Synced
+          description: Whether the domains were successfully synced to WorkOS
+      type: object
+      required:
+      - message
+      - workos_synced
+      title: SyncDomainsToWorkosResponse
+      description: Response model for syncing enterprise domains to WorkOS.
+    PreviewResponse:
+      properties:
+        preview:
+          type: object
+          title: Preview
+      type: object
+      required:
+      - preview
+      title: PreviewResponse
+    SendInvoiceRequest:
+      properties:
+        invoice_id:
+          type: string
+          minLength: 1
+          title: Invoice Id
+          description: Stripe draft invoice ID to finalize and send
+        po_number:
+          type: string
+          maxLength: 100
+          minLength: 1
+          title: Po Number
+          description: Purchase order number
+      type: object
+      required:
+      - invoice_id
+      - po_number
+      title: SendInvoiceRequest
+      description: Request model for sending a pending invoice.
+    EnterpriseBillingConfigCreate:
+      properties:
+        next_true_up_date:
+          type: string
+          format: date-time
+          title: Next True Up Date
+        true_up_period_days:
+          type: integer
+          enum:
+          - 30
+          - 90
+          - 365
+          title: True Up Period Days
+          description: Billing period in days (monthly, quarterly, annual)
+        stripe_price_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stripe Price Id
+          description: Stripe price ID. If omitted, resolved from product_name + currency.
+        product_name:
+          type: string
+          minLength: 1
+          title: Product Name
+        payment_terms_days:
+          type: integer
+          minimum: 1.0
+          title: Payment Terms Days
+          default: 7
+        custom_unit_price_cents:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Custom Unit Price Cents
+        pricing_tiers:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/PricingTierSchema'
+            type: array
+          - type: 'null'
+          title: Pricing Tiers
+        currency:
+          $ref: '#/components/schemas/Currency'
+          default: usd
+        seat_cap:
+          anyOf:
+          - type: integer
+            minimum: 1.0
+          - type: 'null'
+          title: Seat Cap
+          description: Maximum seats allowed for this enterprise
+        contract_end_date:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Contract End Date
+        contract_period_days:
+          anyOf:
+          - type: integer
+            minimum: 1.0
+          - type: 'null'
+          title: Contract Period Days
+        enterprise_id:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      type: object
+      required:
+      - next_true_up_date
+      - true_up_period_days
+      - product_name
+      - enterprise_id
+      title: EnterpriseBillingConfigCreate
+      description: Request model for creating a billing config.
+    ListRecentInvoicesResponse:
+      properties:
+        draft:
+          anyOf:
+          - $ref: '#/components/schemas/InvoiceSummary'
+          - type: 'null'
+        open:
+          anyOf:
+          - $ref: '#/components/schemas/InvoiceSummary'
+          - type: 'null'
+      type: object
+      required:
+      - draft
+      - open
+      title: ListRecentInvoicesResponse
+      description: 'The two most-recent invoices an operator might want to act on.
+
+
+        ``open`` covers the past_due case as well — Stripe treats past_due as just
+
+        an ``open`` invoice past its due_date, so a single ``open`` slot is enough
+
+        for the picker. Acting on the ``open`` row triggers the void-and-reissue
+
+        flow inside ``add_po_to_invoice``; the ``draft`` row is editable in place.
+
+        Either slot may be null when no such invoice exists for the customer.'
+    UpdatePilotEndRequest:
+      properties:
+        pilot_end:
+          type: string
+          format: date
+          title: Pilot End
+      type: object
+      required:
+      - pilot_end
+      title: UpdatePilotEndRequest
+      description: Request model for updating an enterprise pilot end date.
+    CreateCodesResponse:
+      properties:
+        created_count:
+          type: integer
+          title: Created Count
+        created_codes:
+          items:
+            $ref: '#/components/schemas/CodeListItem'
+          type: array
+          title: Created Codes
+      type: object
+      required:
+      - created_count
+      - created_codes
+      title: CreateCodesResponse
+      description: 'Result of creating promo codes: count and the created rows.'
+    ConsensusPreviewRequest:
+      properties:
+        algorithm_id:
+          $ref: '#/components/schemas/AlgorithmId'
+      type: object
+      required:
+      - algorithm_id
+      title: ConsensusPreviewRequest
+      description: Explicit consensus implementation selection.
+    FlowStatePreviewRequest:
+      properties:
+        reporting_month:
+          type: string
+          format: date
+          title: Reporting Month
+        emails:
+          anyOf:
+          - items:
+              type: string
+              format: email
+            type: array
+          - type: 'null'
+          title: Emails
+        domain:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Domain
+        user_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: User Ids
+        limit:
+          type: integer
+          maximum: 500.0
+          minimum: 1.0
+          title: Limit
+          default: 100
+        offset:
+          type: integer
+          minimum: 0.0
+          title: Offset
+          default: 0
+      type: object
+      required:
+      - reporting_month
+      title: FlowStatePreviewRequest
+      description: Request body for previewing generated profiles before send.
+    ConsensusActualMode:
+      type: string
+      enum:
+      - anonymous
+      - cluster
+      - segment
+      title: ConsensusActualMode
+      description: The implementation path that produced a preview result.
+    FailedAddUserItem:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        reason:
+          type: string
+          title: Reason
+      type: object
+      required:
+      - email
+      - reason
+      title: FailedAddUserItem
+      description: Details about a user that failed to be added
+    DomainVerificationStatus:
+      properties:
+        domain_id:
+          type: string
+          title: Domain Id
+        enterprise_id:
+          type: string
+          title: Enterprise Id
+        domain:
+          type: string
+          title: Domain
+        verified:
+          type: boolean
+          title: Verified
+        verified_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Verified At
+          description: ISO-8601 timestamp of verification, or ``null`` if unverified.
+        verification_initiated_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Verification Initiated At
+          description: ISO-8601 timestamp of when the token was first issued, or ``null`` if never initiated.
+        last_verification_check_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Verification Check At
+          description: ISO-8601 timestamp of the last DNS poll, or ``null`` if never polled.
+        verification_attempts:
+          type: integer
+          title: Verification Attempts
+          description: Number of DNS check attempts made against this domain.
+        token_active:
+          type: boolean
+          title: Token Active
+          description: True iff a verification token is currently issued and the domain is not yet verified.
+        record:
+          anyOf:
+          - $ref: '#/components/schemas/DomainVerificationRecord'
+          - type: 'null'
+          description: The TXT record to publish. Populated only on superadmin reads while unverified; always ``null`` on admin-facing reads.
+        domain_capture_policy:
+          $ref: '#/components/schemas/DomainCapturePolicy'
+          description: Per-domain capture policy. ``unset`` while unverified; ``off``/``require`` once verified.
+      type: object
+      required:
+      - domain_id
+      - enterprise_id
+      - domain
+      - verified
+      - verified_at
+      - verification_initiated_at
+      - last_verification_check_at
+      - verification_attempts
+      - token_active
+      - record
+      - domain_capture_policy
+      title: DomainVerificationStatus
+      description: 'Per-domain verification state returned by the enterprise and internal APIs.
+
+
+        The ``record`` field is populated only on superadmin (internal) reads while
+
+        the domain is still unverified. Admin-facing reads always set it to ``None``.'
+    AdminMemorySearchResponse:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/AdminMemorySearchResult'
+          type: array
+          title: Results
+      type: object
+      required:
+      - results
+      title: AdminMemorySearchResponse
+    AdminApplyReferralRequest:
+      properties:
+        user_email:
+          type: string
+          format: email
+          title: User Email
+        referral_code:
+          type: string
+          maxLength: 50
+          minLength: 1
+          title: Referral Code
+      type: object
+      required:
+      - user_email
+      - referral_code
+      title: AdminApplyReferralRequest
+      description: Request model for applying a referral code to a user on their behalf.
+    AdminUpdateStripeCustomerIdRequest:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        stripe_customer_id:
+          type: string
+          minLength: 1
+          title: Stripe Customer Id
+        dry_run:
+          type: boolean
+          title: Dry Run
+          default: true
+      type: object
+      required:
+      - user_id
+      - stripe_customer_id
+      title: AdminUpdateStripeCustomerIdRequest
+    FlowStateProfilePreviewItem:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        email:
+          type: string
+          title: Email
+        eligibility_word_count:
+          type: integer
+          title: Eligibility Word Count
+        generated_at:
+          type: string
+          format: date-time
+          title: Generated At
+        send_status:
+          type: string
+          title: Send Status
+        send_attempts:
+          type: integer
+          title: Send Attempts
+        sent_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Sent At
+        send_error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Send Error
+        profile:
+          type: object
+          title: Profile
+      type: object
+      required:
+      - user_id
+      - email
+      - eligibility_word_count
+      - generated_at
+      - send_status
+      - send_attempts
+      - profile
+      title: FlowStateProfilePreviewItem
+      description: Generated Flow State profile row for internal admin preview.
+    BillingAddress:
+      properties:
+        line1:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Line1
+        line2:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Line2
+        city:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: City
+        state:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: State
+        postal_code:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Postal Code
+        country:
+          anyOf:
+          - type: string
+            maxLength: 2
+            minLength: 2
+            pattern: ^[A-Z]{2}$
+          - type: 'null'
+          title: Country
+          description: ISO 3166-1 alpha-2 country code (uppercase, e.g. 'US', 'GB')
+      type: object
+      title: BillingAddress
+      description: 'Billing address fields propagated to the Stripe customer address object.
+
+
+        All fields optional so admins can supply partial info. ISO 3166-1 alpha-2
+
+        country code (e.g. "US", "GB") is what Stripe expects.'
+    FlowStateProfilePreviewResponse:
+      properties:
+        total:
+          type: integer
+          title: Total
+        items:
+          items:
+            $ref: '#/components/schemas/FlowStateProfilePreviewItem'
+          type: array
+          title: Items
+      type: object
+      required:
+      - total
+      - items
+      title: FlowStateProfilePreviewResponse
+      description: Paginated generated profile preview.
+    EnterpriseBillingConfigListResponse:
+      properties:
+        configs:
+          items:
+            $ref: '#/components/schemas/EnterpriseBillingConfigResponse'
+          type: array
+          title: Configs
+      type: object
+      required:
+      - configs
+      title: EnterpriseBillingConfigListResponse
+      description: Response model for list of billing configs.
+    CommitResponse:
+      properties:
+        ok:
+          type: boolean
+          title: Ok
+          default: true
+        stripe_responses:
+          items:
+            type: object
+          type: array
+          title: Stripe Responses
+      type: object
+      required:
+      - stripe_responses
+      title: CommitResponse
+      description: 'Minimal commit ack — the op ran. Stripe responses are surfaced so the UI
+
+        can show what happened. No audit row is persisted; see the structured log
+
+        line emitted by ``BillingOpsService.commit`` for the operational record.'
+    UpdateWorkosDirectoryIdRequest:
+      properties:
+        workos_directory_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Workos Directory Id
+      type: object
+      required:
+      - workos_directory_id
+      title: UpdateWorkosDirectoryIdRequest
+      description: Request model for setting or unlinking workos_directory_id on an enterprise.
+    ListCostCentersResponse:
+      properties:
+        cost_centers:
+          items:
+            $ref: '#/components/schemas/CostCenterListItem'
+          type: array
+          title: Cost Centers
+      type: object
+      required:
+      - cost_centers
+      title: ListCostCentersResponse
+      description: 'Cost centers under an enterprise, sorted by ``created_at`` ascending.
+
+
+        The UI uses this to populate a picker before running a billing op: when an
+
+        enterprise has exactly one cost_center the picker auto-selects it; with
+
+        multiple, the operator must choose explicitly.'
+    EnterpriseMembersResponse:
+      properties:
+        members:
+          items:
+            $ref: '#/components/schemas/EnterpriseMember'
+          type: array
+          title: Members
+        total:
+          type: integer
+          title: Total
+        limit:
+          type: integer
+          title: Limit
+        offset:
+          type: integer
+          title: Offset
+      type: object
+      required:
+      - members
+      - total
+      - limit
+      - offset
+      title: EnterpriseMembersResponse
+      description: Response model for list of enterprise members with pagination
+    PricingTierSchema:
+      properties:
+        max_seats:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Seats
+          description: Maximum seats in this tier (None = unlimited)
+        price_cents_per_seat_per_year:
+          type: integer
+          minimum: 0.0
+          title: Price Cents Per Seat Per Year
+          description: Price per seat per year in cents
+      type: object
+      required:
+      - price_cents_per_seat_per_year
+      title: PricingTierSchema
+      description: Schema for a single pricing tier.
+    Body_add_users_to_enterprise_file_upload_api_v1_internal_enterprises__enterprise_id__members_upload_post:
+      properties:
+        file:
+          type: string
+          contentMediaType: application/octet-stream
+          title: File
+      type: object
+      required:
+      - file
+      title: Body_add_users_to_enterprise_file_upload_api_v1_internal_enterprises__enterprise_id__members_upload_post
+    GenerateAndSendFlowStateRequest:
+      properties:
+        reporting_month:
+          type: string
+          format: date
+          title: Reporting Month
+        min_word_count:
+          type: integer
+          title: Min Word Count
+          default: 500
+        min_app_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Min App Count
+        dry_run:
+          type: boolean
+          title: Dry Run
+          default: false
+        resend_failed:
+          type: boolean
+          title: Resend Failed
+          default: false
+      type: object
+      required:
+      - reporting_month
+      title: GenerateAndSendFlowStateRequest
+      description: Request body for the backend-owned all-user generate-and-send endpoint.
+    BlockedDomainsListResponse:
+      properties:
+        blocked_domains:
+          items:
+            $ref: '#/components/schemas/BlockedDomainItem'
+          type: array
+          title: Blocked Domains
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - blocked_domains
+      - total
+      title: BlockedDomainsListResponse
+      description: Response model for list of blocked domains.
+    RemoveUsersFromEnterpriseRequest:
+      properties:
+        emails:
+          items:
+            type: string
+            format: email
+          type: array
+          maxItems: 100
+          title: Emails
+          description: List of user emails to remove (max 100)
+      type: object
+      required:
+      - emails
+      title: RemoveUsersFromEnterpriseRequest
+      description: Request model for removing users from an enterprise by email
+    UpdateEnterpriseSettingsRequest:
+      properties:
+        settings:
+          type: object
+          title: Settings
+      type: object
+      required:
+      - settings
+      title: UpdateEnterpriseSettingsRequest
+    PendingInvoiceResponse:
+      properties:
+        pending_invoice_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Pending Invoice Id
+      type: object
+      title: PendingInvoiceResponse
+      description: Response model for checking pending invoice status.
+    ListOperationsResponse:
+      properties:
+        operations:
+          items:
+            $ref: '#/components/schemas/OperationDescriptor'
+          type: array
+          title: Operations
+      type: object
+      required:
+      - operations
+      title: ListOperationsResponse
+    CreateCodesRequest:
+      properties:
+        codes:
+          items:
+            type: string
+          type: array
+          minItems: 1
+          title: Codes
+        max_redemptions:
+          anyOf:
+          - type: integer
+            minimum: 1.0
+          - type: 'null'
+          title: Max Redemptions
+      type: object
+      required:
+      - codes
+      title: CreateCodesRequest
+      description: Request to create one or more promo codes for a campaign.
+    CreateEnterpriseFromAdminRequest:
+      properties:
+        admin_email:
+          type: string
+          format: email
+          title: Admin Email
+        enterprise_domain:
+          type: string
+          minLength: 1
+          title: Enterprise Domain
+          description: Domain cannot be empty
+        enterprise_name:
+          type: string
+          minLength: 1
+          title: Enterprise Name
+          description: Name cannot be empty
+        preserve_contracted_seats:
+          type: boolean
+          title: Preserve Contracted Seats
+          description: If true, seats are never automatically reduced
+          default: false
+        billing_info:
+          anyOf:
+          - $ref: '#/components/schemas/BillingInfo'
+          - type: 'null'
+          description: Optional Stripe billing contact email + address. Stripe customer name is always enterprise_name.
+        create_admin_user_if_missing:
+          type: boolean
+          title: Create Admin User If Missing
+          description: If true and admin_email has no Wispr user, provision one (requires admin_first_name and admin_last_name).
+          default: false
+        admin_first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Admin First Name
+          description: First name for the new admin user (required if create_admin_user_if_missing).
+        admin_last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Admin Last Name
+          description: Last name for the new admin user (required if create_admin_user_if_missing).
+      type: object
+      required:
+      - admin_email
+      - enterprise_domain
+      - enterprise_name
+      title: CreateEnterpriseFromAdminRequest
+      description: Request model for creating an enterprise with an admin user.
+    ToggleDomainDeletedResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+        workos_synced:
+          type: boolean
+          title: Workos Synced
+          description: Whether active domains were successfully synced to WorkOS
+          default: true
+      type: object
+      required:
+      - message
+      title: ToggleDomainDeletedResponse
+      description: Response model for toggling domain deleted status.
+    AdminMemorySearchRequest:
+      properties:
+        emails:
+          items:
+            type: string
+            format: email
+          type: array
+          maxItems: 25
+          minItems: 1
+          title: Emails
+        reason:
+          type: string
+          maxLength: 500
+          minLength: 3
+          title: Reason
+          description: Required justification for accessing these users' private memory; recorded in the audit log.
+        context:
+          type: string
+          maxLength: 500
+          minLength: 1
+          title: Context
+        max_facts:
+          type: integer
+          maximum: 50.0
+          minimum: 1.0
+          title: Max Facts
+          default: 10
+        max_nodes:
+          type: integer
+          maximum: 50.0
+          minimum: 1.0
+          title: Max Nodes
+          default: 10
+      type: object
+      required:
+      - emails
+      - reason
+      - context
+      title: AdminMemorySearchRequest
+      description: 'Super-admin request: semantic-search each user''s voice memory by ``context``.'
+    AddBlockedDomainResponse:
+      properties:
+        warning:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Warning
+      type: object
+      title: AddBlockedDomainResponse
+      description: Response model for adding a blocked domain.
+    UpdateEnterpriseGatesRequest:
+      properties:
+        gates:
+          additionalProperties:
+            type: boolean
+          type: object
+          title: Gates
+      type: object
+      required:
+      - gates
+      title: UpdateEnterpriseGatesRequest
+    Currency:
+      type: string
+      enum:
+      - usd
+      - gbp
+      - eur
+      - inr
+      - cad
+      - cny
+      - aud
+      - rub
+      - pln
+      - brl
+      - ils
+      - try
+      - jpy
+      - chf
+      - mxn
+      - aed
+      - sek
+      - sgd
+      - zar
+      - nzd
+      - thb
+      - twd
+      - czk
+      - krw
+      title: Currency
+      description: Supported billing currencies as lowercase ISO 4217 codes.
+    MarketingJobStatusResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        job_type:
+          type: string
+          title: Job Type
+        reporting_month:
+          type: string
+          format: date
+          title: Reporting Month
+        status:
+          type: string
+          title: Status
+        total:
+          type: integer
+          title: Total
+        succeeded:
+          type: integer
+          title: Succeeded
+        failed:
+          type: integer
+          title: Failed
+        stage:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stage
+        started_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Started At
+        completed_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Completed At
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+      type: object
+      required:
+      - id
+      - job_type
+      - reporting_month
+      - status
+      - total
+      - succeeded
+      - failed
+      title: MarketingJobStatusResponse
+      description: Latest persisted state of a marketing generate-or-send job.
+    DisbandEnterpriseRequest:
+      properties:
+        reason:
+          type: string
+          maxLength: 500
+          minLength: 1
+          title: Reason
+          description: Reason for disbanding the enterprise
+      type: object
+      required:
+      - reason
+      title: DisbandEnterpriseRequest
+      description: Request model for disbanding an enterprise.
+    UpdatePreserveContractedSeatsRequest:
+      properties:
+        preserve_contracted_seats:
+          type: boolean
+          title: Preserve Contracted Seats
+      type: object
+      required:
+      - preserve_contracted_seats
+      title: UpdatePreserveContractedSeatsRequest
+      description: Request model for toggling preserve_contracted_seats on an enterprise.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    BillingInfo:
+      properties:
+        billing_contact:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Billing Contact
+        address:
+          anyOf:
+          - $ref: '#/components/schemas/BillingAddress'
+          - type: 'null'
+      type: object
+      title: BillingInfo
+      description: 'Billing info propagated to the Stripe customer record.
+
+
+        `billing_contact` is the email Stripe sends invoices and receipts to;
+
+        overrides the Stripe customer''s `email` (which otherwise defaults to the
+
+        admin user''s address). The Stripe customer `name` is always set to the
+
+        enterprise name server-side.'
+    CampaignStatus:
+      type: string
+      enum:
+      - active
+      - paused
+      - ended
+      - archived
+      title: CampaignStatus
+      description: Lifecycle status of a promotional campaign.
+    GenerateFlowStateRequest:
+      properties:
+        reporting_month:
+          type: string
+          format: date
+          title: Reporting Month
+        min_word_count:
+          type: integer
+          title: Min Word Count
+          default: 500
+        min_app_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Min App Count
+        user_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: User Ids
+        emails:
+          anyOf:
+          - items:
+              type: string
+              format: email
+            type: array
+          - type: 'null'
+          title: Emails
+        domain:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Domain
+        all_users:
+          type: boolean
+          title: All Users
+          default: false
+      type: object
+      required:
+      - reporting_month
+      title: GenerateFlowStateRequest
+      description: Request body for the marketing profile generation endpoint.
+    AdminApplyReferralResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - message
+      title: AdminApplyReferralResponse
+      description: Response model for admin referral application.
+    AdminUpdateStripeCustomerIdResponse:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        old_stripe_customer_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Old Stripe Customer Id
+        new_stripe_customer_id:
+          type: string
+          title: New Stripe Customer Id
+        stripe_customer_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stripe Customer Email
+        applied:
+          type: boolean
+          title: Applied
+        warnings:
+          items:
+            type: string
+          type: array
+          title: Warnings
+      type: object
+      required:
+      - user_id
+      - old_stripe_customer_id
+      - new_stripe_customer_id
+      - stripe_customer_email
+      - applied
+      - warnings
+      title: AdminUpdateStripeCustomerIdResponse
+    EnterpriseListItem:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        name:
+          type: string
+          title: Name
+        status:
+          $ref: '#/components/schemas/EnterpriseStatus'
+      type: object
+      required:
+      - id
+      - name
+      - status
+      title: EnterpriseListItem
+      description: Response model for an enterprise in a list
+    InvoiceSummary:
+      properties:
+        id:
+          type: string
+          title: Id
+        number:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Number
+        status:
+          type: string
+          title: Status
+        amount_due:
+          type: integer
+          title: Amount Due
+          description: Amount due in the currency's minor unit (e.g. cents).
+        currency:
+          type: string
+          title: Currency
+        created:
+          type: string
+          format: date-time
+          title: Created
+        due_date:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Due Date
+        hosted_invoice_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Hosted Invoice Url
+      type: object
+      required:
+      - id
+      - number
+      - status
+      - amount_due
+      - currency
+      - created
+      - due_date
+      - hosted_invoice_url
+      title: InvoiceSummary
+      description: 'A minimal Stripe invoice projection for the operator-UI picker.
+
+
+        Fields are taken directly from the Stripe ``Invoice`` object. ``amount_due``
+
+        is in the currency''s minor unit (cents for USD). ``number`` is null on
+
+        invoices that have never been finalized (drafts).'
+    CreateSalesLedEnterpriseCustomBillingRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        domain:
+          type: string
+          minLength: 1
+          title: Domain
+          description: Enterprise domain
+        enterprise_name:
+          type: string
+          minLength: 1
+          title: Enterprise Name
+          description: Enterprise name
+        plan:
+          $ref: '#/components/schemas/StripeProductOption'
+          description: Stripe plan (e.g. FLOW_BUSINESS_YEARLY)
+        seats:
+          type: integer
+          exclusiveMinimum: 0.0
+          title: Seats
+          description: Number of seats
+        platform_fee_monthly_rate:
+          type: integer
+          minimum: 0.0
+          title: Platform Fee Monthly Rate
+          description: Platform fee rate in $/month. For yearly plans, charged as 12x upfront. Must match a configured Stripe price.
+          default: 0
+        days_until_due:
+          type: integer
+          exclusiveMinimum: 0.0
+          title: Days Until Due
+          description: Payment terms in days (e.g., 30 for Net30)
+          default: 30
+        preserve_contracted_seats:
+          type: boolean
+          title: Preserve Contracted Seats
+          description: If true, seats are never automatically reduced
+          default: false
+        billing_info:
+          $ref: '#/components/schemas/BillingInfo'
+          description: 'Stripe billing contact email + address. Required for sales-led: contact + address.line1, city, postal_code, country must all be present; state is additionally required for US/CA.'
+        create_admin_user_if_missing:
+          type: boolean
+          title: Create Admin User If Missing
+          description: If true and email has no Wispr user, provision one (requires admin_first_name and admin_last_name).
+          default: false
+        admin_first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Admin First Name
+          description: First name for the new admin user (required if create_admin_user_if_missing).
+        admin_last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Admin Last Name
+          description: Last name for the new admin user (required if create_admin_user_if_missing).
+        custom_billing_config:
+          $ref: '#/components/schemas/CustomBillingConfigInput'
+          description: Negotiated per-seat pricing. Creates an EnterpriseBillingConfig row and attaches a custom Stripe Price to the subscription so renewals bill at the negotiated rate. Requires superadmin role.
+      type: object
+      required:
+      - email
+      - domain
+      - enterprise_name
+      - plan
+      - seats
+      - billing_info
+      - custom_billing_config
+      title: CreateSalesLedEnterpriseCustomBillingRequest
+      description: 'Request model for the superadmin-only custom-billing sales-led path.
+
+
+        Adds `custom_billing_config` as a required field — the dedicated subclass
+
+        surfaces the auth escalation in the route signature and OpenAPI rather
+
+        than hiding it behind a runtime branch.'
+    SendFlowStateRequest:
+      properties:
+        reporting_month:
+          type: string
+          format: date
+          title: Reporting Month
+        emails:
+          anyOf:
+          - items:
+              type: string
+              format: email
+            type: array
+          - type: 'null'
+          title: Emails
+        domain:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Domain
+        user_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: User Ids
+        all_users:
+          type: boolean
+          title: All Users
+          default: false
+        dry_run:
+          type: boolean
+          title: Dry Run
+          default: false
+        resend_failed:
+          type: boolean
+          title: Resend Failed
+          default: false
+      type: object
+      required:
+      - reporting_month
+      title: SendFlowStateRequest
+      description: 'Request body for the marketing send endpoint.
+
+
+        Requires at least one explicit filter (emails, domain, or user_ids) to prevent
+
+        accidentally blasting every user with a profile for the reporting month.'
+    CreateEnterprisePilotRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        domain:
+          type: string
+          title: Domain
+        enterprise_name:
+          type: string
+          title: Enterprise Name
+        trial_end:
+          type: string
+          format: date
+          title: Trial End
+      type: object
+      required:
+      - email
+      - domain
+      - enterprise_name
+      - trial_end
+      title: CreateEnterprisePilotRequest
+      description: Request model for creating an enterprise pilot.
+    UserInput:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+      type: object
+      required:
+      - email
+      title: UserInput
+      description: Input for a single user in bulk add operations.
+    CustomBillingConfigInput:
+      properties:
+        custom_unit_price_cents:
+          type: integer
+          minimum: 1.0
+          title: Custom Unit Price Cents
+          description: Per-seat USD price in cents over the plan's billing period (year for *_YEARLY plans, month for *_MONTHLY).
+      type: object
+      required:
+      - custom_unit_price_cents
+      title: CustomBillingConfigInput
+      description: 'Custom-pricing fields collected inline during sales-led enterprise creation.
+
+
+        All other billing-config fields are derived server-side: product_name from plan,
+
+        true_up_period_days from plan cadence, payment_terms_days from days_until_due,
+
+        currency is always USD (the sales-led subscription path is USD-only end-to-end —
+
+        platform-fee prices and the subscription currency arg are both USD).'
+    CodeListResponse:
+      properties:
+        codes:
+          items:
+            $ref: '#/components/schemas/CodeListItem'
+          type: array
+          title: Codes
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - codes
+      - total
+      title: CodeListResponse
+      description: A page of promo codes with a total count.
+    ReactivateEnterprisePilotRequest:
+      properties:
+        trial_end:
+          type: string
+          format: date
+          title: Trial End
+      type: object
+      required:
+      - trial_end
+      title: ReactivateEnterprisePilotRequest
+      description: 'Request model for reactivating a canceled enterprise pilot.
+
+
+        The enterprise is identified by path param; the server resolves the
+
+        admin email + primary domain from existing records so callers don''t
+
+        have to re-supply them.'
+    CreateCampaignRequest:
+      properties:
+        name:
+          type: string
+          maxLength: 255
+          minLength: 1
+          title: Name
+        campaign_type:
+          $ref: '#/components/schemas/CampaignType'
+          default: sponsor
+        trial_days:
+          type: integer
+          maximum: 365.0
+          minimum: 1.0
+          title: Trial Days
+        source_name:
+          type: string
+          maxLength: 255
+          minLength: 1
+          title: Source Name
+        attribution_message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Attribution Message
+        max_redemptions:
+          anyOf:
+          - type: integer
+            minimum: 1.0
+          - type: 'null'
+          title: Max Redemptions
+        starts_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Starts At
+        expires_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Expires At
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+      type: object
+      required:
+      - name
+      - trial_days
+      - source_name
+      title: CreateCampaignRequest
+      description: Request to create a promo campaign.
+    AdminUserLookupResponse:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+        referral_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Referral Code
+        referrer_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Referrer Code
+        enterprise_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Enterprise Id
+        enterprise_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Enterprise Name
+        enterprise_role:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Enterprise Role
+        stripe_customer_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stripe Customer Id
+        stripe_subscription_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stripe Subscription Id
+        plan_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Plan Name
+        subscription_status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subscription Status
+        subscription_created_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Subscription Created At
+        trial_ends_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Trial Ends At
+      type: object
+      required:
+      - user_id
+      - email
+      - first_name
+      - last_name
+      - referral_code
+      - referrer_code
+      - enterprise_id
+      - enterprise_name
+      - enterprise_role
+      - stripe_customer_id
+      - stripe_subscription_id
+      - plan_name
+      - subscription_status
+      - subscription_created_at
+      - trial_ends_at
+      title: AdminUserLookupResponse
+      description: Admin view of a user's profile and subscription info.
+    AlgorithmId:
+      type: string
+      enum:
+      - cluster-v1
+      - segment-v3
+      title: AlgorithmId
+      description: Closed registry of consensus implementations exposed for preview.
+    BlockedDomainItem:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        domain:
+          type: string
+          title: Domain
+        notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Notes
+        created_by:
+          type: string
+          title: Created By
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+      type: object
+      required:
+      - id
+      - domain
+      - notes
+      - created_by
+      - created_at
+      title: BlockedDomainItem
+      description: Response model for a blocked domain.
+    TranscriptEntry:
+      properties:
+        id:
+          type: string
+          title: Id
+        timestamp:
+          type: string
+          title: Timestamp
+        text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Text
+        speaker:
+          anyOf:
+          - $ref: '#/components/schemas/TranscriptSpeaker'
+          - type: 'null'
+        latched:
+          type: boolean
+          title: Latched
+          default: false
+        marker:
+          anyOf:
+          - $ref: '#/components/schemas/TranscriptMarkerType'
+          - type: 'null'
+        label:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Label
+      additionalProperties: false
+      type: object
+      required:
+      - id
+      - timestamp
+      title: TranscriptEntry
+      description: Generator-safe wire model enforcing the three persisted entry shapes.
+    InternalCostCenterProvisionPreviewResponse:
+      properties:
+        user_email:
+          type: string
+          title: User Email
+        team_name:
+          type: string
+          title: Team Name
+        committed_seats:
+          type: integer
+          title: Committed Seats
+        stripe_price_id:
+          type: string
+          title: Stripe Price Id
+        unit_amount_cents:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Unit Amount Cents
+        currency:
+          type: string
+          title: Currency
+        annual_total_cents:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Annual Total Cents
+        warnings:
+          items:
+            type: string
+          type: array
+          title: Warnings
+        blocking_errors:
+          items:
+            type: string
+          type: array
+          title: Blocking Errors
+      type: object
+      required:
+      - user_email
+      - team_name
+      - committed_seats
+      - stripe_price_id
+      - unit_amount_cents
+      - currency
+      - annual_total_cents
+      - warnings
+      - blocking_errors
+      title: InternalCostCenterProvisionPreviewResponse
+      description: Server-computed provisioning math plus warnings/blockers. No writes are performed.
+    CampaignListResponse:
+      properties:
+        campaigns:
+          items:
+            $ref: '#/components/schemas/CampaignListItem'
+          type: array
+          title: Campaigns
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - campaigns
+      - total
+      title: CampaignListResponse
+      description: A page of promo campaigns with a total count.
+    TranscriptSpeaker:
+      properties:
+        id:
+          type: integer
+          title: Id
+        source:
+          $ref: '#/components/schemas/TranscriptSpeakerSource'
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+      additionalProperties: false
+      type: object
+      required:
+      - id
+      - source
+      - name
+      title: TranscriptSpeaker
+      description: Canonical speaker identity; source and ID form the stable key.
+    AddEnterpriseDomainRequest:
+      properties:
+        enterprise_id:
+          type: string
+          format: uuid
+          title: Enterprise Id
+        domain:
+          type: string
+          minLength: 3
+          pattern: ^[^@\s]+\.[^@\s]+$
+          title: Domain
+          description: Domain to add (e.g. acme.com)
+        allow_forbidden_domain:
+          type: boolean
+          title: Allow Forbidden Domain
+          description: Allow adding forbidden domains (e.g. .edu)
+          default: false
+      type: object
+      required:
+      - enterprise_id
+      - domain
+      title: AddEnterpriseDomainRequest
+      description: Request model for adding a domain to an enterprise.
+    RedemptionListResponse:
+      properties:
+        redemptions:
+          items:
+            $ref: '#/components/schemas/RedemptionListItem'
+          type: array
+          title: Redemptions
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - redemptions
+      - total
+      title: RedemptionListResponse
+      description: A page of promo redemptions with a total count.
+    AllEnterprisesResponse:
+      properties:
+        enterprises:
+          items:
+            $ref: '#/components/schemas/EnterpriseListItem'
+          type: array
+          title: Enterprises
+        total:
+          type: integer
+          title: Total
+        limit:
+          type: integer
+          title: Limit
+        offset:
+          type: integer
+          title: Offset
+      type: object
+      required:
+      - enterprises
+      - total
+      - limit
+      - offset
+      title: AllEnterprisesResponse
+      description: Response model for list of all enterprises with pagination
+    AdminMemoryListResult:
+      properties:
+        email:
+          type: string
+          title: Email
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        status:
+          type: string
+          enum:
+          - ok
+          - no_memories
+          - user_not_found
+          - error
+          title: Status
+        episodes:
+          items:
+            type: object
+          type: array
+          title: Episodes
+        error_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error Code
+      type: object
+      required:
+      - email
+      - status
+      title: AdminMemoryListResult
+      description: Per-user list result. Payload dicts are stripped of internal Graphiti identifiers.
+    AdminMemoryListRequest:
+      properties:
+        emails:
+          items:
+            type: string
+            format: email
+          type: array
+          maxItems: 25
+          minItems: 1
+          title: Emails
+        reason:
+          type: string
+          maxLength: 500
+          minLength: 3
+          title: Reason
+          description: Required justification for accessing these users' private memory; recorded in the audit log.
+        limit:
+          type: integer
+          maximum: 500.0
+          minimum: 1.0
+          title: Limit
+          default: 100
+      type: object
+      required:
+      - emails
+      - reason
+      title: AdminMemoryListRequest
+      description: 'Super-admin request: list all stored voice memories for each user.'
+    DomainVerificationInitiateResponse:
+      properties:
+        domain_id:
+          type: string
+          title: Domain Id
+        enterprise_id:
+          type: string
+          title: Enterprise Id
+        domain:
+          type: string
+          title: Domain
+        verified:
+          type: boolean
+          title: Verified
+        verified_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Verified At
+        verification_initiated_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Verification Initiated At
+        record:
+          anyOf:
+          - $ref: '#/components/schemas/DomainVerificationRecord'
+          - type: 'null'
+      type: object
+      required:
+      - domain_id
+      - enterprise_id
+      - domain
+      - verified
+      - verified_at
+      - verification_initiated_at
+      - record
+      title: DomainVerificationInitiateResponse
+      description: 'Response returned by the superadmin ``initiate-verification`` endpoint.
+
+
+        Narrower than :class:`DomainVerificationStatus` — does not expose check
+
+        counters or capture policy, only what is needed to issue the TXT record.'
+    AddUsersToEnterpriseResponse:
+      properties:
+        added_count:
+          type: integer
+          title: Added Count
+        created_count:
+          type: integer
+          title: Created Count
+          default: 0
+        skipped_count:
+          type: integer
+          title: Skipped Count
+          default: 0
+        failed:
+          items:
+            $ref: '#/components/schemas/FailedAddUserItem'
+          type: array
+          title: Failed
+          default: []
+      type: object
+      required:
+      - added_count
+      title: AddUsersToEnterpriseResponse
+      description: Response model for bulk add users operation
+    OperationDescriptor:
+      properties:
+        kind:
+          type: string
+          title: Kind
+        description:
+          type: string
+          title: Description
+        enabled:
+          type: boolean
+          title: Enabled
+        input_schema_json:
+          type: object
+          title: Input Schema Json
+      type: object
+      required:
+      - kind
+      - description
+      - enabled
+      - input_schema_json
+      title: OperationDescriptor
+      description: Metadata for a single registered op, surfaced to the operator UI.
+    DirectorySyncUserAction:
+      properties:
+        email:
+          type: string
+          title: Email
+        action:
+          type: string
+          enum:
+          - linked_workos_id
+          - provisioned
+          - removed
+          - skipped
+          - error
+          title: Action
+        detail:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Detail
+      type: object
+      required:
+      - email
+      - action
+      title: DirectorySyncUserAction
+      description: A single user action from a directory sync operation.
+    EnterpriseDetailsResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        name:
+          type: string
+          title: Name
+        status:
+          $ref: '#/components/schemas/EnterpriseStatus'
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        disbanded_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Disbanded At
+        domains:
+          items:
+            $ref: '#/components/schemas/EnterpriseDomainItem'
+          type: array
+          title: Domains
+        preserve_contracted_seats:
+          type: boolean
+          title: Preserve Contracted Seats
+        zdr:
+          type: boolean
+          title: Zdr
+        zdr_locked:
+          type: boolean
+          title: Zdr Locked
+        allow_cloud_sync:
+          type: boolean
+          title: Allow Cloud Sync
+        allow_share_data:
+          type: boolean
+          title: Allow Share Data
+        granular_data_controls_ui_visible:
+          type: boolean
+          title: Granular Data Controls Ui Visible
+        ip_allowlist_ui_visible:
+          type: boolean
+          title: Ip Allowlist Ui Visible
+        ip_allowlist_locked:
+          type: boolean
+          title: Ip Allowlist Locked
+        restrict_domain_access:
+          type: boolean
+          title: Restrict Domain Access
+        usage_export_allowed:
+          type: boolean
+          title: Usage Export Allowed
+        show_last_used_at:
+          type: boolean
+          title: Show Last Used At
+        context_awareness:
+          type: string
+          enum:
+          - available
+          - disabled
+          title: Context Awareness
+        hide_leaderboard:
+          type: boolean
+          title: Hide Leaderboard
+        auto_invite:
+          type: boolean
+          title: Auto Invite
+        disable_team_trial:
+          type: boolean
+          title: Disable Team Trial
+        workos_org_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Workos Org Id
+        workos_con_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Workos Con Id
+        workos_provider:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Workos Provider
+        workos_directory_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Workos Directory Id
+      type: object
+      required:
+      - id
+      - name
+      - status
+      - created_at
+      - disbanded_at
+      - domains
+      - preserve_contracted_seats
+      - zdr
+      - zdr_locked
+      - allow_cloud_sync
+      - allow_share_data
+      - granular_data_controls_ui_visible
+      - ip_allowlist_ui_visible
+      - ip_allowlist_locked
+      - restrict_domain_access
+      - usage_export_allowed
+      - show_last_used_at
+      - context_awareness
+      - hide_leaderboard
+      - auto_invite
+      - disable_team_trial
+      - workos_org_id
+      - workos_con_id
+      - workos_provider
+      - workos_directory_id
+      title: EnterpriseDetailsResponse
+      description: Response model for enterprise details.
+    EnterprisePilotItem:
+      properties:
+        enterprise_id:
+          type: string
+          title: Enterprise Id
+        enterprise_name:
+          type: string
+          title: Enterprise Name
+        pilot_end:
+          type: string
+          format: date-time
+          title: Pilot End
+        stripe_subscription_id:
+          type: string
+          title: Stripe Subscription Id
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        status:
+          type: string
+          title: Status
+      type: object
+      required:
+      - enterprise_id
+      - enterprise_name
+      - pilot_end
+      - stripe_subscription_id
+      - created_at
+      - status
+      title: EnterprisePilotItem
+      description: Single enterprise pilot item for list response.
+    AddEnterpriseDomainResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+        workos_synced:
+          type: boolean
+          title: Workos Synced
+          description: Whether the domain was successfully synced to WorkOS (only relevant for SSO-enabled enterprises)
+          default: true
+      type: object
+      required:
+      - message
+      title: AddEnterpriseDomainResponse
+      description: Response model for adding a domain to an enterprise.
+    CostCenterListItem:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        name:
+          type: string
+          title: Name
+        status:
+          type: string
+          title: Status
+        stripe_customer_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stripe Customer Id
+        stripe_subscription_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stripe Subscription Id
+      type: object
+      required:
+      - id
+      - name
+      - status
+      - stripe_customer_id
+      - stripe_subscription_id
+      title: CostCenterListItem
+      description: 'One row in the cost-center picker the operator UI renders.
+
+
+        ``name`` comes from ``CostCenter.name`` (default ``"Default"`` for legacy
+
+        single-CC enterprises). ``status`` is the cost_center.status string
+
+        (``active``, ``inactive``, ``trialing``, ``past_due``, etc.). The Stripe
+
+        ids surface so the UI can show whether a cost_center has been wired up to
+
+        Stripe before letting an operator queue an op against it.'
+    ErrorDetail:
+      properties:
+        detail:
+          type: string
+          title: Detail
+      type: object
+      required:
+      - detail
+      title: ErrorDetail
+      description: 'Standard FastAPI HTTPException envelope: `{"detail": "..."}`.'
+    UpdatePilotEndResponse:
+      properties:
+        enterprise_id:
+          type: string
+          title: Enterprise Id
+        new_pilot_end:
+          type: string
+          format: date-time
+          title: New Pilot End
+      type: object
+      required:
+      - enterprise_id
+      - new_pilot_end
+      title: UpdatePilotEndResponse
+      description: Response model for updating an enterprise pilot end date.
+    AdminMemoryListResponse:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/AdminMemoryListResult'
+          type: array
+          title: Results
+      type: object
+      required:
+      - results
+      title: AdminMemoryListResponse
+    CommitRequest:
+      properties:
+        cost_center_id:
+          type: string
+          format: uuid
+          title: Cost Center Id
+          description: Cost center the operation targets. Stripe customer/subscription artifacts are keyed on cost_center, not enterprise.
+        operation_kind:
+          type: string
+          title: Operation Kind
+        input:
+          type: object
+          title: Input
+        idempotency_root:
+          type: string
+          maxLength: 64
+          minLength: 1
+          title: Idempotency Root
+          description: Client-generated key (typically a UUID hex) mixed into every Stripe idempotency key emitted by this commit. The UI must generate it once per commit attempt and reuse it on retries so Stripe dedupes.
+      type: object
+      required:
+      - cost_center_id
+      - operation_kind
+      - input
+      - idempotency_root
+      title: CommitRequest
+    SignalQuality:
+      properties:
+        vote_margin:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Vote Margin
+        tile_agreement:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Tile Agreement
+        tile_log_event_count:
+          type: integer
+          title: Tile Log Event Count
+        tile_log_cadence_ms:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Tile Log Cadence Ms
+        tile_log_longest_gap_ms:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tile Log Longest Gap Ms
+        cluster_count:
+          type: integer
+          title: Cluster Count
+        token_confidence_avg:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Token Confidence Avg
+        token_confidence_min:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Token Confidence Min
+        token_count:
+          type: integer
+          title: Token Count
+      type: object
+      required:
+      - tile_log_event_count
+      - cluster_count
+      - token_count
+      title: SignalQuality
+      description: Bounded diagnostics emitted by the consensus engine.
+    EnterpriseMember:
+      properties:
+        userId:
+          type: string
+          title: Userid
+        firstName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Firstname
+        lastName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Lastname
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+        role:
+          anyOf:
+          - $ref: '#/components/schemas/EnterpriseRole'
+          - type: 'null'
+        joinedAt:
+          anyOf:
+          - type: integer
+            format: int64
+          - type: 'null'
+          title: Joinedat
+      type: object
+      required:
+      - userId
+      - firstName
+      - lastName
+      - email
+      - role
+      - joinedAt
+      title: EnterpriseMember
+      description: 'Response model for an enterprise member.
+
+
+        ``firstName``, ``lastName``, ``email`` are nullable because the underlying
+
+        ``User`` columns are nullable (see ``models/user.py``). ``role`` is nullable
+
+        because the column is free-text and may contain stray strings outside the
+
+        canonical ``EnterpriseRole`` enum (FLOW-BACKEND-8NW); the validator below
+
+        silently coerces those to ``None``.
+
+
+        ``joinedAt`` is unix seconds of ``MIN(user_team_membership.added_at)`` across
+
+        all the user''s memberships in this enterprise (active + soft-deleted).
+
+        ``None`` when the user has no membership row (edge case).'
+    AddBlockedDomainRequest:
+      properties:
+        domain:
+          type: string
+          minLength: 1
+          title: Domain
+          description: Domain to block
+        notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Notes
+          description: Optional notes/reason for blocking
+      type: object
+      required:
+      - domain
+      title: AddBlockedDomainRequest
+      description: Request model for adding a domain to the block list.
+    AddUsersToEnterpriseRequest:
+      properties:
+        users:
+          items:
+            $ref: '#/components/schemas/UserInput'
+          type: array
+          maxItems: 100
+          title: Users
+          description: List of users to add (max 100)
+        role:
+          $ref: '#/components/schemas/EnterpriseRole'
+          default: member
+        create_missing_users:
+          type: boolean
+          title: Create Missing Users
+          default: false
+      type: object
+      required:
+      - users
+      title: AddUsersToEnterpriseRequest
+      description: Request model for bulk adding users to an enterprise.
+    UpdateCampaignRequest:
+      properties:
+        name:
+          anyOf:
+          - type: string
+            maxLength: 255
+            minLength: 1
+          - type: 'null'
+          title: Name
+        campaign_type:
+          anyOf:
+          - $ref: '#/components/schemas/CampaignType'
+          - type: 'null'
+        status:
+          anyOf:
+          - $ref: '#/components/schemas/CampaignStatus'
+          - type: 'null'
+        trial_days:
+          anyOf:
+          - type: integer
+            maximum: 365.0
+            minimum: 1.0
+          - type: 'null'
+          title: Trial Days
+        source_name:
+          anyOf:
+          - type: string
+            maxLength: 255
+            minLength: 1
+          - type: 'null'
+          title: Source Name
+        attribution_message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Attribution Message
+        max_redemptions:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Redemptions
+        starts_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Starts At
+        expires_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Expires At
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+      type: object
+      title: UpdateCampaignRequest
+      description: Partial-update request for an existing promo campaign.
+    DomainVerificationRecord:
+      properties:
+        type:
+          type: string
+          title: Type
+          description: DNS record type. Always ``"TXT"`` for this flow.
+        host:
+          type: string
+          title: Host
+          description: Fully-qualified DNS name to publish the TXT record at.
+        value:
+          type: string
+          title: Value
+          description: Exact TXT record value to publish (our DNS token).
+      type: object
+      required:
+      - type
+      - host
+      - value
+      title: DomainVerificationRecord
+      description: TXT record the customer must publish to prove ownership of a domain.
+    InternalCostCenterProvisionResponse:
+      properties:
+        cost_center:
+          $ref: '#/components/schemas/ProvisionedCostCenterSummary'
+        team:
+          $ref: '#/components/schemas/ProvisionedTeamSummary'
+        invoice:
+          $ref: '#/components/schemas/ProvisionedInvoiceSummary'
+        stripe_subscription_id:
+          type: string
+          title: Stripe Subscription Id
+      type: object
+      required:
+      - cost_center
+      - team
+      - invoice
+      - stripe_subscription_id
+      title: InternalCostCenterProvisionResponse
+      description: 'Successful-provision result: the created cost center, team, and invoice.'
+    CreateSalesLedEnterpriseResponse:
+      properties:
+        enterprise_id:
+          type: string
+          title: Enterprise Id
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - enterprise_id
+      - message
+      title: CreateSalesLedEnterpriseResponse
+      description: Response model for creating a sales-led enterprise.
+    Body_update_user_roles_file_upload_api_v1_internal_enterprises__enterprise_id__members_update_role_bulk_post:
+      properties:
+        file:
+          type: string
+          contentMediaType: application/octet-stream
+          title: File
+      type: object
+      required:
+      - file
+      title: Body_update_user_roles_file_upload_api_v1_internal_enterprises__enterprise_id__members_update_role_bulk_post
+    ToggleDomainDeletedRequest:
+      properties:
+        deleted:
+          type: boolean
+          title: Deleted
+      type: object
+      required:
+      - deleted
+      title: ToggleDomainDeletedRequest
+      description: Request model for toggling domain deleted status.
+    CodeListItem:
+      properties:
+        id:
+          type: string
+          title: Id
+        code:
+          type: string
+          title: Code
+        is_active:
+          type: boolean
+          title: Is Active
+        max_redemptions:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Redemptions
+        total_redemptions:
+          type: integer
+          title: Total Redemptions
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+      type: object
+      required:
+      - id
+      - code
+      - is_active
+      - max_redemptions
+      - total_redemptions
+      - created_at
+      title: CodeListItem
+      description: A promo code summary row for the admin list view.
+    UpdateUserTrialEndRequest:
+      properties:
+        user_email:
+          type: string
+          format: email
+          title: User Email
+        trial_end:
+          type: string
+          format: date
+          title: Trial End
+          description: New trial end date (YYYY-MM-DD). The date is interpreted as 23:59:59 UTC on that day; the server rejects dates whose end-of-day UTC has already passed, and caps the value at 365 days from now (UTC).
+      type: object
+      required:
+      - user_email
+      - trial_end
+      title: UpdateUserTrialEndRequest
+      description: Request model for updating a user's personal trial end date (internal admin).
+    UpdateUserTrialEndResponse:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        user_email:
+          type: string
+          title: User Email
+        trial_ends_at:
+          type: integer
+          format: int64
+          title: Trial Ends At
+          description: New trial end time as a Unix timestamp (seconds).
+      type: object
+      required:
+      - user_id
+      - user_email
+      - trial_ends_at
+      title: UpdateUserTrialEndResponse
+      description: Response model for updating a user's personal trial end date.
+    CampaignListItem:
+      properties:
+        id:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
+        campaign_type:
+          type: string
+          title: Campaign Type
+        status:
+          type: string
+          title: Status
+        trial_days:
+          type: integer
+          title: Trial Days
+        source_name:
+          type: string
+          title: Source Name
+        attribution_message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Attribution Message
+        max_redemptions:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Redemptions
+        total_redemptions:
+          type: integer
+          title: Total Redemptions
+        starts_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Starts At
+        expires_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Expires At
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        code_count:
+          type: integer
+          title: Code Count
+      type: object
+      required:
+      - id
+      - name
+      - campaign_type
+      - status
+      - trial_days
+      - source_name
+      - attribution_message
+      - max_redemptions
+      - total_redemptions
+      - starts_at
+      - expires_at
+      - description
+      - created_at
+      - code_count
+      title: CampaignListItem
+      description: A promo campaign summary row for the admin list view.
+    UpdateUsersRoleRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        role:
+          $ref: '#/components/schemas/EnterpriseRole'
+      type: object
+      required:
+      - email
+      - role
+      title: UpdateUsersRoleRequest
+      description: Request model for updating user roles in an enterprise.
+    PublicDomainsListResponse:
+      properties:
+        domains:
+          items:
+            type: string
+          type: array
+          title: Domains
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - domains
+      - total
+      title: PublicDomainsListResponse
+      description: Response model for the static public/webmail domain list.
+    ProvisionedTeamSummary:
+      properties:
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - name
+      title: ProvisionedTeamSummary
+      description: The team created by a successful provision.
+    DomainCapturePolicy:
+      type: string
+      enum:
+      - unset
+      - 'off'
+      - require
+      title: DomainCapturePolicy
+      description: 'Whether unclaimed users on a verified domain are required to request to join the enterprise.
+
+
+        ``unset`` indicates the admin has not chosen a policy — distinct from explicitly ``off``.
+
+        Both ``off`` and ``require`` require a DNS-verified domain before they may be set;
+
+        ``unset`` is the only value allowed when no domain has been verified yet.
+
+        ``off`` means that they have intentionally turned off domain capture so users can keep using flow without being prompted to join the enterprise.'
+    SendInvoiceResponse:
+      properties:
+        invoice_id:
+          type: string
+          title: Invoice Id
+        status:
+          type: string
+          title: Status
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - invoice_id
+      - status
+      - message
+      title: SendInvoiceResponse
+      description: Response model for sending an invoice.
+    CreateSalesLedEnterpriseRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        domain:
+          type: string
+          minLength: 1
+          title: Domain
+          description: Enterprise domain
+        enterprise_name:
+          type: string
+          minLength: 1
+          title: Enterprise Name
+          description: Enterprise name
+        plan:
+          $ref: '#/components/schemas/StripeProductOption'
+          description: Stripe plan (e.g. FLOW_BUSINESS_YEARLY)
+        seats:
+          type: integer
+          exclusiveMinimum: 0.0
+          title: Seats
+          description: Number of seats
+        platform_fee_monthly_rate:
+          type: integer
+          minimum: 0.0
+          title: Platform Fee Monthly Rate
+          description: Platform fee rate in $/month. For yearly plans, charged as 12x upfront. Must match a configured Stripe price.
+          default: 0
+        days_until_due:
+          type: integer
+          exclusiveMinimum: 0.0
+          title: Days Until Due
+          description: Payment terms in days (e.g., 30 for Net30)
+          default: 30
+        preserve_contracted_seats:
+          type: boolean
+          title: Preserve Contracted Seats
+          description: If true, seats are never automatically reduced
+          default: false
+        billing_info:
+          $ref: '#/components/schemas/BillingInfo'
+          description: 'Stripe billing contact email + address. Required for sales-led: contact + address.line1, city, postal_code, country must all be present; state is additionally required for US/CA.'
+        create_admin_user_if_missing:
+          type: boolean
+          title: Create Admin User If Missing
+          description: If true and email has no Wispr user, provision one (requires admin_first_name and admin_last_name).
+          default: false
+        admin_first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Admin First Name
+          description: First name for the new admin user (required if create_admin_user_if_missing).
+        admin_last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Admin Last Name
+          description: Last name for the new admin user (required if create_admin_user_if_missing).
+      type: object
+      required:
+      - email
+      - domain
+      - enterprise_name
+      - plan
+      - seats
+      - billing_info
+      title: CreateSalesLedEnterpriseRequest
+      description: Request model for creating a sales-led enterprise with deferred invoicing.
+    FlowStateMonthSummaryResponse:
+      properties:
+        reporting_month:
+          type: string
+          format: date
+          title: Reporting Month
+          description: First day of the reporting month.
+        generated_total:
+          type: integer
+          title: Generated Total
+          description: Profiles generated for this reporting month.
+        pending_send_total:
+          type: integer
+          title: Pending Send Total
+          description: Generated profiles still pending send.
+        sent_total:
+          type: integer
+          title: Sent Total
+          description: Profiles already sent.
+        failed_send_total:
+          type: integer
+          title: Failed Send Total
+          description: Profiles whose send failed.
+        sending_total:
+          type: integer
+          title: Sending Total
+          description: Profiles currently claimed for send.
+        skipped_total:
+          type: integer
+          title: Skipped Total
+          description: Profiles skipped during send.
+        active_job:
+          anyOf:
+          - $ref: '#/components/schemas/MarketingJobStatusResponse'
+          - type: 'null'
+          description: Pending or running job for this reporting month.
+        latest_job:
+          anyOf:
+          - $ref: '#/components/schemas/MarketingJobStatusResponse'
+          - type: 'null'
+          description: Most recent job for this reporting month.
+        can_send_existing:
+          type: boolean
+          title: Can Send Existing
+          description: Whether already generated profiles can be sent.
+        can_regenerate_send:
+          type: boolean
+          title: Can Regenerate Send
+          description: Whether regenerate-and-send can be enqueued.
+      type: object
+      required:
+      - reporting_month
+      - generated_total
+      - pending_send_total
+      - sent_total
+      - failed_send_total
+      - sending_total
+      - skipped_total
+      - can_send_existing
+      - can_regenerate_send
+      title: FlowStateMonthSummaryResponse
+      description: Month-level Flow State generation/send state for the admin portal.
+    EnterpriseStatus:
+      type: string
+      enum:
+      - active
+      - disbanded
+      title: EnterpriseStatus
+      description: Whether an enterprise or team is active or disbanded.
+    UpdateUsersRoleResponse:
+      properties:
+        updated_count:
+          type: integer
+          title: Updated Count
+        skipped_count:
+          type: integer
+          title: Skipped Count
+          default: 0
+        failed:
+          items:
+            $ref: '#/components/schemas/FailedUpdateUserItem'
+          type: array
+          title: Failed
+          default: []
+      type: object
+      required:
+      - updated_count
+      title: UpdateUsersRoleResponse
+      description: Response model for bulk update users role operation.
+    CampaignType:
+      type: string
+      enum:
+      - sponsor
+      - affiliate
+      - partnership
+      - community
+      - internal
+      title: CampaignType
+      description: Category of a promotional campaign.
+    Body_remove_users_from_enterprise_file_upload_api_v1_internal_enterprises__enterprise_id__members_remove_upload_post:
+      properties:
+        file:
+          type: string
+          contentMediaType: application/octet-stream
+          title: File
+      type: object
+      required:
+      - file
+      title: Body_remove_users_from_enterprise_file_upload_api_v1_internal_enterprises__enterprise_id__members_remove_upload_post
+    InternalCostCenterProvisionRequest:
+      properties:
+        enterprise_id:
+          type: string
+          format: uuid
+          title: Enterprise Id
+        user_id:
+          type: string
+          format: uuid
+          title: User Id
+          description: 'Picked user: becomes the cost center''s billing owner and invoice recipient'
+        team_name:
+          type: string
+          maxLength: 100
+          minLength: 1
+          title: Team Name
+        committed_seats:
+          type: integer
+          maximum: 10000.0
+          minimum: 1.0
+          title: Committed Seats
+          description: Committed seat count (high-water mark) the subscription is created with
+        idempotency_root:
+          type: string
+          maxLength: 128
+          minLength: 1
+          title: Idempotency Root
+          description: Client-minted per commit; keys the Stripe create calls so a double submit can't duplicate them
+      type: object
+      required:
+      - enterprise_id
+      - user_id
+      - team_name
+      - committed_seats
+      - idempotency_root
+      title: InternalCostCenterProvisionRequest
+      description: Shared body for preview-provision and provision (same payload for both).
+    RemoveUsersFromEnterpriseResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+        removed_count:
+          type: integer
+          title: Removed Count
+      type: object
+      required:
+      - message
+      - removed_count
+      title: RemoveUsersFromEnterpriseResponse
+      description: Response model for remove users operation
+    DisbandEnterpriseResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+        enterprise_id:
+          type: string
+          title: Enterprise Id
+        enterprise_name:
+          type: string
+          title: Enterprise Name
+      type: object
+      required:
+      - message
+      - enterprise_id
+      - enterprise_name
+      title: DisbandEnterpriseResponse
+      description: Response model for disbanding an enterprise.
+    TranscriptMarkerType:
+      type: string
+      enum:
+      - paused
+      - resumed
+      - dictated
+      - audio_event
+      - sleep_gap
+      title: TranscriptMarkerType
+      description: Persisted non-speech transcript marker types.
+    EnterpriseBillingConfigResponse:
+      properties:
+        next_true_up_date:
+          type: string
+          format: date-time
+          title: Next True Up Date
+        true_up_period_days:
+          type: integer
+          enum:
+          - 30
+          - 90
+          - 365
+          title: True Up Period Days
+          description: Billing period in days (monthly, quarterly, annual)
+        stripe_price_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stripe Price Id
+          description: Stripe price ID. If omitted, resolved from product_name + currency.
+        product_name:
+          type: string
+          minLength: 1
+          title: Product Name
+        payment_terms_days:
+          type: integer
+          minimum: 1.0
+          title: Payment Terms Days
+          default: 7
+        custom_unit_price_cents:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Custom Unit Price Cents
+        pricing_tiers:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/PricingTierSchema'
+            type: array
+          - type: 'null'
+          title: Pricing Tiers
+        currency:
+          $ref: '#/components/schemas/Currency'
+          default: usd
+        seat_cap:
+          anyOf:
+          - type: integer
+            minimum: 1.0
+          - type: 'null'
+          title: Seat Cap
+          description: Maximum seats allowed for this enterprise
+        contract_end_date:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Contract End Date
+        contract_period_days:
+          anyOf:
+          - type: integer
+            minimum: 1.0
+          - type: 'null'
+          title: Contract Period Days
+        id:
+          type: string
+          format: uuid
+          title: Id
+        enterprise_id:
+          type: string
+          format: uuid
+          title: Enterprise Id
+        enterprise_name:
+          type: string
+          title: Enterprise Name
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+      type: object
+      required:
+      - next_true_up_date
+      - true_up_period_days
+      - product_name
+      - id
+      - enterprise_id
+      - enterprise_name
+      - created_at
+      title: EnterpriseBillingConfigResponse
+      description: Response model for a billing config.
+    EnterpriseBillingConfigUpdate:
+      properties:
+        next_true_up_date:
+          type: string
+          format: date-time
+          title: Next True Up Date
+        true_up_period_days:
+          type: integer
+          enum:
+          - 30
+          - 90
+          - 365
+          title: True Up Period Days
+          description: Billing period in days (monthly, quarterly, annual)
+        stripe_price_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stripe Price Id
+          description: Stripe price ID. If omitted, resolved from product_name + currency.
+        product_name:
+          type: string
+          minLength: 1
+          title: Product Name
+        payment_terms_days:
+          type: integer
+          minimum: 1.0
+          title: Payment Terms Days
+          default: 7
+        custom_unit_price_cents:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Custom Unit Price Cents
+        pricing_tiers:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/PricingTierSchema'
+            type: array
+          - type: 'null'
+          title: Pricing Tiers
+        currency:
+          $ref: '#/components/schemas/Currency'
+          default: usd
+        seat_cap:
+          anyOf:
+          - type: integer
+            minimum: 1.0
+          - type: 'null'
+          title: Seat Cap
+          description: Maximum seats allowed for this enterprise
+        contract_end_date:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Contract End Date
+        contract_period_days:
+          anyOf:
+          - type: integer
+            minimum: 1.0
+          - type: 'null'
+          title: Contract Period Days
+      type: object
+      required:
+      - next_true_up_date
+      - true_up_period_days
+      - product_name
+      title: EnterpriseBillingConfigUpdate
+      description: Request model for updating a billing config.
+    MarketingJobResponse:
+      properties:
+        job_id:
+          type: string
+          format: uuid
+          title: Job Id
+        message:
+          type: string
+          title: Message
+        log_query:
+          type: string
+          title: Log Query
+      type: object
+      required:
+      - job_id
+      - message
+      - log_query
+      title: MarketingJobResponse
+      description: Response returned after kicking off a generate-or-send job.
+    PreviewRequest:
+      properties:
+        cost_center_id:
+          type: string
+          format: uuid
+          title: Cost Center Id
+          description: Cost center the operation targets. Stripe customer/subscription artifacts are keyed on cost_center, not enterprise.
+        operation_kind:
+          type: string
+          title: Operation Kind
+        input:
+          type: object
+          title: Input
+      type: object
+      required:
+      - cost_center_id
+      - operation_kind
+      - input
+      title: PreviewRequest
+    DirectorySyncPreview:
+      properties:
+        enterprise_id:
+          type: string
+          format: uuid
+          title: Enterprise Id
+        enterprise_name:
+          type: string
+          title: Enterprise Name
+        workos_directory_user_count:
+          type: integer
+          title: Workos Directory User Count
+        db_user_count:
+          type: integer
+          title: Db User Count
+        to_provision:
+          items:
+            $ref: '#/components/schemas/DirectorySyncUserAction'
+          type: array
+          title: To Provision
+        to_remove:
+          items:
+            $ref: '#/components/schemas/DirectorySyncUserAction'
+          type: array
+          title: To Remove
+        to_link:
+          items:
+            $ref: '#/components/schemas/DirectorySyncUserAction'
+          type: array
+          title: To Link
+      type: object
+      required:
+      - enterprise_id
+      - enterprise_name
+      - workos_directory_user_count
+      - db_user_count
+      - to_provision
+      - to_remove
+      - to_link
+      title: DirectorySyncPreview
+      description: Dry-run diff of a directory sync, shown to the admin before confirming.
+    DirectorySyncStartedResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+        log_query:
+          type: string
+          title: Log Query
+      type: object
+      required:
+      - message
+      - log_query
+      title: DirectorySyncStartedResponse
+      description: Response for async directory sync endpoints (202 Accepted).
+    AdminMemorySearchResult:
+      properties:
+        email:
+          type: string
+          title: Email
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        status:
+          type: string
+          enum:
+          - ok
+          - no_memories
+          - user_not_found
+          - error
+          title: Status
+        facts:
+          items:
+            type: object
+          type: array
+          title: Facts
+        nodes:
+          items:
+            type: object
+          type: array
+          title: Nodes
+        error_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error Code
+      type: object
+      required:
+      - email
+      - status
+      title: AdminMemorySearchResult
+      description: Per-user search result. Payload dicts are stripped of internal Graphiti identifiers.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    RedemptionListItem:
+      properties:
+        id:
+          type: string
+          title: Id
+        user_id:
+          type: string
+          title: User Id
+        campaign_name:
+          type: string
+          title: Campaign Name
+        code_string:
+          type: string
+          title: Code String
+        outcome:
+          type: string
+          title: Outcome
+        trial_days_granted:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Trial Days Granted
+        stripe_subscription_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stripe Subscription Id
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+      type: object
+      required:
+      - id
+      - user_id
+      - campaign_name
+      - code_string
+      - outcome
+      - trial_days_granted
+      - stripe_subscription_id
+      - created_at
+      title: RedemptionListItem
+      description: A promo redemption summary row for the admin list view.
+    ConsensusPreviewResponse:
+      properties:
+        meeting_id:
+          type: string
+          format: uuid
+          title: Meeting Id
+        requested_algorithm_id:
+          $ref: '#/components/schemas/AlgorithmId'
+        consensus_mode:
+          $ref: '#/components/schemas/ConsensusActualMode'
+        algorithm_version:
+          type: integer
+          title: Algorithm Version
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reason
+        signal_quality:
+          $ref: '#/components/schemas/SignalQuality'
+        speaker_map:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Speaker Map
+        entries:
+          items:
+            $ref: '#/components/schemas/TranscriptEntry'
+          type: array
+          title: Entries
+      type: object
+      required:
+      - meeting_id
+      - requested_algorithm_id
+      - consensus_mode
+      - algorithm_version
+      - signal_quality
+      title: ConsensusPreviewResponse
+      description: Ephemeral, non-persisted consensus preview result.
+    StripeProductOption:
+      type: string
+      enum:
+      - FLOW_PRO_MONTHLY
+      - FLOW_PRO_YEARLY
+      - FLOW_STUDENT_MONTHLY
+      - FLOW_STUDENT_YEARLY
+      - FLOW_TEAM_MONTHLY
+      - FLOW_TEAM_YEARLY
+      - FLOW_BUSINESS_MONTHLY
+      - FLOW_BUSINESS_YEARLY
+      title: StripeProductOption
+    TranscriptSpeakerSource:
+      type: string
+      enum:
+      - mic
+      - system
+      - refined
+      title: TranscriptSpeakerSource
+      description: The transcript identity namespace that produced a speaker ID.
+    FailedUpdateUserItem:
+      properties:
+        email:
+          type: string
+          title: Email
+        reason:
+          type: string
+          title: Reason
+      type: object
+      required:
+      - email
+      - reason
+      title: FailedUpdateUserItem
+      description: Details about a user that failed to have their role updated.
+    EnterpriseRole:
+      type: string
+      enum:
+      - admin
+      - member
+      - superadmin
+      - it_admin
+      title: EnterpriseRole
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

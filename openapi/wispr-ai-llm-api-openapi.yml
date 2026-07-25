@@ -1,0 +1,2366 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics LLM API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: LLM
+paths:
+  /llm/api:
+    post:
+      tags:
+      - LLM
+      summary: Flow Api
+      operationId: flow_api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Body_flow_api_llm_api_post'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /llm/asr:
+    post:
+      tags:
+      - LLM
+      summary: Asr
+      operationId: asr
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Body_asr_llm_asr_post'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /llm/formatting:
+    post:
+      tags:
+      - LLM
+      summary: Formatting
+      operationId: formatting
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FormattingRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /llm/completion:
+    post:
+      tags:
+      - LLM
+      summary: Completion
+      operationId: completion
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompletionRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /llm/ocr:
+    post:
+      tags:
+      - LLM
+      summary: Ocr
+      operationId: ocr
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OCRRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /llm/extract_asr_words:
+    post:
+      tags:
+      - LLM
+      summary: Extract Asr Words
+      operationId: extract_asr_words
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtractASRWordsRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /llm/format_non_english:
+    post:
+      tags:
+      - LLM
+      summary: Format Non English Endpoint
+      operationId: format_non_english_endpoint
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NonEnglishFormattingRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /llm/asr_audio_chunks:
+    post:
+      tags:
+      - LLM
+      summary: Asr Audio Chunks
+      operationId: asr_audio_chunks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AsrAudioChunksRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /llm/command_mode_route:
+    post:
+      tags:
+      - LLM
+      summary: Command Mode Route
+      operationId: command_mode_route
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommandModeRouteRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /llm/command_mode:
+    post:
+      tags:
+      - LLM
+      summary: Command Mode
+      operationId: command_mode
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommandModeRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /llm/instruct_mode:
+    post:
+      tags:
+      - LLM
+      summary: Instruct Mode
+      operationId: instruct_mode
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstructModeRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstructModeResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /llm/polish_text:
+    post:
+      tags:
+      - LLM
+      summary: Polish Text
+      operationId: polish_text
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PolishTextRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolishTextResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /llm/extract_edited_words:
+    post:
+      tags:
+      - LLM
+      summary: Extract Edited Words
+      description: 'Extract proper nouns, technical terms, or domain-specific terms that were edited
+
+        between the original pasted text and the edited text.'
+      operationId: extract_edited_words
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtractEditedWordsRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtractEditedWordsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /llm/classify_intent:
+    post:
+      tags:
+      - LLM
+      summary: Classify Intent
+      description: 'Classify voice input into one of the provided routes.
+
+
+        Returns the matched route plus optional per-route structured data the classifier'
+      operationId: classify_intent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClassifyIntentRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassifyIntentResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /llm/detect_formality:
+    post:
+      tags:
+      - LLM
+      summary: Detect Formality
+      description: 'Classify text messages into one of three formality levels based on
+
+        capitalization, punctuation and other use of informal language.
+
+        Levels: very_casual, casual, formal'
+      operationId: detect_formality
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DetectFormalityRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetectFormalityResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /llm/check_sensibility:
+    post:
+      tags:
+      - LLM
+      summary: Check Sensibility
+      description: 'Check if a transcribed message makes sense in context.
+
+        Returns a score from 0.0 (nonsensical) to 1.0 (makes perfect sense).
+
+        Used to warn users before they send potentially embarrassing messages.'
+      operationId: check_sensibility
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckSensibilityRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckSensibilityResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /llm/chat:
+    post:
+      tags:
+      - LLM
+      summary: Flow Response
+      operationId: flow_response
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FlowResponseRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /llm/flow_state_2025:
+    get:
+      tags:
+      - LLM
+      summary: Fetch Flow State 2025
+      operationId: fetch_flow_state_2025
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowState2025Response'
+      security:
+      - ApiKeyHeaderPatched: []
+    post:
+      tags:
+      - LLM
+      summary: Create Flow State 2025
+      operationId: create_flow_state_2025
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HistoryRowsRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowState2025Response'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /llm/voice_profile/latest:
+    get:
+      tags:
+      - LLM
+      summary: Fetch Latest Voice Profile
+      operationId: fetch_latest_voice_profile
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoiceProfileResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+  /llm/voice_profile:
+    get:
+      tags:
+      - LLM
+      summary: Fetch Voice Profile
+      operationId: fetch_voice_profile
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: word_count_milestone
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - enum:
+            - 2000
+            - 12000
+            - 37000
+            - 87000
+            - 162000
+            - 262000
+            - 362000
+            - 462000
+            - 562000
+            - 662000
+            type: integer
+          - type: 'null'
+          title: Word Count Milestone
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoiceProfileResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - LLM
+      summary: Create Voice Profile
+      operationId: create_voice_profile
+      security:
+      - ApiKeyHeaderPatched: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoiceProfileRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoiceProfileResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    TransformProviderConfig:
+      properties:
+        provider:
+          anyOf:
+          - $ref: '#/components/schemas/OpenAIProviderConfig'
+          - $ref: '#/components/schemas/CerebrasProviderConfig'
+          - $ref: '#/components/schemas/AnthropicProviderConfig'
+          - $ref: '#/components/schemas/RaceProviderConfig'
+          title: Provider
+      type: object
+      required:
+      - provider
+      title: TransformProviderConfig
+      description: Wrapper pairing a transform with its provider config.
+    CommandModeRouteRequest:
+      properties:
+        full_text:
+          type: string
+          title: Full Text
+        selected_text:
+          type: string
+          title: Selected Text
+        instruction:
+          type: string
+          title: Instruction
+      type: object
+      required:
+      - full_text
+      - selected_text
+      - instruction
+      title: CommandModeRouteRequest
+    WritingSample:
+      properties:
+        text:
+          type: string
+          title: Text
+        prompt_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prompt Name
+      type: object
+      required:
+      - text
+      title: WritingSample
+      description: A single writing sample provided by the user for voice/style matching.
+    PolishInstructions:
+      properties:
+        default:
+          additionalProperties:
+            type: boolean
+          type: object
+          title: Default
+          default: {}
+        custom:
+          additionalProperties:
+            type: boolean
+          type: object
+          title: Custom
+          default: {}
+      type: object
+      title: PolishInstructions
+      description: Saved toggle rules for Polish transforms (built-in defaults + custom).
+    Conversation:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Identifier of the conversation
+        participants:
+          items:
+            type: string
+          type: array
+          title: Participants
+          description: List of participants in the conversation
+        messages:
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+          type: array
+          title: Messages
+          description: List of messages in the conversation
+      type: object
+      required:
+      - id
+      title: Conversation
+    AppType:
+      type: string
+      enum:
+      - email
+      - ai
+      - word
+      - terminal
+      - other
+      title: AppType
+      description: Represents the type of app the user is trying to paste in.
+    HistoryRow:
+      properties:
+        formatted_text:
+          type: string
+          title: Formatted Text
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp
+        app_name:
+          type: string
+          title: App Name
+        detected_language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Detected Language
+      type: object
+      required:
+      - formatted_text
+      - timestamp
+      - app_name
+      title: HistoryRow
+    OCRRequest:
+      properties:
+        image:
+          type: string
+          title: Image
+      type: object
+      required:
+      - image
+      title: OCRRequest
+    FlowStateProcessingStatus:
+      type: string
+      enum:
+      - not_started
+      - processing
+      - complete
+      - failed
+      title: FlowStateProcessingStatus
+    DetectFormalityResponse:
+      properties:
+        formality_level:
+          $ref: '#/components/schemas/PersonalizationStyle'
+          description: Detected formality level of the text
+      type: object
+      required:
+      - formality_level
+      title: DetectFormalityResponse
+    FlowWorkFlows:
+      type: string
+      enum:
+      - slack_demo
+      - whatsapp_demo
+      - chat_gpt_demo
+      title: FlowWorkFlows
+    ExtractEditedWordsRequest:
+      properties:
+        potential_words:
+          type: string
+          title: Potential Words
+          description: Space-separated string of potential words to filter
+      type: object
+      required:
+      - potential_words
+      title: ExtractEditedWordsRequest
+    FlowResponseRequest:
+      properties:
+        workflow:
+          $ref: '#/components/schemas/FlowWorkFlows'
+        messages:
+          items:
+            additionalProperties:
+              type: string
+            propertyNames:
+              enum:
+              - speaker
+              - message
+            type: object
+          type: array
+          title: Messages
+      type: object
+      required:
+      - workflow
+      - messages
+      title: FlowResponseRequest
+    ClassifyIntentRoutesConfig:
+      properties:
+        dictation_short_circuit_provider:
+          oneOf:
+          - $ref: '#/components/schemas/OpenRouterProviderConfig'
+          - $ref: '#/components/schemas/CerebrasProviderConfig'
+          title: Dictation Short Circuit Provider
+        route_provider:
+          oneOf:
+          - $ref: '#/components/schemas/OpenRouterProviderConfig'
+          - $ref: '#/components/schemas/CerebrasProviderConfig'
+          title: Route Provider
+      type: object
+      required:
+      - dictation_short_circuit_provider
+      - route_provider
+      title: ClassifyIntentRoutesConfig
+      description: Provider configs for the short-circuit and routing classify-intent calls.
+    FlowState2025Response:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        processing_status:
+          $ref: '#/components/schemas/FlowStateProcessingStatus'
+        total_words:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Total Words
+        total_words_percentile:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Total Words Percentile
+        last_active:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Active
+        total_dictations_desktop:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Total Dictations Desktop
+        total_dictations_mobile:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Total Dictations Mobile
+        wpm_desktop:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Wpm Desktop
+        wpm_mobile:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Wpm Mobile
+        longest_streak_days:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Longest Streak Days
+        top_app:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Top App
+        top_app_day_of_week:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Top App Day Of Week
+        top_app_hour_of_day:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Top App Hour Of Day
+        top_app_category:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Top App Category
+        secondary_app_category:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Secondary App Category
+        signature_phrase:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Signature Phrase
+        signature_phrase_app:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Signature Phrase App
+        most_used_phrase:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Most Used Phrase
+        dictation_strength:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Dictation Strength
+        alter_ego:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Alter Ego
+        alter_ego_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Alter Ego Description
+        avg_session_duration_desktop:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Avg Session Duration Desktop
+        avg_session_duration_mobile:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Avg Session Duration Mobile
+        goals:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Goals
+      type: object
+      required:
+      - user_id
+      - processing_status
+      title: FlowState2025Response
+    PolishTextResponse:
+      properties:
+        status:
+          $ref: '#/components/schemas/PolishStatus'
+        polished_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Polished Text
+        model_version:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model Version
+        used_provider:
+          anyOf:
+          - $ref: '#/components/schemas/OpenAIProviderConfig'
+          - $ref: '#/components/schemas/CerebrasProviderConfig'
+          - $ref: '#/components/schemas/AnthropicProviderConfig'
+          - type: 'null'
+          title: Used Provider
+      type: object
+      required:
+      - status
+      title: PolishTextResponse
+    ChatMessage:
+      properties:
+        role:
+          $ref: '#/components/schemas/ChatRole'
+          description: Role of the message sender
+        content:
+          type: string
+          title: Content
+          description: Content of the message
+        sender_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sender Id
+          description: Identifier of the message sender
+      type: object
+      required:
+      - role
+      - content
+      title: ChatMessage
+    CheckSensibilityRequest:
+      properties:
+        transcript:
+          type: string
+          title: Transcript
+          description: The transcribed and formatted text to check
+        before_text:
+          type: string
+          title: Before Text
+          description: Text before the cursor/insertion point
+          default: ''
+        after_text:
+          type: string
+          title: After Text
+          description: Text after the cursor/insertion point
+          default: ''
+        app_context:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: App Context
+          description: Optional app context (e.g., app name, URL)
+      type: object
+      required:
+      - transcript
+      title: CheckSensibilityRequest
+    NonEnglishFormattingRequest:
+      properties:
+        content:
+          type: string
+          title: Content
+          description: Text content to format
+        app_type:
+          $ref: '#/components/schemas/AppType'
+          description: Application type, to help with selecting application specific prompt
+        detected_language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Detected Language
+          description: Detected language of the text
+        user_languages:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: User Languages
+          description: List of user languages
+      type: object
+      required:
+      - content
+      - app_type
+      title: NonEnglishFormattingRequest
+    DetectFormalityRequest:
+      properties:
+        text:
+          type: string
+          title: Text
+          description: Text message to classify for formality level
+      type: object
+      required:
+      - text
+      title: DetectFormalityRequest
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ToolCallDefinition:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: The name of the function
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: A description of what the function does
+        parameters:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Parameters
+          description: JSON Schema object for the function parameters
+      type: object
+      required:
+      - name
+      title: ToolCallDefinition
+    PolishStatus:
+      type: string
+      enum:
+      - succeeded
+      - long_text
+      - short_text
+      - timeout
+      - error
+      - cancelled
+      - no_changes
+      - not_editable
+      - no_text
+      - no_instructions
+      title: PolishStatus
+      description: Outcome of a Polish text-refinement request.
+    AsrAudioChunksRequest:
+      properties:
+        access_token:
+          type: string
+          title: Access Token
+          description: Access token for authentication
+        audio:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Audio
+          description: Base64 encoded audio data
+        audio_packets:
+          anyOf:
+          - $ref: '#/components/schemas/BasetenAudioPackets'
+          - type: 'null'
+          description: Structured audio packets data
+        pipeline:
+          items:
+            type: string
+          type: array
+          title: Pipeline
+          description: List of pipeline steps to execute
+        context:
+          $ref: '#/components/schemas/Context'
+          description: Context information including dictionary and user details
+        language:
+          items:
+            type: string
+          type: array
+          title: Language
+          description: List of language codes to consider
+        app:
+          type: string
+          title: App
+          description: Application type (ai, email, other)
+        user:
+          type: object
+          title: User
+          description: User information including UUID
+        metadata:
+          type: object
+          title: Metadata
+          description: Additional metadata including session ID and client version
+        prev_asr_text:
+          type: string
+          title: Prev Asr Text
+          description: Previous ASR text for context
+          default: ''
+        prev_llm_text:
+          type: string
+          title: Prev Llm Text
+          description: Previous LLM text for context
+          default: ''
+        prev_detected_language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prev Detected Language
+          description: Previously detected language
+      type: object
+      required:
+      - access_token
+      - pipeline
+      - context
+      - app
+      - user
+      - metadata
+      title: AsrAudioChunksRequest
+    CommandModeRequest:
+      properties:
+        full_text:
+          type: string
+          title: Full Text
+        selected_text:
+          type: string
+          title: Selected Text
+        instruction:
+          type: string
+          title: Instruction
+      type: object
+      required:
+      - full_text
+      - selected_text
+      - instruction
+      title: CommandModeRequest
+    InstructSessionHistoryMessage:
+      properties:
+        role:
+          type: string
+          enum:
+          - user
+          - assistant
+          title: Role
+        content:
+          type: string
+          maxLength: 4096
+          title: Content
+      type: object
+      required:
+      - role
+      - content
+      title: InstructSessionHistoryMessage
+      description: One prior turn of an instruct chat session, mirroring what the chat UI shows.
+    ChatRole:
+      type: string
+      enum:
+      - user
+      - human
+      - assistant
+      title: ChatRole
+    ClassifyIntentRequest:
+      properties:
+        config:
+          $ref: '#/components/schemas/ClassifyIntentRoutesConfig'
+          description: Provider configuration for classification
+        routes:
+          items:
+            $ref: '#/components/schemas/RouteDefinition'
+          type: array
+          title: Routes
+          description: Available routes to classify against
+        short_circuit_route:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Short Circuit Route
+          description: If set, a fast model first determines if the request should go to this route. If so, returns immediately; otherwise, a smarter model classifies across all routes. If not set, a single smart model call is used.
+        context:
+          $ref: '#/components/schemas/ClassifyIntentContext'
+          description: Context (screen, app, etc) at the time of the intent classification request
+      type: object
+      required:
+      - config
+      - routes
+      - context
+      title: ClassifyIntentRequest
+    PolishPrompt:
+      properties:
+        prompt:
+          type: string
+          title: Prompt
+        shortcut:
+          items:
+            type: integer
+          type: array
+          title: Shortcut
+        prompt_name:
+          type: string
+          title: Prompt Name
+      type: object
+      required:
+      - prompt
+      - shortcut
+      - prompt_name
+      title: PolishPrompt
+      description: A single polish prompt provided by the user for polish.
+    BasetenAudioPackets:
+      properties:
+        packets:
+          items:
+            type: string
+          type: array
+          title: Packets
+          description: List of base64 encoded audio packets
+        volumes:
+          items:
+            type: number
+          type: array
+          title: Volumes
+          description: List of volume levels for each packet
+        packet_duration:
+          type: number
+          title: Packet Duration
+          description: Duration of each packet in seconds
+        audio_encoding:
+          type: string
+          title: Audio Encoding
+          description: Audio encoding format (e.g. opus)
+        byte_encoding:
+          type: string
+          title: Byte Encoding
+          description: Byte encoding format
+      type: object
+      required:
+      - packets
+      - volumes
+      - packet_duration
+      - audio_encoding
+      - byte_encoding
+      title: BasetenAudioPackets
+    PolishTextRequest:
+      properties:
+        selected_text:
+          type: string
+          title: Selected Text
+        instructions:
+          $ref: '#/components/schemas/PolishInstructions'
+        writing_samples:
+          anyOf:
+          - additionalProperties:
+              $ref: '#/components/schemas/WritingSample'
+            type: object
+          - type: 'null'
+          title: Writing Samples
+        custom_prompt:
+          anyOf:
+          - $ref: '#/components/schemas/PolishPrompt'
+          - type: 'null'
+        provider_config:
+          anyOf:
+          - $ref: '#/components/schemas/TransformProviderConfig'
+          - type: 'null'
+        user_voice_preference:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Voice Preference
+      type: object
+      required:
+      - selected_text
+      - instructions
+      title: PolishTextRequest
+    InstructModeResponse:
+      properties:
+        content:
+          type: string
+          title: Content
+      type: object
+      required:
+      - content
+      title: InstructModeResponse
+    OpenRouterProviderConfig:
+      properties:
+        kind:
+          type: string
+          enum:
+          - openrouter
+          title: Kind
+          default: openrouter
+        model:
+          type: string
+          title: Model
+      type: object
+      required:
+      - model
+      title: OpenRouterProviderConfig
+      description: Provider config for an OpenRouter-backed model.
+    ClassifyIntentRouteData:
+      properties:
+        transform:
+          anyOf:
+          - $ref: '#/components/schemas/TransformRouteData'
+          - type: 'null'
+          description: Populated when `route == 'transform'`.
+      type: object
+      title: ClassifyIntentRouteData
+      description: 'Per-route structured outputs from the classifier.
+
+
+        Only the field for the chosen route is populated; all other fields stay null.
+
+        Adding a new route''s structured output = adding a new optional field here.'
+    VoiceProfileRequest:
+      properties:
+        privacy_mode:
+          type: boolean
+          title: Privacy Mode
+        history_rows:
+          items:
+            $ref: '#/components/schemas/HistoryRow'
+          type: array
+          minItems: 1
+          title: History Rows
+        timezone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Timezone
+        peak_time_label:
+          type: string
+          title: Peak Time Label
+        peak_time_top_app:
+          type: string
+          title: Peak Time Top App
+        most_used_word:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Most Used Word
+        most_removed_word:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Most Removed Word
+        word_count_milestone:
+          anyOf:
+          - type: integer
+            enum:
+            - 2000
+            - 12000
+            - 37000
+            - 87000
+            - 162000
+            - 262000
+            - 362000
+            - 462000
+            - 562000
+            - 662000
+          - type: 'null'
+          title: Word Count Milestone
+      type: object
+      required:
+      - privacy_mode
+      - history_rows
+      - peak_time_label
+      - peak_time_top_app
+      title: VoiceProfileRequest
+    VoiceProfileProcessingStatus:
+      type: string
+      enum:
+      - NOT_STARTED
+      - PROCESSING
+      - COMPLETE
+      - FAILED
+      title: VoiceProfileProcessingStatus
+      description: Processing state of a user's voice profile generation.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    RaceProviderConfig:
+      properties:
+        kind:
+          type: string
+          enum:
+          - race
+          title: Kind
+          default: race
+        deadline_seconds:
+          type: number
+          title: Deadline Seconds
+        providers:
+          items:
+            $ref: '#/components/schemas/TransformProviderConfig'
+          type: array
+          title: Providers
+      type: object
+      required:
+      - deadline_seconds
+      - providers
+      title: RaceProviderConfig
+      description: Provider config that races several sub-providers, preferring earlier ones.
+    APIProperties:
+      properties:
+        language:
+          anyOf:
+          - type: string
+            enum:
+            - ''
+            - en
+            - engb
+            - enca
+            - zh
+            - zhcn
+            - de
+            - dech
+            - es
+            - ru
+            - ko
+            - fr
+            - ja
+            - pt
+            - tr
+            - pl
+            - ca
+            - nl
+            - ar
+            - sv
+            - it
+            - id
+            - hi
+            - hien
+            - fi
+            - vi
+            - he
+            - uk
+            - el
+            - ms
+            - cs
+            - ro
+            - da
+            - hu
+            - ta
+            - 'no'
+            - th
+            - ur
+            - hr
+            - bg
+            - lt
+            - la
+            - mi
+            - ml
+            - cy
+            - sk
+            - te
+            - fa
+            - lv
+            - bn
+            - sr
+            - az
+            - sl
+            - kn
+            - et
+            - mk
+            - br
+            - eu
+            - is
+            - hy
+            - ne
+            - mn
+            - bs
+            - kk
+            - sq
+            - sw
+            - gl
+            - mr
+            - pa
+            - si
+            - km
+            - sn
+            - yo
+            - so
+            - af
+            - oc
+            - ka
+            - be
+            - tg
+            - sd
+            - gu
+            - am
+            - yi
+            - lo
+            - uz
+            - fo
+            - ht
+            - ps
+            - tk
+            - nn
+            - mt
+            - sa
+            - lb
+            - my
+            - bo
+            - tl
+            - mg
+            - as
+            - tt
+            - haw
+            - ln
+            - ha
+            - ba
+            - jv
+            - su
+            - yue
+          - type: 'null'
+          title: Language
+          description: Language of the audio
+        before_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Before Text
+          description: Text before the audio
+        after_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: After Text
+          description: Text after the audio
+        selected_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Selected Text
+          description: Selected text
+        app_type:
+          anyOf:
+          - type: string
+            enum:
+            - ai
+            - email
+            - other
+          - type: 'null'
+          title: App Type
+          description: Type of application
+        dictionary:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Dictionary
+          description: Dictionary words
+      type: object
+      title: APIProperties
+    CheckSensibilityResponse:
+      properties:
+        score:
+          type: number
+          title: Score
+          description: Sensibility score from 0.0 (nonsensical) to 1.0 (makes sense)
+      type: object
+      required:
+      - score
+      title: CheckSensibilityResponse
+    Body_asr_llm_asr_post:
+      properties:
+        audio:
+          type: string
+          title: Audio
+          description: Base64 encoded audio
+        language:
+          type: string
+          title: Language
+          description: Language of the audio
+          default: ''
+        prompt:
+          type: string
+          title: Prompt
+          description: Prompt for the audio
+      type: object
+      required:
+      - audio
+      title: Body_asr_llm_asr_post
+    ExtractASRWordsRequest:
+      properties:
+        textbox_text:
+          type: string
+          title: Textbox Text
+          description: Text from the textbox to extract ASR words from
+      type: object
+      required:
+      - textbox_text
+      title: ExtractASRWordsRequest
+    Context:
+      properties:
+        app:
+          anyOf:
+          - $ref: '#/components/schemas/App'
+          - type: 'null'
+          description: Information on the app the user is trying to paste in
+        ax_context:
+          items:
+            type: string
+          type: array
+          title: Ax Context
+          description: List of words from accessibility context
+        variable_names:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Variable Names
+          description: Variable names extracted from the app context. These get backticked
+        file_names:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: File Names
+          description: File names extracted from the app context, usually VS Code file names.
+        ocr_context:
+          items:
+            type: string
+          type: array
+          title: Ocr Context
+          description: List of names extracted from user screen content
+        dictionary_context:
+          items:
+            type: string
+          type: array
+          title: Dictionary Context
+          description: List of names in the user's dictionary
+        dictionary_replacements:
+          additionalProperties:
+            type: string
+          type: object
+          title: Dictionary Replacements
+          description: Mapping for replacing phrases/snippets in the user's dictionary
+        dictionary_snippets:
+          additionalProperties:
+            items:
+              type: string
+            type: array
+          type: object
+          title: Dictionary Snippets
+          description: Mapping of stripped snippet triggers to full triggers
+        user_identifier:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Identifier
+          description: Identifier of the user within the foreground app (e.g., X username, email, etc.)
+        user_first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User First Name
+          description: First name of the user making the request
+        user_last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Last Name
+          description: Last name of the user making the request
+        textbox_contents:
+          anyOf:
+          - $ref: '#/components/schemas/TextboxContents'
+          - type: 'null'
+          description: Selected and surrounding text in the textbox that is being dictated into
+        screenshot:
+          anyOf:
+          - type: string
+            contentMediaType: application/octet-stream
+          - type: 'null'
+          title: Screenshot
+          description: Screenshot of the user's screen at time of dictation
+        content_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Content Text
+          description: Text content of the foreground app at time of dictation
+        content_html:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Content Html
+          description: HTML content of the foreground app at time of dictation
+        conversation:
+          anyOf:
+          - $ref: '#/components/schemas/Conversation'
+          - type: 'null'
+          description: Conversation history for a dictation
+        session_dictation_apps:
+          items:
+            type: string
+          type: array
+          title: Session Dictation Apps
+          description: List of all applications (names, bundle IDs, URLs) used for dictation in this session
+      type: object
+      title: Context
+    src__backend_service__services__llm__cost__Source:
+      type: string
+      enum:
+      - notetaker_chat
+      - scratchpad_chat
+      - scratchpad_suggestion_pill
+      - notetaker_summary
+      - meeting_title
+      - what_did_i_miss
+      - agentic_preread
+      - todo_automation
+      - polish_transform
+      - prompt_engineer_transform
+      - turn_to_list_transform
+      - translate_to_english_transform
+      - empathize_transform
+      - custom_transform
+      - unknown
+      title: Source
+      description: 'Closed vocabulary of UI surfaces that trigger an LLM call.
+
+
+        Observability-only: never let a ``Source`` value influence routing,
+
+        pricing, or attribution. Bounded so it''s safe to use as a metric tag.'
+    VoiceProfileResponse:
+      properties:
+        processing_status:
+          $ref: '#/components/schemas/VoiceProfileProcessingStatus'
+        headline:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Headline
+        superpower_title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Superpower Title
+        superpower_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Superpower Description
+        peak_time_label:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Peak Time Label
+        peak_time_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Peak Time Description
+        peak_time_top_app:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Peak Time Top App
+        catch_phrase:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Catch Phrase
+        catch_phrase_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Catch Phrase Description
+        persona:
+          anyOf:
+          - type: string
+            enum:
+            - Analysis
+            - Brainstorm
+            - Coding
+            - Collaboration
+            - Create
+            - Deep thought
+            - Dreaming
+            - Educate
+            - Finance
+            - Healthcare & Life Sciences
+            - Idea generation
+            - Leadership
+            - Long writing
+            - Manage
+            - Multi-tasking
+            - Multilingual
+            - On the go
+            - Organize
+            - Presenting
+            - Reporting
+            - Support
+            - Thinking
+          - type: string
+          - type: 'null'
+          title: Persona
+        most_used_word:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Most Used Word
+        most_removed_word:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Most Removed Word
+        word_count_milestone:
+          anyOf:
+          - type: integer
+            enum:
+            - 2000
+            - 12000
+            - 37000
+            - 87000
+            - 162000
+            - 262000
+            - 362000
+            - 462000
+            - 562000
+            - 662000
+          - type: 'null'
+          title: Word Count Milestone
+        created_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Created At
+      type: object
+      required:
+      - processing_status
+      title: VoiceProfileResponse
+      description: The generated voice profile and its processing status for a user.
+    ExtractEditedWordsResponse:
+      properties:
+        words:
+          type: string
+          title: Words
+          description: Comma-separated list of proper nouns, technical terms, or domain-specific terms
+      type: object
+      required:
+      - words
+      title: ExtractEditedWordsResponse
+    HistoryRowsRequest:
+      properties:
+        privacy_mode:
+          type: boolean
+          title: Privacy Mode
+        history_rows:
+          items:
+            $ref: '#/components/schemas/HistoryRow'
+          type: array
+          title: History Rows
+        timezone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Timezone
+      type: object
+      required:
+      - privacy_mode
+      - history_rows
+      title: HistoryRowsRequest
+    FormattingRequest:
+      properties:
+        content:
+          type: string
+          title: Content
+          description: Text content to format
+        model_name:
+          type: string
+          title: Model Name
+          description: Name of the model to use for formatting
+      type: object
+      required:
+      - content
+      - model_name
+      title: FormattingRequest
+    ClassifyIntentContext:
+      properties:
+        asr_text:
+          type: string
+          title: Asr Text
+          description: Raw ASR transcription text
+        app_name:
+          type: string
+          title: App Name
+          description: Name of the foreground app
+          default: ''
+        app_url:
+          type: string
+          title: App Url
+          description: URL within the foreground app
+          default: ''
+        before_text:
+          type: string
+          title: Before Text
+          description: Text before the cursor
+          default: ''
+        selected_text:
+          type: string
+          title: Selected Text
+          description: Currently selected text
+          default: ''
+        after_text:
+          type: string
+          title: After Text
+          description: Text after the cursor
+          default: ''
+        ax_context:
+          type: string
+          title: Ax Context
+          description: First 1000 chars of accessibility context
+          default: ''
+        session_history:
+          items:
+            $ref: '#/components/schemas/InstructSessionHistoryMessage'
+          type: array
+          maxItems: 40
+          title: Session History
+          description: Prior instruct-chat turns for multi-turn follow-ups (e.g. clarifications after a settings confirmation).
+      type: object
+      required:
+      - asr_text
+      title: ClassifyIntentContext
+    TextboxContents:
+      properties:
+        beforeText:
+          type: string
+          title: Beforetext
+          description: Text right before the cursor position or start of selected text
+          default: ''
+        selectedText:
+          type: string
+          title: Selectedtext
+          description: Highlited text in the textbox
+          default: ''
+        afterText:
+          type: string
+          title: Aftertext
+          description: Text right after the cursor position or end of selected text
+          default: ''
+        contents:
+          type: string
+          title: Contents
+          description: All of the text in the textbox
+          default: ''
+      type: object
+      title: TextboxContents
+    CerebrasProviderConfig:
+      properties:
+        kind:
+          type: string
+          enum:
+          - cerebras
+          title: Kind
+          default: cerebras
+        model:
+          type: string
+          title: Model
+      type: object
+      required:
+      - model
+      title: CerebrasProviderConfig
+      description: Provider config for a Cerebras-backed model.
+    InstructModeRequest:
+      properties:
+        instruction:
+          type: string
+          title: Instruction
+        screen_context:
+          type: string
+          title: Screen Context
+        provider_config:
+          anyOf:
+          - $ref: '#/components/schemas/TransformProviderConfig'
+          - type: 'null'
+        selected_text:
+          type: string
+          title: Selected Text
+          default: ''
+        before_text:
+          type: string
+          title: Before Text
+          default: ''
+        after_text:
+          type: string
+          title: After Text
+          default: ''
+        app_name:
+          type: string
+          title: App Name
+          default: ''
+        app_url:
+          type: string
+          title: App Url
+          default: ''
+        user_voice_preference:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Voice Preference
+        session_history:
+          items:
+            $ref: '#/components/schemas/InstructSessionHistoryMessage'
+          type: array
+          maxItems: 40
+          title: Session History
+      type: object
+      required:
+      - instruction
+      - screen_context
+      title: InstructModeRequest
+    TransformRouteData:
+      properties:
+        matched_prompt_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Matched Prompt Name
+          description: If the user invoked one of their saved polish transforms by name (e.g. 'Gusto Voice'), the canonical prompt_name. Null when no specific transform was identified.
+      type: object
+      title: TransformRouteData
+      description: Structured data the classifier may emit when picking the `transform` route.
+    RouteDefinition:
+      properties:
+        name:
+          type: string
+          maxLength: 64
+          title: Name
+          description: Route name, e.g. 'instruct', 'dictation'
+        route_prompt:
+          type: string
+          title: Route Prompt
+          description: Description of when this route applies
+      type: object
+      required:
+      - name
+      - route_prompt
+      title: RouteDefinition
+    OpenAIProviderConfig:
+      properties:
+        kind:
+          type: string
+          enum:
+          - openai
+          title: Kind
+          default: openai
+        model:
+          anyOf:
+          - type: string
+          - type: string
+            enum:
+            - gpt-4.1
+            - gpt-4.1-mini
+            - gpt-4.1-nano
+            - gpt-4.1-2025-04-14
+            - gpt-4.1-mini-2025-04-14
+            - gpt-4.1-nano-2025-04-14
+            - o3-mini
+            - o3-mini-2025-01-31
+            - o1
+            - o1-2024-12-17
+            - o1-preview
+            - o1-preview-2024-09-12
+            - o1-mini
+            - o1-mini-2024-09-12
+            - gpt-4o
+            - gpt-4o-2024-11-20
+            - gpt-4o-2024-08-06
+            - gpt-4o-2024-05-13
+            - gpt-4o-audio-preview
+            - gpt-4o-audio-preview-2024-10-01
+            - gpt-4o-audio-preview-2024-12-17
+            - gpt-4o-mini-audio-preview
+            - gpt-4o-mini-audio-preview-2024-12-17
+            - gpt-4o-search-preview
+            - gpt-4o-mini-search-preview
+            - gpt-4o-search-preview-2025-03-11
+            - gpt-4o-mini-search-preview-2025-03-11
+            - chatgpt-4o-latest
+            - gpt-4o-mini
+            - gpt-4o-mini-2024-07-18
+            - gpt-4-turbo
+            - gpt-4-turbo-2024-04-09
+            - gpt-4-0125-preview
+            - gpt-4-turbo-preview
+            - gpt-4-1106-preview
+            - gpt-4-vision-preview
+            - gpt-4
+            - gpt-4-0314
+            - gpt-4-0613
+            - gpt-4-32k
+            - gpt-4-32k-0314
+            - gpt-4-32k-0613
+            - gpt-3.5-turbo
+            - gpt-3.5-turbo-16k
+            - gpt-3.5-turbo-0301
+            - gpt-3.5-turbo-0613
+            - gpt-3.5-turbo-1106
+            - gpt-3.5-turbo-0125
+            - gpt-3.5-turbo-16k-0613
+          - type: string
+            enum:
+            - o1-pro
+            - o1-pro-2025-03-19
+            - computer-use-preview
+            - computer-use-preview-2025-03-11
+          title: Model
+      type: object
+      required:
+      - model
+      title: OpenAIProviderConfig
+      description: Provider config for an OpenAI-backed model.
+    App:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of the app
+        bundle_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Bundle Id
+          description: Bundle ID of the app
+        type:
+          $ref: '#/components/schemas/AppType'
+          description: Category to which the app belongs
+          default: other
+        url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Url
+          description: URL within the app
+      type: object
+      title: App
+    AnthropicProviderConfig:
+      properties:
+        kind:
+          type: string
+          enum:
+          - anthropic
+          title: Kind
+          default: anthropic
+        model:
+          anyOf:
+          - type: string
+            enum:
+            - claude-opus-4-7
+            - claude-mythos-preview
+            - claude-opus-4-6
+            - claude-sonnet-4-6
+            - claude-haiku-4-5
+            - claude-haiku-4-5-20251001
+            - claude-opus-4-5
+            - claude-opus-4-5-20251101
+            - claude-sonnet-4-5
+            - claude-sonnet-4-5-20250929
+            - claude-opus-4-1
+            - claude-opus-4-1-20250805
+            - claude-opus-4-0
+            - claude-opus-4-20250514
+            - claude-sonnet-4-0
+            - claude-sonnet-4-20250514
+            - claude-3-haiku-20240307
+          - type: string
+          title: Model
+      type: object
+      required:
+      - model
+      title: AnthropicProviderConfig
+      description: Provider config for an Anthropic-backed model.
+    CompletionRequest:
+      properties:
+        model:
+          type: string
+          title: Model
+          description: Name of the model to use
+        messages:
+          items:
+            type: object
+          type: array
+          title: Messages
+          description: Messages to send to the LLM
+        client_type:
+          type: string
+          title: Client Type
+          description: Client type (OPENAI or FIREWORKS or OPENROUTER or OPENPIPE)
+          default: FIREWORKS
+        temperature:
+          type: number
+          title: Temperature
+          description: Sampling temperature
+          default: 0.0
+        max_tokens:
+          type: integer
+          title: Max Tokens
+          description: Maximum number of tokens
+          default: 4096
+        top_p:
+          type: number
+          title: Top P
+          description: Nucleus sampling value
+          default: 1.0
+        frequency_penalty:
+          type: number
+          title: Frequency Penalty
+          description: Penalty for frequency of tokens
+          default: 0.0
+        presence_penalty:
+          type: number
+          title: Presence Penalty
+          description: Penalty for presence of tokens
+          default: 0.0
+        tools:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ToolCallDefinition'
+            type: array
+          - type: 'null'
+          title: Tools
+          description: Tool definitions for function calling
+        source:
+          $ref: '#/components/schemas/src__backend_service__services__llm__cost__Source'
+          description: UI surface that triggered this completion (observability tag only).
+          default: unknown
+      type: object
+      required:
+      - model
+      - messages
+      title: CompletionRequest
+    ClassifyIntentResponse:
+      properties:
+        route:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Route
+          description: Name of the matched route, or null if classification failed
+        data:
+          anyOf:
+          - $ref: '#/components/schemas/ClassifyIntentRouteData'
+          - type: 'null'
+          description: Route-specific structured outputs from the classifier. Only the field matching `route` is populated.
+        is_instruction:
+          type: boolean
+          title: Is Instruction
+          description: True if the user is instructing Flow, False if dictating text. Derived from `route`; kept for iOS compatibility.
+          deprecated: true
+      type: object
+      required:
+      - is_instruction
+      title: ClassifyIntentResponse
+    Body_flow_api_llm_api_post:
+      properties:
+        audio:
+          type: string
+          title: Audio
+          description: Base64 encoded audio
+        language:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: string
+          - type: 'null'
+          title: Language
+          description: List of languages the user speaks
+        context:
+          anyOf:
+          - $ref: '#/components/schemas/Context'
+          - type: 'null'
+          description: Full context surrounding the dictation
+        properties:
+          anyOf:
+          - $ref: '#/components/schemas/APIProperties'
+          - type: 'null'
+          description: Additional properties
+        transcript_id:
+          type: string
+          title: Transcript Id
+          description: Transcript Entity UUID
+      type: object
+      required:
+      - audio
+      title: Body_flow_api_llm_api_post
+    PersonalizationStyle:
+      type: string
+      enum:
+      - formal
+      - casual
+      - veryCasual
+      - excited
+      - genz
+      - default
+      title: PersonalizationStyle
+      description: Represents the style for personalization settings.
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

@@ -1,0 +1,438 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Enterpret API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Enterpret
+paths:
+  /api/v1/enterpret:
+    post:
+      tags:
+      - Enterpret
+      summary: Ingest Enterpret Payload
+      operationId: ingest_enterpret_payload
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - $ref: '#/components/schemas/EnterpretWebhookRequest'
+              - $ref: '#/components/schemas/EnterpretWebhookPayload'
+              title: Payload
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+components:
+  schemas:
+    EnterpretWebhookRequest:
+      properties:
+        webhook_target:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Webhook Target
+        request_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Request Id
+        webhook_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Webhook Id
+        webhook_payload:
+          $ref: '#/components/schemas/EnterpretWebhookPayload'
+        metadata:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Metadata
+      additionalProperties: true
+      type: object
+      required:
+      - webhook_payload
+      title: EnterpretWebhookRequest
+      description: The outer Enterpret webhook request wrapping its payload and metadata.
+    EnterpretWebhookPayload:
+      properties:
+        issue_id:
+          type: string
+          title: Issue Id
+        issue_number:
+          type: string
+          title: Issue Number
+        account_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Account Id
+        contact_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Contact Id
+        requester_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Requester Email
+        account_user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Account User Id
+        enterprise_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Enterprise Id
+        is_enterprise:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Is Enterprise
+        billing_cycle:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Billing Cycle
+        country:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Country
+        country_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Country Code
+        country_currency:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Country Currency
+        discount_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Discount Type
+        account_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Account Email
+        wispr_flow_account_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Wispr Flow Account Email
+        is_student_account:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Is Student Account
+        max_seats_cycle:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Max Seats Cycle
+        number_seats:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Number Seats
+        payment_platform:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Payment Platform
+        stripe_customer_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stripe Customer Id
+        stripe_promo_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stripe Promo Code
+        subscription:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subscription
+        subscription_currency:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subscription Currency
+        subscription_plan:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subscription Plan
+        subscription_plan_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subscription Plan Name
+        subscription_status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subscription Status
+        trial_ends_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Trial Ends At
+        vip_user:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Vip User
+        body:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Body
+        created_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created At
+        issue_link:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Issue Link
+        resolution_time:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Resolution Time
+        issue_source:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Issue Source
+        issue_status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Issue Status
+        issue_title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Issue Title
+        article_status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Article Status
+        feedback_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feedback Type
+        issue_complexity:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Issue Complexity
+        assignee_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignee Id
+        assignee_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignee Email
+        assignee_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignee Name
+        tags:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tags
+        account_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Account Name
+        account_domains:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Account Domains
+        account_owner_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Account Owner Name
+        requester_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Requester Name
+        team_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Name
+        customer_portal_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Customer Portal Url
+        last_message_sent_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Message Sent At
+        last_message_is_private:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Message Is Private
+        last_message_source:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Message Source
+        device_details:
+          anyOf:
+          - $ref: '#/components/schemas/EnterpretDeviceDetails'
+          - type: 'null'
+        conversation:
+          anyOf:
+          - $ref: '#/components/schemas/EnterpretConversation'
+          - type: 'null'
+      additionalProperties: true
+      type: object
+      required:
+      - issue_id
+      - issue_number
+      title: EnterpretWebhookPayload
+      description: The issue payload delivered by an Enterpret webhook.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    EnterpretDeviceDetails:
+      properties:
+        architecture:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Architecture
+        device_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Device Type
+        platform:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Platform
+        version:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Version
+        region:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Region
+      additionalProperties: true
+      type: object
+      title: EnterpretDeviceDetails
+      description: Device metadata attached to an Enterpret issue.
+    EnterpretConversation:
+      properties:
+        message_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message Id
+        author_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Author Name
+        body:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Body
+        ccs:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ccs
+      additionalProperties: true
+      type: object
+      title: EnterpretConversation
+      description: A single conversation message from an Enterpret issue.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

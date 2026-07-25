@@ -1,0 +1,180 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Tracking API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Tracking
+paths:
+  /api/v1/tracking/events:
+    post:
+      tags:
+      - Tracking
+      summary: Track Event
+      description: 'Ingest tracking events from web beacons (Webflow).
+
+
+        Currently supports:
+
+        - app_download -> Lead event (first per account, via attribution service)'
+      operationId: track_event
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrackingEventRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackingEventResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    TrackingEventName:
+      type: string
+      enum:
+      - app_download
+      title: TrackingEventName
+      description: Supported tracking event names for web beacons.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    TrackingEventResponse:
+      properties:
+        success:
+          type: boolean
+          title: Success
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+      type: object
+      required:
+      - success
+      title: TrackingEventResponse
+      description: Response for tracking events.
+    TrackingEventRequest:
+      properties:
+        event_name:
+          $ref: '#/components/schemas/TrackingEventName'
+          description: Canonical event name
+        event_id:
+          type: string
+          maxLength: 255
+          title: Event Id
+          description: Client-generated event ID for Pixel dedup
+        platform:
+          $ref: '#/components/schemas/AttributionPlatform'
+          default: web
+        email:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Email
+          description: User email for match quality
+        wispr_user_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Wispr User Id
+          description: Wispr user ID if logged in
+        fbp:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Fbp
+          description: _fbp cookie value
+        fbc:
+          anyOf:
+          - type: string
+            maxLength: 512
+          - type: 'null'
+          title: Fbc
+          description: _fbc cookie value
+        ga_client_id:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Ga Client Id
+          description: 'GA4 client ID: numeric portion of the _ga cookie after stripping the ''GA1.<scope>.'' prefix. Format: ''<int>.<int>'' (e.g. ''1234567890.9876543210'').'
+        ga_session_id:
+          anyOf:
+          - type: string
+            maxLength: 32
+          - type: 'null'
+          title: Ga Session Id
+          description: 'GA4 session ID: the timestamp segment of the _ga_<MEASUREMENT_ID> cookie (a 10+ digit Unix timestamp, e.g. ''1714281234'').'
+      type: object
+      required:
+      - event_name
+      - event_id
+      title: TrackingEventRequest
+      description: Request for tracking events from web beacons.
+    AttributionPlatform:
+      type: string
+      enum:
+      - web
+      - desktop_mac
+      - desktop_windows
+      - ios
+      - android
+      title: AttributionPlatform
+      description: 'Valid platforms for attribution event tracking.
+
+
+        Desktop clients must use specific variants (DESKTOP_MAC, DESKTOP_WINDOWS).'
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

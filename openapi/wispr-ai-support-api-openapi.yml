@@ -1,0 +1,973 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Support API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Support
+paths:
+  /api/v1/support/slack/{platform}:
+    post:
+      tags:
+      - Support
+      summary: Send Feedback Slack
+      description: Send feedback to slack.
+      operationId: send_feedback_slack
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: platform
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/src__common__constants__Platform'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_send_feedback_slack_api_v1_support_slack__platform__post'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/support/users:
+    delete:
+      tags:
+      - Support
+      summary: Delete User
+      description: Delete a user and all it's data.
+      operationId: delete_user
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/support/users/{email}:
+    delete:
+      tags:
+      - Support
+      summary: Support Delete User
+      description: 'Immediately delete a user and all their data (support staff only).
+
+
+        This endpoint requires the root API key and is intended for support staff only.
+
+        It performs immediate deletion without using background tasks.'
+      operationId: support_delete_user
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: email
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Email
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/support/usage-data-erasure:
+    post:
+      tags:
+      - Support
+      summary: Start Usage Data Erasure
+      description: 'Start an account-preserving usage-data erasure (support staff, root API key).
+
+
+        Gated by the root API key — the same key that authorizes account deletion
+
+        (`support_delete_user`); no JWT path. Email is the PRIMARY identifier; `user_id`+`confirm_orphan` is the
+
+        orphan/no-email fallback. `actor`/`reason` are recorded UNTRUSTED. A `start_workflow`
+
+        failure surfaces as 5xx (nothing persisted pre-start; the caller retries — idempotent
+
+        via USE_EXISTING).'
+      operationId: start_usage_data_erasure
+      security:
+      - APIKeyHeader: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErasureStartRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErasureStartResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Support
+      summary: Get Usage Data Erasure Status
+      description: 'Redacted erasure status by `user_id` or `email` (root API key; ids/enums/counts only).
+
+
+        In-flight from Temporal (`describe_workflow` + the progress query), terminal from the
+
+        audit row, or a clean not-found. PII (raw email / content / errors) never appears.'
+      operationId: get_usage_data_erasure_status
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Target user id
+          title: User Id
+        description: Target user id
+      - name: email
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Target user email
+          title: Email
+        description: Target user email
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErasureStatusResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/support/feedback:
+    post:
+      tags:
+      - Support
+      summary: Frontapp Feedback
+      operationId: frontapp_feedback
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_frontapp_feedback_api_v1_support_feedback_post'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/support/update-pylon-account:
+    post:
+      tags:
+      - Support
+      summary: Update Pylon Account
+      operationId: update_pylon_account
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: email
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Email
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/support/image-feedback:
+    post:
+      tags:
+      - Support
+      summary: Frontapp Feedback With Image
+      operationId: frontapp_feedback_with_image
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupportFeedbackRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/support/pre-login-feedback:
+    post:
+      tags:
+      - Support
+      summary: Pre Login Feedback
+      description: This endpoint allows users to submit feedback before they have authenticated (for login or account creation issues)
+      operationId: pre_login_feedback
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreLoginFeedbackRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/support/cancel-subscription:
+    post:
+      tags:
+      - Support
+      summary: Support Cancel Subscription
+      description: 'Cancel a user''s active Stripe subscription and refund based on request.
+
+
+        - refund="full": refund entire current cycle amount
+
+        - refund="partial": prorated refund for unused period
+
+        - refund="no": cancel immediately with no refund'
+      operationId: support_cancel_subscription
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancelSubscriptionRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /api/v1/support/sync-individual-stripe-subscription:
+    post:
+      tags:
+      - Support
+      summary: Sync Individual Stripe Subscription
+      description: 'Sync a user''s individual Stripe subscription row from current Stripe state.
+
+
+        - dry_run=true (default): preview before/after diff without writing
+
+        - dry_run=false: apply changes to the subscription table'
+      operationId: sync_individual_stripe_subscription
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SyncSubscriptionRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /api/v1/support/sync-individual-mobile-subscription:
+    post:
+      tags:
+      - Support
+      summary: Sync Individual Mobile Subscription
+      description: 'Sync a user''s mobile_subscription row from current RevenueCat state.
+
+
+        Intended to patch up state after missed webhooks. Future webhooks with
+
+        newer event timestamps will still override this sync via the upsert
+
+        stale-event guard.
+
+
+        - dry_run=true (default): preview before/after diff without writing
+
+        - dry_run=false: apply changes to the mobile_subscription table'
+      operationId: sync_individual_mobile_subscription
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SyncMobileSubscriptionRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /api/v1/support/validate-user:
+    get:
+      tags:
+      - Support
+      summary: Validate User
+      description: Validate that a Supabase user exists for the email and matches the DB user_id.
+      operationId: validate_user
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: email
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The email of the user to validate
+          format: email
+          title: Email
+        description: The email of the user to validate
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/support/pylon-feedback:
+    post:
+      tags:
+      - Support
+      summary: Create Pylon Feedback
+      operationId: create_pylon_feedback
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_create_pylon_feedback_api_v1_support_pylon_feedback_post'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/support/attio-sync:
+    post:
+      tags:
+      - Support
+      summary: Attio Sync
+      description: Sync the Attio system with the enterprise.
+      operationId: attio_sync
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: enterprise_id
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Enterprise Id
+      - name: type_of_sync
+        in: query
+        required: false
+        schema:
+          enum:
+          - workspace
+          - users
+          - invoices
+          type: string
+          description: 'Type of sync: ''workspace'' or ''users'' or ''invoices'
+          default: workspace
+          title: Type Of Sync
+        description: 'Type of sync: ''workspace'' or ''users'' or ''invoices'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/support/nps/score:
+    post:
+      tags:
+      - Support
+      summary: Submit Nps Score
+      description: Submit an NPS score.
+      operationId: submit_nps_score
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NPSScoreRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/support/nps/feedback:
+    post:
+      tags:
+      - Support
+      summary: Submit Nps Feedback
+      description: Submit an NPS feedback.
+      operationId: submit_nps_feedback
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NPSFeedbackRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    NPSFeedbackRequest:
+      properties:
+        customer_id:
+          type: string
+          title: Customer Id
+        feedback:
+          type: string
+          title: Feedback
+        campaign:
+          type: string
+          title: Campaign
+      type: object
+      required:
+      - customer_id
+      - feedback
+      - campaign
+      title: NPSFeedbackRequest
+    Body_create_pylon_feedback_api_v1_support_pylon_feedback_post:
+      properties:
+        body:
+          type: string
+          title: Body
+        attachments:
+          items:
+            type: string
+            contentMediaType: application/octet-stream
+          type: array
+          title: Attachments
+        subject:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject
+        comment:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Comment
+        platform:
+          $ref: '#/components/schemas/src__common__constants__Platform'
+          default: desktop
+      type: object
+      required:
+      - body
+      title: Body_create_pylon_feedback_api_v1_support_pylon_feedback_post
+    Body_send_feedback_slack_api_v1_support_slack__platform__post:
+      properties:
+        audio:
+          anyOf:
+          - type: string
+            contentMediaType: application/octet-stream
+          - type: 'null'
+          title: Audio
+        asr_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Asr Text
+        formatted_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Formatted Text
+        feedback:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feedback
+        logs:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Logs
+        image_data:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Image Data
+        image_type:
+          anyOf:
+          - $ref: '#/components/schemas/ImageType'
+          - type: 'null'
+      type: object
+      title: Body_send_feedback_slack_api_v1_support_slack__platform__post
+    NPSScoreRequest:
+      properties:
+        customer_id:
+          type: string
+          title: Customer Id
+        score:
+          type: integer
+          title: Score
+        campaign:
+          type: string
+          title: Campaign
+      type: object
+      required:
+      - customer_id
+      - score
+      - campaign
+      title: NPSScoreRequest
+    SyncMobileSubscriptionRequest:
+      properties:
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+          description: User UUID (same as RevenueCat app_user_id)
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+          description: User email — used to look up the user
+        dry_run:
+          type: boolean
+          title: Dry Run
+          description: Preview changes without committing. Set to false to apply.
+          default: true
+      type: object
+      title: SyncMobileSubscriptionRequest
+    Body_frontapp_feedback_api_v1_support_feedback_post:
+      properties:
+        to:
+          type: string
+          title: To
+        body:
+          type: string
+          title: Body
+        attachments:
+          items:
+            type: string
+            contentMediaType: application/octet-stream
+          type: array
+          title: Attachments
+        subject:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject
+        comment:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Comment
+        platform:
+          $ref: '#/components/schemas/src__common__constants__Platform'
+          default: desktop
+      type: object
+      required:
+      - to
+      - body
+      title: Body_frontapp_feedback_api_v1_support_feedback_post
+    SupportFeedbackRequest:
+      properties:
+        to:
+          type: string
+          title: To
+        body:
+          type: string
+          title: Body
+        attachments:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          title: Attachments
+        subject:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject
+        comment:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Comment
+        imageData:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Imagedata
+        imageType:
+          anyOf:
+          - $ref: '#/components/schemas/ImageType'
+          - type: 'null'
+        platform:
+          $ref: '#/components/schemas/src__common__constants__Platform'
+          default: desktop
+      type: object
+      required:
+      - to
+      - body
+      title: SupportFeedbackRequest
+    ErasureStartResponse:
+      properties:
+        workflow_id:
+          type: string
+          title: Workflow Id
+        skipped_no_email:
+          type: boolean
+          title: Skipped No Email
+      type: object
+      required:
+      - workflow_id
+      - skipped_no_email
+      title: ErasureStartResponse
+      description: 'Response for a started (or attached-to-existing) erasure.
+
+
+        Carries only the derived workflow id (non-PII; `usage-erasure:{user_id}`) and a
+
+        flag for whether the email-keyed ClickHouse legs will be skipped (the orphan path).'
+    SyncSubscriptionRequest:
+      properties:
+        stripe_subscription_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stripe Subscription Id
+          description: Stripe subscription ID (e.g. sub_xxx)
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+          description: User email — used to look up the Stripe customer
+        dry_run:
+          type: boolean
+          title: Dry Run
+          description: Preview changes without committing. Set to false to apply.
+          default: true
+      type: object
+      title: SyncSubscriptionRequest
+    ImageType:
+      type: string
+      enum:
+      - image/png
+      - image/jpeg
+      - image/bmp
+      - image/webp
+      title: ImageType
+    ErasureStartRequest:
+      properties:
+        email:
+          anyOf:
+          - type: string
+            maxLength: 320
+          - type: 'null'
+          title: Email
+        user_id:
+          anyOf:
+          - type: string
+            maxLength: 80
+            minLength: 1
+          - type: 'null'
+          title: User Id
+        confirm_orphan:
+          type: boolean
+          title: Confirm Orphan
+          default: false
+        actor:
+          anyOf:
+          - type: string
+            maxLength: 320
+          - type: 'null'
+          title: Actor
+        reason:
+          anyOf:
+          - type: string
+            maxLength: 2000
+          - type: 'null'
+          title: Reason
+      type: object
+      title: ErasureStartRequest
+      description: "Body for `POST /api/v1/support/usage-data-erasure`.\n\nExactly one of `email` / `user_id` must be set.\n\nAttributes:\n    email: The PRIMARY identifier — the target's email. Resolved server-side to a\n        single user_id; the operator stating the human identity IS the fat-finger\n        guard, so no separate confirm field is needed. 0 matches → 404, >1 → 422.\n    user_id: The orphan-only identifier — a raw user id reaching orphaned usage data\n        (no `User` row / no email). The user_id path targets ONLY orphaned data;\n        requires `confirm_orphan=True`; server-side path-char rejected before use.\n    confirm_orphan: Explicit acknowledgement that applies ONLY to the `user_id` /\n        orphan path. Invalid with `email` (rejected by the validator).\n    actor: The support caller's identity — caller-supplied free text stored verbatim in\n        the audit row; not validated and never authorization-bearing.\n    reason: The erasure reason — caller-supplied free text stored verbatim in the audit row."
+    ErasureStatusState:
+      type: string
+      enum:
+      - not_found
+      - in_flight
+      - completed
+      - failed
+      title: ErasureStatusState
+      description: Coarse, non-PII status of an erasure for the redacted status response.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    src__common__constants__Platform:
+      type: string
+      enum:
+      - desktop
+      - ios
+      - android
+      title: Platform
+    ErasureStatusResponse:
+      properties:
+        state:
+          $ref: '#/components/schemas/ErasureStatusState'
+        workflow_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Workflow Id
+        per_store:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          title: Per Store
+        outcome:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Outcome
+        watermark_t0_epoch_s:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Watermark T0 Epoch S
+        completed_at_epoch_s:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Completed At Epoch S
+        last_error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Error
+        proof:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Proof
+      type: object
+      required:
+      - state
+      title: ErasureStatusResponse
+      description: "REDACTED status of an erasure — ids / enums / counts / timestamps only.\n\nNever carries the raw email, row content, or a raw exception. `per_store` is the\nworkflow's `{store: StepState}` progress map for an in-flight run (bounded enum\nstrings) or omitted for a terminal/not-found read. `last_error` is a sanitized\nbounded code (e.g. `clickhouse_verification_timed_out`), never a stack/raw error.\n\nAttributes:\n    state: Coarse status (`not_found` / `in_flight` / `completed` / `failed`).\n    workflow_id: The derived workflow id queried (non-PII), or None for not_found\n        when no id could be derived.\n    per_store: In-flight per-store progress `{ErasureStore: StepState}`; None for\n        terminal/not-found reads (terminal proof lives in the audit row).\n    outcome: Terminal outcome string (`completed`/`failed`) from the audit row; None\n        in-flight / not-found.\n    watermark_t0_epoch_s: T0 (epoch seconds) from the terminal audit row; None\n        in-flight / not-found.\n    completed_at_epoch_s: Terminal `completed_at` (epoch seconds) from the audit row.\n    last_error: Sanitized bounded failure code on a `failed` terminal; None otherwise.\n    proof: Per-store residual-count / empty-listing evidence from the audit row\n        (counts only, non-PII); None in-flight / not-found."
+    PreLoginFeedbackRequest:
+      properties:
+        name:
+          type: string
+          title: Name
+        email:
+          type: string
+          format: email
+          title: Email
+        body:
+          type: string
+          title: Body
+        subject:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject
+        comment:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Comment
+        imageData:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Imagedata
+        imageType:
+          anyOf:
+          - $ref: '#/components/schemas/ImageType'
+          - type: 'null'
+        platform:
+          $ref: '#/components/schemas/src__common__constants__Platform'
+          default: desktop
+      type: object
+      required:
+      - name
+      - email
+      - body
+      title: PreLoginFeedbackRequest
+    CancelSubscriptionRequest:
+      properties:
+        email:
+          type: string
+          title: Email
+          description: User email
+        refund:
+          type: string
+          title: Refund
+          description: 'Refund type: "full", "partial", or "no"'
+      type: object
+      required:
+      - email
+      - refund
+      title: CancelSubscriptionRequest
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

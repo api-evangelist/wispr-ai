@@ -1,0 +1,98 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Geo API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Geo
+paths:
+  /geo/base10:
+    get:
+      tags:
+      - Geo
+      summary: Get Base10 Server
+      operationId: get_base10_server
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+    post:
+      tags:
+      - Geo
+      summary: Post Base10 Server
+      operationId: post_base10_server
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+  /geo/base10/grpc-servers:
+    get:
+      tags:
+      - Geo
+      summary: Get Grpc Server List
+      description: Returns all known gRPC server model IDs so clients can probe latency and pick the fastest.
+      operationId: get_grpc_server_list
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  type: string
+                type: array
+                title: Response Get Grpc Server List Geo Base10 Grpc Servers Get
+      security:
+      - ApiKeyHeaderPatched: []
+  /geo:
+    get:
+      tags:
+      - Geo
+      summary: Get Geo
+      description: Return the client's country code and deployment region derived from IP.
+      operationId: get_geo
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeoResponse'
+components:
+  schemas:
+    GeoResponse:
+      properties:
+        country_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Country Code
+        region:
+          type: string
+          enum:
+          - us
+          - europe
+          - apac
+          title: Region
+      type: object
+      required:
+      - region
+      title: GeoResponse
+      description: Response for the /geo endpoint with country code and region.
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

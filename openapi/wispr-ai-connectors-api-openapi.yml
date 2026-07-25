@@ -1,0 +1,433 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Connectors API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Connectors
+paths:
+  /api/v1/connectors/connect:
+    post:
+      tags:
+      - Connectors
+      summary: Initiate Connection
+      operationId: initiate_connection
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InitiateConnectionRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InitiateConnectionResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/connectors/raw_connect:
+    post:
+      tags:
+      - Connectors
+      summary: Raw Initiate Connection
+      description: 'Solely meant for prototypes. This endpoint directly forwards a connection request to the underlying connector implementation.
+
+
+        Production code should use the `/connect` endpoint, as that is the only way to have a stable API
+
+        through provider changes. Users of this endpoint should assume breaking changes might occur arbitrarily.'
+      operationId: raw_initiate_connection
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RawInitiateConnectionRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InitiateConnectionResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/connectors/connection/{connection_id}/status:
+    get:
+      tags:
+      - Connectors
+      summary: Get Connection Status
+      operationId: get_connection_status
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: connection_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Connection Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectionStatusResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/connectors:
+    get:
+      tags:
+      - Connectors
+      summary: List Connectors
+      operationId: list_connectors
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectorsResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/connectors/disconnect:
+    post:
+      tags:
+      - Connectors
+      summary: Disconnect
+      operationId: disconnect
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DisconnectRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisconnectResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/connectors/list_calendar_events:
+    post:
+      tags:
+      - Connectors
+      summary: List Calendar Events
+      operationId: list_calendar_events
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListCalendarEventsRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCalendarEventsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+components:
+  schemas:
+    DisconnectRequest:
+      properties:
+        key:
+          $ref: '#/components/schemas/ConnectorKey'
+      type: object
+      required:
+      - key
+      title: DisconnectRequest
+      description: Request to disconnect a connector identified by its key.
+    GoogleCalendarEvent:
+      properties:
+        summary:
+          type: string
+          title: Summary
+          default: ''
+        description:
+          type: string
+          title: Description
+          default: ''
+        start:
+          type: string
+          format: date-time
+          title: Start
+        end:
+          type: string
+          format: date-time
+          title: End
+        organizer:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Organizer
+        attendees:
+          items:
+            type: string
+          type: array
+          title: Attendees
+        url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Url
+      type: object
+      required:
+      - start
+      - end
+      title: GoogleCalendarEvent
+    ConnectorStatus:
+      type: string
+      enum:
+      - pending
+      - active
+      - failed
+      title: ConnectorStatus
+    InitiateConnectionRequest:
+      properties:
+        key:
+          $ref: '#/components/schemas/ConnectorKey'
+        callback_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Callback Url
+      type: object
+      required:
+      - key
+      title: InitiateConnectionRequest
+      description: Request to start connecting a connector identified by its key.
+    RawInitiateConnectionRequest:
+      properties:
+        app:
+          type: string
+          title: App
+        callback_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Callback Url
+      type: object
+      required:
+      - app
+      title: RawInitiateConnectionRequest
+      description: Request to start connecting a connector identified by a raw app string.
+    ConnectorKey:
+      type: string
+      enum:
+      - calendar
+      - github
+      - gmail
+      - linear
+      - notion
+      - slack
+      - wispr
+      title: ConnectorKey
+      x-enum-varnames:
+      - Calendar
+      - Github
+      - GoogleAutomations
+      - Linear
+      - Notion
+      - Slack
+      - Wispr
+    ListCalendarEventsRequest:
+      properties:
+        time_min:
+          type: string
+          format: date-time
+          title: Time Min
+        time_max:
+          type: string
+          format: date-time
+          title: Time Max
+        max_results:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Results
+      type: object
+      required:
+      - time_min
+      - time_max
+      title: ListCalendarEventsRequest
+      description: Request to list calendar events within a time window.
+    ConnectionStatusResponse:
+      properties:
+        connection_id:
+          type: string
+          title: Connection Id
+        status:
+          $ref: '#/components/schemas/ConnectorStatus'
+        toolkit_slug:
+          type: string
+          title: Toolkit Slug
+        incomplete_scopes:
+          type: boolean
+          title: Incomplete Scopes
+          default: false
+      type: object
+      required:
+      - connection_id
+      - status
+      - toolkit_slug
+      title: ConnectionStatusResponse
+    ListCalendarEventsResponse:
+      properties:
+        successful:
+          type: boolean
+          title: Successful
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+        data:
+          items:
+            $ref: '#/components/schemas/GoogleCalendarEvent'
+          type: array
+          title: Data
+      type: object
+      required:
+      - successful
+      title: ListCalendarEventsResponse
+    DisconnectResponse:
+      properties:
+        successful:
+          type: boolean
+          title: Successful
+      type: object
+      required:
+      - successful
+      title: DisconnectResponse
+    ConnectorsResponse:
+      properties:
+        connectors:
+          items:
+            $ref: '#/components/schemas/ConnectorInfo'
+          type: array
+          title: Connectors
+      type: object
+      required:
+      - connectors
+      title: ConnectorsResponse
+      description: The list of connectors and their status for the user.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    InitiateConnectionResponse:
+      properties:
+        connection_id:
+          type: string
+          title: Connection Id
+        redirect_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Redirect Url
+      type: object
+      required:
+      - connection_id
+      title: InitiateConnectionResponse
+    ConnectorInfo:
+      properties:
+        key:
+          $ref: '#/components/schemas/ConnectorKey'
+        label:
+          type: string
+          title: Label
+        connected:
+          type: boolean
+          title: Connected
+        incomplete_scopes:
+          type: boolean
+          title: Incomplete Scopes
+          default: false
+        connected_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Connected Email
+      type: object
+      required:
+      - key
+      - label
+      - connected
+      title: ConnectorInfo
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

@@ -1,0 +1,350 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Marketing API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Marketing
+paths:
+  /marketing/redirect/{page}/{subpage}:
+    get:
+      tags:
+      - Marketing
+      summary: Marketing Redirect Page Subpage
+      description: 'Redirects to a page that prompts the user to open the app or download it.
+
+        page and subpage are optional path parameters.
+
+        All query parameters are preserved and passed to the deeplink.'
+      operationId: marketing_redirect_page_subpage
+      parameters:
+      - name: page
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Page
+      - name: subpage
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subpage
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            text/html:
+              schema:
+                type: string
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /marketing/redirect/{page}:
+    get:
+      tags:
+      - Marketing
+      summary: Marketing Redirect Page
+      description: 'Redirects to a page that prompts the user to open the app or download it.
+
+        page and subpage are optional path parameters.
+
+        All query parameters are preserved and passed to the deeplink.'
+      operationId: marketing_redirect_page
+      parameters:
+      - name: page
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Page
+      - name: subpage
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subpage
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            text/html:
+              schema:
+                type: string
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /marketing/redirect/:
+    get:
+      tags:
+      - Marketing
+      summary: Marketing Redirect Base
+      description: 'Redirects to a page that prompts the user to open the app or download it.
+
+        page and subpage are optional path parameters.
+
+        All query parameters are preserved and passed to the deeplink.'
+      operationId: marketing_redirect_base
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Page
+      - name: subpage
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subpage
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            text/html:
+              schema:
+                type: string
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /marketing/mic-quiz/email-results:
+    post:
+      tags:
+      - Marketing
+      summary: Send Mic Quiz Results Email
+      description: Send microphone quiz results email to the authenticated user.
+      operationId: send_mic_quiz_results_email
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MicQuizEmailRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /marketing/mic-quiz/email-results-v2:
+    post:
+      tags:
+      - Marketing
+      summary: Send Mic Quiz V2 Results Email
+      description: Send V2 microphone quiz results email to the authenticated user.
+      operationId: send_mic_quiz_v2_results_email
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MicQuizV2EmailRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+  /marketing/onboarding-webhook:
+    post:
+      tags:
+      - Marketing
+      summary: Onboarding Webhook
+      description: 'Customer.io webhook for onboarding campaign.
+
+        Returns user statistics for first-week users.'
+      operationId: onboarding_webhook
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OnboardingWebhookRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    MicQuizEmailRequest:
+      properties:
+        title:
+          type: string
+          title: Title
+          default: Your recommended setup!
+        subtitle:
+          type: string
+          title: Subtitle
+          default: ''
+        recommendations:
+          items:
+            $ref: '#/components/schemas/MicRecommendation'
+          type: array
+          title: Recommendations
+        show_less_ideal:
+          type: boolean
+          title: Show Less Ideal
+          default: false
+        less_ideal_text:
+          type: string
+          title: Less Ideal Text
+          default: ''
+      type: object
+      required:
+      - recommendations
+      title: MicQuizEmailRequest
+    OnboardingWebhookRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        token:
+          type: string
+          title: Token
+      type: object
+      required:
+      - email
+      - token
+      title: OnboardingWebhookRequest
+      description: Request schema for Customer.io onboarding webhook.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    MicQuizV2EmailRequest:
+      properties:
+        best_match:
+          type: string
+          enum:
+          - podcastMic
+          - gooseneckMic
+          - lavMic
+          - headsetWithMic
+          title: Best Match
+        title:
+          type: string
+          title: Title
+      type: object
+      required:
+      - best_match
+      - title
+      title: MicQuizV2EmailRequest
+      description: 'Payload for the V2 mic quiz email. Both fields are required — the template uses them
+
+        directly without fallbacks, so missing data will render as an empty highlight/title.'
+    MicRecommendation:
+      properties:
+        badge:
+          type: string
+          title: Badge
+        is_best:
+          type: boolean
+          title: Is Best
+          default: false
+        name:
+          type: string
+          title: Name
+        brand:
+          type: string
+          title: Brand
+          default: ''
+        description:
+          type: string
+          title: Description
+        amazon_url:
+          type: string
+          title: Amazon Url
+          default: ''
+      type: object
+      required:
+      - badge
+      - name
+      - description
+      title: MicRecommendation
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

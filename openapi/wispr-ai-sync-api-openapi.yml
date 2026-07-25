@@ -1,0 +1,123 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Sync API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Sync
+paths:
+  /api/v1/sync/check:
+    get:
+      tags:
+      - Sync
+      summary: Check Sync
+      description: 'Check which sync-managed resources have changed for the current user.
+
+
+        Auth: JWT-only (``Authenticated()``). This endpoint must NOT use
+
+        ``get_current_user_stateless`` — its only DB touch is the IP-allowlist
+
+        check inside ``Authenticated()`` (a per-user cached join, skipped while
+
+        enforcement is disabled). If this endpoint is ever extended to return
+
+        actual user data, upgrade auth accordingly.
+
+
+        Returns 503 if Redis is unreachable so the client can skip the cycle
+
+        and retry on the next interval.'
+      operationId: check_sync
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyncCheckResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+components:
+  schemas:
+    IncidentStatusDetail:
+      properties:
+        state:
+          type: string
+          enum:
+          - degraded
+          - outage
+          title: State
+        message:
+          type: string
+          title: Message
+        affected_regions:
+          items:
+            type: string
+            enum:
+            - us
+            - europe
+            - apac
+          type: array
+          title: Affected Regions
+        started_at:
+          type: string
+          format: date-time
+          title: Started At
+        incident_url:
+          type: string
+          title: Incident Url
+      type: object
+      required:
+      - state
+      - message
+      - affected_regions
+      - started_at
+      - incident_url
+      title: IncidentStatusDetail
+      description: Active incident details returned in the status response.
+    SyncCheckResponse:
+      properties:
+        changed:
+          items:
+            type: string
+          type: array
+          title: Changed
+        unchanged:
+          items:
+            type: string
+          type: array
+          title: Unchanged
+        timestamps:
+          additionalProperties:
+            type: string
+          type: object
+          title: Timestamps
+        client_region:
+          type: string
+          enum:
+          - us
+          - europe
+          - apac
+          title: Client Region
+        incident_status:
+          anyOf:
+          - $ref: '#/components/schemas/IncidentStatusDetail'
+          - type: 'null'
+      type: object
+      required:
+      - changed
+      - unchanged
+      - timestamps
+      - client_region
+      title: SyncCheckResponse
+      description: Response from ``GET /api/v1/sync/check``.
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

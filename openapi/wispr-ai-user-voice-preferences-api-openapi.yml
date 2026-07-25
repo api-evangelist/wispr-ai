@@ -1,0 +1,203 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics User Voice Preferences API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: User Voice Preferences
+paths:
+  /api/v1/user_voice_preferences:
+    get:
+      tags:
+      - User Voice Preferences
+      summary: List User Voice Preferences
+      description: Return all voice preference records for the authenticated user.
+      operationId: list_user_voice_preferences
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListUserVoicePreferencesResponse'
+      security:
+      - ApiKeyHeaderPatched: []
+  /api/v1/user_voice_preferences/upload:
+    post:
+      tags:
+      - User Voice Preferences
+      summary: Upload User Voice Preferences
+      description: 'Upsert a batch of voice preference records for the authenticated user.
+
+
+        The desktop client generates each record''s UUID locally. Re-uploading the
+
+        same record is idempotent: the existing row is updated, not duplicated.
+
+        Each saved row is also scheduled for Graphiti voice-memory ingest (202-style,
+
+        fire-and-forget — same as POST /memory/ingest).'
+      operationId: upload_user_voice_preferences
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadUserVoicePreferencesRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadUserVoicePreferencesResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeaderPatched: []
+components:
+  schemas:
+    UploadUserVoicePreferencesResponse:
+      properties:
+        num_rows_saved:
+          type: integer
+          title: Num Rows Saved
+        ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Ids
+      type: object
+      required:
+      - num_rows_saved
+      - ids
+      title: UploadUserVoicePreferencesResponse
+      description: Response model confirming which voice preference records were saved.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    VoicePreferenceUploadRecord:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        preference:
+          type: string
+          title: Preference
+        filter:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Filter
+      type: object
+      required:
+      - id
+      - preference
+      title: VoicePreferenceUploadRecord
+      description: 'A single voice preference record uploaded from the desktop client.
+
+
+        `filter` is the LLM-derived scope string (e.g. "app:gmail-language:de").
+
+        `None` means a general preference that is not scoped to any dimension.'
+    VoicePreferenceRecord:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        preference:
+          type: string
+          title: Preference
+        filter:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Filter
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        modified_at:
+          type: string
+          format: date-time
+          title: Modified At
+      type: object
+      required:
+      - id
+      - preference
+      - created_at
+      - modified_at
+      title: VoicePreferenceRecord
+      description: A voice preference row returned from GET /user_voice_preferences.
+    UploadUserVoicePreferencesRequest:
+      properties:
+        voice_preferences:
+          items:
+            $ref: '#/components/schemas/VoicePreferenceUploadRecord'
+          type: array
+          title: Voice Preferences
+      type: object
+      required:
+      - voice_preferences
+      title: UploadUserVoicePreferencesRequest
+      description: Request model for bulk-uploading voice preference records.
+    ListUserVoicePreferencesResponse:
+      properties:
+        voice_preferences:
+          items:
+            $ref: '#/components/schemas/VoicePreferenceRecord'
+          type: array
+          title: Voice Preferences
+      type: object
+      required:
+      - voice_preferences
+      title: ListUserVoicePreferencesResponse
+      description: All voice preference rows for the authenticated user, newest first.
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

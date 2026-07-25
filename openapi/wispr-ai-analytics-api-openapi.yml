@@ -1,0 +1,421 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Analytics
+paths:
+  /api/v1/analytics/track:
+    post:
+      tags:
+      - Analytics
+      summary: Track Event Endpoint
+      description: Deprecated no-op retained for backward compatibility; validates and discards the payload (analytics moved to PostHog).
+      operationId: track_event_endpoint
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrackEventRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      deprecated: true
+  /api/v1/analytics/user-metadata:
+    post:
+      tags:
+      - Analytics
+      summary: Ingest User Metadata Endpoint
+      description: Ingest user metadata into ClickHouse.
+      operationId: ingest_user_metadata_endpoint
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserMetadataRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /api/v1/analytics/user-metadata/query:
+    post:
+      tags:
+      - Analytics
+      summary: Query User Metadata Endpoint
+      description: Fetch user metadata rows from ClickHouse with pagination using request body.
+      operationId: query_user_metadata_endpoint
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserMetadataQueryRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserMetadataListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+components:
+  schemas:
+    PaginationMetadata:
+      properties:
+        page_size:
+          type: integer
+          title: Page Size
+        page_number:
+          type: integer
+          title: Page Number
+        total_pages:
+          type: integer
+          title: Total Pages
+        total_rows:
+          type: integer
+          title: Total Rows
+      type: object
+      required:
+      - page_size
+      - page_number
+      - total_pages
+      - total_rows
+      title: PaginationMetadata
+    src__backend_service__schemas__api__clickhouse__Source:
+      type: string
+      enum:
+      - desktop
+      - ios
+      - web
+      - landing
+      title: Source
+    UserMetadataListResponse:
+      properties:
+        rows:
+          items:
+            $ref: '#/components/schemas/UserMetadataResponse'
+          type: array
+          title: Rows
+        pagination:
+          $ref: '#/components/schemas/PaginationMetadata'
+      type: object
+      required:
+      - rows
+      - pagination
+      title: UserMetadataListResponse
+    TrackEventRequest:
+      properties:
+        event:
+          type: string
+          title: Event
+        source:
+          $ref: '#/components/schemas/src__backend_service__schemas__api__clickhouse__Source'
+        properties:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Properties
+        user_id:
+          type: string
+          title: User Id
+      type: object
+      required:
+      - event
+      - source
+      - user_id
+      title: TrackEventRequest
+      description: Request model for tracking events
+    UserMetadataResponse:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        metadata_date:
+          type: string
+          format: date
+          title: Metadata Date
+        first_name:
+          type: string
+          title: First Name
+        last_name:
+          type: string
+          title: Last Name
+        email:
+          type: string
+          title: Email
+        enriched_linked_in_url:
+          type: string
+          title: Enriched Linked In Url
+        enriched_job_title:
+          type: string
+          title: Enriched Job Title
+        name:
+          type: string
+          title: Name
+        website:
+          type: string
+          title: Website
+        industry:
+          type: string
+          title: Industry
+        employee_count:
+          type: integer
+          title: Employee Count
+        locality:
+          type: string
+          title: Locality
+        country:
+          type: string
+          title: Country
+        founded:
+          type: integer
+          title: Founded
+        work_email:
+          type: string
+          title: Work Email
+        fundraising:
+          type: string
+          title: Fundraising
+        modified_at:
+          type: string
+          format: date-time
+          title: Modified At
+        event_type:
+          type: string
+          title: Event Type
+        id:
+          type: string
+          format: uuid
+          title: Id
+      type: object
+      required:
+      - created_at
+      - metadata_date
+      - first_name
+      - last_name
+      - email
+      - enriched_linked_in_url
+      - enriched_job_title
+      - name
+      - website
+      - industry
+      - employee_count
+      - locality
+      - country
+      - founded
+      - work_email
+      - fundraising
+      - modified_at
+      - event_type
+      - id
+      title: UserMetadataResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    UserMetadataRequest:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        event_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Event Type
+          default: ''
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+          default: ''
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+          default: ''
+        email:
+          type: string
+          title: Email
+        modified_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Modified At
+          description: Defaults to current UTC time.
+        enriched_linked_in_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Enriched Linked In Url
+          default: ''
+        enriched_job_title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Enriched Job Title
+          default: ''
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          default: ''
+        website:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Website
+          default: ''
+        industry:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Industry
+          default: ''
+        employee_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Employee Count
+          default: -1
+        founded:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Founded
+          default: -1
+        locality:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Locality
+          default: ''
+        country:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Country
+          default: ''
+        work_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Work Email
+          default: ''
+        fundraising:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Fundraising
+          default: ''
+      type: object
+      required:
+      - id
+      - email
+      title: UserMetadataRequest
+      description: Request model for ingesting user metadata into ClickHouse
+    UserMetadataQueryRequest:
+      properties:
+        uuids:
+          anyOf:
+          - items:
+              type: string
+              format: uuid
+            type: array
+          - type: 'null'
+          title: Uuids
+        start_time:
+          type: string
+          title: Start Time
+        end_time:
+          type: string
+          title: End Time
+        page_size:
+          type: integer
+          title: Page Size
+          default: 100
+        page_number:
+          type: integer
+          title: Page Number
+          default: 1
+      type: object
+      required:
+      - start_time
+      - end_time
+      title: UserMetadataQueryRequest
+      description: Request body for querying user metadata with large UUID lists.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

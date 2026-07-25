@@ -1,0 +1,1644 @@
+openapi: 3.0.3
+info:
+  title: Wispr Backend Analytics Sync WS API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Sync WS
+paths:
+  /api/v1/sync/ws/admin/test-publish:
+    post:
+      tags:
+      - Sync WS
+      summary: Admin Test Publish
+      description: 'Synthesize one or more sync events for ``user_id``.
+
+
+        ``burst > 1`` is the gap-too-large drill: publishing more than the replay
+
+        buffer size (``publisher.REPLAY_MAXLEN``) forces the oldest entries out so
+
+        a reconnecting client with a stale ``since`` falls through to
+
+        ``/sync/check``.'
+      operationId: admin_test_publish
+      security:
+      - ApiKeyHeaderPatched: []
+      parameters:
+      - name: burst
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 2000
+          minimum: 1
+          default: 1
+          title: Burst
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminTestPublishRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminTestPublishResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/sync/ws/schema:
+    get:
+      tags:
+      - Sync WS
+      summary: Sync Ws Schema
+      description: 'Return a stub envelope. Exists so the ``SyncEvent`` discriminated
+
+        union is reachable from the OpenAPI spec (and thus the generated TS
+
+        client). Admin-gating isn''t required — it returns no user data.'
+      operationId: sync_ws_schema
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyncEventEnvelope'
+  /api/v1/sync/ws/client-schema:
+    get:
+      tags:
+      - Sync WS
+      summary: Sync Ws Client Schema
+      description: Companion to ``/ws/schema`` for the client-to-server frame union.
+      operationId: sync_ws_client_schema
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyncClientFrameEnvelope'
+components:
+  schemas:
+    AdminTestPublishOptions:
+      properties:
+        meeting_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Meeting Id
+      type: object
+      title: AdminTestPublishOptions
+    SyncEventUnrecognized:
+      properties:
+        type:
+          type: string
+          const: unrecognized
+          title: Type
+        seq:
+          type: integer
+          title: Seq
+        ts:
+          type: string
+          format: date-time
+          title: Ts
+        requested_event_type:
+          type: string
+          title: Requested Event Type
+      type: object
+      required:
+      - type
+      - seq
+      - ts
+      - requested_event_type
+      title: SyncEventUnrecognized
+      description: 'Escape hatch for the admin test-publish endpoint.
+
+
+        Lets the server emit a well-formed envelope whose ``type`` the client
+
+        doesn''t know yet, so the desktop harness can verify the unknown-event-type
+
+        path end-to-end without a server-side branch fabricating a real event.'
+    NotificationPlatformType:
+      type: string
+      enum:
+      - desktop
+      - ios
+      - both
+      title: NotificationPlatformType
+      description: Client platform(s) a notification targets.
+    PolishInstructions:
+      properties:
+        default:
+          additionalProperties:
+            type: boolean
+          type: object
+          title: Default
+          default: {}
+        custom:
+          additionalProperties:
+            type: boolean
+          type: object
+          title: Custom
+          default: {}
+      type: object
+      title: PolishInstructions
+      description: Saved toggle rules for Polish transforms (built-in defaults + custom).
+    SyncEventMeetingChanged:
+      properties:
+        type:
+          type: string
+          const: meeting.changed
+          title: Type
+        seq:
+          type: integer
+          title: Seq
+        ts:
+          type: string
+          format: date-time
+          title: Ts
+        meeting_id:
+          type: string
+          format: uuid
+          title: Meeting Id
+        refine_status:
+          anyOf:
+          - $ref: '#/components/schemas/RefineJobStatus'
+          - type: 'null'
+      type: object
+      required:
+      - type
+      - seq
+      - ts
+      - meeting_id
+      title: SyncEventMeetingChanged
+      description: 'A meeting row''s user-visible state changed.
+
+
+        Thin-ticket — client refetches the meeting row. A resource-level ``changed``
+
+        shape (matching ``notes.changed`` / ``calendar.changed``) is preferred over
+
+        ``ready`` variants that inline a payload:
+
+        the row''s fields can be edited cross-device or regenerated, so an inlined value
+
+        rots the moment it can change again.
+
+
+        ``refine_status`` is an advisory hint carrying the refine pipeline''s current stage
+
+        (emitted on each transition so a client can render progress); the pulled row stays
+
+        authoritative. Optional-with-default so pre-hint payloads still parse.'
+    FlowStateProcessingStatus:
+      type: string
+      enum:
+      - not_started
+      - processing
+      - complete
+      - failed
+      title: FlowStateProcessingStatus
+    FlowState2025Response:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        processing_status:
+          $ref: '#/components/schemas/FlowStateProcessingStatus'
+        total_words:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Total Words
+        total_words_percentile:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Total Words Percentile
+        last_active:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Active
+        total_dictations_desktop:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Total Dictations Desktop
+        total_dictations_mobile:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Total Dictations Mobile
+        wpm_desktop:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Wpm Desktop
+        wpm_mobile:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Wpm Mobile
+        longest_streak_days:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Longest Streak Days
+        top_app:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Top App
+        top_app_day_of_week:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Top App Day Of Week
+        top_app_hour_of_day:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Top App Hour Of Day
+        top_app_category:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Top App Category
+        secondary_app_category:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Secondary App Category
+        signature_phrase:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Signature Phrase
+        signature_phrase_app:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Signature Phrase App
+        most_used_phrase:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Most Used Phrase
+        dictation_strength:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Dictation Strength
+        alter_ego:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Alter Ego
+        alter_ego_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Alter Ego Description
+        avg_session_duration_desktop:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Avg Session Duration Desktop
+        avg_session_duration_mobile:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Avg Session Duration Mobile
+        goals:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Goals
+      type: object
+      required:
+      - user_id
+      - processing_status
+      title: FlowState2025Response
+    SyncEventReconnectResync:
+      properties:
+        type:
+          type: string
+          const: reconnect_resync
+          title: Type
+        seq:
+          type: integer
+          title: Seq
+        ts:
+          type: string
+          format: date-time
+          title: Ts
+        reason:
+          type: string
+          title: Reason
+      type: object
+      required:
+      - type
+      - seq
+      - ts
+      - reason
+      title: SyncEventReconnectResync
+      description: 'Server-initiated reconnect signal.
+
+
+        Client should drop its last_seq, reconnect, and call ``/sync/check`` to
+
+        bootstrap from snapshot.'
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    UserPreferences:
+      properties:
+        onboarding_role:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Onboarding Role
+        onboarding_industry:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Onboarding Industry
+        privacy_mode:
+          type: boolean
+          title: Privacy Mode
+          default: false
+        share_data:
+          type: boolean
+          title: Share Data
+          default: true
+        cloud_sync:
+          type: boolean
+          title: Cloud Sync
+          default: true
+        output_languages:
+          items:
+            type: string
+            enum:
+            - ''
+            - en
+            - engb
+            - enca
+            - zh
+            - zhcn
+            - de
+            - dech
+            - es
+            - ru
+            - ko
+            - fr
+            - ja
+            - pt
+            - tr
+            - pl
+            - ca
+            - nl
+            - ar
+            - sv
+            - it
+            - id
+            - hi
+            - hien
+            - fi
+            - vi
+            - he
+            - uk
+            - el
+            - ms
+            - cs
+            - ro
+            - da
+            - hu
+            - ta
+            - 'no'
+            - th
+            - ur
+            - hr
+            - bg
+            - lt
+            - la
+            - mi
+            - ml
+            - cy
+            - sk
+            - te
+            - fa
+            - lv
+            - bn
+            - sr
+            - az
+            - sl
+            - kn
+            - et
+            - mk
+            - br
+            - eu
+            - is
+            - hy
+            - ne
+            - mn
+            - bs
+            - kk
+            - sq
+            - sw
+            - gl
+            - mr
+            - pa
+            - si
+            - km
+            - sn
+            - yo
+            - so
+            - af
+            - oc
+            - ka
+            - be
+            - tg
+            - sd
+            - gu
+            - am
+            - yi
+            - lo
+            - uz
+            - fo
+            - ht
+            - ps
+            - tk
+            - nn
+            - mt
+            - sa
+            - lb
+            - my
+            - bo
+            - tl
+            - mg
+            - as
+            - tt
+            - haw
+            - ln
+            - ha
+            - ba
+            - jv
+            - su
+            - yue
+          type: array
+          title: Output Languages
+          default:
+          - en
+        personalization_styles:
+          $ref: '#/components/schemas/PersonalizationStyles'
+          default:
+            personal: formal
+            work: formal
+            email: formal
+            other: formal
+            unset: default
+        personalizationOnboardingCompleted:
+          type: boolean
+          title: Personalizationonboardingcompleted
+          default: false
+        polish_instructions:
+          $ref: '#/components/schemas/PolishInstructions'
+          default:
+            default: {}
+            custom: {}
+        auto_cleanup_level:
+          anyOf:
+          - type: string
+            enum:
+            - none
+            - light
+            - medium
+            - high
+            - full
+          - type: 'null'
+          title: Auto Cleanup Level
+        local_data_policy:
+          anyOf:
+          - type: string
+            enum:
+            - store_normally
+            - delete_after_24h
+            - never_store
+          - type: 'null'
+          title: Local Data Policy
+        notetaker_transcript_retention:
+          $ref: '#/components/schemas/NotetakerTranscriptRetention'
+          default: never_delete
+        fulfilled_intents:
+          items:
+            $ref: '#/components/schemas/OnboardingIntent'
+          type: array
+          title: Fulfilled Intents
+          default: []
+        ui_locale:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ui Locale
+      type: object
+      title: UserPreferences
+    AdminTestPublishRequest:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        event_type:
+          type: string
+          enum:
+          - heartbeat
+          - reconnect_resync
+          - gap_too_large
+          - notification.created
+          - preferences.changed
+          - notes.changed
+          - meeting.changed
+          - meeting.transcript_changed
+          - calendar.changed
+          title: Event Type
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reason
+        options:
+          anyOf:
+          - $ref: '#/components/schemas/AdminTestPublishOptions'
+          - type: 'null'
+      type: object
+      required:
+      - user_id
+      - event_type
+      title: AdminTestPublishRequest
+    SyncClientSubscribe:
+      properties:
+        type:
+          type: string
+          const: subscribe
+          title: Type
+        since:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Since
+      type: object
+      required:
+      - type
+      title: SyncClientSubscribe
+      description: 'First frame after the WS upgrade.
+
+
+        Establishes the subscription and optionally resumes from ``since`` (the
+
+        client''s last delivered sequence; omitted on a cold start).'
+    PersonalizationStyles:
+      properties:
+        personal:
+          $ref: '#/components/schemas/PersonalizationStyle'
+          default: formal
+        work:
+          $ref: '#/components/schemas/PersonalizationStyle'
+          default: formal
+        email:
+          $ref: '#/components/schemas/PersonalizationStyle'
+          default: formal
+        other:
+          $ref: '#/components/schemas/PersonalizationStyle'
+          default: formal
+        unset:
+          $ref: '#/components/schemas/PersonalizationStyle'
+          default: default
+      type: object
+      title: PersonalizationStyles
+    SyncEventHeartbeat:
+      properties:
+        type:
+          type: string
+          const: heartbeat
+          title: Type
+        seq:
+          type: integer
+          title: Seq
+        ts:
+          type: string
+          format: date-time
+          title: Ts
+      type: object
+      required:
+      - type
+      - seq
+      - ts
+      title: SyncEventHeartbeat
+      description: Keepalive frame emitted by the server on a fixed cadence.
+    SyncEventEnterpriseMembershipChanged:
+      properties:
+        type:
+          type: string
+          const: enterprise.membership_changed
+          title: Type
+        seq:
+          type: integer
+          title: Seq
+        ts:
+          type: string
+          format: date-time
+          title: Ts
+        enterprise_id:
+          type: string
+          title: Enterprise Id
+      type: object
+      required:
+      - type
+      - seq
+      - ts
+      - enterprise_id
+      title: SyncEventEnterpriseMembershipChanged
+      description: 'An enterprise''s membership roster changed (member added/removed via SCIM or admin action).
+
+
+        Thin — the client refetches its subscription state through
+
+        ``GET /payment/subscription`` (enterprise role/seat reach the client through
+
+        the billing path; there is no separate enterprise surface on desktop).
+
+
+        Fanned out to all current members plus the affected/removed user (so a
+
+        removed user''s client drops its enterprise state).'
+    SyncClientFrameEnvelope:
+      properties:
+        sync_frame:
+          oneOf:
+          - $ref: '#/components/schemas/SyncClientAck'
+          - $ref: '#/components/schemas/SyncClientPing'
+          - $ref: '#/components/schemas/SyncClientSubscribe'
+          title: Sync Frame
+          discriminator:
+            propertyName: type
+            mapping:
+              ack: '#/components/schemas/SyncClientAck'
+              ping: '#/components/schemas/SyncClientPing'
+              subscribe: '#/components/schemas/SyncClientSubscribe'
+      type: object
+      required:
+      - sync_frame
+      title: SyncClientFrameEnvelope
+      description: Wrapper for the client-frame union — same OpenAPI surfacing trick.
+    AdminTestPublishResponse:
+      properties:
+        published:
+          type: integer
+          title: Published
+        last_entry_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Entry Id
+      type: object
+      required:
+      - published
+      - last_entry_id
+      title: AdminTestPublishResponse
+    SyncClientAck:
+      properties:
+        type:
+          type: string
+          const: ack
+          title: Type
+        seq:
+          type: integer
+          title: Seq
+      type: object
+      required:
+      - type
+      - seq
+      title: SyncClientAck
+      description: 'Client acknowledges receipt up to ``seq``.
+
+
+        Server uses for stream trimming heuristics.'
+    SyncEventSubscriptionChanged:
+      properties:
+        type:
+          type: string
+          const: subscription.changed
+          title: Type
+        seq:
+          type: integer
+          title: Seq
+        ts:
+          type: string
+          format: date-time
+          title: Ts
+        payload:
+          $ref: '#/components/schemas/SubscriptionPayload'
+      type: object
+      required:
+      - type
+      - seq
+      - ts
+      - payload
+      title: SyncEventSubscriptionChanged
+      description: 'The user''s subscription state changed (Stripe or RevenueCat webhook).
+
+
+        Fat event — the full rendered ``SubscriptionPayload`` travels on the wire so
+
+        the client applies it directly without a refetch. Built from the primary at
+
+        publish time (read-your-writes), so it is never stale relative to the write
+
+        that triggered it.'
+    SyncEventFlowStateJobCompleted:
+      properties:
+        type:
+          type: string
+          const: flow_state_job.completed
+          title: Type
+        seq:
+          type: integer
+          title: Seq
+        ts:
+          type: string
+          format: date-time
+          title: Ts
+        payload:
+          $ref: '#/components/schemas/FlowState2025Response'
+      type: object
+      required:
+      - type
+      - seq
+      - ts
+      - payload
+      title: SyncEventFlowStateJobCompleted
+      description: 'A flow-state-2025 background job finished and committed its LLM fields.
+
+
+        Fat event — the full ``FlowState2025Response`` (same shape the desktop polls
+
+        via ``GET /llm/flow_state_2025``) travels on the wire so the client renders
+
+        immediately without a follow-up REST fetch. Published from the background
+
+        processor''s completion transition (post-commit, read-your-writes).'
+    NotificationResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        type:
+          $ref: '#/components/schemas/NotificationType'
+        key:
+          type: string
+          title: Key
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+        text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Text
+        ios_title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ios Title
+        ios_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ios Text
+        platform_type:
+          $ref: '#/components/schemas/NotificationPlatformType'
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        is_archived:
+          type: boolean
+          title: Is Archived
+      type: object
+      required:
+      - id
+      - type
+      - key
+      - title
+      - text
+      - ios_title
+      - ios_text
+      - platform_type
+      - created_at
+      - is_archived
+      title: NotificationResponse
+      description: A single notification as returned to the client.
+    RefineJobStatus:
+      type: string
+      enum:
+      - awaiting_audio
+      - transcribing
+      - summarizing
+      - complete
+      - failed
+      - abandoned
+      title: RefineJobStatus
+    VoiceProfileProcessingStatus:
+      type: string
+      enum:
+      - NOT_STARTED
+      - PROCESSING
+      - COMPLETE
+      - FAILED
+      title: VoiceProfileProcessingStatus
+      description: Processing state of a user's voice profile generation.
+    SyncEventIncidentBannerUpdated:
+      properties:
+        type:
+          type: string
+          const: incident_banner.updated
+          title: Type
+        seq:
+          type: integer
+          title: Seq
+        ts:
+          type: string
+          format: date-time
+          title: Ts
+        payload:
+          anyOf:
+          - $ref: '#/components/schemas/IncidentStatusDetail'
+          - type: 'null'
+      type: object
+      required:
+      - type
+      - seq
+      - ts
+      title: SyncEventIncidentBannerUpdated
+      description: 'The production incident banner changed for ALL users (global fanout).
+
+
+        Fat event carrying the same ``IncidentStatusDetail`` the bootstrap
+
+        ``/sync/check`` returns. ``payload=None`` means the incident was cleared —
+
+        the client tears down its banner. Fanned out on the single ``sync:global``
+
+        channel every connected client subscribes to, not a per-user channel.'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    SyncEventMeetingTranscriptChanged:
+      properties:
+        type:
+          type: string
+          const: meeting.transcript_changed
+          title: Type
+        seq:
+          type: integer
+          title: Seq
+        ts:
+          type: string
+          format: date-time
+          title: Ts
+        meeting_id:
+          type: string
+          format: uuid
+          title: Meeting Id
+      type: object
+      required:
+      - type
+      - seq
+      - ts
+      - meeting_id
+      title: SyncEventMeetingTranscriptChanged
+      description: 'Refined transcript persisted for ``meeting_id``.
+
+
+        Thin-ticket — client refetches transcript bytes through the existing inline
+
+        sync path.
+
+
+        Kept separate from ``meeting.changed`` because transcript bytes are a
+
+        distinct surface (different consumers, different refetch path) from the
+
+        meeting row''s columns.'
+    SyncEventVoiceProfileReady:
+      properties:
+        type:
+          type: string
+          const: voice_profile.ready
+          title: Type
+        seq:
+          type: integer
+          title: Seq
+        ts:
+          type: string
+          format: date-time
+          title: Ts
+        payload:
+          $ref: '#/components/schemas/VoiceProfileResponse'
+      type: object
+      required:
+      - type
+      - seq
+      - ts
+      - payload
+      title: SyncEventVoiceProfileReady
+      description: 'A voice-profile background job finished and committed a profile row.
+
+
+        Fat event — the full ``VoiceProfileResponse`` (same shape the desktop polls
+
+        via ``GET /llm/voice_profile``) travels on the wire so the client renders
+
+        immediately without a follow-up REST fetch. Published from the background
+
+        processor''s completion transition (post-commit, read-your-writes).'
+    NotificationType:
+      type: string
+      enum:
+      - achievement
+      - referral
+      - announcement
+      title: NotificationType
+      description: Category of a user notification.
+    SyncEventNotificationCreated:
+      properties:
+        type:
+          type: string
+          const: notification.created
+          title: Type
+        seq:
+          type: integer
+          title: Seq
+        ts:
+          type: string
+          format: date-time
+          title: Ts
+        payload:
+          $ref: '#/components/schemas/NotificationResponse'
+      type: object
+      required:
+      - type
+      - seq
+      - ts
+      - payload
+      title: SyncEventNotificationCreated
+      description: 'A new notification has been created for the user.
+
+
+        Inline (fat) event: the entire ``NotificationResponse`` travels on the wire
+
+        so the client can render a toast immediately without a follow-up REST fetch.'
+    SyncClientPing:
+      properties:
+        type:
+          type: string
+          const: ping
+          title: Type
+        ts:
+          type: string
+          format: date-time
+          title: Ts
+      type: object
+      required:
+      - type
+      - ts
+      title: SyncClientPing
+      description: Client liveness probe; server replies with the next heartbeat.
+    SyncEventNotesChanged:
+      properties:
+        type:
+          type: string
+          const: notes.changed
+          title: Type
+        seq:
+          type: integer
+          title: Seq
+        ts:
+          type: string
+          format: date-time
+          title: Ts
+      type: object
+      required:
+      - type
+      - seq
+      - ts
+      title: SyncEventNotesChanged
+      description: 'Notes set changed.
+
+
+        Thin-ticket — client refetches via the existing notes sync flow.'
+    VoiceProfileResponse:
+      properties:
+        processing_status:
+          $ref: '#/components/schemas/VoiceProfileProcessingStatus'
+        headline:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Headline
+        superpower_title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Superpower Title
+        superpower_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Superpower Description
+        peak_time_label:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Peak Time Label
+        peak_time_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Peak Time Description
+        peak_time_top_app:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Peak Time Top App
+        catch_phrase:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Catch Phrase
+        catch_phrase_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Catch Phrase Description
+        persona:
+          anyOf:
+          - type: string
+            enum:
+            - Analysis
+            - Brainstorm
+            - Coding
+            - Collaboration
+            - Create
+            - Deep thought
+            - Dreaming
+            - Educate
+            - Finance
+            - Healthcare & Life Sciences
+            - Idea generation
+            - Leadership
+            - Long writing
+            - Manage
+            - Multi-tasking
+            - Multilingual
+            - On the go
+            - Organize
+            - Presenting
+            - Reporting
+            - Support
+            - Thinking
+          - type: string
+          - type: 'null'
+          title: Persona
+        most_used_word:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Most Used Word
+        most_removed_word:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Most Removed Word
+        word_count_milestone:
+          anyOf:
+          - type: integer
+            enum:
+            - 2000
+            - 12000
+            - 37000
+            - 87000
+            - 162000
+            - 262000
+            - 362000
+            - 462000
+            - 562000
+            - 662000
+          - type: 'null'
+          title: Word Count Milestone
+        created_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Created At
+      type: object
+      required:
+      - processing_status
+      title: VoiceProfileResponse
+      description: The generated voice profile and its processing status for a user.
+    SyncEventTodosChanged:
+      properties:
+        type:
+          type: string
+          const: todos.changed
+          title: Type
+        seq:
+          type: integer
+          title: Seq
+        ts:
+          type: string
+          format: date-time
+          title: Ts
+      type: object
+      required:
+      - type
+      - seq
+      - ts
+      title: SyncEventTodosChanged
+      description: 'Todos set changed.
+
+
+        Thin-ticket — client refetches via the existing ``/todos/sync`` flow.
+
+        Coarse (no ``todo_id``): the client re-pulls the whole resource, and a
+
+        per-row event would mint unbounded Redis keys (the 2026-06-01 OOM).'
+    SyncEventPreferencesChanged:
+      properties:
+        type:
+          type: string
+          const: preferences.changed
+          title: Type
+        seq:
+          type: integer
+          title: Seq
+        ts:
+          type: string
+          format: date-time
+          title: Ts
+        payload:
+          $ref: '#/components/schemas/PreferencesResponse'
+      type: object
+      required:
+      - type
+      - seq
+      - ts
+      - payload
+      title: SyncEventPreferencesChanged
+      description: 'User preferences updated.
+
+
+        Inline (fat) — full ``PreferencesResponse`` travels on the wire so peers
+
+        can converge via last-writer-wins on the ``modified_at`` echo.'
+    SyncEventCalendarChanged:
+      properties:
+        type:
+          type: string
+          const: calendar.changed
+          title: Type
+        seq:
+          type: integer
+          title: Seq
+        ts:
+          type: string
+          format: date-time
+          title: Ts
+      type: object
+      required:
+      - type
+      - seq
+      - ts
+      title: SyncEventCalendarChanged
+      description: 'Calendar state changed.
+
+
+        Thin-ticket — client refetches the calendar list.'
+    NotetakerTranscriptRetention:
+      type: string
+      enum:
+      - never_delete
+      - 1_day
+      - 7_days
+      - 30_days
+      - 90_days
+      - 180_days
+      - 365_days
+      title: NotetakerTranscriptRetention
+    IncidentStatusDetail:
+      properties:
+        state:
+          type: string
+          enum:
+          - degraded
+          - outage
+          title: State
+        message:
+          type: string
+          title: Message
+        affected_regions:
+          items:
+            type: string
+            enum:
+            - us
+            - europe
+            - apac
+          type: array
+          title: Affected Regions
+        started_at:
+          type: string
+          format: date-time
+          title: Started At
+        incident_url:
+          type: string
+          title: Incident Url
+      type: object
+      required:
+      - state
+      - message
+      - affected_regions
+      - started_at
+      - incident_url
+      title: IncidentStatusDetail
+      description: Active incident details returned in the status response.
+    SyncEventAutomationsChanged:
+      properties:
+        type:
+          type: string
+          const: automations.changed
+          title: Type
+        seq:
+          type: integer
+          title: Seq
+        ts:
+          type: string
+          format: date-time
+          title: Ts
+      type: object
+      required:
+      - type
+      - seq
+      - ts
+      title: SyncEventAutomationsChanged
+      description: 'Automations set changed.
+
+
+        Thin-ticket — the client refetches via the ``/automations/sync`` pull.
+
+        Coarse (no automation id): the client re-pulls the whole resource, and a
+
+        per-row event would mint unbounded Redis keys (the 2026-06-01 OOM).'
+    SubscriptionPayload:
+      properties:
+        status:
+          type: string
+          title: Status
+        plan:
+          type: string
+          title: Plan
+        is_subscribed:
+          type: boolean
+          title: Is Subscribed
+        source_of_subscription:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Source Of Subscription
+        renews_at:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Renews At
+        trial_ends_at:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Trial Ends At
+        created_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Created At
+        credits:
+          type: integer
+          title: Credits
+          default: 0
+        is_student:
+          type: boolean
+          title: Is Student
+          default: false
+        total_trial_days:
+          type: integer
+          title: Total Trial Days
+          default: 0
+        cancel_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Cancel At
+        cancel_at_period_end:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Cancel At Period End
+        past_due_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Past Due At
+        most_recent_enterprise_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Most Recent Enterprise Id
+        team_domain_status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Domain Status
+        skip_default_trial:
+          type: boolean
+          title: Skip Default Trial
+          default: false
+        team_trial_given:
+          type: boolean
+          title: Team Trial Given
+          default: false
+        desktop_trial_given:
+          type: boolean
+          title: Desktop Trial Given
+          default: false
+        mobile_trial_given:
+          type: boolean
+          title: Mobile Trial Given
+          default: false
+        trial_extension_days_claimed:
+          type: integer
+          title: Trial Extension Days Claimed
+          default: 0
+        bonus_ends_at:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Bonus Ends At
+        grace_period_ends_at:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Grace Period Ends At
+      additionalProperties: true
+      type: object
+      required:
+      - status
+      - plan
+      - is_subscribed
+      title: SubscriptionPayload
+      description: 'Rendered subscription state mirroring ``stripe_service.get_subscription_details``.
+
+
+        The fat ``subscription.changed`` event carries this so the client applies it
+
+        directly — no follow-up ``GET /payment/subscription`` and therefore no
+
+        replica-lag race. The producer builds it from the same read path as that
+
+        endpoint but on the writer session (read-your-writes); see
+
+        ``services/sync_ws/subscription_publisher.py``.
+
+
+        ``get_subscription_details`` returns a loosely-typed dict whose keys vary by
+
+        branch (personal / enterprise / mobile / trial / none). The always-present
+
+        keys are typed here; branch-conditional keys (``cancel_at``, ``past_due_at``,
+
+        ``most_recent_enterprise_id``, ``team_domain_status``) are optional. ``extra``
+
+        is permitted so the payload stays a forward-compatible superset of the GET
+
+        response: a new field added to that dict reaches the client without a schema
+
+        bump, and the client ignores keys it doesn''t know.'
+    SyncEventEnterpriseSubscriptionChanged:
+      properties:
+        type:
+          type: string
+          const: enterprise.subscription_changed
+          title: Type
+        seq:
+          type: integer
+          title: Seq
+        ts:
+          type: string
+          format: date-time
+          title: Ts
+        enterprise_id:
+          type: string
+          title: Enterprise Id
+      type: object
+      required:
+      - type
+      - seq
+      - ts
+      - enterprise_id
+      title: SyncEventEnterpriseSubscriptionChanged
+      description: 'An enterprise''s subscription changed (enterprise Stripe webhook or an admin plan switch).
+
+
+        Thin — every current member refetches its subscription state through the
+
+        billing path, same routing as ``enterprise.membership_changed``.'
+    PreferencesResponse:
+      properties:
+        preferences:
+          $ref: '#/components/schemas/UserPreferences'
+        modified_at:
+          type: string
+          format: date-time
+          title: Modified At
+      type: object
+      required:
+      - preferences
+      - modified_at
+      title: PreferencesResponse
+      description: 'Full snapshot of a user''s preferences plus the server-assigned
+
+        ``modified_at`` watermark. Used as the inline payload for the
+
+        ``preferences.changed`` sync event so peers can converge via
+
+        last-writer-wins without an extra refetch.'
+    OnboardingIntent:
+      type: string
+      enum:
+      - spend_time_typing
+      - flow_use_case
+      - about_yourself
+      - work_environment
+      - language_preference
+      - attribution
+      - privacy_consent
+      - personalization_styles
+      - personalization_styles_default
+      - trial_activation
+      - voice_profile
+      - product_value_prop
+      title: OnboardingIntent
+    SyncEventGapTooLarge:
+      properties:
+        type:
+          type: string
+          const: gap_too_large
+          title: Type
+        seq:
+          type: integer
+          title: Seq
+        ts:
+          type: string
+          format: date-time
+          title: Ts
+      type: object
+      required:
+      - type
+      - seq
+      - ts
+      title: SyncEventGapTooLarge
+      description: 'Server response when the requested resume point is too old.
+
+
+        Emitted in response to ``subscribe { since: N }`` where the stream''s oldest
+
+        entry is newer than ``N`` — client must fall back to ``/sync/check``.'
+    SyncEventEnvelope:
+      properties:
+        sync_event:
+          oneOf:
+          - $ref: '#/components/schemas/SyncEventHeartbeat'
+          - $ref: '#/components/schemas/SyncEventReconnectResync'
+          - $ref: '#/components/schemas/SyncEventGapTooLarge'
+          - $ref: '#/components/schemas/SyncEventNotificationCreated'
+          - $ref: '#/components/schemas/SyncEventMeetingChanged'
+          - $ref: '#/components/schemas/SyncEventMeetingTranscriptChanged'
+          - $ref: '#/components/schemas/SyncEventCalendarChanged'
+          - $ref: '#/components/schemas/SyncEventPreferencesChanged'
+          - $ref: '#/components/schemas/SyncEventNotesChanged'
+          - $ref: '#/components/schemas/SyncEventTodosChanged'
+          - $ref: '#/components/schemas/SyncEventAutomationsChanged'
+          - $ref: '#/components/schemas/SyncEventSubscriptionChanged'
+          - $ref: '#/components/schemas/SyncEventEnterpriseMembershipChanged'
+          - $ref: '#/components/schemas/SyncEventEnterpriseSubscriptionChanged'
+          - $ref: '#/components/schemas/SyncEventVoiceProfileReady'
+          - $ref: '#/components/schemas/SyncEventFlowStateJobCompleted'
+          - $ref: '#/components/schemas/SyncEventIncidentBannerUpdated'
+          - $ref: '#/components/schemas/SyncEventUnrecognized'
+          title: Sync Event
+          discriminator:
+            propertyName: type
+            mapping:
+              automations.changed: '#/components/schemas/SyncEventAutomationsChanged'
+              calendar.changed: '#/components/schemas/SyncEventCalendarChanged'
+              enterprise.membership_changed: '#/components/schemas/SyncEventEnterpriseMembershipChanged'
+              enterprise.subscription_changed: '#/components/schemas/SyncEventEnterpriseSubscriptionChanged'
+              flow_state_job.completed: '#/components/schemas/SyncEventFlowStateJobCompleted'
+              gap_too_large: '#/components/schemas/SyncEventGapTooLarge'
+              heartbeat: '#/components/schemas/SyncEventHeartbeat'
+              incident_banner.updated: '#/components/schemas/SyncEventIncidentBannerUpdated'
+              meeting.changed: '#/components/schemas/SyncEventMeetingChanged'
+              meeting.transcript_changed: '#/components/schemas/SyncEventMeetingTranscriptChanged'
+              notes.changed: '#/components/schemas/SyncEventNotesChanged'
+              notification.created: '#/components/schemas/SyncEventNotificationCreated'
+              preferences.changed: '#/components/schemas/SyncEventPreferencesChanged'
+              reconnect_resync: '#/components/schemas/SyncEventReconnectResync'
+              subscription.changed: '#/components/schemas/SyncEventSubscriptionChanged'
+              todos.changed: '#/components/schemas/SyncEventTodosChanged'
+              unrecognized: '#/components/schemas/SyncEventUnrecognized'
+              voice_profile.ready: '#/components/schemas/SyncEventVoiceProfileReady'
+      type: object
+      required:
+      - sync_event
+      title: SyncEventEnvelope
+      description: 'Wrapper that surfaces the ``SyncEvent`` union to OpenAPI.
+
+
+        The field name ``sync_event`` is load-bearing: openapi-generator-cli names
+
+        the generated TS union type from this field, yielding ``SyncEvent``.'
+    PersonalizationStyle:
+      type: string
+      enum:
+      - formal
+      - casual
+      - veryCasual
+      - excited
+      - genz
+      - default
+      title: PersonalizationStyle
+      description: Represents the style for personalization settings.
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
