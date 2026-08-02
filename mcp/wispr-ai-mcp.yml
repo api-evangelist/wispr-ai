@@ -1,0 +1,1310 @@
+generated: '2026-07-21'
+method: derived
+status: candidate
+source: openapi/wispr-ai-backend-openapi-original.json
+notes: No official Wispr MCP server found (official MCP registry search returned zero). Candidate tool list derived one-per-operationId from the
+  publicly served backend OpenAPI.
+server:
+  name: wispr-ai
+  transport: http
+  url: null
+tools:
+- name: list_events
+  description: List Events
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#list_events
+- name: batch_save_events
+  description: Batch Save Events
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#batch_save_events
+- name: get_global_properties
+  description: Get Global Properties
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_global_properties
+- name: save_global_properties
+  description: Save Global Properties
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#save_global_properties
+- name: publish_preview
+  description: Publish Preview
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#publish_preview
+- name: publish
+  description: Publish
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#publish
+- name: mark_implemented
+  description: Mark Implemented
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#mark_implemented
+- name: health
+  description: Health
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#health
+- name: version
+  description: Version
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#version
+- name: warmup
+  description: Warmup
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#warmup
+- name: google_sign_in
+  description: Google Sign In
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#google_sign_in
+- name: apple_sign_in
+  description: Apple Sign In
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#apple_sign_in
+- name: microsoft_sign_in
+  description: Microsoft Sign In
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#microsoft_sign_in
+- name: sso_sign_in
+  description: Sso Sign In
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#sso_sign_in
+- name: authkit_google_sign_in
+  description: Authkit Google Sign In
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#authkit_google_sign_in
+- name: authkit_sso_sign_in
+  description: Authkit Sso Sign In
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#authkit_sso_sign_in
+- name: authkit_google_callback
+  description: Authkit Google Callback
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#authkit_google_callback
+- name: authkit_sso_callback
+  description: Authkit Sso Callback
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#authkit_sso_callback
+- name: google_callback
+  description: Google Callback
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#google_callback
+- name: apple_callback
+  description: Apple Callback
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#apple_callback
+- name: microsoft_callback
+  description: Microsoft Callback
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#microsoft_callback
+- name: sso_callback
+  description: Sso Callback
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#sso_callback
+- name: user_status
+  description: User Status
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#user_status
+- name: email_verification_status
+  description: Email Verification Status
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#email_verification_status
+- name: signup
+  description: Signup
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#signup
+- name: signup_raw_email
+  description: Signup Raw Email
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#signup_raw_email
+- name: confirm_email
+  description: Confirm Email
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#confirm_email
+- name: add_to_waitlist
+  description: Add To Waitlist
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#add_to_waitlist
+- name: sign_up_with_email
+  description: Sign Up With Email
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#sign_up_with_email
+- name: sign_up_with_email_captcha
+  description: Sign Up With Email Captcha
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#sign_up_with_email_captcha
+- name: sign_in_with_email
+  description: Sign In With Email
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#sign_in_with_email
+- name: sign_in_with_email_captcha
+  description: Sign In With Email Captcha
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#sign_in_with_email_captcha
+- name: email_callback
+  description: Email Callback
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#email_callback
+- name: reset_password_callback
+  description: Reset Password Callback
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#reset_password_callback
+- name: reset_password
+  description: Reset Password
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#reset_password
+- name: request_reset_password
+  description: Request Reset Password
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#request_reset_password
+- name: request_reset_password_captcha
+  description: Request Reset Password Captcha
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#request_reset_password_captcha
+- name: resend_verification_email
+  description: Resend Verification Email
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#resend_verification_email
+- name: resend_verification_email_captcha
+  description: Resend Verification Email Captcha
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#resend_verification_email_captcha
+- name: validate_email
+  description: Validate Email
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#validate_email
+- name: apple_app_site_association
+  description: Apple App Site Association
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#apple_app_site_association
+- name: create_user
+  description: Create User
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_user
+- name: device_complete
+  description: Device Complete
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#device_complete
+- name: device_stream
+  description: Device Stream
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#device_stream
+- name: device_poll
+  description: Device Poll
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#device_poll
+- name: get_total_credits
+  description: Get Total Credits
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_total_credits
+- name: get_referrals_info
+  description: Get Referrals Info
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_referrals_info
+- name: send_generic_download_email
+  description: Send Generic Download Email
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#send_generic_download_email
+- name: refer_emails
+  description: Refer Emails
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#refer_emails
+- name: regenerate_referral_code
+  description: Regenerate Referral Code
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#regenerate_referral_code
+- name: get_referral_code
+  description: Get Referral Code
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_referral_code
+- name: apply_referral_code
+  description: Apply Referral Code
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#apply_referral_code
+- name: send_download_link
+  description: Send Download Link
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#send_download_link
+- name: get_student_challenge_leaderboard
+  description: Get Student Challenge Leaderboard
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_student_challenge_leaderboard
+- name: feedback_history
+  description: Feedback History
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#feedback_history
+- name: upload_history
+  description: Upload History
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#upload_history
+- name: get_history_stats
+  description: Get History Stats
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_history_stats
+- name: overwrite_history_stats
+  description: Overwrite History Stats
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#overwrite_history_stats
+- name: get_context_stats
+  description: Get Context Stats
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_context_stats
+- name: get_enterprise_history_stats
+  description: Get Enterprise History Stats
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_enterprise_history_stats
+- name: get_enterprise_weekly_ranks
+  description: Get Enterprise Weekly Ranks
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_enterprise_weekly_ranks
+- name: get_enterprise_podiums
+  description: Get Enterprise Podiums
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_enterprise_podiums
+- name: write_mobile_words_this_week
+  description: Write Mobile Words This Week
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#write_mobile_words_this_week
+- name: get_insights
+  description: Get Insights
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_insights
+- name: get_heatmap
+  description: Get Heatmap
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_heatmap
+- name: desktop_corrections_backfill
+  description: Desktop Corrections Backfill
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#desktop_corrections_backfill
+- name: flow_api
+  description: Flow Api
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#flow_api
+- name: asr
+  description: Asr
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#asr
+- name: formatting
+  description: Formatting
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#formatting
+- name: completion
+  description: Completion
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#completion
+- name: ocr
+  description: Ocr
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#ocr
+- name: extract_asr_words
+  description: Extract Asr Words
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#extract_asr_words
+- name: format_non_english_endpoint
+  description: Format Non English Endpoint
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#format_non_english_endpoint
+- name: asr_audio_chunks
+  description: Asr Audio Chunks
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#asr_audio_chunks
+- name: command_mode_route
+  description: Command Mode Route
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#command_mode_route
+- name: command_mode
+  description: Command Mode
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#command_mode
+- name: instruct_mode
+  description: Instruct Mode
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#instruct_mode
+- name: polish_text
+  description: Polish Text
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#polish_text
+- name: extract_edited_words
+  description: Extract Edited Words
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#extract_edited_words
+- name: classify_intent
+  description: Classify Intent
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#classify_intent
+- name: detect_formality
+  description: Detect Formality
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#detect_formality
+- name: check_sensibility
+  description: Check Sensibility
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#check_sensibility
+- name: flow_response
+  description: Flow Response
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#flow_response
+- name: fetch_flow_state_2025
+  description: Fetch Flow State 2025
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#fetch_flow_state_2025
+- name: create_flow_state_2025
+  description: Create Flow State 2025
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_flow_state_2025
+- name: fetch_latest_voice_profile
+  description: Fetch Latest Voice Profile
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#fetch_latest_voice_profile
+- name: fetch_voice_profile
+  description: Fetch Voice Profile
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#fetch_voice_profile
+- name: create_voice_profile
+  description: Create Voice Profile
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_voice_profile
+- name: dash_api
+  description: Dash Api
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#dash_api
+- name: client_api
+  description: Client Api
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#client_api
+- name: warmup_dash
+  description: Warmup Dash
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#warmup_dash
+- name: generate_access_token
+  description: Generate Access Token
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#generate_access_token
+- name: chrome_extension_client_key
+  description: Chrome Extension Client Key
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#chrome_extension_client_key
+- name: revoke_user_token
+  description: Revoke User Token
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#revoke_user_token
+- name: generate_webflow_token
+  description: Generate Webflow Token
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#generate_webflow_token
+- name: send_feedback_slack
+  description: Send Feedback Slack
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#send_feedback_slack
+- name: delete_user
+  description: Delete User
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#delete_user
+- name: support_delete_user
+  description: Support Delete User
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#support_delete_user
+- name: start_usage_data_erasure
+  description: Start Usage Data Erasure
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#start_usage_data_erasure
+- name: get_usage_data_erasure_status
+  description: Get Usage Data Erasure Status
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_usage_data_erasure_status
+- name: frontapp_feedback
+  description: Frontapp Feedback
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#frontapp_feedback
+- name: update_pylon_account
+  description: Update Pylon Account
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#update_pylon_account
+- name: frontapp_feedback_with_image
+  description: Frontapp Feedback With Image
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#frontapp_feedback_with_image
+- name: pre_login_feedback
+  description: Pre Login Feedback
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#pre_login_feedback
+- name: support_cancel_subscription
+  description: Support Cancel Subscription
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#support_cancel_subscription
+- name: sync_individual_stripe_subscription
+  description: Sync Individual Stripe Subscription
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#sync_individual_stripe_subscription
+- name: sync_individual_mobile_subscription
+  description: Sync Individual Mobile Subscription
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#sync_individual_mobile_subscription
+- name: validate_user
+  description: Validate User
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#validate_user
+- name: create_pylon_feedback
+  description: Create Pylon Feedback
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_pylon_feedback
+- name: attio_sync
+  description: Attio Sync
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#attio_sync
+- name: submit_nps_score
+  description: Submit Nps Score
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#submit_nps_score
+- name: submit_nps_feedback
+  description: Submit Nps Feedback
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#submit_nps_feedback
+- name: get_user_profile
+  description: Get User Profile
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_user_profile
+- name: update_user_profile
+  description: Update User Profile
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#update_user_profile
+- name: get_user_id
+  description: Get User Id
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_user_id
+- name: get_user_preference
+  description: Get User Preference
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_user_preference
+- name: update_user_preference
+  description: Update User Preference
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#update_user_preference
+- name: save_onboarding_answers
+  description: Save Onboarding Answers
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#save_onboarding_answers
+- name: get_user_dictionary
+  description: Get User Dictionary
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_user_dictionary
+- name: update_user_dictionary
+  description: Update User Dictionary
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#update_user_dictionary
+- name: delete_user_dictionary
+  description: Delete User Dictionary
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#delete_user_dictionary
+- name: delete_word_in_dictionary
+  description: Delete Word In Dictionary
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#delete_word_in_dictionary
+- name: get_student_status
+  description: Get Student Status
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_student_status
+- name: update_student_status
+  description: Update Student Status
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#update_student_status
+- name: onboarding_complete
+  description: Onboarding Complete
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#onboarding_complete
+- name: claim_trial_extension
+  description: Claim Trial Extension
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#claim_trial_extension
+- name: get_user_stats
+  description: Get User Stats
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_user_stats
+- name: get_hipaa_baa_status
+  description: Get Hipaa Baa Status
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_hipaa_baa_status
+- name: sign_hipaa_baa
+  description: Sign Hipaa Baa
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#sign_hipaa_baa
+- name: revoke_hipaa_baa
+  description: Revoke Hipaa Baa
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#revoke_hipaa_baa
+- name: request_push_notification
+  description: Request Push Notification
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#request_push_notification
+- name: register_device
+  description: Register Device
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#register_device
+- name: get_registered_devices
+  description: Get Registered Devices
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_registered_devices
+- name: export_user_data
+  description: Export User Data
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#export_user_data
+- name: get_trial_status
+  description: Get Trial Status
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_trial_status
+- name: switch_enterprise_plan
+  description: Switch Enterprise Plan
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#switch_enterprise_plan
+- name: switch_support_plan
+  description: Switch Support Plan
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#switch_support_plan
+- name: switch_plan
+  description: Switch Plan
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#switch_plan
+- name: create_enterprise_checkout_session
+  description: Create Enterprise Checkout Session
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_enterprise_checkout_session
+- name: create_checkout_session
+  description: Create Checkout Session
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_checkout_session
+- name: create_bank_transfer_invoice
+  description: Create Bank Transfer Invoice
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_bank_transfer_invoice
+- name: success
+  description: Success
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#success
+- name: cancel
+  description: Cancel
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#cancel
+- name: error
+  description: Error
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#error
+- name: webhook_received
+  description: Webhook Received
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#webhook_received
+- name: metadata_webhook_received
+  description: Metadata Webhook Received
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#metadata_webhook_received
+- name: revenuecat_webhook_received
+  description: Revenuecat Webhook Received
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#revenuecat_webhook_received
+- name: customer_portal
+  description: Customer Portal
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#customer_portal
+- name: enterprise_portal
+  description: Enterprise Portal
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#enterprise_portal
+- name: cancel_subscription
+  description: Cancel Subscription
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#cancel_subscription
+- name: get_subscription_details
+  description: Get Subscription Details
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_subscription_details
+- name: subscription_watch_start
+  description: Subscription Watch Start
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#subscription_watch_start
+- name: subscription_watch_stream
+  description: Subscription Watch Stream
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#subscription_watch_stream
+- name: create_promotion_code
+  description: Create Promotion Code
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_promotion_code
+- name: pricing_by_ip
+  description: Pricing By Ip
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#pricing_by_ip
+- name: pricing_by_currency
+  description: Pricing By Currency
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#pricing_by_currency
+- name: get_currency_by_country_code
+  description: Get Currency By Country Code
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_currency_by_country_code
+- name: migrate_subscription
+  description: Migrate Subscription
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#migrate_subscription
+- name: get_base10_server
+  description: Get Base10 Server
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_base10_server
+- name: post_base10_server
+  description: Post Base10 Server
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#post_base10_server
+- name: get_grpc_server_list
+  description: Get Grpc Server List
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_grpc_server_list
+- name: get_geo
+  description: Get Geo
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_geo
+- name: list_organizations
+  description: List Organizations
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#list_organizations
+- name: create_organization
+  description: Create Organization
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_organization
+- name: get_organization
+  description: Get Organization
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_organization
+- name: update_organization
+  description: Update Organization
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#update_organization
+- name: list_api_keys
+  description: List Api Keys
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#list_api_keys
+- name: create_api_key
+  description: Create Api Key
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_api_key
+- name: delete_api_key
+  description: Delete Api Key
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#delete_api_key
+- name: update_api_key
+  description: Update Api Key
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#update_api_key
+- name: create_user_invitation
+  description: Create User Invitation
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_user_invitation
+- name: get_user_invitations
+  description: Get User Invitations
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_user_invitations
+- name: delete_user_invitation
+  description: Delete User Invitation
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#delete_user_invitation
+- name: list_users
+  description: List Users
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#list_users
+- name: update_user_role
+  description: Update User Role
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#update_user_role
+- name: remove_user
+  description: Remove User
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#remove_user
+- name: get_credits
+  description: Get Credits
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_credits
+- name: get_usage
+  description: Get Usage
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_usage
+- name: get_active_invoice
+  description: Get Active Invoice
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_active_invoice
+- name: playground
+  description: Playground
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#playground
+- name: upload_polish
+  description: Upload Polish
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#upload_polish
+- name: upload_instruct_history
+  description: Upload Instruct History
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#upload_instruct_history
+- name: upload_notetaker_chats
+  description: Upload Notetaker Chats
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#upload_notetaker_chats
+- name: list_notetaker_chats
+  description: List Notetaker Chats
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#list_notetaker_chats
+- name: list_notetaker_chat_messages
+  description: List Notetaker Chat Messages
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#list_notetaker_chat_messages
+- name: delete_notetaker_chat
+  description: Delete Notetaker Chat
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#delete_notetaker_chat
+- name: sync_notes
+  description: Sync Notes
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#sync_notes
+- name: sync_todos
+  description: Sync Todos
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#sync_todos
+- name: sync_automations
+  description: Sync Automations
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#sync_automations
+- name: send_email
+  description: Send Email
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#send_email
+- name: add_calendar_event
+  description: Add Calendar Event
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#add_calendar_event
+- name: create_cost_center
+  description: Create Cost Center
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_cost_center
+- name: list_cost_centers
+  description: List Cost Centers
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#list_cost_centers
+- name: get_cost_center
+  description: Get Cost Center
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_cost_center
+- name: update_cost_center
+  description: Update Cost Center
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#update_cost_center
+- name: delete_cost_center
+  description: Delete Cost Center
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#delete_cost_center
+- name: get_break_away_preview
+  description: Get Break Away Preview
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_break_away_preview
+- name: create_cost_center_billing
+  description: Create Cost Center Billing
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_cost_center_billing
+- name: create_team
+  description: Create Team
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_team
+- name: list_teams
+  description: List Teams
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#list_teams
+- name: get_team
+  description: Get Team
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_team
+- name: update_team
+  description: Update Team
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#update_team
+- name: disband_team
+  description: Disband Team
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#disband_team
+- name: move_member_to_team
+  description: Move Member To Team
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#move_member_to_team
+- name: update_team_member_role
+  description: Update Team Member Role
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#update_team_member_role
+- name: move_team_to_cost_center
+  description: Move Team To Cost Center
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#move_team_to_cost_center
+- name: join_team
+  description: Join Team
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#join_team
+- name: get_active_cost_center_for_caller
+  description: Get Active Cost Center For Caller
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_active_cost_center_for_caller
+- name: get_audit_logs
+  description: Get Audit Logs
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_audit_logs
+- name: create_enterprise_new
+  description: Create Enterprise New
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_enterprise_new
+- name: get_enterprise
+  description: Get Enterprise
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_enterprise
+- name: update_enterprise
+  description: Update Enterprise
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#update_enterprise
+- name: update_enterprise_settings
+  description: Update Enterprise Settings
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#update_enterprise_settings
+- name: get_members
+  description: Get Members
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_members
+- name: get_members_table
+  description: Get Members Table
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_members_table
+- name: get_members_count
+  description: Get Members Count
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_members_count
+- name: get_domain_status
+  description: Get Domain Status
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_domain_status
+- name: get_domain_info
+  description: Get Domain Info
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_domain_info
+- name: get_my_current_ip
+  description: Get My Current Ip
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_my_current_ip
+- name: list_domain_verifications
+  description: List Domain Verifications
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#list_domain_verifications
+- name: initiate_domain_verification
+  description: Initiate Domain Verification
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#initiate_domain_verification
+- name: check_domain_verification
+  description: Check Domain Verification
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#check_domain_verification
+- name: update_domain_capture_policy
+  description: Update Domain Capture Policy
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#update_domain_capture_policy
+- name: get_member_detail
+  description: Get Member Detail
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_member_detail
+- name: remove_member
+  description: Remove Member
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#remove_member
+- name: update_member_role
+  description: Update Member Role
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#update_member_role
+- name: remove_member_support
+  description: Remove Member Support
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#remove_member_support
+- name: update_member_role_support
+  description: Update Member Role Support
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#update_member_role_support
+- name: self_invite
+  description: Self Invite
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#self_invite
+- name: contact_admin
+  description: Contact Admin
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#contact_admin
+- name: get_invitations
+  description: Get Invitations
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_invitations
+- name: invite_user
+  description: Invite User
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#invite_user
+- name: bulk_invite_users
+  description: Bulk Invite Users
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#bulk_invite_users
+- name: bulk_invite_users_support
+  description: Bulk Invite Users Support
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#bulk_invite_users_support
+- name: revoke_invitation
+  description: Revoke Invitation
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#revoke_invitation
+- name: revoke_invitation_support
+  description: Revoke Invitation Support
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#revoke_invitation_support
+- name: setup_sso
+  description: Setup Sso
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#setup_sso
+- name: connect_sso
+  description: Connect Sso
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#connect_sso
+- name: sign_enterprise_hipaa_baa
+  description: Sign Enterprise Hipaa Baa
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#sign_enterprise_hipaa_baa
+- name: revoke_enterprise_hipaa_baa
+  description: Revoke Enterprise Hipaa Baa
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#revoke_enterprise_hipaa_baa
+- name: get_my_invitations
+  description: Get My Invitations
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_my_invitations
+- name: accept_enterprise_invite
+  description: Accept Enterprise Invite
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#accept_enterprise_invite
+- name: get_join_requests
+  description: Get Join Requests
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_join_requests
+- name: get_my_join_requests
+  description: Get My Join Requests
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_my_join_requests
+- name: accept_join_request
+  description: Accept Join Request
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#accept_join_request
+- name: bulk_accept_join_request
+  description: Bulk Accept Join Request
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#bulk_accept_join_request
+- name: reject_join_request
+  description: Reject Join Request
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#reject_join_request
+- name: check_enterprise_eligibility
+  description: Check Enterprise Eligibility
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#check_enterprise_eligibility
+- name: get_team_invite_link
+  description: Get Team Invite Link
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_team_invite_link
+- name: accept_team_invite_link
+  description: Accept Team Invite Link
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#accept_team_invite_link
+- name: rejoin
+  description: Rejoin
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#rejoin
+- name: get_next_invoice
+  description: Get Next Invoice
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_next_invoice
+- name: get_my_seat_info
+  description: Get My Seat Info
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_my_seat_info
+- name: workos_webhook
+  description: Workos Webhook
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#workos_webhook
+- name: setup_scim
+  description: Setup Scim
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#setup_scim
+- name: get_words_dictated
+  description: Get Words Dictated
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_words_dictated
+- name: export_words_dictated
+  description: Export Words Dictated
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#export_words_dictated
+- name: get_team_members
+  description: Get Team Members
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_team_members
+- name: get_desktop_apps
+  description: Get Desktop Apps
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_desktop_apps
+- name: get_impact
+  description: Get Impact
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_impact
+- name: list_filter_options
+  description: List Filter Options
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#list_filter_options
+- name: list_user_filter_options
+  description: List User Filter Options
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#list_user_filter_options
+- name: track_paywall_viewed
+  description: Track Paywall Viewed
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#track_paywall_viewed
+- name: track_event
+  description: Track Event
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#track_event
+- name: transforms_voice_prompts
+  description: Transforms Voice Prompts
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#transforms_voice_prompts
+- name: get_suggestions
+  description: Get Suggestions
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_suggestions
+- name: apply_transform
+  description: Apply Transform
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#apply_transform
+- name: apply_transform_stream
+  description: Apply Transform Stream
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#apply_transform_stream
+- name: apply_transform_suggestion
+  description: Apply Transform Suggestion
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#apply_transform_suggestion
+- name: apply_transform_suggestion_stream
+  description: Apply Transform Suggestion Stream
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#apply_transform_suggestion_stream
+- name: apply_transform_dynamic
+  description: Apply Transform Dynamic
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#apply_transform_dynamic
+- name: apply_transform_dynamic_stream
+  description: Apply Transform Dynamic Stream
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#apply_transform_dynamic_stream
+- name: list_operations
+  description: List Operations
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#list_operations
+- name: preview
+  description: Preview
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#preview
+- name: commit
+  description: Commit
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#commit
+- name: list_cost_centers_for_enterprise
+  description: List Cost Centers For Enterprise
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#list_cost_centers_for_enterprise
+- name: list_recent_invoices_for_cost_center
+  description: List Recent Invoices For Cost Center
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#list_recent_invoices_for_cost_center
+- name: get_meeting_attribution_live
+  description: Get Meeting Attribution Live
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_meeting_attribution_live
+- name: get_meeting_attribution_refined
+  description: Get Meeting Attribution Refined
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_meeting_attribution_refined
+- name: get_meeting_attribution_refined_raw
+  description: Get Meeting Attribution Refined Raw
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_meeting_attribution_refined_raw
+- name: get_meeting_attribution_speaker_observations
+  description: Get Meeting Attribution Speaker Observations
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_meeting_attribution_speaker_observations
+- name: preview_meeting_speaker_consensus
+  description: Preview Meeting Speaker Consensus
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#preview_meeting_speaker_consensus
+- name: get_meeting_attribution_audio_url
+  description: Get Meeting Attribution Audio Url
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_meeting_attribution_audio_url
+- name: internal_preview_cost_center_provision
+  description: Internal Preview Cost Center Provision
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#internal_preview_cost_center_provision
+- name: internal_provision_cost_center
+  description: Internal Provision Cost Center
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#internal_provision_cost_center
+- name: generate_flow_state_profiles
+  description: Generate Flow State Profiles
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#generate_flow_state_profiles
+- name: generate_and_send_flow_state_emails
+  description: Generate And Send Flow State Emails
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#generate_and_send_flow_state_emails
+- name: send_flow_state_emails
+  description: Send Flow State Emails
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#send_flow_state_emails
+- name: get_flow_state_month_summary
+  description: Get Flow State Month Summary
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_flow_state_month_summary
+- name: preview_flow_state_profiles
+  description: Preview Flow State Profiles
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#preview_flow_state_profiles
+- name: get_flow_state_job
+  description: Get Flow State Job
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_flow_state_job
+- name: internal_create_enterprise
+  description: Internal Create Enterprise
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#internal_create_enterprise
+- name: create_enterprise_pilot
+  description: Create Enterprise Pilot
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_enterprise_pilot
+- name: create_sales_led_enterprise
+  description: Create Sales Led Enterprise
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_sales_led_enterprise
+- name: create_sales_led_enterprise_custom_billing
+  description: Create Sales Led Enterprise Custom Billing
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_sales_led_enterprise_custom_billing
+- name: send_enterprise_invoice
+  description: Send Enterprise Invoice
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#send_enterprise_invoice
+- name: get_pending_invoice
+  description: Get Pending Invoice
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_pending_invoice
+- name: update_enterprise_pilot_end
+  description: Update Enterprise Pilot End
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#update_enterprise_pilot_end
+- name: reactivate_enterprise_pilot
+  description: Reactivate Enterprise Pilot
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#reactivate_enterprise_pilot
+- name: list_enterprise_pilots
+  description: List Enterprise Pilots
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#list_enterprise_pilots
+- name: search_enterprises
+  description: Search Enterprises
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#search_enterprises
+- name: get_enterprise_members
+  description: Get Enterprise Members
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_enterprise_members
+- name: add_users_to_enterprise
+  description: Add Users To Enterprise
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#add_users_to_enterprise
+- name: get_enterprise_details
+  description: Get Enterprise Details
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_enterprise_details
+- name: add_enterprise_domain
+  description: Add Enterprise Domain
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#add_enterprise_domain
+- name: toggle_domain_deleted
+  description: Toggle Domain Deleted
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#toggle_domain_deleted
+- name: update_preserve_contracted_seats
+  description: Update Preserve Contracted Seats
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#update_preserve_contracted_seats
+- name: update_workos_directory_id
+  description: Update Workos Directory Id
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#update_workos_directory_id
+- name: sync_enterprise_domains_to_workos
+  description: Sync Enterprise Domains To Workos
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#sync_enterprise_domains_to_workos
+- name: add_users_to_enterprise_file_upload
+  description: Add Users To Enterprise File Upload
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#add_users_to_enterprise_file_upload
+- name: remove_users_from_enterprise
+  description: Remove Users From Enterprise
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#remove_users_from_enterprise
+- name: remove_users_from_enterprise_file_upload
+  description: Remove Users From Enterprise File Upload
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#remove_users_from_enterprise_file_upload
+- name: update_user_enterprise_role
+  description: Update User Enterprise Role
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#update_user_enterprise_role
+- name: update_user_roles_file_upload
+  description: Update User Roles File Upload
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#update_user_roles_file_upload
+- name: list_billing_configs
+  description: List Billing Configs
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#list_billing_configs
+- name: create_billing_config
+  description: Create Billing Config
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_billing_config
+- name: update_billing_config
+  description: Update Billing Config
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#update_billing_config
+- name: delete_billing_config
+  description: Delete Billing Config
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#delete_billing_config
+- name: get_public_domains
+  description: Get Public Domains
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_public_domains
+- name: get_blocked_domains
+  description: Get Blocked Domains
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_blocked_domains
+- name: create_blocked_domain
+  description: Create Blocked Domain
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_blocked_domain
+- name: delete_blocked_domain
+  description: Delete Blocked Domain
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#delete_blocked_domain
+- name: sync_enterprise_directory_users
+  description: Sync Enterprise Directory Users
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#sync_enterprise_directory_users
+- name: preview_enterprise_directory_users
+  description: Preview Enterprise Directory Users
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#preview_enterprise_directory_users
+- name: sync_all_enterprise_directory_users
+  description: Sync All Enterprise Directory Users
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#sync_all_enterprise_directory_users
+- name: list_promo_campaigns
+  description: List Promo Campaigns
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#list_promo_campaigns
+- name: create_promo_campaign
+  description: Create Promo Campaign
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_promo_campaign
+- name: get_promo_campaign
+  description: Get Promo Campaign
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_promo_campaign
+- name: update_promo_campaign
+  description: Update Promo Campaign
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#update_promo_campaign
+- name: list_promo_codes
+  description: List Promo Codes
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#list_promo_codes
+- name: create_promo_codes
+  description: Create Promo Codes
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_promo_codes
+- name: export_promo_codes_csv
+  description: Export Promo Codes Csv
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#export_promo_codes_csv
+- name: toggle_promo_code_active
+  description: Toggle Promo Code Active
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#toggle_promo_code_active
+- name: list_promo_redemptions
+  description: List Promo Redemptions
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#list_promo_redemptions
+- name: internal_update_enterprise_settings
+  description: Internal Update Enterprise Settings
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#internal_update_enterprise_settings
+- name: internal_update_enterprise_gates
+  description: Internal Update Enterprise Gates
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#internal_update_enterprise_gates
+- name: internal_disband_enterprise
+  description: Internal Disband Enterprise
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#internal_disband_enterprise
+- name: admin_apply_referral
+  description: Admin Apply Referral
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#admin_apply_referral
+- name: internal_initiate_domain_verification
+  description: Internal Initiate Domain Verification
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#internal_initiate_domain_verification
+- name: internal_check_domain_verification
+  description: Internal Check Domain Verification
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#internal_check_domain_verification
+- name: internal_get_domain_verification_status
+  description: Internal Get Domain Verification Status
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#internal_get_domain_verification_status
+- name: internal_update_user_trial_end
+  description: Internal Update User Trial End
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#internal_update_user_trial_end
+- name: admin_search_user_memories
+  description: Admin Search User Memories
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#admin_search_user_memories
+- name: admin_list_user_memories
+  description: Admin List User Memories
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#admin_list_user_memories
+- name: admin_lookup_user
+  description: Admin Lookup User
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#admin_lookup_user
+- name: admin_update_stripe_customer_id
+  description: Admin Update Stripe Customer Id
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#admin_update_stripe_customer_id
+- name: get_notifications
+  description: Get Notifications
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_notifications
+- name: archive_notification
+  description: Archive Notification
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#archive_notification
+- name: archive_all_notifications
+  description: Archive All Notifications
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#archive_all_notifications
+- name: create_notification
+  description: Create Notification
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_notification
+- name: create_internal_notification
+  description: Create Internal Notification
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_internal_notification
+- name: delete_notification
+  description: Delete Notification
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#delete_notification
+- name: create_announcement
+  description: Create Announcement
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_announcement
+- name: send_ios_download_link
+  description: Send Ios Download Link
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#send_ios_download_link
+- name: track_event_endpoint
+  description: Track Event Endpoint
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#track_event_endpoint
+- name: ingest_user_metadata_endpoint
+  description: Ingest User Metadata Endpoint
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#ingest_user_metadata_endpoint
+- name: query_user_metadata_endpoint
+  description: Query User Metadata Endpoint
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#query_user_metadata_endpoint
+- name: get_events_batch
+  description: Get Events Batch
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_events_batch
+- name: sync_calendar
+  description: Sync Calendar
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#sync_calendar
+- name: sync_agentic_prereads
+  description: Sync Agentic Prereads
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#sync_agentic_prereads
+- name: get_event_preread
+  description: Get Event Preread
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_event_preread
+- name: submit_event_preread_feedback
+  description: Submit Event Preread Feedback
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#submit_event_preread_feedback
+- name: manual_resync
+  description: Manual Resync
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#manual_resync
+- name: initiate_connection
+  description: Initiate Connection
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#initiate_connection
+- name: raw_initiate_connection
+  description: Raw Initiate Connection
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#raw_initiate_connection
+- name: get_connection_status
+  description: Get Connection Status
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_connection_status
+- name: list_connectors
+  description: List Connectors
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#list_connectors
+- name: disconnect
+  description: Disconnect
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#disconnect
+- name: list_calendar_events
+  description: List Calendar Events
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#list_calendar_events
+- name: linkedin_connect
+  description: Linkedin Connect
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#linkedin_connect
+- name: linkedin_status
+  description: Linkedin Status
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#linkedin_status
+- name: linkedin_disconnect
+  description: Linkedin Disconnect
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#linkedin_disconnect
+- name: marketing_redirect_page_subpage
+  description: Marketing Redirect Page Subpage
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#marketing_redirect_page_subpage
+- name: marketing_redirect_page
+  description: Marketing Redirect Page
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#marketing_redirect_page
+- name: marketing_redirect_base
+  description: Marketing Redirect Base
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#marketing_redirect_base
+- name: send_mic_quiz_results_email
+  description: Send Mic Quiz Results Email
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#send_mic_quiz_results_email
+- name: send_mic_quiz_v2_results_email
+  description: Send Mic Quiz V2 Results Email
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#send_mic_quiz_v2_results_email
+- name: onboarding_webhook
+  description: Onboarding Webhook
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#onboarding_webhook
+- name: sync_meetings
+  description: Sync Meetings
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#sync_meetings
+- name: list_shared_meeting_notes
+  description: List Shared Meeting Notes
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#list_shared_meeting_notes
+- name: resolve_shared_meeting_note
+  description: Resolve Shared Meeting Note
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#resolve_shared_meeting_note
+- name: get_shared_meeting_note_transcript
+  description: Get Shared Meeting Note Transcript
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_shared_meeting_note_transcript
+- name: get_shared_note_share_state
+  description: Get Shared Note Share State
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_shared_note_share_state
+- name: get_meeting_share_state
+  description: Get Meeting Share State
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_meeting_share_state
+- name: upsert_meeting_share
+  description: Upsert Meeting Share
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#upsert_meeting_share
+- name: add_meeting_share_recipients
+  description: Add Meeting Share Recipients
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#add_meeting_share_recipients
+- name: delete_meeting_share_recipient
+  description: Delete Meeting Share Recipient
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#delete_meeting_share_recipient
+- name: delete_meeting
+  description: Delete Meeting
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#delete_meeting
+- name: create_meeting_upload_url
+  description: Create Meeting Upload Url
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_meeting_upload_url
+- name: get_meeting_status
+  description: Get Meeting Status
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_meeting_status
+- name: get_refined_transcript_download_url
+  description: Get Refined Transcript Download Url
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_refined_transcript_download_url
+- name: create_speaker_observations_upload_url
+  description: Create Speaker Observations Upload Url
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_speaker_observations_upload_url
+- name: create_live_transcript_upload_url
+  description: Create Live Transcript Upload Url
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_live_transcript_upload_url
+- name: handle_incoming_sms
+  description: Handle Incoming Sms
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#handle_incoming_sms
+- name: check_user_has_sms_events
+  description: Check User Has Sms Events
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#check_user_has_sms_events
+- name: get_personal_dictionary
+  description: Get Personal Dictionary
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_personal_dictionary
+- name: update_personal_dictionary
+  description: Update Personal Dictionary
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#update_personal_dictionary
+- name: get_team_dictionary
+  description: Get Team Dictionary
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_team_dictionary
+- name: create_team_dictionary_item
+  description: Create Team Dictionary Item
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_team_dictionary_item
+- name: bulk_create_team_dictionary_items
+  description: Bulk Create Team Dictionary Items
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#bulk_create_team_dictionary_items
+- name: update_team_dictionary_item
+  description: Update Team Dictionary Item
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#update_team_dictionary_item
+- name: delete_team_dictionary_item
+  description: Delete Team Dictionary Item
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#delete_team_dictionary_item
+- name: create_and_signin_sandbox_user
+  description: Create and sign in a sandbox user
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#create_and_signin_sandbox_user
+- name: destroy_sandbox_user
+  description: Destroy a sandbox user
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#destroy_sandbox_user
+- name: ingest_enterpret_payload
+  description: Ingest Enterpret Payload
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#ingest_enterpret_payload
+- name: get_android_waitlist_rank
+  description: Get Android Waitlist Rank
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_android_waitlist_rank
+- name: submit_phone_number
+  description: Submit Phone Number
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#submit_phone_number
+- name: verify_social_share
+  description: Verify Social Share
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#verify_social_share
+- name: validate_promo_code
+  description: Validate Promo Code
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#validate_promo_code
+- name: apply_promo_code
+  description: Apply Promo Code
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#apply_promo_code
+- name: get_pending_promo
+  description: Get Pending Promo
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_pending_promo
+- name: get_incident_status
+  description: Get Incident Status
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_incident_status
+- name: check_sync
+  description: Check Sync
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#check_sync
+- name: admin_test_publish
+  description: Admin Test Publish
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#admin_test_publish
+- name: sync_ws_schema
+  description: Sync Ws Schema
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#sync_ws_schema
+- name: sync_ws_client_schema
+  description: Sync Ws Client Schema
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#sync_ws_client_schema
+- name: submit_score
+  description: Submit Score
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#submit_score
+- name: get_leaderboard
+  description: Get Leaderboard
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_leaderboard
+- name: get_passage
+  description: Get Passage
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_passage
+- name: get_user_context
+  description: Get User Context
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#get_user_context
+- name: update_user_context
+  description: Update User Context
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#update_user_context
+- name: delete_user_context
+  description: Delete User Context
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#delete_user_context
+- name: list_user_voice_preferences
+  description: List User Voice Preferences
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#list_user_voice_preferences
+- name: upload_user_voice_preferences
+  description: Upload User Voice Preferences
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#upload_user_voice_preferences
+- name: ingest_keyboard_telemetry
+  description: Ingest keyboard touch aggregate cells (staging-gated)
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#ingest_keyboard_telemetry
+- name: ingest_memory
+  description: Ingest a batch of ActionEvents into the voice memory system
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#ingest_memory
+- name: memory_health
+  description: Check voice-memory Graphiti connectivity
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#memory_health
+- name: memory_context
+  description: Return compact prompt-ready voice memory context
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#memory_context
+- name: list_memory
+  description: 'Debug: list the caller''s raw Graphiti voice memories'
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#list_memory
+- name: search_memory
+  description: 'Debug: raw Graphiti search over the caller''s voice memory'
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#search_memory
+- name: voice_actions_realtime_schema
+  description: Voice Actions Realtime Schema
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#voice_actions_realtime_schema
+- name: voice_actions_realtime_client_schema
+  description: Voice Actions Realtime Client Schema
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#voice_actions_realtime_client_schema
+- name: read_root__get
+  description: Read Root
+  source_operation: openapi/wispr-ai-backend-openapi-original.json#read_root__get

@@ -1,0 +1,29 @@
+generated: '2026-07-21'
+method: searched
+probe: true
+url: https://trust.wispr.ai/
+platform: SafeBase (Drata)
+certifications:
+- SOC 2 Type 1
+- SOC 2 Type 2
+- ISO/IEC 27001
+- HIPAA
+subprocessors:
+- Baseten
+- Vercel
+- OpenPipe
+- OpenAI
+- Supabase
+practices:
+- AWS hosting with anti-DDoS protections and status monitoring
+- audit logging, penetration testing, application security assessments, bot detection
+- change management, access control, incident response, risk assessment programs
+- employee privacy/phishing/role-based security training
+- dedicated AI System Development and Evaluation Policy
+evidence:
+- source: https://trust.wispr.ai/
+  keywords:
+  - SOC 2 Type 2
+  - ISO 27001
+  - HIPAA
+  - trust center

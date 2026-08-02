@@ -1,0 +1,87 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/wispr-ai-backend-openapi-original.json
+format: fastapi-http-validation
+envelope: FastAPI-style JSON error bodies; 422 responses use the HTTPValidationError schema (detail[]
+  of loc/msg/type); no application/problem+json (RFC 9457) in the spec
+problems:
+- status: 400
+  title: trial_end is in the past or exceeds the 365-day cap.
+  occurrences: 1
+  sample_operations:
+  - openapi/wispr-ai-backend-openapi-original.json#internal_update_user_trial_end
+- status: 401
+  title: Not authenticated
+  occurrences: 5
+  sample_operations:
+  - openapi/wispr-ai-backend-openapi-original.json#list_shared_meeting_notes
+  - openapi/wispr-ai-backend-openapi-original.json#get_meeting_share_state
+  - openapi/wispr-ai-backend-openapi-original.json#upsert_meeting_share
+  - openapi/wispr-ai-backend-openapi-original.json#add_meeting_share_recipients
+  - openapi/wispr-ai-backend-openapi-original.json#delete_meeting_share_recipient
+- status: 403
+  title: Cloud Sync is disabled
+  occurrences: 8
+  sample_operations:
+  - openapi/wispr-ai-backend-openapi-original.json#upload_notetaker_chats
+  - openapi/wispr-ai-backend-openapi-original.json#list_notetaker_chats
+  - openapi/wispr-ai-backend-openapi-original.json#list_notetaker_chat_messages
+  - openapi/wispr-ai-backend-openapi-original.json#get_meeting_share_state
+  - openapi/wispr-ai-backend-openapi-original.json#upsert_meeting_share
+- status: 404
+  title: No pricing available for the requested currency
+  occurrences: 15
+  sample_operations:
+  - openapi/wispr-ai-backend-openapi-original.json#pricing_by_currency
+  - openapi/wispr-ai-backend-openapi-original.json#upload_notetaker_chats
+  - openapi/wispr-ai-backend-openapi-original.json#list_notetaker_chat_messages
+  - openapi/wispr-ai-backend-openapi-original.json#get_member_detail
+  - openapi/wispr-ai-backend-openapi-original.json#internal_update_user_trial_end
+- status: 409
+  title: Identifier conflict; earlier chats may be persisted, so retry the whole batch
+  occurrences: 1
+  sample_operations:
+  - openapi/wispr-ai-backend-openapi-original.json#upload_notetaker_chats
+- status: 413
+  title: Export row cap exceeded — narrow filters and retry.
+  occurrences: 1
+  sample_operations:
+  - openapi/wispr-ai-backend-openapi-original.json#export_words_dictated
+- status: 422
+  title: Validation Error
+  occurrences: 333
+  sample_operations:
+  - openapi/wispr-ai-backend-openapi-original.json#batch_save_events
+  - openapi/wispr-ai-backend-openapi-original.json#save_global_properties
+  - openapi/wispr-ai-backend-openapi-original.json#mark_implemented
+  - openapi/wispr-ai-backend-openapi-original.json#google_sign_in
+  - openapi/wispr-ai-backend-openapi-original.json#apple_sign_in
+- status: 429
+  title: Too Many Requests
+  occurrences: 28
+  sample_operations:
+  - openapi/wispr-ai-backend-openapi-original.json#create_user
+  - openapi/wispr-ai-backend-openapi-original.json#pricing_by_currency
+  - openapi/wispr-ai-backend-openapi-original.json#upload_instruct_history
+  - openapi/wispr-ai-backend-openapi-original.json#upload_notetaker_chats
+  - openapi/wispr-ai-backend-openapi-original.json#list_notetaker_chats
+- status: 500
+  title: S3 transcript cleanup failed; the meeting row may already be marked deleted. Retry is safe —
+    the cleanup leg is idempotent.
+  occurrences: 1
+  sample_operations:
+  - openapi/wispr-ai-backend-openapi-original.json#delete_meeting
+- status: 503
+  title: Service temporarily unavailable
+  occurrences: 3
+  sample_operations:
+  - openapi/wispr-ai-backend-openapi-original.json#send_email
+  - openapi/wispr-ai-backend-openapi-original.json#add_calendar_event
+  - openapi/wispr-ai-backend-openapi-original.json#create_meeting_upload_url
+- status: 504
+  title: 'Transform timed out. Same shape as SSE `event: error` payloads.'
+  occurrences: 3
+  sample_operations:
+  - openapi/wispr-ai-backend-openapi-original.json#apply_transform
+  - openapi/wispr-ai-backend-openapi-original.json#apply_transform_suggestion
+  - openapi/wispr-ai-backend-openapi-original.json#apply_transform_dynamic

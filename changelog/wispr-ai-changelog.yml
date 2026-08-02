@@ -1,0 +1,48 @@
+generated: '2026-07-21'
+method: searched
+source: https://wisprflow.ai/whats-new
+scheme: dated entries per platform; Desktop 1.x and Android 2.x app versions
+current:
+  desktop: 1.5.751
+  android: 2.0.9
+entries:
+- date: '2026-07-09'
+  platform: all
+  highlights:
+  - dictation reliability improvements (99.9% uptime claim)
+  - Flow Bar repositioning to left/right screen edges
+  - Canadian English language support
+- date: '2026-07-02'
+  platform: android
+  version: 2.0.9
+  highlights:
+  - Flow Bubble auto-recovery
+  - accessibility permission recovery
+  - multi-account isolation fixes
+  - Xiaomi/OnePlus device optimizations
+- date: '2026-06-24'
+  platform: all
+  highlights:
+  - consistent formatting across transcriptions
+  - model standardization for quality consistency
+- date: '2026-06-10'
+  platform: desktop
+  version: 1.5.751
+  highlights:
+  - automatic microphone ranking and switching
+  - clamshell mode support
+  - infrastructure scaling improvements
+- date: '2026-05-01'
+  platform: desktop
+  version: 1.5.113
+  highlights:
+  - Scratchpad notepad feature (beta)
+  - Transforms for AI text rewriting (beta)
+  - status page integration
+- date: '2026-03-31'
+  platform: desktop
+  version: 1.4.661
+  highlights:
+  - language picker in Flow Bar
+  - dictation extended to 20 minutes
+  - Mouse Flow button-triggered dictation

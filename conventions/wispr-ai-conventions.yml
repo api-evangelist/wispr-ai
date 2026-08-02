@@ -1,0 +1,34 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/wispr-ai-backend-openapi-original.json
+authentication:
+  style: API key headers
+  schemes:
+  - Authorization (ApiKeyHeaderPatched)
+  - X-API-Key (APIKeyHeader)
+  artifact: authentication/wispr-ai-authentication.yml
+idempotency:
+  supported: false
+  notes: No Idempotency-Key header contract; several operations are documented in the spec as naturally idempotent (batch
+    chat mutations, calendar upserts, meeting share writes, 204-on-repeat deletes).
+pagination:
+  style: mixed query parameters
+  params:
+    offset: 11
+    limit: 15
+    cursor: 5
+    page: 3
+versioning:
+  style: URI path (/api/v1/...) alongside unversioned auth/history routes
+  current: v1
+errors:
+  envelope: FastAPI HTTPValidationError (detail[] of loc/msg/type) on 422; JSON error bodies elsewhere
+  artifact: errors/wispr-ai-problem-types.yml
+rate_limits:
+  signaling: 429 responses declared on 28 operations; no X-RateLimit-* headers documented in the spec
+request_tracing: null
+field_expansion: null
+cross_links:
+- authentication/wispr-ai-authentication.yml
+- errors/wispr-ai-problem-types.yml
+- lifecycle/wispr-ai-lifecycle.yml

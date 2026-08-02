@@ -1,0 +1,15 @@
+generated: '2026-07-21'
+method: searched
+source: npm/PyPI/registry searches 2026-07-21
+notes: Wispr publishes no first-party client libraries. The only registry hit is a
+  community SDK explicitly marked unofficial. The PyPI package `wispr` is an unrelated
+  WISPr hotspot-protocol client by a different author.
+packages:
+- language: typescript
+  registry: npm
+  name: wispr-flow-sdk-unofficial
+  url: https://www.npmjs.com/package/wispr-flow-sdk-unofficial
+  install: npm install wispr-flow-sdk-unofficial
+  official: false
+  notes: Community-built TypeScript SDK for the Wispr Flow voice-to-text API; not
+    affiliated with Wispr.

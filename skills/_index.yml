@@ -1,0 +1,17 @@
+generated: '2026-07-21'
+method: generated
+skills:
+- file: wispr-ai-manage-personal-dictionary.md
+  name: Manage a Wispr Flow personal dictionary
+  api: openapi/wispr-ai-backend-openapi-original.json
+  operations:
+  - get_personal_dictionary
+  - update_personal_dictionary
+  - delete_word_in_dictionary
+- file: wispr-ai-check-service-health.md
+  name: Check Wispr Flow backend health and user status
+  api: openapi/wispr-ai-backend-openapi-original.json
+  operations:
+  - health
+  - version
+  - user_status

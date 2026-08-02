@@ -1,0 +1,31 @@
+generated: '2026-07-21'
+method: searched
+hosts:
+- host: https://wisprflow.ai
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/apple-app-site-association
+    status: 200
+  - path: /llms.txt
+    status: 200
+    file: ../llms/wispr-ai-llms.txt
+- host: https://api.wisprflow.ai
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/apple-app-site-association
+    status: 200
+  - path: /openapi.json
+    status: 200
+    file: ../openapi/wispr-ai-backend-openapi-original.json

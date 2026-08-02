@@ -1,0 +1,31 @@
+generated: '2026-07-21'
+method: searched
+source: https://trust.wispr.ai/ + openapi/wispr-ai-backend-openapi-original.json
+standards:
+- id: soc2-type2
+  conforms: true
+  evidence: SOC 2 Type II attestation published on trust.wispr.ai (SafeBase trust center)
+- id: iso27001
+  conforms: true
+  evidence: ISO/IEC 27001 certification listed on trust.wispr.ai
+- id: hipaa
+  conforms: true
+  evidence: HIPAA report available on trust.wispr.ai; HIPAA compliance documented at wisprflow.ai/help/security/hipaa
+- id: oauth2
+  conforms: false
+  evidence: OpenAPI declares only apiKey securitySchemes (Authorization, X-API-Key headers); SSO/SAML offered for enterprise sign-in but no OAuth2 API authorization
+- id: oidc
+  conforms: false
+  evidence: no /.well-known/openid-configuration on wisprflow.ai or api.wisprflow.ai (404)
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: no application/problem+json in the OpenAPI; errors use FastAPI HTTPValidationError envelopes
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt returns 404 on both hosts; disclosure handled via wisprflow.ai/bug-bounty
+- id: pagination
+  conforms: true
+  evidence: OpenAPI operations use page/limit/offset/cursor query parameters
+- id: idempotency-key
+  conforms: false
+  evidence: no Idempotency-Key header contract in the OpenAPI (some operations documented as naturally idempotent)

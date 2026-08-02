@@ -1,0 +1,21 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/wispr-ai-backend-openapi-original.json
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: ApiKeyHeaderPatched
+  type: apiKey
+  in: header
+  parameter: Authorization
+  sources:
+  - openapi/wispr-ai-backend-openapi-original.json
+- name: APIKeyHeader
+  type: apiKey
+  in: header
+  parameter: X-API-Key
+  sources:
+  - openapi/wispr-ai-backend-openapi-original.json

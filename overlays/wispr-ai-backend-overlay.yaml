@@ -1,0 +1,29 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Wispr Flow Backend API
+  version: 1.0.0
+extends: openapi/wispr-ai-backend-openapi-original.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist:
+      aid: wispr-ai
+      harvested: '2026-07-21'
+      source: https://api.wisprflow.ai/openapi.json
+      notes: Publicly served FastAPI backend spec for the Wispr Flow clients; API-key authenticated and not offered as a documented
+        public developer product.
+- target: $.info
+  update:
+    contact:
+      name: Wispr
+      url: https://wisprflow.ai/support
+- target: $
+  update:
+    servers:
+    - url: https://api.wisprflow.ai
+      description: Production (derived from the serving host; spec publishes no servers[])
+- target: $
+  update:
+    externalDocs:
+      description: Wispr Flow help center
+      url: https://docs.wisprflow.ai
