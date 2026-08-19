@@ -1,0 +1,76 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics LinkedIn API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "LinkedIn",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Linkedin Connect",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/linkedin/connect",
+            "params": [
+              {
+                "name": "source",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Begin the LinkedIn OAuth flow: redirect the user to LinkedIn's consent screen."
+        },
+        {
+          "info": {
+            "name": "Linkedin Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/linkedin/status",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Return the caller's LinkedIn connection state."
+        },
+        {
+          "info": {
+            "name": "Linkedin Disconnect",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/linkedin/disconnect",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Remove the caller's LinkedIn integration; best-effort delete the signal first."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

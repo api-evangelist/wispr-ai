@@ -2,8 +2,8 @@ generated: '2026-07-21'
 method: derived
 status: candidate
 source: openapi/wispr-ai-backend-openapi-original.json
-notes: No official Wispr MCP server found (official MCP registry search returned zero). Candidate tool list derived one-per-operationId from the
-  publicly served backend OpenAPI.
+notes: No official Wispr MCP server found (official MCP registry search returned zero). Candidate tool
+  list derived one-per-operationId from the publicly served backend OpenAPI.
 server:
   name: wispr-ai
   transport: http
@@ -1308,3 +1308,9 @@ tools:
 - name: read_root__get
   description: Read Root
   source_operation: openapi/wispr-ai-backend-openapi-original.json#read_root__get
+deployment:
+  mode: none
+  verified: derived
+  tools: 433
+  checked: '2026-08-12'
+  source: catalog MCP census

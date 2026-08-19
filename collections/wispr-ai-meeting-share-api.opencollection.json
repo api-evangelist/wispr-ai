@@ -1,0 +1,228 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Meeting Share API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Meeting Share",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Shared Meeting Notes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/meetings/shared",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Return notes shared with the authenticated caller."
+        },
+        {
+          "info": {
+            "name": "Resolve Shared Meeting Note",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/meetings/shared/:slug",
+            "params": [
+              {
+                "name": "slug",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Resolve a share slug to the note payload.\n\nAuth is optional and Cloud Sync is NOT required: an anyone-with-link note must\nbe viewable by anonymous callers, so the only protection on this path is a\nper-IP rate limit. When a valid token is present we additionally honor the\nowner / invited-recipient / domain-match access tiers; anonymous callers can\nonly ever read anyone-with-link notes.\n\nReturns 404 for both unknown slugs and accessible-but-no-access cases to prevent\ninformation leakage about shar"
+        },
+        {
+          "info": {
+            "name": "Get Shared Meeting Note Transcript",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/meetings/shared/:slug/transcript",
+            "params": [
+              {
+                "name": "slug",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Return the refined transcript + speaker map for a shared note.\n\nSame access model as resolving the note itself: auth optional, no Cloud Sync\ngate, per-IP rate limit, and 404 for unknown slug and no-access alike. An\naccessible note whose transcript is absent, unreadable, or retention-erased\nresolves 200 with ``transcript: null`` — the cases are deliberately\nindistinguishable and the client shows its empty state."
+        },
+        {
+          "info": {
+            "name": "Get Shared Note Share State",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/meetings/shared/:slug/share",
+            "params": [
+              {
+                "name": "slug",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Return share state (owner, recipients, visibility, caller role) for a shared note.\n\nSame access model as resolving the note itself: auth optional, no Cloud Sync\ngate, per-IP rate limit, and 404 for unknown slug and no-access alike (no\nexistence leak). Disclosure is least-privilege: recipient emails are shown\nonly to the owner and explicitly-invited recipients — domain and link viewers\nget an empty ``recipients`` list — and the owner's email is null for anonymous\ncallers. Read-only by constructio"
+        },
+        {
+          "info": {
+            "name": "Get Meeting Share State",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/meetings/:meeting_id/share",
+            "params": [
+              {
+                "name": "meeting_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Return full share state for a meeting the caller owns.\n\nPure read: returns 404 until sharing has been enabled (POST /{meeting_id}/share).\nThe slug is only ever minted by the dedicated create route, never as a side\neffect of a read."
+        },
+        {
+          "info": {
+            "name": "Upsert Meeting Share",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/meetings/:meeting_id/share",
+            "params": [
+              {
+                "name": "meeting_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create or update the share for a meeting the caller owns. Idempotent.\n\nThe single write entry point for share state: the first call mints the slug\nwith the requested visibility, later calls just update visibility — so\n\"share publicly\" is one round trip."
+        },
+        {
+          "info": {
+            "name": "Add Meeting Share Recipients",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/meetings/:meeting_id/share/recipients",
+            "params": [
+              {
+                "name": "meeting_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Invite one or more recipients to an already-created share in a single call.\n\nEach recipient is processed independently and tallied in the response: an\naddress the owner's enterprise policy bars from external sharing is counted\nunder ``not_eligible`` rather than failing the whole request, and a malformed\naddress or self-invite is counted under ``failed``. Operates on an existing\nshare only — returns 404 if the meeting hasn't been shared yet (create the link\nfirst via PUT /{meeting_id}/share). The"
+        },
+        {
+          "info": {
+            "name": "Delete Meeting Share Recipient",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/meetings/:meeting_id/share/recipients/:email",
+            "params": [
+              {
+                "name": "meeting_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "email",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Hard-delete a recipient by email, revoking their invited access immediately.\n\n(meeting_id, email) is the recipient's natural key — the same key add uses — so\nclients never need a surrogate id round trip."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

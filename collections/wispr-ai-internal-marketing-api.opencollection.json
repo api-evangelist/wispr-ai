@@ -1,0 +1,151 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Internal Marketing API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Internal Marketing",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Generate Flow State Profiles",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/marketing/flow-state/generate",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Kick off a background job that builds per-user Flow State profiles."
+        },
+        {
+          "info": {
+            "name": "Generate And Send Flow State Emails",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/marketing/flow-state/generate-send",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Enqueue a generate+send job for all eligible Flow State profiles."
+        },
+        {
+          "info": {
+            "name": "Send Flow State Emails",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/marketing/flow-state/send",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Kick off a background job that dispatches Flow State events to Customer.io."
+        },
+        {
+          "info": {
+            "name": "Get Flow State Month Summary",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/marketing/flow-state/months/:reporting_month",
+            "params": [
+              {
+                "name": "reporting_month",
+                "value": "",
+                "type": "path",
+                "description": "First day of the reporting month."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Return month-level Flow State generation/send state for the admin portal."
+        },
+        {
+          "info": {
+            "name": "Preview Flow State Profiles",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/marketing/flow-state/preview",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Return generated profile rows for review before dispatch."
+        },
+        {
+          "info": {
+            "name": "Get Flow State Job",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/marketing/flow-state/jobs/:job_id",
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Return the latest persisted state of a marketing job."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

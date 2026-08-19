@@ -1,0 +1,182 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Transform API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Transform",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Transforms Voice Prompts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/transform/transforms-voice-prompts",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Resolve the requesting user's team/personal Transforms voice profiles.\n\nReturns both when the user matches a personal email and a team domain.\nClient: ``desktop/src/main/backend/ariaWeb.ts`` → ``getVoiceProfilePrompts``."
+        },
+        {
+          "info": {
+            "name": "Get Suggestions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/transform/suggestions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get Suggestions"
+        },
+        {
+          "info": {
+            "name": "Apply Transform",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/transform/apply",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Apply Transform"
+        },
+        {
+          "info": {
+            "name": "Apply Transform Stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/transform/apply/stream",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "SSE variant of :func:`apply_transform`.\n\nClient: ``desktop/src/main/backend/ariaWeb.ts`` → ``applyTransformStream``."
+        },
+        {
+          "info": {
+            "name": "Apply Transform Suggestion",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/transform/apply/suggestion",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Apply Transform Suggestion"
+        },
+        {
+          "info": {
+            "name": "Apply Transform Suggestion Stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/transform/apply/suggestion/stream",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "SSE variant of :func:`apply_transform_suggestion`.\n\nClient: ``desktop/src/main/backend/ariaWeb.ts`` → ``applyTransformSuggestionStream``."
+        },
+        {
+          "info": {
+            "name": "Apply Transform Dynamic",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/transform/apply/dynamic",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Apply Transform Dynamic"
+        },
+        {
+          "info": {
+            "name": "Apply Transform Dynamic Stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/transform/apply/dynamic/stream",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "SSE variant of :func:`apply_transform_dynamic`.\n\nClient: ``desktop/src/main/backend/ariaWeb.ts`` → ``applyTransformDynamicStream``."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

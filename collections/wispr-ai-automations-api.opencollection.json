@@ -1,0 +1,81 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Automations API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Automations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Sync Automations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/automations/sync",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Pull the user's server-authored automations (delta on ``modified_at``, capped + paged)."
+        },
+        {
+          "info": {
+            "name": "Send Email",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/automations/send-email",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Send an email via the authenticated user's connected Google Automations account.\n\nBacks the todo send-email automation card. The sender is the principal;\nrecipients come from the body. Handled failures return 200 with\n``successful=false`` + an ``error`` code so the client can render a specific\ntoast; only auth/ratelimit/validation/unexpected map to non-2xx."
+        },
+        {
+          "info": {
+            "name": "Add Calendar Event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/automations/add-calendar",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create an event via the authenticated user's connected Google Automations account.\n\nBacks the todo add-calendar automation card. The organizer is the\nprincipal; attendees and description are optional. Handled failures return 200\nwith ``successful=false`` + an ``error`` code so the client can render a specific\ntoast; only auth/ratelimit/validation/unexpected map to non-2xx."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

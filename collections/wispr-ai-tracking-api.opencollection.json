@@ -1,0 +1,33 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Tracking API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tracking",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Track Event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/tracking/events",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Ingest tracking events from web beacons (Webflow).\n\nCurrently supports:\n- app_download -> Lead event (first per account, via attribution service)"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

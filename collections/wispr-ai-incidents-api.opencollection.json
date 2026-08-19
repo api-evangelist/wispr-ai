@@ -1,0 +1,29 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Incidents API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Incidents",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Incident Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/incidents/status"
+          },
+          "docs": "Return the current incident/outage status for the caller's region.\n\nNo auth required. On any lookup failure the endpoint returns 200 with\n``client_region=\"us\"`` and ``incident_status=null`` so the pre-login\nscreen is never blocked by a status-check error."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

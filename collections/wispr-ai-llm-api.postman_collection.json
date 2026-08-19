@@ -1,0 +1,3539 @@
+{
+  "item": [
+    {
+      "id": "286640be-1203-4084-9f81-0b2904ba7317",
+      "name": "LLM",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f149563f-8b10-4980-89f2-c3da48966017",
+          "name": "Flow Api",
+          "request": {
+            "name": "Flow Api",
+            "description": {},
+            "url": {
+              "path": [
+                "llm",
+                "api"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"audio\": \"<string>\",\n  \"language\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"context\": {\n    \"app\": {\n      \"name\": \"<string>\",\n      \"bundle_id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"url\": \"<string>\"\n    },\n    \"ax_context\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"variable_names\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"file_names\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"ocr_context\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"dictionary_context\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"dictionary_replacements\": {\n      \"key_0\": \"<string>\",\n      \"key_1\": \"<string>\"\n    },\n    \"dictionary_snippets\": {\n      \"key_0\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"key_1\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"key_2\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"user_identifier\": \"<string>\",\n    \"user_first_name\": \"<string>\",\n    \"user_last_name\": \"<string>\",\n    \"textbox_contents\": {\n      \"beforeText\": \"\",\n      \"selectedText\": \"\",\n      \"afterText\": \"\",\n      \"contents\": \"\"\n    },\n    \"screenshot\": \"<string>\",\n    \"content_text\": \"<string>\",\n    \"content_html\": \"<string>\",\n    \"conversation\": {\n      \"id\": \"<string>\",\n      \"participants\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"messages\": [\n        {\n          \"role\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"content\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"sender_id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"role\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"content\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"sender_id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"session_dictation_apps\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"properties\": {\n    \"language\": \"<string>\",\n    \"before_text\": \"<string>\",\n    \"after_text\": \"<string>\",\n    \"selected_text\": \"<string>\",\n    \"app_type\": \"<string>\",\n    \"dictionary\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"transcript_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "916f7415-af6d-4b0d-99aa-40a3a2fbf4cf",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "api"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"audio\": \"<string>\",\n  \"language\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"context\": {\n    \"app\": {\n      \"name\": \"<string>\",\n      \"bundle_id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"url\": \"<string>\"\n    },\n    \"ax_context\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"variable_names\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"file_names\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"ocr_context\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"dictionary_context\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"dictionary_replacements\": {\n      \"key_0\": \"<string>\"\n    },\n    \"dictionary_snippets\": {\n      \"key_0\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"key_1\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"user_identifier\": \"<string>\",\n    \"user_first_name\": \"<string>\",\n    \"user_last_name\": \"<string>\",\n    \"textbox_contents\": {\n      \"beforeText\": \"\",\n      \"selectedText\": \"\",\n      \"afterText\": \"\",\n      \"contents\": \"\"\n    },\n    \"screenshot\": \"<string>\",\n    \"content_text\": \"<string>\",\n    \"content_html\": \"<string>\",\n    \"conversation\": {\n      \"id\": \"<string>\",\n      \"participants\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"messages\": [\n        {\n          \"role\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"content\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"sender_id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"role\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"content\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"sender_id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"session_dictation_apps\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"properties\": {\n    \"language\": \"<string>\",\n    \"before_text\": \"<string>\",\n    \"after_text\": \"<string>\",\n    \"selected_text\": \"<string>\",\n    \"app_type\": \"<string>\",\n    \"dictionary\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"transcript_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "33150541-4032-40ac-a904-1710bd55fd10",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "api"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"audio\": \"<string>\",\n  \"language\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"context\": {\n    \"app\": {\n      \"name\": \"<string>\",\n      \"bundle_id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"url\": \"<string>\"\n    },\n    \"ax_context\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"variable_names\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"file_names\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"ocr_context\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"dictionary_context\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"dictionary_replacements\": {\n      \"key_0\": \"<string>\"\n    },\n    \"dictionary_snippets\": {\n      \"key_0\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"key_1\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"user_identifier\": \"<string>\",\n    \"user_first_name\": \"<string>\",\n    \"user_last_name\": \"<string>\",\n    \"textbox_contents\": {\n      \"beforeText\": \"\",\n      \"selectedText\": \"\",\n      \"afterText\": \"\",\n      \"contents\": \"\"\n    },\n    \"screenshot\": \"<string>\",\n    \"content_text\": \"<string>\",\n    \"content_html\": \"<string>\",\n    \"conversation\": {\n      \"id\": \"<string>\",\n      \"participants\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"messages\": [\n        {\n          \"role\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"content\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"sender_id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"role\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"content\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"sender_id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"session_dictation_apps\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"properties\": {\n    \"language\": \"<string>\",\n    \"before_text\": \"<string>\",\n    \"after_text\": \"<string>\",\n    \"selected_text\": \"<string>\",\n    \"app_type\": \"<string>\",\n    \"dictionary\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"transcript_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "81259a50-eb47-4d2c-9fb8-bc920995d9a1",
+          "name": "Asr",
+          "request": {
+            "name": "Asr",
+            "description": {},
+            "url": {
+              "path": [
+                "llm",
+                "asr"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"audio\": \"<string>\",\n  \"language\": \"\",\n  \"prompt\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2ac163ca-a8a8-4227-8be1-39a0ffa3fe90",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "asr"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"audio\": \"<string>\",\n  \"language\": \"\",\n  \"prompt\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f0a2ac5b-1ec0-4bd5-8968-ba14236f04c2",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "asr"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"audio\": \"<string>\",\n  \"language\": \"\",\n  \"prompt\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "81c46853-802b-4c47-adeb-4dbc8fdc0862",
+          "name": "Formatting",
+          "request": {
+            "name": "Formatting",
+            "description": {},
+            "url": {
+              "path": [
+                "llm",
+                "formatting"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"<string>\",\n  \"model_name\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3782484b-9919-4130-826e-0f1182223fe2",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "formatting"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": \"<string>\",\n  \"model_name\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9053ae98-b035-4e7a-bd46-1ae02d50c8c7",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "formatting"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": \"<string>\",\n  \"model_name\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f5c16bcd-3aa2-4bc5-891c-7e5642307a49",
+          "name": "Completion",
+          "request": {
+            "name": "Completion",
+            "description": {},
+            "url": {
+              "path": [
+                "llm",
+                "completion"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"model\": \"<string>\",\n  \"messages\": [\n    \"<object>\",\n    \"<object>\"\n  ],\n  \"client_type\": \"FIREWORKS\",\n  \"temperature\": 0,\n  \"max_tokens\": 4096,\n  \"top_p\": 1,\n  \"frequency_penalty\": 0,\n  \"presence_penalty\": 0,\n  \"tools\": [\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"parameters\": \"<object>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"parameters\": \"<object>\"\n    }\n  ],\n  \"source\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a036c787-69b4-487f-8647-a3b3ab32bc26",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "completion"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"model\": \"<string>\",\n  \"messages\": [\n    \"<object>\",\n    \"<object>\"\n  ],\n  \"client_type\": \"FIREWORKS\",\n  \"temperature\": 0,\n  \"max_tokens\": 4096,\n  \"top_p\": 1,\n  \"frequency_penalty\": 0,\n  \"presence_penalty\": 0,\n  \"tools\": [\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"parameters\": \"<object>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"parameters\": \"<object>\"\n    }\n  ],\n  \"source\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "568807a9-6a94-47a7-b64d-8e3ac13ef64d",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "completion"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"model\": \"<string>\",\n  \"messages\": [\n    \"<object>\",\n    \"<object>\"\n  ],\n  \"client_type\": \"FIREWORKS\",\n  \"temperature\": 0,\n  \"max_tokens\": 4096,\n  \"top_p\": 1,\n  \"frequency_penalty\": 0,\n  \"presence_penalty\": 0,\n  \"tools\": [\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"parameters\": \"<object>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"parameters\": \"<object>\"\n    }\n  ],\n  \"source\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6ac7f47f-ee0c-4cb2-b7b2-7b5d317866fc",
+          "name": "Ocr",
+          "request": {
+            "name": "Ocr",
+            "description": {},
+            "url": {
+              "path": [
+                "llm",
+                "ocr"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"image\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "13900fc3-4f1c-4afe-a58e-de8ada985e9a",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "ocr"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"image\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8e879efb-8978-45c3-8573-a5e1490cd534",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "ocr"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"image\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "118344c0-572c-4dfc-b9bb-d97759204ff8",
+          "name": "Extract Asr Words",
+          "request": {
+            "name": "Extract Asr Words",
+            "description": {},
+            "url": {
+              "path": [
+                "llm",
+                "extract_asr_words"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"textbox_text\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2e3c5826-ddc9-4db6-9df6-f6af814bbc22",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "extract_asr_words"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"textbox_text\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c658b5bf-ab69-4154-8b40-5139ec5e5766",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "extract_asr_words"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"textbox_text\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "32988626-e7b5-4649-a6de-caf82c2fad1a",
+          "name": "Format Non English Endpoint",
+          "request": {
+            "name": "Format Non English Endpoint",
+            "description": {},
+            "url": {
+              "path": [
+                "llm",
+                "format_non_english"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"<string>\",\n  \"app_type\": \"<string>\",\n  \"detected_language\": \"<string>\",\n  \"user_languages\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d939bcf9-9857-47c9-ac1a-061a2f07865c",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "format_non_english"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": \"<string>\",\n  \"app_type\": \"<string>\",\n  \"detected_language\": \"<string>\",\n  \"user_languages\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c80f54ca-edf6-469a-8f8d-2159a183d20a",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "format_non_english"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": \"<string>\",\n  \"app_type\": \"<string>\",\n  \"detected_language\": \"<string>\",\n  \"user_languages\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b97a4b9a-a3b7-4867-8caa-4a767e038725",
+          "name": "Asr Audio Chunks",
+          "request": {
+            "name": "Asr Audio Chunks",
+            "description": {},
+            "url": {
+              "path": [
+                "llm",
+                "asr_audio_chunks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"access_token\": \"<string>\",\n  \"pipeline\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"context\": {\n    \"app\": {\n      \"name\": \"<string>\",\n      \"bundle_id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"url\": \"<string>\"\n    },\n    \"ax_context\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"variable_names\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"file_names\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"ocr_context\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"dictionary_context\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"dictionary_replacements\": {\n      \"key_0\": \"<string>\",\n      \"key_1\": \"<string>\"\n    },\n    \"dictionary_snippets\": {\n      \"key_0\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"key_1\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"user_identifier\": \"<string>\",\n    \"user_first_name\": \"<string>\",\n    \"user_last_name\": \"<string>\",\n    \"textbox_contents\": {\n      \"beforeText\": \"\",\n      \"selectedText\": \"\",\n      \"afterText\": \"\",\n      \"contents\": \"\"\n    },\n    \"screenshot\": \"<string>\",\n    \"content_text\": \"<string>\",\n    \"content_html\": \"<string>\",\n    \"conversation\": {\n      \"id\": \"<string>\",\n      \"participants\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"messages\": [\n        {\n          \"role\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"content\": \"<string>\",\n          \"sender_id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"role\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"content\": \"<string>\",\n          \"sender_id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"session_dictation_apps\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"app\": \"<string>\",\n  \"user\": \"<object>\",\n  \"metadata\": \"<object>\",\n  \"audio\": \"<string>\",\n  \"audio_packets\": {\n    \"packets\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"volumes\": [\n      \"<number>\",\n      \"<number>\"\n    ],\n    \"packet_duration\": \"<number>\",\n    \"audio_encoding\": \"<string>\",\n    \"byte_encoding\": \"<string>\"\n  },\n  \"language\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"prev_asr_text\": \"\",\n  \"prev_llm_text\": \"\",\n  \"prev_detected_language\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6b579ee9-03ad-46ff-9def-fe378a0eb8a8",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "asr_audio_chunks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"access_token\": \"<string>\",\n  \"pipeline\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"context\": {\n    \"app\": {\n      \"name\": \"<string>\",\n      \"bundle_id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"url\": \"<string>\"\n    },\n    \"ax_context\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"variable_names\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"file_names\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"ocr_context\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"dictionary_context\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"dictionary_replacements\": {\n      \"key_0\": \"<string>\",\n      \"key_1\": \"<string>\"\n    },\n    \"dictionary_snippets\": {\n      \"key_0\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"key_1\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"user_identifier\": \"<string>\",\n    \"user_first_name\": \"<string>\",\n    \"user_last_name\": \"<string>\",\n    \"textbox_contents\": {\n      \"beforeText\": \"\",\n      \"selectedText\": \"\",\n      \"afterText\": \"\",\n      \"contents\": \"\"\n    },\n    \"screenshot\": \"<string>\",\n    \"content_text\": \"<string>\",\n    \"content_html\": \"<string>\",\n    \"conversation\": {\n      \"id\": \"<string>\",\n      \"participants\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"messages\": [\n        {\n          \"role\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"content\": \"<string>\",\n          \"sender_id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"role\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"content\": \"<string>\",\n          \"sender_id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"session_dictation_apps\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"app\": \"<string>\",\n  \"user\": \"<object>\",\n  \"metadata\": \"<object>\",\n  \"audio\": \"<string>\",\n  \"audio_packets\": {\n    \"packets\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"volumes\": [\n      \"<number>\",\n      \"<number>\"\n    ],\n    \"packet_duration\": \"<number>\",\n    \"audio_encoding\": \"<string>\",\n    \"byte_encoding\": \"<string>\"\n  },\n  \"language\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"prev_asr_text\": \"\",\n  \"prev_llm_text\": \"\",\n  \"prev_detected_language\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "47d906df-b384-4c71-a3ed-a64b3a81cfe9",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "asr_audio_chunks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"access_token\": \"<string>\",\n  \"pipeline\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"context\": {\n    \"app\": {\n      \"name\": \"<string>\",\n      \"bundle_id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"url\": \"<string>\"\n    },\n    \"ax_context\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"variable_names\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"file_names\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"ocr_context\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"dictionary_context\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"dictionary_replacements\": {\n      \"key_0\": \"<string>\",\n      \"key_1\": \"<string>\"\n    },\n    \"dictionary_snippets\": {\n      \"key_0\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"key_1\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"user_identifier\": \"<string>\",\n    \"user_first_name\": \"<string>\",\n    \"user_last_name\": \"<string>\",\n    \"textbox_contents\": {\n      \"beforeText\": \"\",\n      \"selectedText\": \"\",\n      \"afterText\": \"\",\n      \"contents\": \"\"\n    },\n    \"screenshot\": \"<string>\",\n    \"content_text\": \"<string>\",\n    \"content_html\": \"<string>\",\n    \"conversation\": {\n      \"id\": \"<string>\",\n      \"participants\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"messages\": [\n        {\n          \"role\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"content\": \"<string>\",\n          \"sender_id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"role\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"content\": \"<string>\",\n          \"sender_id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"session_dictation_apps\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"app\": \"<string>\",\n  \"user\": \"<object>\",\n  \"metadata\": \"<object>\",\n  \"audio\": \"<string>\",\n  \"audio_packets\": {\n    \"packets\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"volumes\": [\n      \"<number>\",\n      \"<number>\"\n    ],\n    \"packet_duration\": \"<number>\",\n    \"audio_encoding\": \"<string>\",\n    \"byte_encoding\": \"<string>\"\n  },\n  \"language\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"prev_asr_text\": \"\",\n  \"prev_llm_text\": \"\",\n  \"prev_detected_language\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0f91d6ac-334e-4b06-9335-cc79c230af65",
+          "name": "Command Mode Route",
+          "request": {
+            "name": "Command Mode Route",
+            "description": {},
+            "url": {
+              "path": [
+                "llm",
+                "command_mode_route"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_text\": \"<string>\",\n  \"selected_text\": \"<string>\",\n  \"instruction\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c1a67569-b29e-4c23-84af-1b1a2fda3044",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "command_mode_route"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"full_text\": \"<string>\",\n  \"selected_text\": \"<string>\",\n  \"instruction\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b8aa084a-0a16-4d09-902d-b6ccc2d7037e",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "command_mode_route"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"full_text\": \"<string>\",\n  \"selected_text\": \"<string>\",\n  \"instruction\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "10062bd0-bd8d-4255-89ab-60e345d042f0",
+          "name": "Command Mode",
+          "request": {
+            "name": "Command Mode",
+            "description": {},
+            "url": {
+              "path": [
+                "llm",
+                "command_mode"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_text\": \"<string>\",\n  \"selected_text\": \"<string>\",\n  \"instruction\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4f1f4e8d-4347-4b55-bf1d-5a83168b60fe",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "command_mode"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"full_text\": \"<string>\",\n  \"selected_text\": \"<string>\",\n  \"instruction\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a788036e-6098-41be-a96b-6048303b65e2",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "command_mode"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"full_text\": \"<string>\",\n  \"selected_text\": \"<string>\",\n  \"instruction\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0d0e3a04-afa6-4cdd-92c1-39d4e8648345",
+          "name": "Instruct Mode",
+          "request": {
+            "name": "Instruct Mode",
+            "description": {},
+            "url": {
+              "path": [
+                "llm",
+                "instruct_mode"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"instruction\": \"<string>\",\n  \"screen_context\": \"<string>\",\n  \"provider_config\": {\n    \"provider\": {\n      \"model\": \"<string>\",\n      \"kind\": \"openai\"\n    }\n  },\n  \"selected_text\": \"\",\n  \"before_text\": \"\",\n  \"after_text\": \"\",\n  \"app_name\": \"\",\n  \"app_url\": \"\",\n  \"user_voice_preference\": \"<string>\",\n  \"session_history\": [\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "dc1a5091-41fb-469c-8821-7a022648d28b",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "instruct_mode"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"instruction\": \"<string>\",\n  \"screen_context\": \"<string>\",\n  \"provider_config\": {\n    \"provider\": {\n      \"model\": \"<string>\",\n      \"kind\": \"openai\"\n    }\n  },\n  \"selected_text\": \"\",\n  \"before_text\": \"\",\n  \"after_text\": \"\",\n  \"app_name\": \"\",\n  \"app_url\": \"\",\n  \"user_voice_preference\": \"<string>\",\n  \"session_history\": [\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"content\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8a3ac3da-f8ba-49c5-90ee-f0501b2d5705",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "instruct_mode"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"instruction\": \"<string>\",\n  \"screen_context\": \"<string>\",\n  \"provider_config\": {\n    \"provider\": {\n      \"model\": \"<string>\",\n      \"kind\": \"openai\"\n    }\n  },\n  \"selected_text\": \"\",\n  \"before_text\": \"\",\n  \"after_text\": \"\",\n  \"app_name\": \"\",\n  \"app_url\": \"\",\n  \"user_voice_preference\": \"<string>\",\n  \"session_history\": [\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9f019a37-b189-4e0e-b35b-d74474ba68b9",
+          "name": "Polish Text",
+          "request": {
+            "name": "Polish Text",
+            "description": {},
+            "url": {
+              "path": [
+                "llm",
+                "polish_text"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"selected_text\": \"<string>\",\n  \"instructions\": {\n    \"default\": {},\n    \"custom\": {}\n  },\n  \"writing_samples\": {\n    \"key_0\": {\n      \"text\": \"<string>\",\n      \"prompt_name\": \"<string>\"\n    },\n    \"key_1\": {\n      \"text\": \"<string>\",\n      \"prompt_name\": \"<string>\"\n    }\n  },\n  \"custom_prompt\": {\n    \"prompt\": \"<string>\",\n    \"shortcut\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"prompt_name\": \"<string>\"\n  },\n  \"provider_config\": {\n    \"provider\": {\n      \"model\": \"<string>\",\n      \"kind\": \"openai\"\n    }\n  },\n  \"user_voice_preference\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "587f1fb5-9810-4fe6-8c6a-e829fd4f42dd",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "polish_text"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"selected_text\": \"<string>\",\n  \"instructions\": {\n    \"default\": {},\n    \"custom\": {}\n  },\n  \"writing_samples\": {\n    \"key_0\": {\n      \"text\": \"<string>\",\n      \"prompt_name\": \"<string>\"\n    },\n    \"key_1\": {\n      \"text\": \"<string>\",\n      \"prompt_name\": \"<string>\"\n    }\n  },\n  \"custom_prompt\": {\n    \"prompt\": \"<string>\",\n    \"shortcut\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"prompt_name\": \"<string>\"\n  },\n  \"provider_config\": {\n    \"provider\": {\n      \"model\": \"<string>\",\n      \"kind\": \"openai\"\n    }\n  },\n  \"user_voice_preference\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"short_text\",\n  \"polished_text\": \"string\",\n  \"model_version\": \"string\",\n  \"used_provider\": {\n    \"model\": \"<string>\",\n    \"kind\": \"openai\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a3929114-81dc-41e0-95d4-a21a48ea3c9a",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "polish_text"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"selected_text\": \"<string>\",\n  \"instructions\": {\n    \"default\": {},\n    \"custom\": {}\n  },\n  \"writing_samples\": {\n    \"key_0\": {\n      \"text\": \"<string>\",\n      \"prompt_name\": \"<string>\"\n    },\n    \"key_1\": {\n      \"text\": \"<string>\",\n      \"prompt_name\": \"<string>\"\n    }\n  },\n  \"custom_prompt\": {\n    \"prompt\": \"<string>\",\n    \"shortcut\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"prompt_name\": \"<string>\"\n  },\n  \"provider_config\": {\n    \"provider\": {\n      \"model\": \"<string>\",\n      \"kind\": \"openai\"\n    }\n  },\n  \"user_voice_preference\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "01b4492a-e118-4cef-9e85-54a27dfeea73",
+          "name": "Extract Edited Words",
+          "request": {
+            "name": "Extract Edited Words",
+            "description": {
+              "content": "Extract proper nouns, technical terms, or domain-specific terms that were edited\nbetween the original pasted text and the edited text.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "llm",
+                "extract_edited_words"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"potential_words\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ed4b54e9-974f-4a3d-84ac-4ee9c345f84e",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "extract_edited_words"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"potential_words\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"words\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d3e628eb-bd0f-4495-819f-9477ea247c8a",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "extract_edited_words"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"potential_words\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "750c182e-04b3-4022-9f57-24c40d0d4654",
+          "name": "Classify Intent",
+          "request": {
+            "name": "Classify Intent",
+            "description": {
+              "content": "Classify voice input into one of the provided routes.\n\nReturns the matched route plus optional per-route structured data the classifier",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "llm",
+                "classify_intent"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"config\": {\n    \"dictation_short_circuit_provider\": {\n      \"model\": \"<string>\",\n      \"kind\": \"openrouter\"\n    },\n    \"route_provider\": {\n      \"model\": \"<string>\",\n      \"kind\": \"openrouter\"\n    }\n  },\n  \"routes\": [\n    {\n      \"name\": \"<string>\",\n      \"route_prompt\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"route_prompt\": \"<string>\"\n    }\n  ],\n  \"context\": {\n    \"asr_text\": \"<string>\",\n    \"app_name\": \"\",\n    \"app_url\": \"\",\n    \"before_text\": \"\",\n    \"selected_text\": \"\",\n    \"after_text\": \"\",\n    \"ax_context\": \"\",\n    \"session_history\": [\n      {\n        \"role\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"role\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ]\n  },\n  \"short_circuit_route\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b9bce45d-fe69-4634-83ad-3f7d769247c6",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "classify_intent"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"config\": {\n    \"dictation_short_circuit_provider\": {\n      \"model\": \"<string>\",\n      \"kind\": \"openrouter\"\n    },\n    \"route_provider\": {\n      \"model\": \"<string>\",\n      \"kind\": \"openrouter\"\n    }\n  },\n  \"routes\": [\n    {\n      \"name\": \"<string>\",\n      \"route_prompt\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"route_prompt\": \"<string>\"\n    }\n  ],\n  \"context\": {\n    \"asr_text\": \"<string>\",\n    \"app_name\": \"\",\n    \"app_url\": \"\",\n    \"before_text\": \"\",\n    \"selected_text\": \"\",\n    \"after_text\": \"\",\n    \"ax_context\": \"\",\n    \"session_history\": [\n      {\n        \"role\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"role\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ]\n  },\n  \"short_circuit_route\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"is_instruction\": false,\n  \"route\": \"string\",\n  \"data\": {\n    \"transform\": {\n      \"matched_prompt_name\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "83418413-7a1b-4441-b1b8-78de54cda384",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "classify_intent"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"config\": {\n    \"dictation_short_circuit_provider\": {\n      \"model\": \"<string>\",\n      \"kind\": \"openrouter\"\n    },\n    \"route_provider\": {\n      \"model\": \"<string>\",\n      \"kind\": \"openrouter\"\n    }\n  },\n  \"routes\": [\n    {\n      \"name\": \"<string>\",\n      \"route_prompt\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"route_prompt\": \"<string>\"\n    }\n  ],\n  \"context\": {\n    \"asr_text\": \"<string>\",\n    \"app_name\": \"\",\n    \"app_url\": \"\",\n    \"before_text\": \"\",\n    \"selected_text\": \"\",\n    \"after_text\": \"\",\n    \"ax_context\": \"\",\n    \"session_history\": [\n      {\n        \"role\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"role\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ]\n  },\n  \"short_circuit_route\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b3bbde20-5099-4c69-855f-fdd6cd5ab5e7",
+          "name": "Detect Formality",
+          "request": {
+            "name": "Detect Formality",
+            "description": {
+              "content": "Classify text messages into one of three formality levels based on\ncapitalization, punctuation and other use of informal language.\nLevels: very_casual, casual, formal",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "llm",
+                "detect_formality"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "04828594-af7a-4427-b32d-7d2e2c4956e1",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "detect_formality"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"text\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"formality_level\": \"casual\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3da93aeb-5af0-4968-9b80-b9152de3e212",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "detect_formality"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"text\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "da64d772-5ebf-42b2-87d6-48ba39e059c5",
+          "name": "Check Sensibility",
+          "request": {
+            "name": "Check Sensibility",
+            "description": {
+              "content": "Check if a transcribed message makes sense in context.\nReturns a score from 0.0 (nonsensical) to 1.0 (makes perfect sense).\nUsed to warn users before they send potentially embarrassing messages.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "llm",
+                "check_sensibility"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transcript\": \"<string>\",\n  \"before_text\": \"\",\n  \"after_text\": \"\",\n  \"app_context\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "94d4d171-ff28-4d58-9729-caed30b4798b",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "check_sensibility"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"transcript\": \"<string>\",\n  \"before_text\": \"\",\n  \"after_text\": \"\",\n  \"app_context\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"score\": 8631.71479636009\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "15db486c-3622-4dd7-ad83-3839b9c6fcca",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "check_sensibility"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"transcript\": \"<string>\",\n  \"before_text\": \"\",\n  \"after_text\": \"\",\n  \"app_context\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "76d0236d-a84b-4f26-bd95-6c29bbbbf483",
+          "name": "Flow Response",
+          "request": {
+            "name": "Flow Response",
+            "description": {},
+            "url": {
+              "path": [
+                "llm",
+                "chat"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workflow\": \"<string>\",\n  \"messages\": [\n    {\n      \"key_0\": \"<string>\",\n      \"key_1\": \"<string>\",\n      \"key_2\": \"<string>\"\n    },\n    {\n      \"key_0\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d7fbf69f-2f10-4049-a075-5938b6e648e3",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "chat"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"workflow\": \"<string>\",\n  \"messages\": [\n    {\n      \"key_0\": \"<string>\",\n      \"key_1\": \"<string>\"\n    },\n    {\n      \"key_0\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8fd4c150-09dc-485c-bad1-95f8e7cbad56",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "chat"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"workflow\": \"<string>\",\n  \"messages\": [\n    {\n      \"key_0\": \"<string>\",\n      \"key_1\": \"<string>\"\n    },\n    {\n      \"key_0\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "51a7593f-70d4-4154-a502-4ac257e15aa9",
+          "name": "Fetch Flow State 2025",
+          "request": {
+            "name": "Fetch Flow State 2025",
+            "description": {},
+            "url": {
+              "path": [
+                "llm",
+                "flow_state_2025"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "21e669a8-c400-4b0c-8705-5ff36d0632be",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "flow_state_2025"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"user_id\": \"string\",\n  \"processing_status\": \"processing\",\n  \"total_words\": 5961,\n  \"total_words_percentile\": 7592.9597136752245,\n  \"last_active\": \"1987-07-16T18:25:09.751Z\",\n  \"total_dictations_desktop\": 5515,\n  \"total_dictations_mobile\": 7026,\n  \"wpm_desktop\": 308.53206325373026,\n  \"wpm_mobile\": 4378.974147536744,\n  \"longest_streak_days\": 6509,\n  \"top_app\": \"string\",\n  \"top_app_day_of_week\": \"string\",\n  \"top_app_hour_of_day\": 8128,\n  \"top_app_category\": \"string\",\n  \"secondary_app_category\": \"string\",\n  \"signature_phrase\": \"string\",\n  \"signature_phrase_app\": \"string\",\n  \"most_used_phrase\": \"string\",\n  \"dictation_strength\": \"string\",\n  \"alter_ego\": \"string\",\n  \"alter_ego_description\": \"string\",\n  \"avg_session_duration_desktop\": 2305.4797586951927,\n  \"avg_session_duration_mobile\": 2258.152459556211,\n  \"goals\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "74ac16a3-141f-4b8e-aaad-9d6e1eb9e594",
+          "name": "Create Flow State 2025",
+          "request": {
+            "name": "Create Flow State 2025",
+            "description": {},
+            "url": {
+              "path": [
+                "llm",
+                "flow_state_2025"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"privacy_mode\": \"<boolean>\",\n  \"history_rows\": [\n    {\n      \"formatted_text\": \"<string>\",\n      \"timestamp\": \"<dateTime>\",\n      \"app_name\": \"<string>\",\n      \"detected_language\": \"<string>\"\n    },\n    {\n      \"formatted_text\": \"<string>\",\n      \"timestamp\": \"<dateTime>\",\n      \"app_name\": \"<string>\",\n      \"detected_language\": \"<string>\"\n    }\n  ],\n  \"timezone\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "65db9c31-ff99-478f-863d-0cd9cc7cf129",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "flow_state_2025"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"privacy_mode\": \"<boolean>\",\n  \"history_rows\": [\n    {\n      \"formatted_text\": \"<string>\",\n      \"timestamp\": \"<dateTime>\",\n      \"app_name\": \"<string>\",\n      \"detected_language\": \"<string>\"\n    },\n    {\n      \"formatted_text\": \"<string>\",\n      \"timestamp\": \"<dateTime>\",\n      \"app_name\": \"<string>\",\n      \"detected_language\": \"<string>\"\n    }\n  ],\n  \"timezone\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"user_id\": \"string\",\n  \"processing_status\": \"complete\",\n  \"total_words\": 2761,\n  \"total_words_percentile\": 6318.755464556865,\n  \"last_active\": \"2005-10-18T12:52:21.516Z\",\n  \"total_dictations_desktop\": 6906,\n  \"total_dictations_mobile\": 3802,\n  \"wpm_desktop\": 3060.719731531134,\n  \"wpm_mobile\": 9853.465231522781,\n  \"longest_streak_days\": 1833,\n  \"top_app\": \"string\",\n  \"top_app_day_of_week\": \"string\",\n  \"top_app_hour_of_day\": 5579,\n  \"top_app_category\": \"string\",\n  \"secondary_app_category\": \"string\",\n  \"signature_phrase\": \"string\",\n  \"signature_phrase_app\": \"string\",\n  \"most_used_phrase\": \"string\",\n  \"dictation_strength\": \"string\",\n  \"alter_ego\": \"string\",\n  \"alter_ego_description\": \"string\",\n  \"avg_session_duration_desktop\": 1763.1260377361912,\n  \"avg_session_duration_mobile\": 3630.1433463534518,\n  \"goals\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f3804e57-29eb-4c5a-9ce4-cfaec0f074d7",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "flow_state_2025"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"privacy_mode\": \"<boolean>\",\n  \"history_rows\": [\n    {\n      \"formatted_text\": \"<string>\",\n      \"timestamp\": \"<dateTime>\",\n      \"app_name\": \"<string>\",\n      \"detected_language\": \"<string>\"\n    },\n    {\n      \"formatted_text\": \"<string>\",\n      \"timestamp\": \"<dateTime>\",\n      \"app_name\": \"<string>\",\n      \"detected_language\": \"<string>\"\n    }\n  ],\n  \"timezone\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bb4fcf09-4243-4d4a-8885-27addff6a4ed",
+          "name": "Fetch Latest Voice Profile",
+          "request": {
+            "name": "Fetch Latest Voice Profile",
+            "description": {},
+            "url": {
+              "path": [
+                "llm",
+                "voice_profile",
+                "latest"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a8f4b5f3-e27c-40e5-a4a3-528b1f37785d",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "voice_profile",
+                    "latest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"processing_status\": \"COMPLETE\",\n  \"headline\": \"string\",\n  \"superpower_title\": \"string\",\n  \"superpower_description\": \"string\",\n  \"peak_time_label\": \"string\",\n  \"peak_time_description\": \"string\",\n  \"peak_time_top_app\": \"string\",\n  \"catch_phrase\": \"string\",\n  \"catch_phrase_description\": \"string\",\n  \"persona\": \"Create\",\n  \"most_used_word\": \"string\",\n  \"most_removed_word\": \"string\",\n  \"word_count_milestone\": 662000,\n  \"created_at\": \"2002-05-15T04:28:31.501Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "044ccd6b-f82a-4cbe-8216-bc78e3feada5",
+          "name": "Fetch Voice Profile",
+          "request": {
+            "name": "Fetch Voice Profile",
+            "description": {},
+            "url": {
+              "path": [
+                "llm",
+                "voice_profile"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "word_count_milestone",
+                  "value": "<integer>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "4c91bea7-1b37-4965-98e3-58bdd8d62362",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "voice_profile"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "word_count_milestone",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"processing_status\": \"COMPLETE\",\n  \"headline\": \"string\",\n  \"superpower_title\": \"string\",\n  \"superpower_description\": \"string\",\n  \"peak_time_label\": \"string\",\n  \"peak_time_description\": \"string\",\n  \"peak_time_top_app\": \"string\",\n  \"catch_phrase\": \"string\",\n  \"catch_phrase_description\": \"string\",\n  \"persona\": \"Create\",\n  \"most_used_word\": \"string\",\n  \"most_removed_word\": \"string\",\n  \"word_count_milestone\": 662000,\n  \"created_at\": \"2002-05-15T04:28:31.501Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a5073c9f-8328-48fa-b293-8e368d0e1d89",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "voice_profile"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "word_count_milestone",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d77c4df0-4df3-4f4d-b1c1-6d9e4396eb3d",
+          "name": "Create Voice Profile",
+          "request": {
+            "name": "Create Voice Profile",
+            "description": {},
+            "url": {
+              "path": [
+                "llm",
+                "voice_profile"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"privacy_mode\": \"<boolean>\",\n  \"history_rows\": [\n    {\n      \"formatted_text\": \"<string>\",\n      \"timestamp\": \"<dateTime>\",\n      \"app_name\": \"<string>\",\n      \"detected_language\": \"<string>\"\n    }\n  ],\n  \"peak_time_label\": \"<string>\",\n  \"peak_time_top_app\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"most_used_word\": \"<string>\",\n  \"most_removed_word\": \"<string>\",\n  \"word_count_milestone\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9220d24a-3ed7-4d39-a5aa-e2bcae32a8f3",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "voice_profile"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"privacy_mode\": \"<boolean>\",\n  \"history_rows\": [\n    {\n      \"formatted_text\": \"<string>\",\n      \"timestamp\": \"<dateTime>\",\n      \"app_name\": \"<string>\",\n      \"detected_language\": \"<string>\"\n    }\n  ],\n  \"peak_time_label\": \"<string>\",\n  \"peak_time_top_app\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"most_used_word\": \"<string>\",\n  \"most_removed_word\": \"<string>\",\n  \"word_count_milestone\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"processing_status\": \"COMPLETE\",\n  \"headline\": \"string\",\n  \"superpower_title\": \"string\",\n  \"superpower_description\": \"string\",\n  \"peak_time_label\": \"string\",\n  \"peak_time_description\": \"string\",\n  \"peak_time_top_app\": \"string\",\n  \"catch_phrase\": \"string\",\n  \"catch_phrase_description\": \"string\",\n  \"persona\": \"Create\",\n  \"most_used_word\": \"string\",\n  \"most_removed_word\": \"string\",\n  \"word_count_milestone\": 662000,\n  \"created_at\": \"2002-05-15T04:28:31.501Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "015d3ab9-9dd4-4546-ab76-8c7740cd54cc",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "llm",
+                    "voice_profile"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"privacy_mode\": \"<boolean>\",\n  \"history_rows\": [\n    {\n      \"formatted_text\": \"<string>\",\n      \"timestamp\": \"<dateTime>\",\n      \"app_name\": \"<string>\",\n      \"detected_language\": \"<string>\"\n    }\n  ],\n  \"peak_time_label\": \"<string>\",\n  \"peak_time_top_app\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"most_used_word\": \"<string>\",\n  \"most_removed_word\": \"<string>\",\n  \"word_count_milestone\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "14b7e373-f3bf-49ae-9b43-706a123e85b9",
+    "name": "Wispr Backend Analytics LLM API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Wispr Backend API",
+      "type": "text/plain"
+    }
+  }
+}

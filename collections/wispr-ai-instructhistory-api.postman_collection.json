@@ -1,0 +1,257 @@
+{
+  "item": [
+    {
+      "id": "8b58ec69-52f1-477b-b773-0f689e5f5a5d",
+      "name": "InstructHistory",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "d764f11c-be2a-4143-81b8-2ab05e81e2b9",
+          "name": "Upload Instruct History",
+          "request": {
+            "name": "Upload Instruct History",
+            "description": {
+              "content": "Upload instruct-history (route-classification) rows for a user.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "instruct_history",
+                "upload"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": \"<string>\",\n  \"instruct_history_records\": [\n    {\n      \"id\": \"<uuid>\",\n      \"app_version\": \"<string>\",\n      \"transcript_entity_id\": \"<uuid>\",\n      \"polish_id\": \"<uuid>\",\n      \"was_auto_routed\": false,\n      \"classification_mode\": \"<string>\",\n      \"short_circuit_route\": \"<string>\",\n      \"routes_payload\": [\n        \"<object>\",\n        \"<object>\"\n      ],\n      \"context_payload\": \"<object>\",\n      \"config_payload\": \"<object>\",\n      \"classifier_route_data\": \"<object>\",\n      \"classifier_model_version\": \"<string>\",\n      \"classifier_used_provider\": \"<object>\",\n      \"classifier_latency_ms\": \"<number>\",\n      \"classifier_status\": \"<string>\",\n      \"route_status\": \"<string>\",\n      \"route_error\": \"<string>\",\n      \"tool_calls\": [\n        {\n          \"name\": \"<string>\",\n          \"input\": \"<object>\",\n          \"output\": \"<object>\",\n          \"latency_ms\": \"<number>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"input\": \"<object>\",\n          \"output\": \"<object>\",\n          \"latency_ms\": \"<number>\"\n        }\n      ],\n      \"feedback\": {\n        \"rating\": \"<string>\",\n        \"text\": \"<string>\"\n      },\n      \"instruct_session_id\": \"<uuid>\",\n      \"session_turn_index\": \"<integer>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"app_version\": \"<string>\",\n      \"transcript_entity_id\": \"<uuid>\",\n      \"polish_id\": \"<uuid>\",\n      \"was_auto_routed\": false,\n      \"classification_mode\": \"<string>\",\n      \"short_circuit_route\": \"<string>\",\n      \"routes_payload\": [\n        \"<object>\",\n        \"<object>\"\n      ],\n      \"context_payload\": \"<object>\",\n      \"config_payload\": \"<object>\",\n      \"classifier_route_data\": \"<object>\",\n      \"classifier_model_version\": \"<string>\",\n      \"classifier_used_provider\": \"<object>\",\n      \"classifier_latency_ms\": \"<number>\",\n      \"classifier_status\": \"<string>\",\n      \"route_status\": \"<string>\",\n      \"route_error\": \"<string>\",\n      \"tool_calls\": [\n        {\n          \"name\": \"<string>\",\n          \"input\": \"<object>\",\n          \"output\": \"<object>\",\n          \"latency_ms\": \"<number>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"input\": \"<object>\",\n          \"output\": \"<object>\",\n          \"latency_ms\": \"<number>\"\n        }\n      ],\n      \"feedback\": {\n        \"rating\": \"<string>\",\n        \"text\": \"<string>\"\n      },\n      \"instruct_session_id\": \"<uuid>\",\n      \"session_turn_index\": \"<integer>\"\n    }\n  ],\n  \"instruct_chat_sessions\": [\n    {\n      \"id\": \"<uuid>\",\n      \"title\": \"<string>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"title\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a7da7584-5d73-4b5f-98b1-a85270f6bf87",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "instruct_history",
+                    "upload"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_id\": \"<string>\",\n  \"instruct_history_records\": [\n    {\n      \"id\": \"<uuid>\",\n      \"app_version\": \"<string>\",\n      \"transcript_entity_id\": \"<uuid>\",\n      \"polish_id\": \"<uuid>\",\n      \"was_auto_routed\": false,\n      \"classification_mode\": \"<string>\",\n      \"short_circuit_route\": \"<string>\",\n      \"routes_payload\": [\n        \"<object>\",\n        \"<object>\"\n      ],\n      \"context_payload\": \"<object>\",\n      \"config_payload\": \"<object>\",\n      \"classifier_route_data\": \"<object>\",\n      \"classifier_model_version\": \"<string>\",\n      \"classifier_used_provider\": \"<object>\",\n      \"classifier_latency_ms\": \"<number>\",\n      \"classifier_status\": \"<string>\",\n      \"route_status\": \"<string>\",\n      \"route_error\": \"<string>\",\n      \"tool_calls\": [\n        {\n          \"name\": \"<string>\",\n          \"input\": \"<object>\",\n          \"output\": \"<object>\",\n          \"latency_ms\": \"<number>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"input\": \"<object>\",\n          \"output\": \"<object>\",\n          \"latency_ms\": \"<number>\"\n        }\n      ],\n      \"feedback\": {\n        \"rating\": \"<string>\",\n        \"text\": \"<string>\"\n      },\n      \"instruct_session_id\": \"<uuid>\",\n      \"session_turn_index\": \"<integer>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"app_version\": \"<string>\",\n      \"transcript_entity_id\": \"<uuid>\",\n      \"polish_id\": \"<uuid>\",\n      \"was_auto_routed\": false,\n      \"classification_mode\": \"<string>\",\n      \"short_circuit_route\": \"<string>\",\n      \"routes_payload\": [\n        \"<object>\",\n        \"<object>\"\n      ],\n      \"context_payload\": \"<object>\",\n      \"config_payload\": \"<object>\",\n      \"classifier_route_data\": \"<object>\",\n      \"classifier_model_version\": \"<string>\",\n      \"classifier_used_provider\": \"<object>\",\n      \"classifier_latency_ms\": \"<number>\",\n      \"classifier_status\": \"<string>\",\n      \"route_status\": \"<string>\",\n      \"route_error\": \"<string>\",\n      \"tool_calls\": [\n        {\n          \"name\": \"<string>\",\n          \"input\": \"<object>\",\n          \"output\": \"<object>\",\n          \"latency_ms\": \"<number>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"input\": \"<object>\",\n          \"output\": \"<object>\",\n          \"latency_ms\": \"<number>\"\n        }\n      ],\n      \"feedback\": {\n        \"rating\": \"<string>\",\n        \"text\": \"<string>\"\n      },\n      \"instruct_session_id\": \"<uuid>\",\n      \"session_turn_index\": \"<integer>\"\n    }\n  ],\n  \"instruct_chat_sessions\": [\n    {\n      \"id\": \"<uuid>\",\n      \"title\": \"<string>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"title\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"num_rows_saved\": 1837,\n  \"ids\": [\n    \"16ff30e7-16e6-b832-75f4-f78e8dc7a423\",\n    \"7b5ee60b-320b-ad17-5a02-452178a23302\"\n  ],\n  \"session_ids\": [\n    \"3a649062-e5d0-79f8-308e-7788bbff6ebb\",\n    \"a557a412-65b1-9a08-dbf0-5e9ac4a17515\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "04075fcd-c108-49b2-9f40-24d29c027015",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "instruct_history",
+                    "upload"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_id\": \"<string>\",\n  \"instruct_history_records\": [\n    {\n      \"id\": \"<uuid>\",\n      \"app_version\": \"<string>\",\n      \"transcript_entity_id\": \"<uuid>\",\n      \"polish_id\": \"<uuid>\",\n      \"was_auto_routed\": false,\n      \"classification_mode\": \"<string>\",\n      \"short_circuit_route\": \"<string>\",\n      \"routes_payload\": [\n        \"<object>\",\n        \"<object>\"\n      ],\n      \"context_payload\": \"<object>\",\n      \"config_payload\": \"<object>\",\n      \"classifier_route_data\": \"<object>\",\n      \"classifier_model_version\": \"<string>\",\n      \"classifier_used_provider\": \"<object>\",\n      \"classifier_latency_ms\": \"<number>\",\n      \"classifier_status\": \"<string>\",\n      \"route_status\": \"<string>\",\n      \"route_error\": \"<string>\",\n      \"tool_calls\": [\n        {\n          \"name\": \"<string>\",\n          \"input\": \"<object>\",\n          \"output\": \"<object>\",\n          \"latency_ms\": \"<number>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"input\": \"<object>\",\n          \"output\": \"<object>\",\n          \"latency_ms\": \"<number>\"\n        }\n      ],\n      \"feedback\": {\n        \"rating\": \"<string>\",\n        \"text\": \"<string>\"\n      },\n      \"instruct_session_id\": \"<uuid>\",\n      \"session_turn_index\": \"<integer>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"app_version\": \"<string>\",\n      \"transcript_entity_id\": \"<uuid>\",\n      \"polish_id\": \"<uuid>\",\n      \"was_auto_routed\": false,\n      \"classification_mode\": \"<string>\",\n      \"short_circuit_route\": \"<string>\",\n      \"routes_payload\": [\n        \"<object>\",\n        \"<object>\"\n      ],\n      \"context_payload\": \"<object>\",\n      \"config_payload\": \"<object>\",\n      \"classifier_route_data\": \"<object>\",\n      \"classifier_model_version\": \"<string>\",\n      \"classifier_used_provider\": \"<object>\",\n      \"classifier_latency_ms\": \"<number>\",\n      \"classifier_status\": \"<string>\",\n      \"route_status\": \"<string>\",\n      \"route_error\": \"<string>\",\n      \"tool_calls\": [\n        {\n          \"name\": \"<string>\",\n          \"input\": \"<object>\",\n          \"output\": \"<object>\",\n          \"latency_ms\": \"<number>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"input\": \"<object>\",\n          \"output\": \"<object>\",\n          \"latency_ms\": \"<number>\"\n        }\n      ],\n      \"feedback\": {\n        \"rating\": \"<string>\",\n        \"text\": \"<string>\"\n      },\n      \"instruct_session_id\": \"<uuid>\",\n      \"session_turn_index\": \"<integer>\"\n    }\n  ],\n  \"instruct_chat_sessions\": [\n    {\n      \"id\": \"<uuid>\",\n      \"title\": \"<string>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"title\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f836f482-5d4d-4cb3-8f8a-aa386505f293",
+              "name": "Too Many Requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "instruct_history",
+                    "upload"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_id\": \"<string>\",\n  \"instruct_history_records\": [\n    {\n      \"id\": \"<uuid>\",\n      \"app_version\": \"<string>\",\n      \"transcript_entity_id\": \"<uuid>\",\n      \"polish_id\": \"<uuid>\",\n      \"was_auto_routed\": false,\n      \"classification_mode\": \"<string>\",\n      \"short_circuit_route\": \"<string>\",\n      \"routes_payload\": [\n        \"<object>\",\n        \"<object>\"\n      ],\n      \"context_payload\": \"<object>\",\n      \"config_payload\": \"<object>\",\n      \"classifier_route_data\": \"<object>\",\n      \"classifier_model_version\": \"<string>\",\n      \"classifier_used_provider\": \"<object>\",\n      \"classifier_latency_ms\": \"<number>\",\n      \"classifier_status\": \"<string>\",\n      \"route_status\": \"<string>\",\n      \"route_error\": \"<string>\",\n      \"tool_calls\": [\n        {\n          \"name\": \"<string>\",\n          \"input\": \"<object>\",\n          \"output\": \"<object>\",\n          \"latency_ms\": \"<number>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"input\": \"<object>\",\n          \"output\": \"<object>\",\n          \"latency_ms\": \"<number>\"\n        }\n      ],\n      \"feedback\": {\n        \"rating\": \"<string>\",\n        \"text\": \"<string>\"\n      },\n      \"instruct_session_id\": \"<uuid>\",\n      \"session_turn_index\": \"<integer>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"app_version\": \"<string>\",\n      \"transcript_entity_id\": \"<uuid>\",\n      \"polish_id\": \"<uuid>\",\n      \"was_auto_routed\": false,\n      \"classification_mode\": \"<string>\",\n      \"short_circuit_route\": \"<string>\",\n      \"routes_payload\": [\n        \"<object>\",\n        \"<object>\"\n      ],\n      \"context_payload\": \"<object>\",\n      \"config_payload\": \"<object>\",\n      \"classifier_route_data\": \"<object>\",\n      \"classifier_model_version\": \"<string>\",\n      \"classifier_used_provider\": \"<object>\",\n      \"classifier_latency_ms\": \"<number>\",\n      \"classifier_status\": \"<string>\",\n      \"route_status\": \"<string>\",\n      \"route_error\": \"<string>\",\n      \"tool_calls\": [\n        {\n          \"name\": \"<string>\",\n          \"input\": \"<object>\",\n          \"output\": \"<object>\",\n          \"latency_ms\": \"<number>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"input\": \"<object>\",\n          \"output\": \"<object>\",\n          \"latency_ms\": \"<number>\"\n        }\n      ],\n      \"feedback\": {\n        \"rating\": \"<string>\",\n        \"text\": \"<string>\"\n      },\n      \"instruct_session_id\": \"<uuid>\",\n      \"session_turn_index\": \"<integer>\"\n    }\n  ],\n  \"instruct_chat_sessions\": [\n    {\n      \"id\": \"<uuid>\",\n      \"title\": \"<string>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"title\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "20aad15f-2094-4988-9bb3-7187c6872262",
+    "name": "Wispr Backend Analytics InstructHistory API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Wispr Backend API",
+      "type": "text/plain"
+    }
+  }
+}

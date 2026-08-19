@@ -1,0 +1,1162 @@
+{
+  "item": [
+    {
+      "id": "c636e5aa-bdb8-421a-bb34-d51e2ae87ecd",
+      "name": "Calendar",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "61758389-679b-4565-98db-e28ffb316c4f",
+          "name": "Get Events Batch",
+          "request": {
+            "name": "Get Events Batch",
+            "description": {
+              "content": "Return the authenticated user's calendar events matching the given externalIds.\n\nDesigned for the desktop to re-fetch events linked to past notes whose local\ncalendar cache was pruned. No ``start_at_utc`` filter — past events are returned.\nCancelled events are included so the desktop can render the correct state.\nA stranger's ``externalId`` matches no row (query is ``user_id``-scoped).\nEvent order is unspecified; callers look events up by ``externalId``.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "calendar",
+                "events",
+                "batch"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "ids",
+                  "value": "<string>",
+                  "description": "(Required) Comma-separated calendar ``externalId`` values to look up. At most 50 per request; missing ids are absent from the response."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ac3f3f26-468f-426c-b1ab-f6159bdf42b6",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "calendar",
+                    "events",
+                    "batch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ids",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"events\": [\n    {\n      \"externalId\": \"string\",\n      \"title\": \"string\",\n      \"startAtUtc\": \"1989-01-10T19:24:06.790Z\",\n      \"endAtUtc\": \"1990-07-31T09:33:15.128Z\",\n      \"updatedAt\": \"1955-06-16T00:05:14.422Z\",\n      \"conferenceUrl\": \"string\",\n      \"participants\": [\n        \"string\",\n        \"string\"\n      ],\n      \"participantDetails\": [\n        {\n          \"name\": \"string\",\n          \"photoUrl\": \"string\",\n          \"isSelf\": false\n        },\n        {\n          \"name\": \"string\",\n          \"photoUrl\": \"string\",\n          \"isSelf\": false\n        }\n      ],\n      \"status\": \"active\",\n      \"colorId\": \"string\",\n      \"selfResponseStatus\": \"string\"\n    },\n    {\n      \"externalId\": \"string\",\n      \"title\": \"string\",\n      \"startAtUtc\": \"1993-08-31T02:30:15.587Z\",\n      \"endAtUtc\": \"1956-04-27T08:03:20.820Z\",\n      \"updatedAt\": \"2009-11-09T20:34:47.732Z\",\n      \"conferenceUrl\": \"string\",\n      \"participants\": [\n        \"string\",\n        \"string\"\n      ],\n      \"participantDetails\": [\n        {\n          \"name\": \"string\",\n          \"photoUrl\": \"string\",\n          \"isSelf\": false\n        },\n        {\n          \"name\": \"string\",\n          \"photoUrl\": \"string\",\n          \"isSelf\": false\n        }\n      ],\n      \"status\": \"active\",\n      \"colorId\": \"string\",\n      \"selfResponseStatus\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "17043e32-de40-4b6c-9655-23f8c718999e",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "calendar",
+                    "events",
+                    "batch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ids",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5cd0839c-d49a-4cfe-9284-6a89ff54a52e",
+          "name": "Sync Calendar",
+          "request": {
+            "name": "Sync Calendar",
+            "description": {
+              "content": "Return calendar events the desktop hasn't seen yet.\n\nTwo modes:\n\n* ``since`` provided — incremental: events with ``updated_at > since``,\n  ordered ascending by ``(updated_at, id)``. Stable across rows that\n  share an ``updated_at`` (e.g. webhook bulk fan-out).\n* ``since`` null — initial sync: all upcoming events\n  (``start_at_utc >= now``). Ordered ascending by ``(start_at_utc, id)``.\n\nThe response anchors on the server clock — desktop uses ``serverTime`` as\nthe next ``since``. Capped at ``SYNC_PAGE_LIMIT`` events per response;\nwhen more remain ``nextCursor`` is non-null and the caller should refetch\nimmediately with the same ``since`` and the new cursor.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "calendar",
+                "sync"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "since",
+                  "value": "<dateTime>",
+                  "description": "ISO 8601 timestamp from the previous response's `serverTime`. Omit on first sync to get all upcoming events."
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Pagination cursor from the previous response's `nextCursor`. Only meaningful when paired with the same `since` value."
+                },
+                {
+                  "disabled": false,
+                  "key": "launch",
+                  "value": "false",
+                  "description": "When true, the desktop is signalling a genuine app launch; the server schedules a background incremental sync to catch the user up. Defaults false; routine change-pulls omit it."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "bbbbd902-6466-410a-9dee-5343c562d01d",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "calendar",
+                    "sync"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "since",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "launch",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"events\": [\n    {\n      \"externalId\": \"string\",\n      \"title\": \"string\",\n      \"startAtUtc\": \"1968-12-08T07:31:42.563Z\",\n      \"endAtUtc\": \"2018-01-18T14:19:52.618Z\",\n      \"updatedAt\": \"2017-08-31T17:28:27.387Z\",\n      \"conferenceUrl\": \"string\",\n      \"participants\": [\n        \"string\",\n        \"string\"\n      ],\n      \"participantDetails\": [\n        {\n          \"name\": \"string\",\n          \"photoUrl\": \"string\",\n          \"isSelf\": false\n        },\n        {\n          \"name\": \"string\",\n          \"photoUrl\": \"string\",\n          \"isSelf\": false\n        }\n      ],\n      \"status\": \"active\",\n      \"colorId\": \"string\",\n      \"selfResponseStatus\": \"string\"\n    },\n    {\n      \"externalId\": \"string\",\n      \"title\": \"string\",\n      \"startAtUtc\": \"1993-08-19T23:08:29.667Z\",\n      \"endAtUtc\": \"1978-05-06T22:32:40.867Z\",\n      \"updatedAt\": \"1982-03-10T07:04:42.390Z\",\n      \"conferenceUrl\": \"string\",\n      \"participants\": [\n        \"string\",\n        \"string\"\n      ],\n      \"participantDetails\": [\n        {\n          \"name\": \"string\",\n          \"photoUrl\": \"string\",\n          \"isSelf\": false\n        },\n        {\n          \"name\": \"string\",\n          \"photoUrl\": \"string\",\n          \"isSelf\": false\n        }\n      ],\n      \"status\": \"active\",\n      \"colorId\": \"string\",\n      \"selfResponseStatus\": \"string\"\n    }\n  ],\n  \"serverTime\": \"1947-03-12T00:17:24.369Z\",\n  \"nextCursor\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3c7b65df-fa52-437a-a3c1-de6a93790770",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "calendar",
+                    "sync"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "since",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "launch",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "78808fec-e750-4895-bc69-bb23a63c7261",
+          "name": "Sync Agentic Prereads",
+          "request": {
+            "name": "Sync Agentic Prereads",
+            "description": {
+              "content": "Return agentic pre-read deliverables the desktop has not synced yet.\n\nRead-only: never dispatches a managed-agent session. The webhook writes\nrows to ``preread_generation`` and bumps the ``agentic_prereads`` sync\nresource; this endpoint is how the desktop ingests those rows.\n\nIncremental mode (``since`` provided): rows with ``generated_at > since``,\nordered ascending by ``(generated_at, id)``. Initial mode (``since``\nomitted): every successful agentic row for the user, regardless of event age.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "calendar",
+                "prereads",
+                "agentic_sync"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "since",
+                  "value": "<dateTime>",
+                  "description": "ISO 8601 timestamp from the previous response's `serverTime`. Omit on first sync to receive all agentic deliverables for upcoming events."
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Pagination cursor from the previous response's `nextCursor`. Only meaningful when paired with the same `since` value."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "57252b21-62d7-48af-a6b8-92292ee0924e",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "calendar",
+                    "prereads",
+                    "agentic_sync"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "since",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"agenticPrereads\": [\n    {\n      \"title\": \"string\",\n      \"summary\": \"string\",\n      \"contentMd\": \"string\",\n      \"generatedAt\": \"1971-11-01T16:11:31.413Z\",\n      \"externalId\": \"string\"\n    },\n    {\n      \"title\": \"string\",\n      \"summary\": \"string\",\n      \"contentMd\": \"string\",\n      \"generatedAt\": \"1958-08-05T07:12:53.218Z\",\n      \"externalId\": \"string\"\n    }\n  ],\n  \"serverTime\": \"1957-10-22T07:13:47.218Z\",\n  \"nextCursor\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "483a2fdc-7467-4ee2-86b7-00be48bfe894",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "calendar",
+                    "prereads",
+                    "agentic_sync"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "since",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "495e5abb-3fe3-45bc-a701-3c29ebcf98d8",
+          "name": "Get Event Preread",
+          "request": {
+            "name": "Get Event Preread",
+            "description": {
+              "content": "Generate or dispatch a pre-read for an upcoming calendar event.\n\nThe desktop already has Google's ``external_id`` from the sync payload, so\ncallers identify the event by that string rather than the internal UUID.\nThe query layer scopes by ``user_id`` — a stranger's ``external_id``\nmatches no row.\n\nWhen ``useAgenticPreread`` is false (the default), the handler\nsynchronously builds context and calls the LLM; the worst case is bounded\nby the generator's 30s Anthropic client timeout.\n\nWhen ``useAgenticPreread`` is true, the handler dispatches a managed-agent\nsession in the background and returns an empty response immediately. The\ndesktop picks up the deliverable via the ``agentic_prereads`` sync resource once\nthe webhook completes.\n\nEvents that already ended are fetch-only: the latest stored pre-read is\nreturned as-is, and nothing is ever generated or dispatched for them.\n\nReturns 404 only when the event isn't eligible for a pre-read at all:\n\n* No CalendarEvent for ``(user_id, external_id)``.\n* The event is cancelled.\n* The event already ended and has no stored pre-read.\n\nWhen the event exists but the LLM-side generator fails (rate limits,\nvalidation errors, transient outages), the response is still 200 with\na minimal calendar-derived fallback so the desktop can render the\npre-read card with baseline metadata instead of an empty failure\nstate. The generator already logged + counted the failure.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "calendar",
+                "events",
+                ":external_id",
+                "preread"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "useAgenticPreread",
+                  "value": "false",
+                  "description": "When true, dispatch a managed-agent pre-read session asynchronously and return an empty response. The desktop picks up the result via the ``agentic_prereads`` sync resource."
+                },
+                {
+                  "disabled": false,
+                  "key": "trigger",
+                  "value": "<string>",
+                  "description": "Optional client-supplied hint describing why the pre-read is being fetched. Allowed values: precache, reminder, debug, sync. Used for telemetry only — unknown values fall through silently."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "external_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a929684d-1704-4137-8087-e32bc4104832",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "calendar",
+                    "events",
+                    ":external_id",
+                    "preread"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "useAgenticPreread",
+                      "value": "false"
+                    },
+                    {
+                      "key": "trigger",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "external_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"string\",\n  \"summary\": \"string\",\n  \"contentMd\": \"string\",\n  \"generatedAt\": \"1953-04-20T03:20:09.721Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3eeb3ecf-c492-434b-9a05-32d176dcfcbe",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "calendar",
+                    "events",
+                    ":external_id",
+                    "preread"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "useAgenticPreread",
+                      "value": "false"
+                    },
+                    {
+                      "key": "trigger",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "external_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fb1173b6-398a-4f6a-aff2-e1995861a703",
+              "name": "Too Many Requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "calendar",
+                    "events",
+                    ":external_id",
+                    "preread"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "useAgenticPreread",
+                      "value": "false"
+                    },
+                    {
+                      "key": "trigger",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "external_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9fe39d48-2238-4f8d-a3db-1723ccd893e4",
+          "name": "Submit Event Preread Feedback",
+          "request": {
+            "name": "Submit Event Preread Feedback",
+            "description": {
+              "content": "Submit internal dogfood feedback on a cached pre-read.\n\nPosts to a dedicated Slack channel. The server enriches the payload with\nthe calendar event's start time (meeting date), the report timestamp, and\nthe latest Claude managed-agent session id when one exists for this event.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "calendar",
+                "preread",
+                "feedback"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"externalId\": \"<string>\",\n  \"rating\": \"<string>\",\n  \"feedback\": \"<string>\",\n  \"title\": \"<string>\",\n  \"reporterName\": \"<string>\",\n  \"preread\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0e5f53fe-c2c2-4d89-ac8f-57dd7e5888c6",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "calendar",
+                    "preread",
+                    "feedback"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"externalId\": \"<string>\",\n  \"rating\": \"<string>\",\n  \"feedback\": \"<string>\",\n  \"title\": \"<string>\",\n  \"reporterName\": \"<string>\",\n  \"preread\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6558e13e-5623-4c70-998a-f8cdc2455d04",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "calendar",
+                    "preread",
+                    "feedback"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"externalId\": \"<string>\",\n  \"rating\": \"<string>\",\n  \"feedback\": \"<string>\",\n  \"title\": \"<string>\",\n  \"reporterName\": \"<string>\",\n  \"preread\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b389d124-cca5-482e-8882-1ecc05787a75",
+              "name": "Too Many Requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "calendar",
+                    "preread",
+                    "feedback"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"externalId\": \"<string>\",\n  \"rating\": \"<string>\",\n  \"feedback\": \"<string>\",\n  \"title\": \"<string>\",\n  \"reporterName\": \"<string>\",\n  \"preread\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5cebbdeb-52e8-435f-9e2d-e2db1e6d5ae5",
+          "name": "Manual Resync",
+          "request": {
+            "name": "Manual Resync",
+            "description": {
+              "content": "Debug-only: force a Google Calendar backfill for the current user.\n\nCalls :meth:`CalendarService.backfill` which fetches the next\n``BACKFILL_WINDOW_DAYS`` of events from Google via the user's existing\ncalendar connection and upserts them into ``calendar_event``. Idempotent\n— re-running just refreshes the rows.\n\nSurfaced from the desktop Meetings hub as an internal-only \"Manual\nResync\" affordance so internal users on a fresh local backend can\npopulate calendar data without re-doing the OAuth flow. Requires that\nthe user already has an active Google Calendar connection on *this*\nbackend.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "calendar",
+                "resync"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "7a1c2104-b319-4863-ab6c-091c56052f5a",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "calendar",
+                    "resync"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"eventsCount\": 5328,\n  \"success\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "adc1e6a6-b78e-4f60-9842-0357507a5f69",
+    "name": "Wispr Backend Analytics Calendar API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Wispr Backend API",
+      "type": "text/plain"
+    }
+  }
+}

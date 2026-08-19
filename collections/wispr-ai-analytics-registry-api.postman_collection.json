@@ -1,0 +1,925 @@
+{
+  "item": [
+    {
+      "id": "f71f5ebe-591c-451d-86f1-e75a53e12559",
+      "name": "Analytics Registry",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6b23642c-52e4-44c2-bf25-cb9fc93b4aca",
+          "name": "List Events",
+          "request": {
+            "name": "List Events",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "analytics-registry",
+                "events"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "47b6f27c-a338-4243-8642-2ab497a1bfe7",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "analytics-registry",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"c34393a8-ccfe-1a55-1a07-630618a4230b\",\n    \"event_key\": \"string\",\n    \"name\": \"string\",\n    \"created_at\": \"2012-05-08T17:30:26.579Z\",\n    \"modified_at\": \"1958-03-31T09:35:52.920Z\",\n    \"created_by\": \"string\",\n    \"updated_by\": \"string\",\n    \"status\": \"needs_publish\",\n    \"description\": \"string\",\n    \"trigger\": \"string\",\n    \"properties_schema\": {},\n    \"platforms\": [\n      \"android\",\n      \"desktop\"\n    ],\n    \"lifecycle_state\": \"active\",\n    \"created_by_name\": \"string\",\n    \"updated_by_name\": \"string\",\n    \"last_published_at\": \"1980-08-05T22:19:24.551Z\"\n  },\n  {\n    \"id\": \"e163ca3f-e70c-29b0-86a7-a0f5133b3a9e\",\n    \"event_key\": \"string\",\n    \"name\": \"string\",\n    \"created_at\": \"1947-03-16T17:23:09.919Z\",\n    \"modified_at\": \"1966-01-24T10:13:57.476Z\",\n    \"created_by\": \"string\",\n    \"updated_by\": \"string\",\n    \"status\": \"not_implemented\",\n    \"description\": \"string\",\n    \"trigger\": \"string\",\n    \"properties_schema\": {},\n    \"platforms\": [\n      \"android\",\n      \"android\"\n    ],\n    \"lifecycle_state\": \"deprecated\",\n    \"created_by_name\": \"string\",\n    \"updated_by_name\": \"string\",\n    \"last_published_at\": \"1994-08-18T16:30:19.773Z\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e188123c-596d-4492-88be-eb5a2b48e49c",
+          "name": "Batch Save Events",
+          "request": {
+            "name": "Batch Save Events",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "analytics-registry",
+                "events"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"creates\": [\n    {\n      \"name\": \"<string>\",\n      \"event_key\": \"<string>\",\n      \"description\": \"<string>\",\n      \"trigger\": \"<string>\",\n      \"properties_schema\": \"<object>\",\n      \"platforms\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"lifecycle_state\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"event_key\": \"<string>\",\n      \"description\": \"<string>\",\n      \"trigger\": \"<string>\",\n      \"properties_schema\": \"<object>\",\n      \"platforms\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"lifecycle_state\": \"<string>\"\n    }\n  ],\n  \"updates\": [\n    {\n      \"id\": \"<uuid>\",\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"trigger\": \"<string>\",\n      \"properties_schema\": \"<object>\",\n      \"platforms\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"lifecycle_state\": \"<string>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"trigger\": \"<string>\",\n      \"properties_schema\": \"<object>\",\n      \"platforms\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"lifecycle_state\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f7db146f-0e86-4019-a477-bc327c9d2420",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "analytics-registry",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"creates\": [\n    {\n      \"name\": \"<string>\",\n      \"event_key\": \"<string>\",\n      \"description\": \"<string>\",\n      \"trigger\": \"<string>\",\n      \"properties_schema\": \"<object>\",\n      \"platforms\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"lifecycle_state\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"event_key\": \"<string>\",\n      \"description\": \"<string>\",\n      \"trigger\": \"<string>\",\n      \"properties_schema\": \"<object>\",\n      \"platforms\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"lifecycle_state\": \"<string>\"\n    }\n  ],\n  \"updates\": [\n    {\n      \"id\": \"<uuid>\",\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"trigger\": \"<string>\",\n      \"properties_schema\": \"<object>\",\n      \"platforms\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"lifecycle_state\": \"<string>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"trigger\": \"<string>\",\n      \"properties_schema\": \"<object>\",\n      \"platforms\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"lifecycle_state\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"created\": [\n    {\n      \"id\": \"e61292e8-997f-90a0-a537-0505884bdcb1\",\n      \"event_key\": \"string\",\n      \"name\": \"string\",\n      \"created_at\": \"2025-11-06T22:34:47.050Z\",\n      \"modified_at\": \"1998-02-17T17:29:29.390Z\",\n      \"created_by\": \"string\",\n      \"updated_by\": \"string\",\n      \"status\": \"implemented\",\n      \"description\": \"string\",\n      \"trigger\": \"string\",\n      \"properties_schema\": {},\n      \"platforms\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"lifecycle_state\": \"<string>\",\n      \"created_by_name\": \"string\",\n      \"updated_by_name\": \"string\",\n      \"last_published_at\": \"1955-03-15T11:59:22.045Z\"\n    },\n    {\n      \"id\": \"1ecd1784-72ee-e150-150d-3a23bcabc208\",\n      \"event_key\": \"string\",\n      \"name\": \"string\",\n      \"created_at\": \"1983-03-15T06:19:13.514Z\",\n      \"modified_at\": \"2012-06-25T14:26:13.705Z\",\n      \"created_by\": \"string\",\n      \"updated_by\": \"string\",\n      \"status\": \"needs_publish\",\n      \"description\": \"string\",\n      \"trigger\": \"string\",\n      \"properties_schema\": {},\n      \"platforms\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"lifecycle_state\": \"<string>\",\n      \"created_by_name\": \"string\",\n      \"updated_by_name\": \"string\",\n      \"last_published_at\": \"1999-02-08T18:03:31.641Z\"\n    }\n  ],\n  \"updated\": [\n    {\n      \"id\": \"dab39713-e0f2-a197-8a06-705c5890e9d6\",\n      \"event_key\": \"string\",\n      \"name\": \"string\",\n      \"created_at\": \"1996-01-20T18:21:45.439Z\",\n      \"modified_at\": \"1965-11-14T15:03:27.946Z\",\n      \"created_by\": \"string\",\n      \"updated_by\": \"string\",\n      \"status\": \"not_implemented\",\n      \"description\": \"string\",\n      \"trigger\": \"string\",\n      \"properties_schema\": {},\n      \"platforms\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"lifecycle_state\": \"<string>\",\n      \"created_by_name\": \"string\",\n      \"updated_by_name\": \"string\",\n      \"last_published_at\": \"1949-12-24T19:21:57.121Z\"\n    },\n    {\n      \"id\": \"9c9aaa81-fb1e-21e6-bdc2-9619515b87f6\",\n      \"event_key\": \"string\",\n      \"name\": \"string\",\n      \"created_at\": \"1994-05-23T11:02:05.374Z\",\n      \"modified_at\": \"2003-03-09T06:38:32.465Z\",\n      \"created_by\": \"string\",\n      \"updated_by\": \"string\",\n      \"status\": \"not_implemented\",\n      \"description\": \"string\",\n      \"trigger\": \"string\",\n      \"properties_schema\": {},\n      \"platforms\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"lifecycle_state\": \"<string>\",\n      \"created_by_name\": \"string\",\n      \"updated_by_name\": \"string\",\n      \"last_published_at\": \"1981-03-29T04:49:31.428Z\"\n    }\n  ],\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "49fb0f23-63ba-477d-afdc-f466872d23f1",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "analytics-registry",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"creates\": [\n    {\n      \"name\": \"<string>\",\n      \"event_key\": \"<string>\",\n      \"description\": \"<string>\",\n      \"trigger\": \"<string>\",\n      \"properties_schema\": \"<object>\",\n      \"platforms\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"lifecycle_state\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"event_key\": \"<string>\",\n      \"description\": \"<string>\",\n      \"trigger\": \"<string>\",\n      \"properties_schema\": \"<object>\",\n      \"platforms\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"lifecycle_state\": \"<string>\"\n    }\n  ],\n  \"updates\": [\n    {\n      \"id\": \"<uuid>\",\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"trigger\": \"<string>\",\n      \"properties_schema\": \"<object>\",\n      \"platforms\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"lifecycle_state\": \"<string>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"trigger\": \"<string>\",\n      \"properties_schema\": \"<object>\",\n      \"platforms\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"lifecycle_state\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "49bac7ed-d11d-4220-a552-74f8fe46faab",
+          "name": "Get Global Properties",
+          "request": {
+            "name": "Get Global Properties",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "analytics-registry",
+                "global-properties"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "0445b320-e9de-4876-81a3-f8d47a655d6e",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "analytics-registry",
+                    "global-properties"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"54a0f673-257b-9136-06ab-3f5bab7e0cfa\",\n  \"event_key\": \"string\",\n  \"name\": \"string\",\n  \"created_at\": \"2010-12-30T02:11:12.755Z\",\n  \"modified_at\": \"2004-06-19T15:20:30.938Z\",\n  \"created_by\": \"string\",\n  \"updated_by\": \"string\",\n  \"status\": \"implemented\",\n  \"description\": \"string\",\n  \"trigger\": \"string\",\n  \"properties_schema\": {},\n  \"platforms\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"lifecycle_state\": \"<string>\",\n  \"created_by_name\": \"string\",\n  \"updated_by_name\": \"string\",\n  \"last_published_at\": \"1953-03-07T10:23:36.952Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "dc7162c8-51a3-40f8-a53b-33869f1079ab",
+          "name": "Save Global Properties",
+          "request": {
+            "name": "Save Global Properties",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "analytics-registry",
+                "global-properties"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "<object>",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0acae2a1-e412-4c70-98b0-cdca7f7df398",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "analytics-registry",
+                    "global-properties"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<object>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"54a0f673-257b-9136-06ab-3f5bab7e0cfa\",\n  \"event_key\": \"string\",\n  \"name\": \"string\",\n  \"created_at\": \"2010-12-30T02:11:12.755Z\",\n  \"modified_at\": \"2004-06-19T15:20:30.938Z\",\n  \"created_by\": \"string\",\n  \"updated_by\": \"string\",\n  \"status\": \"implemented\",\n  \"description\": \"string\",\n  \"trigger\": \"string\",\n  \"properties_schema\": {},\n  \"platforms\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"lifecycle_state\": \"<string>\",\n  \"created_by_name\": \"string\",\n  \"updated_by_name\": \"string\",\n  \"last_published_at\": \"1953-03-07T10:23:36.952Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "21e5480b-cdf5-4056-a903-fca7b9f0d4b8",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "analytics-registry",
+                    "global-properties"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<object>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "78f7f2fd-7aa6-4b54-9a26-60b8e9570573",
+          "name": "Publish Preview",
+          "request": {
+            "name": "Publish Preview",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "analytics-registry",
+                "publish",
+                "preview"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "2d557f41-4cc6-4a17-a1c5-1bfb95a27c3a",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "analytics-registry",
+                    "publish",
+                    "preview"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a73597d3-86e5-4ee8-9aaa-0a6b0d6f7407",
+          "name": "Publish",
+          "request": {
+            "name": "Publish",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "analytics-registry",
+                "publish"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "5aa87848-e374-4fec-80a9-061ca3b37cca",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "analytics-registry",
+                    "publish"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"change_set_id\": \"string\",\n  \"status\": \"merged\",\n  \"snapshot\": {},\n  \"created_by\": \"string\",\n  \"created_at\": \"2025-06-06T20:33:29.031Z\",\n  \"modified_at\": \"2000-07-30T09:29:10.143Z\",\n  \"last_error\": \"string\",\n  \"created_by_name\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7bb7204c-c56f-43cd-b44d-242d6ef4db93",
+          "name": "Mark Implemented",
+          "request": {
+            "name": "Mark Implemented",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "analytics-registry",
+                "change-sets",
+                ":change_set_id",
+                "mark-implemented"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "change_set_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "X-Webhook-Secret",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3a5117db-d9b0-4813-a2fa-ac6249f0d8ad",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "analytics-registry",
+                    "change-sets",
+                    ":change_set_id",
+                    "mark-implemented"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "change_set_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "key": "X-Webhook-Secret",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "287af671-ced5-42cc-8a66-87851b0e9eb9",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "analytics-registry",
+                    "change-sets",
+                    ":change_set_id",
+                    "mark-implemented"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "change_set_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "key": "X-Webhook-Secret",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "de940d6f-54c8-4699-beb7-1bea014d6bd5",
+    "name": "Wispr Backend Analytics Analytics Registry API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Wispr Backend API",
+      "type": "text/plain"
+    }
+  }
+}

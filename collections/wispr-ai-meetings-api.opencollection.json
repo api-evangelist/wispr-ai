@@ -1,0 +1,206 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Meetings API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Meetings",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Sync Meetings",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/meetings/sync",
+            "headers": [
+              {
+                "name": "content-length",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Reconcile the client's meetings against the server and return the delta.\n\nGated on cloud-sync via the ``require_cloud_sync`` dependency. Acks the\nclient's pushed meetings, pulls the server-side changes the client is\nmissing, and echoes the sync watermark the client should resume from.\n\nArgs:\n    sync_request:     The client's pushed meetings, watermark, and cursor.\n    current_user:     The authenticated caller.\n    meetings_service: Service that performs the reconciliation.\n    storage:        "
+        },
+        {
+          "info": {
+            "name": "Delete Meeting",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/meetings/:meeting_id",
+            "params": [
+              {
+                "name": "meeting_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Soft-delete a meeting and reap its transcript blobs from S3.\n\nFlips ``is_deleted=true``, then best-effort-deletes everything under\n``users/{user_id}/meetings/transcripts/{meeting_id}/`` plus the legacy\nflat key. Bumps the sync timestamp so other devices observe the\ndeletion on their next pull.\n\nReturns 204 on both first-delete and idempotent re-delete. Returns\n404 for unknown meetings and meetings owned by another user (we do\nnot leak existence to non-owners)."
+        },
+        {
+          "info": {
+            "name": "Create Meeting Upload Url",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/meetings/:meeting_id/upload-url",
+            "params": [
+              {
+                "name": "meeting_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Mint a presigned S3 POST for a meeting's refine audio + create the job.\n\nThe ``uploaded`` pipeline: the desktop uploads the encoded audio directly\nto S3 with the returned presigned POST, then deletes its local copy. The\nreconciliation poller picks the object up (by ``audio_s3_key`` on the\njob), submits it to Soniox, and drives completion. Re-minting for a\nmeeting still awaiting its first upload refreshes the same job row (the\ndesktop's pre-upload retry); it won't disturb an in-flight or complete"
+        },
+        {
+          "info": {
+            "name": "Get Meeting Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/meetings/:meeting_id/status",
+            "params": [
+              {
+                "name": "meeting_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "client_status",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Report a meeting's refine progress and inline what the client is missing.\n\nThe desktop polls this as a recovery channel parallel to sync, passing the\nrefine status it currently believes (``transcribing`` or ``summarizing``).\nThe server returns its own job status and inlines the refined transcript\nand/or content only when it is ahead of the client. A 404 means the meeting\ndoesn't exist on the server, so the client re-pushes it via sync."
+        },
+        {
+          "info": {
+            "name": "Get Refined Transcript Download Url",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/meetings/:meeting_id/refined-transcript",
+            "params": [
+              {
+                "name": "meeting_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Mint a presigned S3 GET for a meeting's refined-transcript NDJSON.\n\nThe desktop calls this when a pull row's ``refined_uploaded_at`` stamp\nbeats its locally persisted fetched-through stamp, then downloads\n``refined.ndjson`` straight from S3 — the bytes never transit the API.\nPresign-only: no ``meeting_refine_jobs`` side effects (same contract as\nthe live-transcript / speaker-observations presigns).\n\nArgs:\n    meeting_id: Meeting whose refined transcript to fetch.\n    user:       Authenticated ca"
+        },
+        {
+          "info": {
+            "name": "Create Speaker Observations Upload Url",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/meetings/:meeting_id/speaker-observations/upload-url",
+            "params": [
+              {
+                "name": "meeting_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Mint a presigned S3 POST for a meeting's speaker-observation log.\n\nSibling to :func:`create_meeting_upload_url` but with no job side\neffects: it never touches ``meeting_refine_jobs`` (the audio route's\nupsert revives failed/abandoned jobs and clobbers the audio key — a\nstuck observation artifact must not delay or disturb the transcript).\nThe key is server-composed via :func:`speaker_observations_key`, never\nderived from client input. The client PUTs the artifact directly to S3;\nPhase-1 transcrip"
+        },
+        {
+          "info": {
+            "name": "Create Live Transcript Upload Url",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/meetings/:meeting_id/live-transcript/upload-url",
+            "params": [
+              {
+                "name": "meeting_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Mint a presigned S3 POST for a meeting's live-transcript NDJSON.\n\nSibling to :func:`create_speaker_observations_upload_url`: the desktop\nPUTs ``live.ndjson`` directly to S3 instead of inlining it in the sync\nbody. Same no-job-side-effects contract — it never touches\n``meeting_refine_jobs``. The key is server-composed via\n:func:`live_ndjson_key`, never derived from client input.\n\nErrors map as:\n\n* 404 — meeting doesn't exist for this user (or is deleted).\n* 413 — ``size_bytes`` exceeds :data:`LIV"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics InstructHistory API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "InstructHistory",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Upload Instruct History",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/instruct_history/upload",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Upload instruct-history (route-classification) rows for a user."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

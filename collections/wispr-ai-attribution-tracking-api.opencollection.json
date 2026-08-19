@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Attribution Tracking API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Attribution Tracking",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Track Paywall Viewed",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/attribution/paywall-viewed",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Track when a user views the paywall/pricing screen.\n\nThis event can be sent multiple times (repeatable) and is deduplicated\nby the timestamp parameter.\n\nga4_client_id is optional for native apps (desktop, iOS, Android). If not\nprovided, it will be derived from the user_id for cross-device attribution.\nWeb clients should provide ga4_client_id from gtag.js cookies."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

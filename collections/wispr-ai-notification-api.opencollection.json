@@ -1,0 +1,211 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Notification API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Notification",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Notifications",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/notification",
+            "params": [
+              {
+                "name": "is_archived",
+                "value": "",
+                "type": "query",
+                "description": "Filter by archived status"
+              },
+              {
+                "name": "platform",
+                "value": "",
+                "type": "query",
+                "description": "Filter by platform type (desktop, ios, both)"
+              },
+              {
+                "name": "last_notification_read_time",
+                "value": "",
+                "type": "query",
+                "description": "Timestamp of last read notification as Unix timestamp in milliseconds. Example: 1763423065738"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get paginated list of notifications for the current user.\nReturns the number of unread notifications and the paginated list."
+        },
+        {
+          "info": {
+            "name": "Archive Notification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/notification/archive",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Archive a notification. Only the owner of the notification can archive it."
+        },
+        {
+          "info": {
+            "name": "Archive All Notifications",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/notification/archive_all",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Archive all notifications for the current user."
+        },
+        {
+          "info": {
+            "name": "Create Notification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/notification/create",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Creates a notification for the current user - Called by the client on certain event triggers"
+        },
+        {
+          "info": {
+            "name": "Create Internal Notification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/notification/internal/create",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Internal endpoint to create a notification for specified user(s).\nUsed in the admin dashboard to send notifications to users.\nThis endpoint can only be accessed by wispr.ai admins."
+        },
+        {
+          "info": {
+            "name": "Delete Notification",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/notification/internal/:notification_id",
+            "params": [
+              {
+                "name": "notification_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-Key",
+              "value": "{{X-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Internal endpoint to delete a notification by ID.\nThis endpoint is protected by the root API key and is meant for internal use only."
+        },
+        {
+          "info": {
+            "name": "Create Announcement",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/notification/internal/announce",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Internal endpoint to create an announcement notification for all users.\nUsed in the admin dashboard to send notifications to all users.\nThis endpoint can only be accessed by wispr.ai admins."
+        },
+        {
+          "info": {
+            "name": "Send Ios Download Link",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/notification/send-ios",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Send Ios Download Link"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

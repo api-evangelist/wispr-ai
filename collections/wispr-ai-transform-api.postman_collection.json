@@ -1,0 +1,1572 @@
+{
+  "item": [
+    {
+      "id": "e8eb7137-2161-43ab-94c0-29f01131e186",
+      "name": "Transform",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c57c066d-1fd5-43b9-bee5-a54277bab417",
+          "name": "Transforms Voice Prompts",
+          "request": {
+            "name": "Transforms Voice Prompts",
+            "description": {
+              "content": "Resolve the requesting user's team/personal Transforms voice profiles.\n\nReturns both when the user matches a personal email and a team domain.\nClient: ``desktop/src/main/backend/ariaWeb.ts`` → ``getVoiceProfilePrompts``.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "transform",
+                "transforms-voice-prompts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "7f8b9602-ddb9-4774-9151-251197210829",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transform",
+                    "transforms-voice-prompts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"team\": {\n    \"name\": \"string\",\n    \"description\": \"string\",\n    \"prompt\": \"string\"\n  },\n  \"personal\": {\n    \"name\": \"string\",\n    \"description\": \"string\",\n    \"prompt\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1f89670b-8a33-4411-b6c8-302ae72c066e",
+              "name": "Too Many Requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transform",
+                    "transforms-voice-prompts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7d1fae1c-e68c-4261-839a-d14de7815923",
+          "name": "Get Suggestions",
+          "request": {
+            "name": "Get Suggestions",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "transform",
+                "suggestions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"<string>\",\n  \"count\": 6\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "98ee0388-5145-44b1-990b-f27bcac0f048",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transform",
+                    "suggestions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": \"<string>\",\n  \"count\": 6\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"suggestions\": [\n    {\n      \"id\": \"string\",\n      \"label\": \"string\",\n      \"category\": \"tone\",\n      \"prompt\": \"string\",\n      \"response_target\": \"new_tab\",\n      \"section_title\": \"string\",\n      \"empty_result_message\": \"string\",\n      \"model\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"label\": \"string\",\n      \"category\": \"meeting\",\n      \"prompt\": \"string\",\n      \"response_target\": \"chat\",\n      \"section_title\": \"string\",\n      \"empty_result_message\": \"string\",\n      \"model\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fc669edd-7425-42d9-9274-965de1552c7c",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transform",
+                    "suggestions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": \"<string>\",\n  \"count\": 6\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "953c223c-c42c-4402-a9fa-d09c2d74a23f",
+          "name": "Apply Transform",
+          "request": {
+            "name": "Apply Transform",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "transform",
+                "apply"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"source\": \"<string>\",\n  \"content\": \"<string>\",\n  \"context\": \"<string>\",\n  \"read_only_content\": [\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"editable_content\": [\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"prompt\": \"<string>\",\n  \"trajectory\": [\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    },\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    }\n  ],\n  \"suggestion_id\": \"<string>\",\n  \"suggestions_count\": \"<integer>\",\n  \"allowed_tools\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "46a286ef-f094-43c2-a7ca-3fb80a5d12ed",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transform",
+                    "apply"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source\": \"<string>\",\n  \"content\": \"<string>\",\n  \"context\": \"<string>\",\n  \"read_only_content\": [\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"editable_content\": [\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"prompt\": \"<string>\",\n  \"trajectory\": [\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    },\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    }\n  ],\n  \"suggestion_id\": \"<string>\",\n  \"suggestions_count\": \"<integer>\",\n  \"allowed_tools\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"steps\": [\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    },\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    }\n  ],\n  \"transformed_text\": \"string\",\n  \"response_target\": \"<string>\",\n  \"suggestion_id\": \"string\",\n  \"suggestions\": [\n    {\n      \"id\": \"string\",\n      \"label\": \"string\",\n      \"category\": \"structural\",\n      \"prompt\": \"string\",\n      \"response_target\": \"<string>\",\n      \"section_title\": \"string\",\n      \"empty_result_message\": \"string\",\n      \"model\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"label\": \"string\",\n      \"category\": \"structural\",\n      \"prompt\": \"string\",\n      \"response_target\": \"<string>\",\n      \"section_title\": \"string\",\n      \"empty_result_message\": \"string\",\n      \"model\": \"string\"\n    }\n  ],\n  \"toast\": {\n    \"variant\": \"error\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a7ffaf3d-d1d1-4b63-8ace-c5a4bbe78090",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transform",
+                    "apply"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source\": \"<string>\",\n  \"content\": \"<string>\",\n  \"context\": \"<string>\",\n  \"read_only_content\": [\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"editable_content\": [\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"prompt\": \"<string>\",\n  \"trajectory\": [\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    },\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    }\n  ],\n  \"suggestion_id\": \"<string>\",\n  \"suggestions_count\": \"<integer>\",\n  \"allowed_tools\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "06d60741-6225-46e0-9164-3ed7c7222ae4",
+              "name": "Transform timed out. Same shape as SSE `event: error` payloads.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transform",
+                    "apply"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source\": \"<string>\",\n  \"content\": \"<string>\",\n  \"context\": \"<string>\",\n  \"read_only_content\": [\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"editable_content\": [\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"prompt\": \"<string>\",\n  \"trajectory\": [\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    },\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    }\n  ],\n  \"suggestion_id\": \"<string>\",\n  \"suggestions_count\": \"<integer>\",\n  \"allowed_tools\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Gateway Timeout",
+              "code": 504,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a10389c4-5481-46d8-a59f-50aea14553f6",
+          "name": "Apply Transform Stream",
+          "request": {
+            "name": "Apply Transform Stream",
+            "description": {
+              "content": "SSE variant of :func:`apply_transform`.\n\nClient: ``desktop/src/main/backend/ariaWeb.ts`` → ``applyTransformStream``.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "transform",
+                "apply",
+                "stream"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "text/event-stream"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"source\": \"<string>\",\n  \"content\": \"<string>\",\n  \"context\": \"<string>\",\n  \"read_only_content\": [\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"editable_content\": [\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"prompt\": \"<string>\",\n  \"trajectory\": [\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    },\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    }\n  ],\n  \"suggestion_id\": \"<string>\",\n  \"suggestions_count\": \"<integer>\",\n  \"allowed_tools\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "00a17269-cfdd-4f36-b33c-69d3b0ebaa9d",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transform",
+                    "apply",
+                    "stream"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/event-stream"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source\": \"<string>\",\n  \"content\": \"<string>\",\n  \"context\": \"<string>\",\n  \"read_only_content\": [\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"editable_content\": [\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"prompt\": \"<string>\",\n  \"trajectory\": [\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    },\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    }\n  ],\n  \"suggestion_id\": \"<string>\",\n  \"suggestions_count\": \"<integer>\",\n  \"allowed_tools\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/event-stream"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "25382247-88c4-4af1-8c92-0521907c6416",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transform",
+                    "apply",
+                    "stream"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source\": \"<string>\",\n  \"content\": \"<string>\",\n  \"context\": \"<string>\",\n  \"read_only_content\": [\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"editable_content\": [\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"prompt\": \"<string>\",\n  \"trajectory\": [\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    },\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    }\n  ],\n  \"suggestion_id\": \"<string>\",\n  \"suggestions_count\": \"<integer>\",\n  \"allowed_tools\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "95c3e1d8-4c7b-4d38-a24c-802bd4717ceb",
+          "name": "Apply Transform Suggestion",
+          "request": {
+            "name": "Apply Transform Suggestion",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "transform",
+                "apply",
+                "suggestion"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": {\n    \"read_only\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ],\n    \"editable\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ]\n  },\n  \"trajectory\": [\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    },\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    }\n  ],\n  \"suggestion_id\": \"<string>\",\n  \"source\": \"<string>\",\n  \"suggestions_count\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3f9d0fb0-e6c8-42ae-8534-d5ada909f5f0",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transform",
+                    "apply",
+                    "suggestion"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": {\n    \"read_only\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ],\n    \"editable\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ]\n  },\n  \"trajectory\": [\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    },\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    }\n  ],\n  \"suggestion_id\": \"<string>\",\n  \"source\": \"<string>\",\n  \"suggestions_count\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"steps\": [\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    },\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    }\n  ],\n  \"suggestions\": [\n    {\n      \"id\": \"string\",\n      \"label\": \"string\",\n      \"category\": \"meeting\",\n      \"prompt\": \"string\",\n      \"response_target\": \"<string>\",\n      \"section_title\": \"string\",\n      \"empty_result_message\": \"string\",\n      \"model\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"label\": \"string\",\n      \"category\": \"meeting\",\n      \"prompt\": \"string\",\n      \"response_target\": \"<string>\",\n      \"section_title\": \"string\",\n      \"empty_result_message\": \"string\",\n      \"model\": \"string\"\n    }\n  ],\n  \"toast\": {\n    \"variant\": \"info\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3e39b02b-3705-4064-bec6-7ff8f386bdb7",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transform",
+                    "apply",
+                    "suggestion"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": {\n    \"read_only\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ],\n    \"editable\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ]\n  },\n  \"trajectory\": [\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    },\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    }\n  ],\n  \"suggestion_id\": \"<string>\",\n  \"source\": \"<string>\",\n  \"suggestions_count\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9053d153-9411-4744-baac-bedccba866c0",
+              "name": "Transform timed out. Same shape as SSE `event: error` payloads.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transform",
+                    "apply",
+                    "suggestion"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": {\n    \"read_only\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ],\n    \"editable\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ]\n  },\n  \"trajectory\": [\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    },\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    }\n  ],\n  \"suggestion_id\": \"<string>\",\n  \"source\": \"<string>\",\n  \"suggestions_count\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Gateway Timeout",
+              "code": 504,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f7af9fa2-21a8-44d4-b926-979bb5415bb7",
+          "name": "Apply Transform Suggestion Stream",
+          "request": {
+            "name": "Apply Transform Suggestion Stream",
+            "description": {
+              "content": "SSE variant of :func:`apply_transform_suggestion`.\n\nClient: ``desktop/src/main/backend/ariaWeb.ts`` → ``applyTransformSuggestionStream``.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "transform",
+                "apply",
+                "suggestion",
+                "stream"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "text/event-stream"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": {\n    \"read_only\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ],\n    \"editable\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ]\n  },\n  \"trajectory\": [\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    },\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    }\n  ],\n  \"suggestion_id\": \"<string>\",\n  \"source\": \"<string>\",\n  \"suggestions_count\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b57aeefd-b38d-49cc-82f9-783a51bf7d82",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transform",
+                    "apply",
+                    "suggestion",
+                    "stream"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/event-stream"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": {\n    \"read_only\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ],\n    \"editable\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ]\n  },\n  \"trajectory\": [\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    },\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    }\n  ],\n  \"suggestion_id\": \"<string>\",\n  \"source\": \"<string>\",\n  \"suggestions_count\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/event-stream"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "bcbd146f-171e-4d74-9ce1-085aebb28819",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transform",
+                    "apply",
+                    "suggestion",
+                    "stream"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": {\n    \"read_only\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ],\n    \"editable\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ]\n  },\n  \"trajectory\": [\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    },\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    }\n  ],\n  \"suggestion_id\": \"<string>\",\n  \"source\": \"<string>\",\n  \"suggestions_count\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "17c20dc3-92d4-4b78-86e6-775861285a88",
+          "name": "Apply Transform Dynamic",
+          "request": {
+            "name": "Apply Transform Dynamic",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "transform",
+                "apply",
+                "dynamic"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": {\n    \"read_only\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ],\n    \"editable\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ]\n  },\n  \"trajectory\": [\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    },\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    }\n  ],\n  \"source\": \"<string>\",\n  \"allowed_tools\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"system_prompt_suffix\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "cdc8ab05-099b-4dc9-bf14-5d2cae70c30b",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transform",
+                    "apply",
+                    "dynamic"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": {\n    \"read_only\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ],\n    \"editable\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ]\n  },\n  \"trajectory\": [\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    },\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    }\n  ],\n  \"source\": \"<string>\",\n  \"allowed_tools\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"system_prompt_suffix\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"steps\": [\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    },\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f7febd30-7ddc-4ede-a44c-f10c51c3e764",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transform",
+                    "apply",
+                    "dynamic"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": {\n    \"read_only\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ],\n    \"editable\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ]\n  },\n  \"trajectory\": [\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    },\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    }\n  ],\n  \"source\": \"<string>\",\n  \"allowed_tools\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"system_prompt_suffix\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "beaba4d3-b397-40ce-892a-a6e7a897060d",
+              "name": "Transform timed out. Same shape as SSE `event: error` payloads.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transform",
+                    "apply",
+                    "dynamic"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": {\n    \"read_only\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ],\n    \"editable\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ]\n  },\n  \"trajectory\": [\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    },\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    }\n  ],\n  \"source\": \"<string>\",\n  \"allowed_tools\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"system_prompt_suffix\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Gateway Timeout",
+              "code": 504,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b11e8df1-fb70-4b66-b94e-992ce6b26095",
+          "name": "Apply Transform Dynamic Stream",
+          "request": {
+            "name": "Apply Transform Dynamic Stream",
+            "description": {
+              "content": "SSE variant of :func:`apply_transform_dynamic`.\n\nClient: ``desktop/src/main/backend/ariaWeb.ts`` → ``applyTransformDynamicStream``.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "transform",
+                "apply",
+                "dynamic",
+                "stream"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "text/event-stream"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": {\n    \"read_only\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ],\n    \"editable\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ]\n  },\n  \"trajectory\": [\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    },\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    }\n  ],\n  \"source\": \"<string>\",\n  \"allowed_tools\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"system_prompt_suffix\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c60fd2db-5ed9-4913-a71a-39f81a231986",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transform",
+                    "apply",
+                    "dynamic",
+                    "stream"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/event-stream"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": {\n    \"read_only\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ],\n    \"editable\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ]\n  },\n  \"trajectory\": [\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    },\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    }\n  ],\n  \"source\": \"<string>\",\n  \"allowed_tools\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"system_prompt_suffix\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/event-stream"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3a8e1b42-272a-43c3-9a55-d622c1f4e6f0",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transform",
+                    "apply",
+                    "dynamic",
+                    "stream"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": {\n    \"read_only\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ],\n    \"editable\": [\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"content\": \"<string>\"\n      }\n    ]\n  },\n  \"trajectory\": [\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    },\n    {\n      \"message\": \"<string>\",\n      \"kind\": \"user_prompt\"\n    }\n  ],\n  \"source\": \"<string>\",\n  \"allowed_tools\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"system_prompt_suffix\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "f306cc2b-dd10-4b3c-99ce-30320bbd12ac",
+    "name": "Wispr Backend Analytics Transform API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Wispr Backend API",
+      "type": "text/plain"
+    }
+  }
+}

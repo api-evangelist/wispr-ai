@@ -1,0 +1,236 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics History API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "History",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Feedback History",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/history/report",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Feedback History"
+        },
+        {
+          "info": {
+            "name": "Upload History",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/history/upload",
+            "params": [
+              {
+                "name": "platform",
+                "value": "",
+                "type": "query",
+                "description": "Attribution platform (e.g. desktop_mac, desktop_windows)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Upload History"
+        },
+        {
+          "info": {
+            "name": "Get History Stats",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/history/stats",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get user's history statistics"
+        },
+        {
+          "info": {
+            "name": "Overwrite History Stats",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/history/stats",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Overwrite user's history stats. This should only be called by the client\nwhen the remote user stats data are corrupted and should be overwritten\nwith the local data. Client is responsible for ensuring that the local stats\nare preferred before calling this endpoint."
+        },
+        {
+          "info": {
+            "name": "Get Context Stats",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/history/context-stats",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get cross-device context stats (email, ai, work, personal_messaging, document, other)\nderived from ClickHouse usage_History."
+        },
+        {
+          "info": {
+            "name": "Get Enterprise History Stats",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/history/stats/enterprise",
+            "params": [
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Column to sort/paginate by. Defaults to total_words."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Pagination offset. Used only when ``limit`` is set."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Page size for leaderboard-style pagination. Omit to return the full enterprise roster (no SQL LIMIT). Pass with offset to fetch a page."
+              },
+              {
+                "name": "sort_near_user",
+                "value": "",
+                "type": "query",
+                "description": "User ID to center the page around"
+              },
+              {
+                "name": "omit",
+                "value": "",
+                "type": "query",
+                "description": "Optional sections to omit for smaller payloads. Repeat the parameter (e.g. omit=apps&omit=daily_word_counts). `apps` skips app ARRAY columns in Postgres and removes app lists from JSON. `daily_word_counts` skips the ClickHouse query and omits that array from JSON."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get history statistics for all users in the enterprise.\nAccessible by any enterprise member (admin or non-admin).\nUsed for the enterprise usage dashboard and leaderboard.\n\nPodiums and the 4-week historical leaderboard are served by dedicated endpoints:\n``GET /history/stats/enterprise/podiums`` and\n``GET /history/stats/enterprise/weekly-ranks``.\n\nNote: This endpoint returns all metrics regardless of subscription tier.\nThe frontend is responsible for controlling access to individual metrics\nbased "
+        },
+        {
+          "info": {
+            "name": "Get Enterprise Weekly Ranks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/history/stats/enterprise/weekly-ranks",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Return the 4-week historical leaderboard for the caller's enterprise.\n\nBacked by the same Redis-cached rankings the dashboard already uses; the cache key\nrotates after the Sunday 23:45 UTC ``reset_weekly_words`` cron (TTL 8 days). Like\npodiums, membership is not part of the key,\nso removed or new members may appear in cached data until the entry expires.\n\nAuth + ``hideLeaderboard`` checks run before Redis; on a cache hit the handler skips the\nfull-roster Postgres query.\n\nNote: Like ``GET /histor"
+        },
+        {
+          "info": {
+            "name": "Get Enterprise Podiums",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/history/stats/enterprise/podiums",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Return the top-6 podiums for every ranked metric for the caller's enterprise.\n\nCached in Redis for 5 minutes. Unlike weekly ranks, invalidation is TTL-only (no membership\nhash in the key), so removed members can appear until the cache entry expires.\n\nNote: Like ``GET /history/stats/enterprise``, this does not enforce subscription tier;\nthe client is responsible for tier-based gating of leaderboard features.\n\nAuth + ``hideLeaderboard`` checks run before Redis; on a cache hit the handler skips the"
+        },
+        {
+          "info": {
+            "name": "Write Mobile Words This Week",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/history/mobile-words-this-week",
+            "params": [
+              {
+                "name": "words_this_week",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Write mobile words this week to the database."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

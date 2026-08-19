@@ -1,0 +1,108 @@
+{
+  "item": [
+    {
+      "id": "373a53d0-0697-4a87-8c7c-bebb133dce85",
+      "name": "Incidents",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "216a0ce2-5d33-48c5-85d3-0ac700848773",
+          "name": "Get Incident Status",
+          "request": {
+            "name": "Get Incident Status",
+            "description": {
+              "content": "Return the current incident/outage status for the caller's region.\n\nNo auth required. On any lookup failure the endpoint returns 200 with\n``client_region=\"us\"`` and ``incident_status=null`` so the pre-login\nscreen is never blocked by a status-check error.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "incidents",
+                "status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f859c9bd-9a6c-4210-8bf8-11fd220d3ec9",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "incidents",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"client_region\": \"europe\",\n  \"incident_status\": {\n    \"state\": \"outage\",\n    \"message\": \"string\",\n    \"affected_regions\": [\n      \"apac\",\n      \"europe\"\n    ],\n    \"started_at\": \"1986-10-16T09:47:02.809Z\",\n    \"incident_url\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "dac8968e-b56a-435b-b16a-a819815c49d6",
+    "name": "Wispr Backend Analytics Incidents API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Wispr Backend API",
+      "type": "text/plain"
+    }
+  }
+}

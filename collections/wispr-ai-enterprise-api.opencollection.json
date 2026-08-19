@@ -1,0 +1,1071 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Enterprise API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Enterprise",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Audit Logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/audit-logs",
+            "params": [
+              {
+                "name": "start",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "event_types",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "actor_user_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "target_user_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "query",
+                "description": "Wispr-internal-admin override. Customer enterprise admins must omit this and the route resolves to their own enterprise; a foreign id from a customer returns 404."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Paginated, filter-bounded audit log for an enterprise, newest first.\n\nAuthorization scoping: the ``enterprise_id`` override is honored only for Wispr\ninternal admins. For everyone else the route resolves to the caller's own\nenterprise (admin required); a customer supplying a different enterprise's id\ngets 404 rather than a cross-tenant read."
+        },
+        {
+          "info": {
+            "name": "Create Enterprise New",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/enterprise/create",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create a new enterprise."
+        },
+        {
+          "info": {
+            "name": "Get Enterprise",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get the enterprise ID for the authenticated user if they belong to one."
+        },
+        {
+          "info": {
+            "name": "Update Enterprise",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/enterprise",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update enterprise details. Only accessible by admins."
+        },
+        {
+          "info": {
+            "name": "Update Enterprise Settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/enterprise/settings",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update enterprise settings. Only accessible by admins."
+        },
+        {
+          "info": {
+            "name": "Get Members",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/members",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get all members of the user's enterprise."
+        },
+        {
+          "info": {
+            "name": "Get Members Table",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/members/table",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "query",
+                "description": "Wispr-internal-admin override. Customer enterprise admins must omit this and the route resolves to their own enterprise."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sort_dir",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "words_window",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Paginated enterprise members table for the admin portal.\n\nAuthorization scoping: when ``enterprise_id`` is omitted, the route derives\nit from ``ensure_enterprise_member`` (default behavior for the customer-\nfacing admin portal). When supplied, the override is restricted to Wispr\ninternal admins via ``ensure_internal_admin_with_role``. The ``team_id``\nquery parameter only narrows the resulting set further via the\nactive-membership join."
+        },
+        {
+          "info": {
+            "name": "Get Members Count",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/members/count",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Unfiltered enterprise member count, respecting the protected-enterprise\nadmin-roles visibility rule so the page header's denominator matches what\nthe table can ever surface to the caller."
+        },
+        {
+          "info": {
+            "name": "Get Domain Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/domain-status",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get the status of the user's domain."
+        },
+        {
+          "info": {
+            "name": "Get Domain Info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/domain-info",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets info associated with the user's domain, or the domain the the enterprise they are part of.\nThis is possible distinct from the info associated with they're team. The returned values are\nthe users on that domain, the team members associated with the team that has that domain, etc."
+        },
+        {
+          "info": {
+            "name": "Get My Current Ip",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/my-current-ip",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns the caller's anti-spoofed egress IP.\n\nUsed by the admin-portal lockout-guard modal so a (potentially locked-out)\nadmin can read what IP they appear from before editing the allowlist.\nListed in IP_ALLOWLIST_EXEMPT_PATHS so it remains reachable from outside\nthe enterprise allowlist — that is the entire point."
+        },
+        {
+          "info": {
+            "name": "List Domain Verifications",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/domains/verifications",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Read-only list of the admin's enterprise domains and their verification status.\n\nVerification itself (issuing and checking the TXT record) is performed by a\nWispr superadmin via the internal API; team admins see status only."
+        },
+        {
+          "info": {
+            "name": "Initiate Domain Verification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/enterprise/domains/:domain_id/initiate-verification",
+            "params": [
+              {
+                "name": "domain_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Issue (or reuse) a DNS TXT token for domain ownership verification. Admin-only."
+        },
+        {
+          "info": {
+            "name": "Check Domain Verification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/enterprise/domains/:domain_id/check-verification",
+            "params": [
+              {
+                "name": "domain_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Query public DNS and flip the domain to verified on exact token match. Admin-only."
+        },
+        {
+          "info": {
+            "name": "Update Domain Capture Policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/enterprise/domains/:domain_id/capture-policy",
+            "params": [
+              {
+                "name": "domain_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Set the per-domain capture policy. Admin-only; domain must belong to the caller's enterprise."
+        },
+        {
+          "info": {
+            "name": "Get Member Detail",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/members/:user_id",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path",
+                "description": "user_id of the enterprise member to fetch."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Single-member detail payload for the admin-portal member-detail page.\n\nReturns the same row shape as ``/members/table`` — lifetime ``totalWords``\nand ``lastUsedAt`` from ``user_stats`` plus ``role`` and ``joinedAt``.\nFilter-aware chart totals come from ``/insights/words-dictated`` and\n``/insights/desktop-apps`` so this endpoint stays Postgres-only and\nparameter-free.\n\nAccess model mirrors the team-insights endpoints: a Wispr internal admin\nbypasses the enterprise-membership check and can view an"
+        },
+        {
+          "info": {
+            "name": "Update Member Role",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/enterprise/members/:user_id",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update the role of a member in the enterprise. Only accessible by admins.\nDisabled if the enterprise has no billing (everyone is an admin)."
+        },
+        {
+          "info": {
+            "name": "Remove Member",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/enterprise/members/:user_id",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Remove a member from the enterprise. Only accessible by admins."
+        },
+        {
+          "info": {
+            "name": "Update Member Role Support",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/enterprise/members/:user_id/support",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-Key",
+              "value": "{{X-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update the role of a member in the enterprise. Only accessible by support team."
+        },
+        {
+          "info": {
+            "name": "Remove Member Support",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/enterprise/members/:user_id/support",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-Key",
+              "value": "{{X-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Remove a member from the enterprise. Only accessible by support team."
+        },
+        {
+          "info": {
+            "name": "Self Invite",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/enterprise/self-invite",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Request the admins to invite the user to the enterprise."
+        },
+        {
+          "info": {
+            "name": "Contact Admin",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/enterprise/contact-admin",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Contact the admins of the enterprise. If invite_email is provided, the contact form is an invite request."
+        },
+        {
+          "info": {
+            "name": "Get Invitations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/invitations",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get all invitations for the user's enterprise. Only accessible by enterprise admins."
+        },
+        {
+          "info": {
+            "name": "Invite User",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/enterprise/invitations",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Invite a user to join the enterprise. Only accessible by admins."
+        },
+        {
+          "info": {
+            "name": "Bulk Invite Users",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/enterprise/invitations/bulk",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Invite multiple users to join the enterprise. Only accessible by admins."
+        },
+        {
+          "info": {
+            "name": "Bulk Invite Users Support",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/enterprise/invitations/bulk/support",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-Key",
+              "value": "{{X-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Invite multiple users to join the enterprise. Only accessible by support team."
+        },
+        {
+          "info": {
+            "name": "Revoke Invitation",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/enterprise/invitations/:email",
+            "params": [
+              {
+                "name": "email",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Revoke an invitation to join the enterprise. Only accessible by admins."
+        },
+        {
+          "info": {
+            "name": "Revoke Invitation Support",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/enterprise/invitations/:email/support",
+            "params": [
+              {
+                "name": "email",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-Key",
+              "value": "{{X-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Revoke an invitation to join the enterprise. Only accessible by support team."
+        },
+        {
+          "info": {
+            "name": "Setup Sso",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/enterprise/sso",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Setup SSO for the enterprise."
+        },
+        {
+          "info": {
+            "name": "Connect Sso",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/sso/connect",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Connect Wispr to your SSO provider."
+        },
+        {
+          "info": {
+            "name": "Sign Enterprise Hipaa Baa",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/enterprise/hipaa-baa",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Sign a HIPAA Business Associate Agreement for the entire enterprise."
+        },
+        {
+          "info": {
+            "name": "Revoke Enterprise Hipaa Baa",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/enterprise/hipaa-baa",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Revoke a HIPAA Business Associate Agreement for the entire enterprise."
+        },
+        {
+          "info": {
+            "name": "Get My Invitations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/invitations/my",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get all invitations for the user."
+        },
+        {
+          "info": {
+            "name": "Accept Enterprise Invite",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/enterprise/invitations/accept",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Accept an enterprise invitation by invite ID."
+        },
+        {
+          "info": {
+            "name": "Get Join Requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/join-requests",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get all join requests for the user's enterprise. Only accessible by enterprise admins."
+        },
+        {
+          "info": {
+            "name": "Get My Join Requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/join-requests/my",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get join requests for a user"
+        },
+        {
+          "info": {
+            "name": "Accept Join Request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/enterprise/join-requests/accept",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Accept a join request and add the user to the enterprise."
+        },
+        {
+          "info": {
+            "name": "Bulk Accept Join Request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/enterprise/join-requests/bulk-accept",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Accept multiple join requests for an enterprise with optimized bulk processing."
+        },
+        {
+          "info": {
+            "name": "Reject Join Request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/enterprise/join-requests/delete",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Reject a join request"
+        },
+        {
+          "info": {
+            "name": "Check Enterprise Eligibility",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/enterprise/check-eligibility",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get the eligibility status of the user for an enterprise."
+        },
+        {
+          "info": {
+            "name": "Get Team Invite Link",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/invite-link",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get or create a shareable invite link for the enterprise. Only accessible by admins."
+        },
+        {
+          "info": {
+            "name": "Accept Team Invite Link",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/enterprise/invite-link/accept",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Accept a team invite link and join the enterprise."
+        },
+        {
+          "info": {
+            "name": "Rejoin",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/enterprise/rejoin",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Rejoin the most recent enterprise the user was a member of. Gives the user a 24-hour trial regardless of team_trial_given."
+        },
+        {
+          "info": {
+            "name": "Get Next Invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/next-invoice",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get the next invoice for the user's enterprise."
+        },
+        {
+          "info": {
+            "name": "Get My Seat Info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/my-seat-info",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get the seat type for the user's enterprise."
+        },
+        {
+          "info": {
+            "name": "Workos Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/enterprise/workos/webhook"
+          },
+          "docs": "Handle a WorkOS webhook."
+        },
+        {
+          "info": {
+            "name": "Setup Scim",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/scim",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Setup SCIM for the enterprise."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

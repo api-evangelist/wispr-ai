@@ -1,0 +1,257 @@
+{
+  "item": [
+    {
+      "id": "9cf0eb6e-71ac-4669-af5e-a712244762f7",
+      "name": "Todos",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b7c9465a-87ec-439f-8391-29a1fb536f68",
+          "name": "Sync Todos",
+          "request": {
+            "name": "Sync Todos",
+            "description": {
+              "content": "Bidirectionally sync the user's todos (whole-row, LWW on ``modified_at``).\n\nIngest is INSERT-adopt with guards: a pushed id that exists under another user,\nor whose non-null ``meeting_id`` isn't the caller's, is omitted from ``acked``\nso the client retries; everything else is created/updated. The pull carries\nevery todo the user owns (capped), including tombstones.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "todos",
+                "sync"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"todos\": [\n    {\n      \"id\": \"<uuid>\",\n      \"title\": \"<string>\",\n      \"status\": \"<string>\",\n      \"created_at\": \"<string>\",\n      \"modified_at\": \"<string>\",\n      \"meeting_id\": \"<uuid>\",\n      \"is_archived\": false,\n      \"is_deleted\": false\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"title\": \"<string>\",\n      \"status\": \"<string>\",\n      \"created_at\": \"<string>\",\n      \"modified_at\": \"<string>\",\n      \"meeting_id\": \"<uuid>\",\n      \"is_archived\": false,\n      \"is_deleted\": false\n    }\n  ],\n  \"last_sync_time\": \"<string>\",\n  \"page_cursor\": \"<string>\",\n  \"hard_refresh\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "168b9215-e012-4e39-948e-76fba98a11a4",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "todos",
+                    "sync"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"todos\": [\n    {\n      \"id\": \"<uuid>\",\n      \"title\": \"<string>\",\n      \"status\": \"<string>\",\n      \"created_at\": \"<string>\",\n      \"modified_at\": \"<string>\",\n      \"meeting_id\": \"<uuid>\",\n      \"is_archived\": false,\n      \"is_deleted\": false\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"title\": \"<string>\",\n      \"status\": \"<string>\",\n      \"created_at\": \"<string>\",\n      \"modified_at\": \"<string>\",\n      \"meeting_id\": \"<uuid>\",\n      \"is_archived\": false,\n      \"is_deleted\": false\n    }\n  ],\n  \"last_sync_time\": \"<string>\",\n  \"page_cursor\": \"<string>\",\n  \"hard_refresh\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"acked\": [\n    \"2875da96-a2c5-7f7c-1314-68afbe2d5a82\",\n    \"49ec758c-d646-3cf3-db31-104bc807f33c\"\n  ],\n  \"todos\": [\n    {\n      \"id\": \"86451459-8aba-b819-daff-eda0974d5ece\",\n      \"title\": \"string\",\n      \"status\": \"<string>\",\n      \"created_at\": \"string\",\n      \"modified_at\": \"string\",\n      \"meeting_id\": \"da2fc169-8407-40a1-8b1c-4ca91ba03d10\",\n      \"is_archived\": false,\n      \"is_deleted\": false\n    },\n    {\n      \"id\": \"30df7e68-1f4c-3ed7-726d-6268bd1645d9\",\n      \"title\": \"string\",\n      \"status\": \"<string>\",\n      \"created_at\": \"string\",\n      \"modified_at\": \"string\",\n      \"meeting_id\": \"441f9863-73fb-5756-86b5-572ed133e494\",\n      \"is_archived\": false,\n      \"is_deleted\": false\n    }\n  ],\n  \"sync_time\": \"string\",\n  \"next_page_cursor\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6f7316ed-8f8d-4f20-8358-8ec2ec7c565d",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "todos",
+                    "sync"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"todos\": [\n    {\n      \"id\": \"<uuid>\",\n      \"title\": \"<string>\",\n      \"status\": \"<string>\",\n      \"created_at\": \"<string>\",\n      \"modified_at\": \"<string>\",\n      \"meeting_id\": \"<uuid>\",\n      \"is_archived\": false,\n      \"is_deleted\": false\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"title\": \"<string>\",\n      \"status\": \"<string>\",\n      \"created_at\": \"<string>\",\n      \"modified_at\": \"<string>\",\n      \"meeting_id\": \"<uuid>\",\n      \"is_archived\": false,\n      \"is_deleted\": false\n    }\n  ],\n  \"last_sync_time\": \"<string>\",\n  \"page_cursor\": \"<string>\",\n  \"hard_refresh\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8e5f481a-e80b-4c1f-ae60-de3e2da21217",
+              "name": "Too Many Requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "todos",
+                    "sync"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"todos\": [\n    {\n      \"id\": \"<uuid>\",\n      \"title\": \"<string>\",\n      \"status\": \"<string>\",\n      \"created_at\": \"<string>\",\n      \"modified_at\": \"<string>\",\n      \"meeting_id\": \"<uuid>\",\n      \"is_archived\": false,\n      \"is_deleted\": false\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"title\": \"<string>\",\n      \"status\": \"<string>\",\n      \"created_at\": \"<string>\",\n      \"modified_at\": \"<string>\",\n      \"meeting_id\": \"<uuid>\",\n      \"is_archived\": false,\n      \"is_deleted\": false\n    }\n  ],\n  \"last_sync_time\": \"<string>\",\n  \"page_cursor\": \"<string>\",\n  \"hard_refresh\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "c2c3318c-87ac-4632-9087-5c6ccd051fda",
+    "name": "Wispr Backend Analytics Todos API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Wispr Backend API",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,1886 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Internal API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Internal",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Operations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/billing-ops/operations",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "List every registered operation along with its JSON schema for the form renderer."
+        },
+        {
+          "info": {
+            "name": "Preview",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/billing-ops/preview",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Validate input and run the op's preview."
+        },
+        {
+          "info": {
+            "name": "Commit",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/billing-ops/commit",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Execute the op and emit a structured log line. No DB write."
+        },
+        {
+          "info": {
+            "name": "List Cost Centers For Enterprise",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/billing-ops/cost-centers/:enterprise_id",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "List cost centers under ``enterprise_id`` for the operator-UI picker.\n\nThe UI auto-selects the only cost_center when an enterprise has exactly\none; with multiple, the operator must pick which cost_center the op\ntargets. Rows come back sorted by ``created_at`` ascending."
+        },
+        {
+          "info": {
+            "name": "List Recent Invoices For Cost Center",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/billing-ops/invoices/:cost_center_id",
+            "params": [
+              {
+                "name": "cost_center_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Return the latest draft + latest open Stripe invoices for a cost_center.\n\nPowers the operator-UI invoice picker. The ``open`` slot subsumes\npast_due (Stripe treats past_due as ``open`` past its due_date); acting on\nit inside ``add_po_to_invoice`` triggers the void-and-reissue path, so the\nUI surfaces a \"will void and re-issue\" warning when that card is picked.\nThe ``draft`` slot is editable in place. Either or both may be ``null``."
+        },
+        {
+          "info": {
+            "name": "Get Meeting Attribution Live",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/meetings/:meeting_id/attribution/live",
+            "params": [
+              {
+                "name": "meeting_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Return the exact stored live-transcript NDJSON body."
+        },
+        {
+          "info": {
+            "name": "Get Meeting Attribution Refined",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/meetings/:meeting_id/attribution/refined",
+            "params": [
+              {
+                "name": "meeting_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Return the exact stored refined-transcript NDJSON body."
+        },
+        {
+          "info": {
+            "name": "Get Meeting Attribution Refined Raw",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/meetings/:meeting_id/attribution/refined-raw",
+            "params": [
+              {
+                "name": "meeting_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Return the exact stored archived refine JSON body."
+        },
+        {
+          "info": {
+            "name": "Get Meeting Attribution Speaker Observations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/meetings/:meeting_id/attribution/speaker-observations",
+            "params": [
+              {
+                "name": "meeting_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Return the exact stored speaker-observation NDJSON body."
+        },
+        {
+          "info": {
+            "name": "Preview Meeting Speaker Consensus",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/meetings/:meeting_id/attribution/speaker-consensus/preview",
+            "params": [
+              {
+                "name": "meeting_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Run one explicitly selected, non-persistent consensus preview."
+        },
+        {
+          "info": {
+            "name": "Get Meeting Attribution Audio Url",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/meetings/:meeting_id/attribution/audio-url",
+            "params": [
+              {
+                "name": "meeting_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Return a scoped presigned audio URL when the meeting has audio."
+        },
+        {
+          "info": {
+            "name": "Internal Preview Cost Center Provision",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/cost-centers/preview-provision",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Server-computed preview of a sales-led cost-center provisioning. No writes, no Stripe mutations."
+        },
+        {
+          "info": {
+            "name": "Internal Provision Cost Center",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/cost-centers/provision",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Provision a sales-led cost center for a target enterprise.\n\nCreates the team + membership swap + a send_invoice Stripe subscription at the\nstandard annual Enterprise price, with the invoice emailed to the picked user.\nProvision-or-revert: a stripe_create or stamp failure auto-reverts (rolls back\nthe rows, restores the prior membership, cancels the orphaned subscription) and\nis safe to retry; only an invoice_send failure leaves the cost center ACTIVE for\na manual finalize/send."
+        },
+        {
+          "info": {
+            "name": "Generate Flow State Profiles",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/marketing/flow-state/generate",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Kick off a background job that builds per-user Flow State profiles."
+        },
+        {
+          "info": {
+            "name": "Generate And Send Flow State Emails",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/marketing/flow-state/generate-send",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Enqueue a generate+send job for all eligible Flow State profiles."
+        },
+        {
+          "info": {
+            "name": "Send Flow State Emails",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/marketing/flow-state/send",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Kick off a background job that dispatches Flow State events to Customer.io."
+        },
+        {
+          "info": {
+            "name": "Get Flow State Month Summary",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/marketing/flow-state/months/:reporting_month",
+            "params": [
+              {
+                "name": "reporting_month",
+                "value": "",
+                "type": "path",
+                "description": "First day of the reporting month."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Return month-level Flow State generation/send state for the admin portal."
+        },
+        {
+          "info": {
+            "name": "Preview Flow State Profiles",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/marketing/flow-state/preview",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Return generated profile rows for review before dispatch."
+        },
+        {
+          "info": {
+            "name": "Get Flow State Job",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/marketing/flow-state/jobs/:job_id",
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Return the latest persisted state of a marketing job."
+        },
+        {
+          "info": {
+            "name": "Internal Create Enterprise",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises/create",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create a new enterprise for a given name/domain, and set the given email as the admin user.\nCreates a new user, enterprise, and Stripe customer.\n\nOnly accessible by Wispr admins (@wispr.ai emails)."
+        },
+        {
+          "info": {
+            "name": "Create Enterprise Pilot",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises/create-pilot",
+            "params": [
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create a new enterprise pilot with a user, enterprise, and discounted subscription."
+        },
+        {
+          "info": {
+            "name": "Create Sales Led Enterprise",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises/create-sales-led",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create a sales-led enterprise with deferred invoicing.\n\nCreates the enterprise, Stripe subscription, and a draft invoice.\nThe invoice stays as a draft until sales unpauses collection via /send-invoice (below)."
+        },
+        {
+          "info": {
+            "name": "Create Sales Led Enterprise Custom Billing",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises/create-sales-led-custom-billing",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create a sales-led enterprise with a negotiated custom billing config.\n\nSuperadmin-gated counterpart to /create-sales-led: takes the same payload\nplus a required `custom_billing_config`. Splitting it out keeps the auth\nescalation visible in the route signature and OpenAPI, matching the\nsensitivity of /billing-configs/create."
+        },
+        {
+          "info": {
+            "name": "Send Enterprise Invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises/:enterprise_id/send-invoice",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Send a pending invoice for a sales-led enterprise with PO number."
+        },
+        {
+          "info": {
+            "name": "Get Pending Invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises/:enterprise_id/pending-invoice",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Check if an enterprise has a pending draft invoice (internal admin only)."
+        },
+        {
+          "info": {
+            "name": "Update Enterprise Pilot End",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises/:enterprise_id/update-pilot-end",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update the pilot end date for an enterprise (internal admin only).\n\nThe new pilot_end must be at least 24 hours in the future.\nUpdates Stripe subscription trial_end and all enterprise users' trial_ends_at."
+        },
+        {
+          "info": {
+            "name": "Reactivate Enterprise Pilot",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises/:enterprise_id/reactivate-pilot",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Reactivate a canceled enterprise pilot (internal admin only).\n\nResolves the admin email + primary domain server-side from the enterprise's\nexisting records, then delegates to the standard create-pilot flow. Use\nupdate-pilot-end instead when a live subscription still exists."
+        },
+        {
+          "info": {
+            "name": "List Enterprise Pilots",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises/pilots",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to skip"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by status: 'active', 'expired', or omit for all"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "List enterprise pilots with optional filtering (internal admin only).\n\nArgs:\n    status_filter: Filter option - 'active' (future pilot_end), 'expired' (past pilot_end or canceled), or omit for all"
+        },
+        {
+          "info": {
+            "name": "Search Enterprises",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises",
+            "params": [
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search term for enterprise name or ID"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to skip"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Search enterprises by name or ID (internal admin only)."
+        },
+        {
+          "info": {
+            "name": "Get Enterprise Members",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises/:enterprise_id/members",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of members to return"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Number of members to skip"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Case-insensitive search across name and email"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sort_dir",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get members of an enterprise with pagination, search, and sort (internal admin only)."
+        },
+        {
+          "info": {
+            "name": "Add Users To Enterprise",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises/:enterprise_id/members",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Add user(s) to an enterprise (internal admin only).\n\n- If a user is not in any enterprise: onboards them to the enterprise\n- If a user is already in this enterprise: skips them (included in skipped_count)\n- If a user is in a different enterprise: marks as failed\n- If a user is not found and create_missing_users is False: marks as failed\n- If a user is not found and create_missing_users is True: creates Supabase auth\n  account and DB user, then adds them to the enterprise\n\nPartial success: Adds a"
+        },
+        {
+          "info": {
+            "name": "Get Enterprise Details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/enterprise/:enterprise_id",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get enterprise details including domains (internal admin only)."
+        },
+        {
+          "info": {
+            "name": "Add Enterprise Domain",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/add-enterprise-domain",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Add a domain to an enterprise (internal admin only).\n\nIf the enterprise has SSO enabled (workos_org_id), the domain will also be synced to WorkOS.\nThe response includes a `workos_synced` field indicating whether the sync was successful."
+        },
+        {
+          "info": {
+            "name": "Toggle Domain Deleted",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises/:enterprise_id/domains/:domain_id/toggle-deleted",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "domain_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Toggle domain deleted status for an enterprise (internal admin only).\n\nWhen deleted=true, the domain is hidden from customer settings,\nauto-invite is disabled for that domain, and the domain is removed from WorkOS SSO."
+        },
+        {
+          "info": {
+            "name": "Update Preserve Contracted Seats",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises/:enterprise_id/preserve-seats",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Toggle preserve_contracted_seats for an enterprise (internal admin only)."
+        },
+        {
+          "info": {
+            "name": "Update Workos Directory Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises/:enterprise_id/workos-directory-id",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Set or unlink workos_directory_id for an enterprise (internal admin only)."
+        },
+        {
+          "info": {
+            "name": "Sync Enterprise Domains To Workos",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises/:enterprise_id/sync-workos",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Sync all active (non-deleted) domains for an enterprise to WorkOS (internal admin only).\n\nUse this endpoint to retry WorkOS sync if a previous add/toggle operation\nreported workos_synced=false."
+        },
+        {
+          "info": {
+            "name": "Add Users To Enterprise File Upload",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises/:enterprise_id/members/upload",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "create_missing_users",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "role",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Upload a file to bulk add users to an enterprise (internal admin only).\n\nWhen create_missing_users is False (default): plain text with emails separated\nby commas or newlines. No header row, no role column. All users added as members.\n\nWhen create_missing_users is True: CSV with email,first_name,last_name columns.\nHeader row is optional. Users not found in the DB will have accounts created\nbefore being added to the enterprise."
+        },
+        {
+          "info": {
+            "name": "Remove Users From Enterprise",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises/:enterprise_id/members/remove",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Remove user(s) from an enterprise by email (internal admin only).\n\nLooks up users by email and removes those that belong to this enterprise.\nUsers not found or not in this enterprise are skipped."
+        },
+        {
+          "info": {
+            "name": "Remove Users From Enterprise File Upload",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises/:enterprise_id/members/remove/upload",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Upload a file to bulk remove users from an enterprise (internal admin only).\n\nRemoves users from the enterprise, clears their enterprise association,\nupdates Stripe seats, and triggers all necessary side effects.\n\nFile format: plain text with emails separated by commas or newlines."
+        },
+        {
+          "info": {
+            "name": "Update User Enterprise Role",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises/:enterprise_id/members/update-role",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update a single user's role in an enterprise (internal admin only).\n\n- User must exist and be in this enterprise\n- Cannot demote if it would leave enterprise with zero admins"
+        },
+        {
+          "info": {
+            "name": "Update User Roles File Upload",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises/:enterprise_id/members/update-role-bulk",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "role",
+                "value": "",
+                "type": "query",
+                "description": "Target role: 'admin' or 'member'"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Upload a CSV/text file to bulk update user roles (internal admin only).\n\nFile format: plain text with emails separated by commas or newlines.\nRole is specified as a query parameter."
+        },
+        {
+          "info": {
+            "name": "List Billing Configs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/billing-configs",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "List all enterprise billing configs (internal admin only)."
+        },
+        {
+          "info": {
+            "name": "Create Billing Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/billing-configs/create",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create a new enterprise billing config (internal admin only)."
+        },
+        {
+          "info": {
+            "name": "Update Billing Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/internal/billing-configs/:config_id",
+            "params": [
+              {
+                "name": "config_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update an enterprise billing config (internal admin only)."
+        },
+        {
+          "info": {
+            "name": "Delete Billing Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/internal/billing-configs/:config_id",
+            "params": [
+              {
+                "name": "config_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete an enterprise billing config (internal admin only)."
+        },
+        {
+          "info": {
+            "name": "Get Public Domains",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/public-domains",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get the public/webmail domain list (internal admin only)."
+        },
+        {
+          "info": {
+            "name": "Get Blocked Domains",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/blocked-domains",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get all blocked domains (internal admin only)."
+        },
+        {
+          "info": {
+            "name": "Create Blocked Domain",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/blocked-domains/create",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Add a domain to the block list (internal admin only)."
+        },
+        {
+          "info": {
+            "name": "Delete Blocked Domain",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/internal/blocked-domains/:blocked_domain_id",
+            "params": [
+              {
+                "name": "blocked_domain_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Remove a domain from the block list (internal admin only)."
+        },
+        {
+          "info": {
+            "name": "Sync Enterprise Directory Users",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises/:enterprise_id/sync-directory-users",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Sync a single enterprise's DB users with its WorkOS SCIM directory.\n\nDispatches the sync as a background task and returns immediately.\nSearch Sentry logs (project flow-backend) for 'directory_sync_completed' to see results."
+        },
+        {
+          "info": {
+            "name": "Preview Enterprise Directory Users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises/:enterprise_id/sync-directory-users/preview",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Dry-run preview of a single enterprise's directory sync.\n\nComputes the link/provision/remove diff against WorkOS without mutating\nanything, so the admin can confirm before running the actual sync."
+        },
+        {
+          "info": {
+            "name": "Sync All Enterprise Directory Users",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises/sync-all-directory-users",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Sync all enterprises that have a WorkOS directory with their SCIM directory users.\n\nDispatches the sync as a background task and returns immediately.\nSearch Sentry logs (project flow-backend) for 'directory_sync_all_completed' to see results."
+        },
+        {
+          "info": {
+            "name": "List Promo Campaigns",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/promo/campaigns",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "List Promo Campaigns"
+        },
+        {
+          "info": {
+            "name": "Create Promo Campaign",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/promo/campaigns",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create Promo Campaign"
+        },
+        {
+          "info": {
+            "name": "Get Promo Campaign",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/promo/campaigns/:campaign_id",
+            "params": [
+              {
+                "name": "campaign_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get Promo Campaign"
+        },
+        {
+          "info": {
+            "name": "Update Promo Campaign",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/internal/promo/campaigns/:campaign_id",
+            "params": [
+              {
+                "name": "campaign_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update Promo Campaign"
+        },
+        {
+          "info": {
+            "name": "List Promo Codes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/promo/campaigns/:campaign_id/codes",
+            "params": [
+              {
+                "name": "campaign_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "List Promo Codes"
+        },
+        {
+          "info": {
+            "name": "Create Promo Codes",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/promo/campaigns/:campaign_id/codes",
+            "params": [
+              {
+                "name": "campaign_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create Promo Codes"
+        },
+        {
+          "info": {
+            "name": "Export Promo Codes Csv",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/promo/campaigns/:campaign_id/codes/export",
+            "params": [
+              {
+                "name": "campaign_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Export Promo Codes Csv"
+        },
+        {
+          "info": {
+            "name": "Toggle Promo Code Active",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/internal/promo/codes/:code_id",
+            "params": [
+              {
+                "name": "code_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "is_active",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Toggle Promo Code Active"
+        },
+        {
+          "info": {
+            "name": "List Promo Redemptions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/promo/redemptions",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "campaign_id",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "List Promo Redemptions"
+        },
+        {
+          "info": {
+            "name": "Internal Update Enterprise Settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises/:enterprise_id/settings",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Override customer-settable enterprise settings (any @wispr.ai admin, for\nsupport fixups). Gate keys (usageExportAllowed, zdrLocked, restrictDomainAccess)\nare not accepted here — use PATCH /enterprises/{id}/gates. Per-key compliance\nenforcement (e.g. ZDR cannot be flipped when zdrLocked is True except by a\nsuperadmin) lives in update_settings."
+        },
+        {
+          "info": {
+            "name": "Internal Update Enterprise Gates",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises/:enterprise_id/gates",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update Wispr-controlled enterprise gates. Any @wispr.ai admin can flip keys in\nADMIN_GATES; SUPERADMIN_GATES require an @wispr.ai superadmin (enforced inside\nupdate_gates)."
+        },
+        {
+          "info": {
+            "name": "Internal Disband Enterprise",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/enterprises/:enterprise_id/disband",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Disband an enterprise. Cancels Stripe subscription, removes all members, and sends a Slack notification."
+        },
+        {
+          "info": {
+            "name": "Admin Apply Referral",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/referral/apply",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Apply a referral code to a user on their behalf. Admin only."
+        },
+        {
+          "info": {
+            "name": "Internal Initiate Domain Verification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/domains/:domain_id/initiate-verification",
+            "params": [
+              {
+                "name": "domain_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Issue (or reuse) a DNS TXT token for domain ownership verification."
+        },
+        {
+          "info": {
+            "name": "Internal Check Domain Verification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/domains/:domain_id/check-verification",
+            "params": [
+              {
+                "name": "domain_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Query public DNS and flip the domain to verified on exact token match."
+        },
+        {
+          "info": {
+            "name": "Internal Get Domain Verification Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/domains/:domain_id/verification-status",
+            "params": [
+              {
+                "name": "domain_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Return current verification status (including TXT record) for a single domain."
+        },
+        {
+          "info": {
+            "name": "Internal Update User Trial End",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/internal/users/trial-end",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Override a user's personal trial end date (support action). Capped at 365 days."
+        },
+        {
+          "info": {
+            "name": "Admin Search User Memories",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/memory/search",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Super-admin: semantic-search voice memory for a list of users by a context query.\n\nReads private cross-user memory — restricted to Wispr super-admins."
+        },
+        {
+          "info": {
+            "name": "Admin List User Memories",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/memory/list",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Super-admin: list all stored voice memories for a list of users.\n\nReads private cross-user memory — restricted to Wispr super-admins."
+        },
+        {
+          "info": {
+            "name": "Admin Lookup User",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/internal/users/lookup",
+            "params": [
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Email address or user_id to look up"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Look up a user by email or user_id and return their profile and subscription info."
+        },
+        {
+          "info": {
+            "name": "Admin Update Stripe Customer Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/internal/users/stripe-customer-id",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Overwrite a user's stripe_customer_id (dry-run by default)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

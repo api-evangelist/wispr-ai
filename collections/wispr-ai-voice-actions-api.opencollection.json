@@ -1,0 +1,40 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Voice Actions API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Voice Actions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Voice Actions Realtime Schema",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/voice-actions/realtime/schema"
+          },
+          "docs": "Voice Actions Realtime Schema"
+        },
+        {
+          "info": {
+            "name": "Voice Actions Realtime Client Schema",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/voice-actions/realtime/client-schema"
+          },
+          "docs": "Voice Actions Realtime Client Schema"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

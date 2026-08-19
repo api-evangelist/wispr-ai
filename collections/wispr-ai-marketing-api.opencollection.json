@@ -1,0 +1,144 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Marketing API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Marketing",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Marketing Redirect Page Subpage",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/marketing/redirect/:page/:subpage",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "subpage",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Redirects to a page that prompts the user to open the app or download it.\npage and subpage are optional path parameters.\nAll query parameters are preserved and passed to the deeplink."
+        },
+        {
+          "info": {
+            "name": "Marketing Redirect Page",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/marketing/redirect/:page",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "subpage",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Redirects to a page that prompts the user to open the app or download it.\npage and subpage are optional path parameters.\nAll query parameters are preserved and passed to the deeplink."
+        },
+        {
+          "info": {
+            "name": "Marketing Redirect Base",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/marketing/redirect/",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "subpage",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Redirects to a page that prompts the user to open the app or download it.\npage and subpage are optional path parameters.\nAll query parameters are preserved and passed to the deeplink."
+        },
+        {
+          "info": {
+            "name": "Send Mic Quiz Results Email",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/marketing/mic-quiz/email-results",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Send microphone quiz results email to the authenticated user."
+        },
+        {
+          "info": {
+            "name": "Send Mic Quiz V2 Results Email",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/marketing/mic-quiz/email-results-v2",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Send V2 microphone quiz results email to the authenticated user."
+        },
+        {
+          "info": {
+            "name": "Onboarding Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/marketing/onboarding-webhook",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Customer.io webhook for onboarding campaign.\nReturns user statistics for first-week users."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

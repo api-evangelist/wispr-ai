@@ -1,0 +1,2024 @@
+{
+  "item": [
+    {
+      "id": "179c6530-708c-4d39-8c91-8dd94e7e1621",
+      "name": "Team Insights",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4c6cfa5f-49b7-49bd-af0b-97c583bdcaf9",
+          "name": "Get Words Dictated",
+          "request": {
+            "name": "Get Words Dictated",
+            "description": {
+              "content": "Words Dictated headline + delta + timeseries. ``app_keys``/``app_categories`` use OR-semantics.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "enterprise",
+                "insights",
+                "words-dictated"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "enterprise_id",
+                  "value": "<uuid>",
+                  "description": "(Required) Enterprise to query. Wispr admins may pass any; enterprise admins must pass their own."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<date>"
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<date>"
+                },
+                {
+                  "disabled": false,
+                  "key": "team_id",
+                  "value": "<uuid>"
+                },
+                {
+                  "disabled": false,
+                  "key": "user_ids",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "user_ids",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "app_keys",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "app_keys",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "app_categories",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "app_categories",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "comparison_mode",
+                  "value": "<string>",
+                  "description": "How pct_change picks the prior window. ``rolling`` = trailing N days vs prior N days (for Last 7/30 days). ``calendar`` = MoM/YoY shift (for This month, Last month, This year). Omit to use shape detection."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "0f4623cc-ab6b-489e-b69c-81520ed36eaa",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "enterprise",
+                    "insights",
+                    "words-dictated"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enterprise_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "team_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "user_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_categories",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_categories",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "comparison_mode",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"filters_applied\": {\n    \"start_date\": \"2021-10-29\",\n    \"end_date\": \"2016-01-07\",\n    \"team_id\": \"b3c2b8a4-7c81-930a-d88e-3e2398fb77aa\",\n    \"user_ids\": [\n      \"string\",\n      \"string\"\n    ],\n    \"app_keys\": [\n      \"string\",\n      \"string\"\n    ],\n    \"app_categories\": [\n      \"string\",\n      \"string\"\n    ],\n    \"comparison_mode\": \"calendar\"\n  },\n  \"total\": 6126,\n  \"timeseries\": {\n    \"daily\": [\n      {\n        \"period\": \"2014-08-06\",\n        \"desktop\": 9463,\n        \"mobile\": 5820\n      },\n      {\n        \"period\": \"1963-06-28\",\n        \"desktop\": 8901,\n        \"mobile\": 4228\n      }\n    ],\n    \"weekly\": [\n      {\n        \"period\": \"string\",\n        \"desktop\": 5760,\n        \"mobile\": 9809\n      },\n      {\n        \"period\": \"string\",\n        \"desktop\": 9737,\n        \"mobile\": 8203\n      }\n    ]\n  },\n  \"data_quality_flags\": [\n    \"string\",\n    \"string\"\n  ],\n  \"pct_change_vs_prev_period\": 2282.8736571497298\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b771c20e-f440-47d2-8523-6a47d984e837",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "enterprise",
+                    "insights",
+                    "words-dictated"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enterprise_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "team_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "user_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_categories",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_categories",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "comparison_mode",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d81e48e0-7d62-4694-8e67-31737ee564e4",
+          "name": "Export Words Dictated",
+          "request": {
+            "name": "Export Words Dictated",
+            "description": {
+              "content": "Dimensional CSV of words/dictations for the Usage page export popover.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "enterprise",
+                "insights",
+                "words-dictated",
+                "export"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "enterprise_id",
+                  "value": "<uuid>",
+                  "description": "(Required) Enterprise to query. Wispr admins may pass any; enterprise admins must pass their own."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<date>"
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<date>"
+                },
+                {
+                  "disabled": false,
+                  "key": "team_id",
+                  "value": "<uuid>"
+                },
+                {
+                  "disabled": false,
+                  "key": "user_ids",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "user_ids",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "app_keys",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "app_keys",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "app_categories",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "app_categories",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "columns",
+                  "value": "<string>",
+                  "description": "Dimensions to include as CSV columns. Order is fixed by the design; duplicates are deduped server-side."
+                },
+                {
+                  "disabled": false,
+                  "key": "columns",
+                  "value": "<string>",
+                  "description": "Dimensions to include as CSV columns. Order is fixed by the design; duplicates are deduped server-side."
+                },
+                {
+                  "disabled": false,
+                  "key": "comparison_mode",
+                  "value": "<string>",
+                  "description": "Accepted for shape parity with ``/words-dictated`` — CSV export has no pct_change column so this is unused."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/csv"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "738ccf9a-4439-488c-97cb-e835208c7173",
+              "name": "CSV export",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "enterprise",
+                    "insights",
+                    "words-dictated",
+                    "export"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enterprise_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "team_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "user_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_categories",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_categories",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "columns",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "columns",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "comparison_mode",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/csv"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/csv"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a3b10ebc-dc1b-4ef5-a258-da6285c46818",
+              "name": "Export row cap exceeded — narrow filters and retry.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "enterprise",
+                    "insights",
+                    "words-dictated",
+                    "export"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enterprise_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "team_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "user_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_categories",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_categories",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "columns",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "columns",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "comparison_mode",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Request Entity Too Large",
+              "code": 413,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "db7aba22-2b1d-4395-90ab-638a1d15f60a",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "enterprise",
+                    "insights",
+                    "words-dictated",
+                    "export"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enterprise_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "team_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "user_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_categories",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_categories",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "columns",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "columns",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "comparison_mode",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b3dda206-9d60-4ef7-9380-4a9a3cf3c271",
+          "name": "Get Team Members",
+          "request": {
+            "name": "Get Team Members",
+            "description": {
+              "content": "Total members + active-user timeseries. ``mode`` controls per-day aggregation granularity.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "enterprise",
+                "insights",
+                "team-members"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "enterprise_id",
+                  "value": "<uuid>",
+                  "description": "(Required) Enterprise to query. Wispr admins may pass any; enterprise admins must pass their own."
+                },
+                {
+                  "disabled": false,
+                  "key": "mode",
+                  "value": "weekly"
+                },
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<date>"
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<date>"
+                },
+                {
+                  "disabled": false,
+                  "key": "team_id",
+                  "value": "<uuid>"
+                },
+                {
+                  "disabled": false,
+                  "key": "user_ids",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "user_ids",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "app_keys",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "app_keys",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "app_categories",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "app_categories",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "comparison_mode",
+                  "value": "<string>",
+                  "description": "How pct_change picks the prior window. ``rolling`` = trailing N days vs prior N days. ``calendar`` = MoM/YoY shift. Omit to use shape detection."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "c34cb081-4d17-41f1-96f8-5c50d8267ebd",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "enterprise",
+                    "insights",
+                    "team-members"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enterprise_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "mode",
+                      "value": "weekly"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "team_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "user_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_categories",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_categories",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "comparison_mode",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"filters_applied\": {\n    \"start_date\": \"1982-11-12\",\n    \"end_date\": \"2007-05-01\",\n    \"team_id\": \"8f497bc0-485a-31a9-d4fb-b192c831a945\",\n    \"user_ids\": [\n      \"string\",\n      \"string\"\n    ],\n    \"app_keys\": [\n      \"string\",\n      \"string\"\n    ],\n    \"app_categories\": [\n      \"string\",\n      \"string\"\n    ],\n    \"comparison_mode\": \"rolling\"\n  },\n  \"total_members\": 2562,\n  \"mode\": \"daily\",\n  \"timeseries\": [\n    {\n      \"period\": \"1976-04-22\",\n      \"count\": 3835\n    },\n    {\n      \"period\": \"1996-09-26\",\n      \"count\": 526\n    }\n  ],\n  \"data_quality_flags\": [\n    \"string\",\n    \"string\"\n  ],\n  \"pct_change_vs_prev_period\": 6115.088068520072\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "024b368c-f082-43e8-84a3-7ced9dd79790",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "enterprise",
+                    "insights",
+                    "team-members"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enterprise_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "mode",
+                      "value": "weekly"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "team_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "user_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_categories",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_categories",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "comparison_mode",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "94c66f51-4642-4312-97cf-d24a764eddb8",
+          "name": "Get Desktop Apps",
+          "request": {
+            "name": "Get Desktop Apps",
+            "description": {
+              "content": "Distinct app count + app list (top-2000 from CH, capped). ``app_keys``/``app_categories`` OR-semantics.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "enterprise",
+                "insights",
+                "desktop-apps"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "enterprise_id",
+                  "value": "<uuid>",
+                  "description": "(Required) Enterprise to query. Wispr admins may pass any; enterprise admins must pass their own."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<date>"
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<date>"
+                },
+                {
+                  "disabled": false,
+                  "key": "team_id",
+                  "value": "<uuid>"
+                },
+                {
+                  "disabled": false,
+                  "key": "user_ids",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "user_ids",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "app_keys",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "app_keys",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "app_categories",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "app_categories",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "comparison_mode",
+                  "value": "<string>",
+                  "description": "How pct_change picks the prior window. ``rolling`` = trailing N days vs prior N days. ``calendar`` = MoM/YoY shift. Omit to use shape detection."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "02f5e83b-517d-48cc-a5ee-54da35fe2ebf",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "enterprise",
+                    "insights",
+                    "desktop-apps"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enterprise_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "team_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "user_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_categories",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_categories",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "comparison_mode",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"filters_applied\": {\n    \"start_date\": \"1980-08-05\",\n    \"end_date\": \"1957-11-20\",\n    \"team_id\": \"248af842-c22e-9234-0d96-16c7b6c24b50\",\n    \"user_ids\": [\n      \"string\",\n      \"string\"\n    ],\n    \"app_keys\": [\n      \"string\",\n      \"string\"\n    ],\n    \"app_categories\": [\n      \"string\",\n      \"string\"\n    ],\n    \"comparison_mode\": \"rolling\"\n  },\n  \"distinct_app_count\": 7413,\n  \"rows\": [\n    {\n      \"app_key\": \"string\",\n      \"category\": \"string\",\n      \"word_count\": 4449,\n      \"pct_of_total\": 80.613551757867,\n      \"user_count\": 4921\n    },\n    {\n      \"app_key\": \"string\",\n      \"category\": \"string\",\n      \"word_count\": 8322,\n      \"pct_of_total\": 87.71160131690311,\n      \"user_count\": 3075\n    }\n  ],\n  \"total_distinct_app_count\": 3030,\n  \"data_quality_flags\": [\n    \"string\",\n    \"string\"\n  ],\n  \"distinct_app_count_pct_change_vs_prev_period\": 5375.863445369371\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "30aeb293-e4a1-4a98-be63-f6c01448d8ae",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "enterprise",
+                    "insights",
+                    "desktop-apps"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enterprise_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "team_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "user_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_categories",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "app_categories",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "comparison_mode",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f15ff986-bd63-4562-9991-1c5c0258c9a3",
+          "name": "Get Impact",
+          "request": {
+            "name": "Get Impact",
+            "description": {
+              "content": "All Impact cards in one round trip. ``team_id`` is the only filter.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "enterprise",
+                "insights",
+                "impact"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "enterprise_id",
+                  "value": "<uuid>",
+                  "description": "(Required) Enterprise to query. Wispr admins may pass any; enterprise admins must pass their own."
+                },
+                {
+                  "disabled": false,
+                  "key": "team_id",
+                  "value": "<uuid>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "643e4169-2082-428a-9d20-737dd1a3d637",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "enterprise",
+                    "insights",
+                    "impact"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enterprise_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "team_id",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"filters_applied\": {\n    \"start_date\": \"1974-08-10\",\n    \"end_date\": \"1998-04-01\",\n    \"team_id\": \"81095783-e5b9-6c6e-58fb-55ee6bfb41d8\",\n    \"user_ids\": [\n      \"string\",\n      \"string\"\n    ],\n    \"app_keys\": [\n      \"string\",\n      \"string\"\n    ],\n    \"app_categories\": [\n      \"string\",\n      \"string\"\n    ],\n    \"comparison_mode\": \"calendar\"\n  },\n  \"minutes_saved\": {\n    \"total\": 7340.290748768256,\n    \"since\": \"1994-01-10\"\n  },\n  \"ai_prompt_quality\": {\n    \"multiplier\": 7790.902621479472\n  },\n  \"dictionary\": {\n    \"total\": 3781,\n    \"auto_learned\": 3315,\n    \"manually_added\": 6601,\n    \"phrases_added\": 3092,\n    \"snippets_added\": 1430\n  },\n  \"auto_formatting\": {\n    \"total\": 8357,\n    \"by_category\": [\n      {\n        \"category\": \"string\",\n        \"count\": 1624\n      },\n      {\n        \"category\": \"string\",\n        \"count\": 4006\n      }\n    ]\n  },\n  \"features_utilized\": [\n    {\n      \"feature\": \"string\",\n      \"user_count\": 9914,\n      \"feature_usage_count\": 8913\n    },\n    {\n      \"feature\": \"string\",\n      \"user_count\": 9635,\n      \"feature_usage_count\": 4524\n    }\n  ],\n  \"value_calculator\": {\n    \"team_member_count\": 9877,\n    \"monthly_minutes_saved\": 5684.283003602359,\n    \"monthly_cost_minor_units\": 4967,\n    \"currency\": \"string\"\n  },\n  \"data_quality_flags\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8aec2c48-e176-4d8d-964a-1fbd010cb7ed",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "enterprise",
+                    "insights",
+                    "impact"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enterprise_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "team_id",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b03e1790-508b-4748-9bca-349dcb1dec3e",
+          "name": "List Filter Options",
+          "request": {
+            "name": "List Filter Options",
+            "description": {
+              "content": "Page-load dropdowns: teams + apps + categories.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "enterprise",
+                "insights",
+                "filter-options"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "enterprise_id",
+                  "value": "<uuid>",
+                  "description": "(Required) Enterprise to query. Wispr admins may pass any; enterprise admins must pass their own."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "b435d06f-c572-43c0-815a-332e34a22854",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "enterprise",
+                    "insights",
+                    "filter-options"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enterprise_id",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"teams\": [\n    {\n      \"id\": \"cd0a414c-0d5f-eafa-4c1b-fb6d9b646e15\",\n      \"name\": \"string\"\n    },\n    {\n      \"id\": \"4863c114-c994-8190-9c0a-6c6e12093bdd\",\n      \"name\": \"string\"\n    }\n  ],\n  \"apps\": [\n    {\n      \"app_key\": \"string\",\n      \"display_name\": \"string\",\n      \"category\": \"string\"\n    },\n    {\n      \"app_key\": \"string\",\n      \"display_name\": \"string\",\n      \"category\": \"string\"\n    }\n  ],\n  \"categories\": [\n    {\n      \"category\": \"string\",\n      \"display_name\": \"string\"\n    },\n    {\n      \"category\": \"string\",\n      \"display_name\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "55f965d0-2aa7-49a4-9333-1a74071d3069",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "enterprise",
+                    "insights",
+                    "filter-options"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enterprise_id",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "073dbbf8-dd1a-400d-b693-75e234e27f3e",
+              "name": "Too Many Requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "enterprise",
+                    "insights",
+                    "filter-options"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enterprise_id",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c4271ef5-8fb9-4128-8f0b-093c21de413b",
+          "name": "List User Filter Options",
+          "request": {
+            "name": "List User Filter Options",
+            "description": {
+              "content": "Typeahead user search over the requested enterprise.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "enterprise",
+                "insights",
+                "filter-options",
+                "users"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "enterprise_id",
+                  "value": "<uuid>",
+                  "description": "(Required) Enterprise to query. Wispr admins may pass any; enterprise admins must pass their own."
+                },
+                {
+                  "disabled": false,
+                  "key": "q",
+                  "value": "<string>",
+                  "description": "Prefix on first/last/email"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "50"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "6a6a8d9f-289f-45c9-93bb-c7d50f0a48a4",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "enterprise",
+                    "insights",
+                    "filter-options",
+                    "users"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enterprise_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"users\": [\n    {\n      \"user_id\": \"string\",\n      \"name\": \"string\",\n      \"email\": \"string\"\n    },\n    {\n      \"user_id\": \"string\",\n      \"name\": \"string\",\n      \"email\": \"string\"\n    }\n  ],\n  \"has_more\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f2f71a0e-9ee9-4eeb-995c-9ae89c8519ce",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "enterprise",
+                    "insights",
+                    "filter-options",
+                    "users"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enterprise_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5c489eef-0590-4c6b-883b-cf4a0e1fe3e2",
+              "name": "Too Many Requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "enterprise",
+                    "insights",
+                    "filter-options",
+                    "users"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enterprise_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "bcc94664-e030-4e50-b8c9-7f12a13cff13",
+    "name": "Wispr Backend Analytics Team Insights API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Wispr Backend API",
+      "type": "text/plain"
+    }
+  }
+}

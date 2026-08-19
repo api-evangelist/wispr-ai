@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Todos API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Todos",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Sync Todos",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/todos/sync",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Bidirectionally sync the user's todos (whole-row, LWW on ``modified_at``).\n\nIngest is INSERT-adopt with guards: a pushed id that exists under another user,\nor whose non-null ``meeting_id`` isn't the caller's, is omitted from ``acked``\nso the client retries; everything else is created/updated. The pull carries\nevery todo the user owns (capped), including tombstones."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

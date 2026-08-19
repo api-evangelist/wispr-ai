@@ -1,0 +1,595 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Payments API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Payments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Switch Enterprise Plan",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/payment/enterprise/switch-plan",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Switch an enterprise subscription to a new plan.\n\nThis endpoint:\n1. Validates the user is an admin\n2. Validates the new plan is valid and different from current\n3. Updates the subscription in Stripe\n4. Updates the database record\n5. Returns the updated subscription details"
+        },
+        {
+          "info": {
+            "name": "Switch Support Plan",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/payment/support/switch-plan",
+            "params": [
+              {
+                "name": "email",
+                "value": "",
+                "type": "query",
+                "description": "The email of the user to switch the plan for"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-Key",
+              "value": "{{X-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Switch Support Plan"
+        },
+        {
+          "info": {
+            "name": "Switch Plan",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/payment/switch-plan",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Switch Plan"
+        },
+        {
+          "info": {
+            "name": "Create Enterprise Checkout Session",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/payment/create_enterprise_checkout_session",
+            "params": [
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query",
+                "description": "Deprecated: ignored for pricing. The checkout currency is resolved server-side from the caller's IP (WP-7177). Retained only for backwards compatibility with existing clients."
+              },
+              {
+                "name": "ga4_client_id",
+                "value": "",
+                "type": "query",
+                "description": "GA4 client_id for attribution tracking"
+              },
+              {
+                "name": "platform",
+                "value": "",
+                "type": "query",
+                "description": "Platform for attribution tracking"
+              },
+              {
+                "name": "fbp",
+                "value": "",
+                "type": "query",
+                "description": "Meta _fbp cookie value"
+              },
+              {
+                "name": "fbc",
+                "value": "",
+                "type": "query",
+                "description": "Meta _fbc click ID cookie value"
+              },
+              {
+                "name": "utm_source",
+                "value": "",
+                "type": "query",
+                "description": "UTM source parameter"
+              },
+              {
+                "name": "utm_medium",
+                "value": "",
+                "type": "query",
+                "description": "UTM medium parameter"
+              },
+              {
+                "name": "utm_campaign",
+                "value": "",
+                "type": "query",
+                "description": "UTM campaign parameter"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create an enterprise Stripe Checkout session.\n\nOptional GA4 params for attribution tracking."
+        },
+        {
+          "info": {
+            "name": "Create Checkout Session",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/payment/create-checkout-session",
+            "params": [
+              {
+                "name": "plan",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "custom_redirect",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "promo_code",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "variant",
+                "value": "",
+                "type": "query",
+                "description": "Optional pricing-experiment variant claim. Re-validated server-side against the registry; invalid or stale claims fall back to canonical pricing."
+              },
+              {
+                "name": "ga4_client_id",
+                "value": "",
+                "type": "query",
+                "description": "GA4 client_id for attribution tracking"
+              },
+              {
+                "name": "platform",
+                "value": "",
+                "type": "query",
+                "description": "Platform for attribution tracking"
+              },
+              {
+                "name": "fbp",
+                "value": "",
+                "type": "query",
+                "description": "Meta _fbp cookie value"
+              },
+              {
+                "name": "fbc",
+                "value": "",
+                "type": "query",
+                "description": "Meta _fbc click ID cookie value"
+              },
+              {
+                "name": "utm_source",
+                "value": "",
+                "type": "query",
+                "description": "UTM source parameter"
+              },
+              {
+                "name": "utm_medium",
+                "value": "",
+                "type": "query",
+                "description": "UTM medium parameter"
+              },
+              {
+                "name": "utm_campaign",
+                "value": "",
+                "type": "query",
+                "description": "UTM campaign parameter"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create a Stripe Checkout session."
+        },
+        {
+          "info": {
+            "name": "Create Bank Transfer Invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/payment/create-bank-transfer-invoice",
+            "params": [
+              {
+                "name": "plan",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "country",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create Bank Transfer Invoice"
+        },
+        {
+          "info": {
+            "name": "Success",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/payment/success",
+            "params": [
+              {
+                "name": "session_id",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Handle a successful payment."
+        },
+        {
+          "info": {
+            "name": "Cancel",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/payment/cancel",
+            "params": [
+              {
+                "name": "session_id",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Handle a cancelled Stripe checkout. Stripe always substitutes\n``{CHECKOUT_SESSION_ID}`` in the registered cancel_url before redirecting,\nso a legitimate hit always carries a ``session_id``. Declaring it required\nlets FastAPI 422 bot/crawler traffic at the boundary (no Stripe call, no\ntemplate render) and closes the log-amplification vector on this\nunauthenticated endpoint. Value-level garbage (``undefined``, ``null``,\nunreplaced ``{CHECKOUT_SESSION_ID}`` literals) is filtered in the service.\nNo "
+        },
+        {
+          "info": {
+            "name": "Error",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/payment/error"
+          },
+          "docs": "Handle a successful payment."
+        },
+        {
+          "info": {
+            "name": "Webhook Received",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/payment/webhook"
+          },
+          "docs": "Handle a Stripe webhook."
+        },
+        {
+          "info": {
+            "name": "Metadata Webhook Received",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/payment/metadata-webhook"
+          },
+          "docs": "Handle a Stripe webhook."
+        },
+        {
+          "info": {
+            "name": "Revenuecat Webhook Received",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/payment/revenuecat/webhook"
+          },
+          "docs": "Handle a RevenueCat webhook."
+        },
+        {
+          "info": {
+            "name": "Customer Portal",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/payment/customer-portal",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Redirect to the customer portal."
+        },
+        {
+          "info": {
+            "name": "Enterprise Portal",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/payment/enterprise-portal",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Redirect to the customer portal."
+        },
+        {
+          "info": {
+            "name": "Get Subscription Details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/payment/subscription",
+            "params": [
+              {
+                "name": "device_id",
+                "value": "",
+                "type": "query",
+                "description": "The device ID of the user"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get Subscription Details"
+        },
+        {
+          "info": {
+            "name": "Cancel Subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/payment/subscription",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Cancel Subscription"
+        },
+        {
+          "info": {
+            "name": "Subscription Watch Start",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/payment/subscription-watch/start",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Start (or atomically replace) a billing subscription invalidation watch session."
+        },
+        {
+          "info": {
+            "name": "Subscription Watch Stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/payment/subscription-watch/stream",
+            "headers": [
+              {
+                "name": "X-Billing-Watch-Token",
+                "value": ""
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "SSE stream of ``subscription_changed`` invalidations for billing UI (20m TTL)."
+        },
+        {
+          "info": {
+            "name": "Create Promotion Code",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/payment/create-promotion-code",
+            "params": [
+              {
+                "name": "coupon_code",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "email",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "expires_in_days",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-Key",
+              "value": "{{X-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create Promotion Code"
+        },
+        {
+          "info": {
+            "name": "Pricing By Ip",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/payment/pricing/by-ip",
+            "params": [
+              {
+                "name": "variant",
+                "value": "",
+                "type": "query",
+                "description": "Optional pricing-experiment variant claim. Returns variant-specific price IDs for the resolved currency; invalid or stale claims fall back to canonical pricing."
+              }
+            ]
+          },
+          "docs": "Return location-aware pricing for the caller's IP (or provided IP override)."
+        },
+        {
+          "info": {
+            "name": "Pricing By Currency",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/payment/pricing/by-currency",
+            "params": [
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Return the catalog pricing grid for an explicit currency, without an IP lookup.\n\nPowers the current-plan billing card, which prices in the subscription's own currency\nrather than the caller's geo-IP currency. Public catalog pricing only — no user data."
+        },
+        {
+          "info": {
+            "name": "Get Currency By Country Code",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/payment/currency/by-country-code",
+            "params": [
+              {
+                "name": "country_code",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Return the currency for a given country code."
+        },
+        {
+          "info": {
+            "name": "Migrate Subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/payment/migrate-subscription",
+            "params": [
+              {
+                "name": "target_currency",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-Key",
+              "value": "{{X-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Migrate the current user's subscription (personal or enterprise) to a new currency.\n\n- If the user belongs to an enterprise (has `enterprise_id`), attempt to migrate\n  the enterprise subscription.\n- Otherwise, migrate the user's personal subscription."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

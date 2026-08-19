@@ -1,0 +1,390 @@
+{
+  "item": [
+    {
+      "id": "086d9877-6470-413e-8a62-25452dd511b2",
+      "name": "User Context",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4d5210dd-1df9-46ca-b817-4205ddc61381",
+          "name": "Get User Context",
+          "request": {
+            "name": "Get User Context",
+            "description": {
+              "content": "Get the current user's context.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "user_context"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "0fe4e17a-46d3-4d0e-96c3-490b6b212932",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "user_context"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"70398100-b0f5-47c2-9aa9-176b11c44877\",\n  \"user_id\": \"string\",\n  \"modified_at\": \"1974-01-13T16:39:43.855Z\",\n  \"writing_samples\": {\n    \"key_0\": {\n      \"text\": \"string\",\n      \"prompt_name\": \"string\"\n    },\n    \"key_1\": {\n      \"text\": \"string\",\n      \"prompt_name\": \"string\"\n    },\n    \"key_2\": {\n      \"text\": \"string\",\n      \"prompt_name\": \"string\"\n    },\n    \"key_3\": {\n      \"text\": \"string\",\n      \"prompt_name\": \"string\"\n    }\n  },\n  \"polish_prompts\": {\n    \"key_0\": {\n      \"prompt\": \"string\",\n      \"shortcut\": [\n        8008,\n        989\n      ],\n      \"prompt_name\": \"string\"\n    },\n    \"key_1\": {\n      \"prompt\": \"string\",\n      \"shortcut\": [\n        2916,\n        1113\n      ],\n      \"prompt_name\": \"string\"\n    },\n    \"key_2\": {\n      \"prompt\": \"string\",\n      \"shortcut\": [\n        2476,\n        9574\n      ],\n      \"prompt_name\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0be2a233-f0f5-4fee-afa2-1b4a159115b0",
+          "name": "Update User Context",
+          "request": {
+            "name": "Update User Context",
+            "description": {
+              "content": "Create or update the current user's context.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "user_context"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"writing_samples\": {\n    \"key_0\": {\n      \"text\": \"<string>\",\n      \"prompt_name\": \"<string>\"\n    },\n    \"key_1\": {\n      \"text\": \"<string>\",\n      \"prompt_name\": \"<string>\"\n    }\n  },\n  \"polish_prompts\": {\n    \"key_0\": {\n      \"prompt\": \"<string>\",\n      \"shortcut\": [\n        \"<integer>\",\n        \"<integer>\"\n      ],\n      \"prompt_name\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "26222906-ad2a-4dda-b658-48e3fa7c1ea4",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "user_context"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"writing_samples\": {\n    \"key_0\": {\n      \"text\": \"<string>\",\n      \"prompt_name\": \"<string>\"\n    },\n    \"key_1\": {\n      \"text\": \"<string>\",\n      \"prompt_name\": \"<string>\"\n    }\n  },\n  \"polish_prompts\": {\n    \"key_0\": {\n      \"prompt\": \"<string>\",\n      \"shortcut\": [\n        \"<integer>\",\n        \"<integer>\"\n      ],\n      \"prompt_name\": \"<string>\"\n    },\n    \"key_1\": {\n      \"prompt\": \"<string>\",\n      \"shortcut\": [\n        \"<integer>\",\n        \"<integer>\"\n      ],\n      \"prompt_name\": \"<string>\"\n    },\n    \"key_2\": {\n      \"prompt\": \"<string>\",\n      \"shortcut\": [\n        \"<integer>\",\n        \"<integer>\"\n      ],\n      \"prompt_name\": \"<string>\"\n    },\n    \"key_3\": {\n      \"prompt\": \"<string>\",\n      \"shortcut\": [\n        \"<integer>\",\n        \"<integer>\"\n      ],\n      \"prompt_name\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"e12406fd-939b-8247-441f-ae216675ae86\",\n  \"user_id\": \"string\",\n  \"modified_at\": \"1950-10-31T21:56:44.157Z\",\n  \"writing_samples\": {\n    \"key_0\": {\n      \"text\": \"<string>\",\n      \"prompt_name\": \"<string>\"\n    },\n    \"key_1\": {\n      \"text\": \"<string>\",\n      \"prompt_name\": \"<string>\"\n    }\n  },\n  \"polish_prompts\": {\n    \"key_0\": {\n      \"prompt\": \"<string>\",\n      \"shortcut\": [\n        \"<integer>\",\n        \"<integer>\"\n      ],\n      \"prompt_name\": \"<string>\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "234d3d67-6b57-40d8-a5d0-1ad514b2aeea",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "user_context"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"writing_samples\": {\n    \"key_0\": {\n      \"text\": \"<string>\",\n      \"prompt_name\": \"<string>\"\n    },\n    \"key_1\": {\n      \"text\": \"<string>\",\n      \"prompt_name\": \"<string>\"\n    }\n  },\n  \"polish_prompts\": {\n    \"key_0\": {\n      \"prompt\": \"<string>\",\n      \"shortcut\": [\n        \"<integer>\",\n        \"<integer>\"\n      ],\n      \"prompt_name\": \"<string>\"\n    },\n    \"key_1\": {\n      \"prompt\": \"<string>\",\n      \"shortcut\": [\n        \"<integer>\",\n        \"<integer>\"\n      ],\n      \"prompt_name\": \"<string>\"\n    },\n    \"key_2\": {\n      \"prompt\": \"<string>\",\n      \"shortcut\": [\n        \"<integer>\",\n        \"<integer>\"\n      ],\n      \"prompt_name\": \"<string>\"\n    },\n    \"key_3\": {\n      \"prompt\": \"<string>\",\n      \"shortcut\": [\n        \"<integer>\",\n        \"<integer>\"\n      ],\n      \"prompt_name\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2c0014e0-41d8-4977-b1d2-f9781cf734bd",
+          "name": "Delete User Context",
+          "request": {
+            "name": "Delete User Context",
+            "description": {
+              "content": "Delete the current user's context.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "user_context"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "DELETE",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "b92d95d4-5030-4658-ae65-8951adef6320",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "user_context"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "3e385c3d-cfb8-4830-bfee-17a3018911f9",
+    "name": "Wispr Backend Analytics User Context API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Wispr Backend API",
+      "type": "text/plain"
+    }
+  }
+}

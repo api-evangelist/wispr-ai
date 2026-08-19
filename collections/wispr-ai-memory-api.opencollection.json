@@ -1,0 +1,129 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics memory API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "memory",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Ingest a batch of ActionEvents into the voice memory system",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/memory/ingest",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Accept a batch of ActionEnvelopes and schedule fire-and-forget Graphiti writes (202)."
+        },
+        {
+          "info": {
+            "name": "Check voice-memory Graphiti connectivity",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/memory/health"
+          },
+          "docs": "Return whether Graphiti's ``/health`` endpoint responds."
+        },
+        {
+          "info": {
+            "name": "Return compact prompt-ready voice memory context",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/memory/context",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Return compact, prompt-ready Graphiti memory: the client-facing prompt contract."
+        },
+        {
+          "info": {
+            "name": "Debug: list the caller's raw Graphiti voice memories",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/memory/list",
+            "params": [
+              {
+                "name": "limit_episodes",
+                "value": "",
+                "type": "query",
+                "description": "Max episodes to return"
+              },
+              {
+                "name": "max_facts",
+                "value": "",
+                "type": "query",
+                "description": "Max facts from broad semantic search"
+              },
+              {
+                "name": "max_nodes",
+                "value": "",
+                "type": "query",
+                "description": "Max entity nodes from broad semantic search"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Debug: raw Graphiti episodes + a broad fact/node sample. Prompt consumers use ``/context``."
+        },
+        {
+          "info": {
+            "name": "Debug: raw Graphiti search over the caller's voice memory",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/memory/search",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Debug: raw Graphiti fact/node search for the caller's dictation context (passthrough)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

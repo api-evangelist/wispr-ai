@@ -1,0 +1,139 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Promotions API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Promotions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Android Waitlist Rank",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/promos/android_waitlist_rank",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get the current Android waitlist rank for the authenticated user.\nReturns referral_code, current_rank, total_boost, referrals_count, and desktop_dictation_bonus_earned."
+        },
+        {
+          "info": {
+            "name": "Submit Phone Number",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/promos/android_waitlist/phone_number",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Submit phone number for Android waitlist boost.\nAwards 30,000 points on first submission."
+        },
+        {
+          "info": {
+            "name": "Verify Social Share",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/promos/android_waitlist/verify_social_share",
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Verify a social share screenshot and award boost points.\n\nUpload a screenshot of your social media post about Wispr Flow.\nThe screenshot will be verified using AI to confirm:\n- The post mentions Wispr Flow or contains a wisprflow.ai URL\n- The post was actually published (not just composed)\n- The platform (Twitter/X, LinkedIn, WhatsApp, or Slack)\n\nBoost points awarded:\n- Twitter/X: 50,000 points\n- LinkedIn: 50,000 points\n- WhatsApp: 20,000 points\n- Slack: 20,000 points\n\nEach platform can only be "
+        },
+        {
+          "info": {
+            "name": "Validate Promo Code",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/promos/campaign/validate",
+            "params": [
+              {
+                "name": "code",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Validate a promo code and return attribution info without applying it."
+        },
+        {
+          "info": {
+            "name": "Apply Promo Code",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/promos/campaign/apply",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Validate and attach a promo code to the current user for their next checkout."
+        },
+        {
+          "info": {
+            "name": "Get Pending Promo",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/promos/campaign/pending",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get the current user's pending promo info (for paywall/onboarding display).\n\nReturns 200 with campaign details if a pending promo exists, or 204 if not."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

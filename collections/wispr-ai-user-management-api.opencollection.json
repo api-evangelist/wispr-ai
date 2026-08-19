@@ -1,0 +1,506 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics User Management API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "User Management",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get User Profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/user/profile",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a user's profile information."
+        },
+        {
+          "info": {
+            "name": "Update User Profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/user/profile",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update a user's profile information (first name and last name)."
+        },
+        {
+          "info": {
+            "name": "Get User Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/user/user-id",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a user's ID."
+        },
+        {
+          "info": {
+            "name": "Get User Preference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/user/preferences",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a user's preferences."
+        },
+        {
+          "info": {
+            "name": "Update User Preference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/user/preferences",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update a user's preferences."
+        },
+        {
+          "info": {
+            "name": "Save Onboarding Answers",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/user/onboarding-answers",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Store onboarding answers and mark fulfilled intents.\n\nCalled by the web SPA after signup completes and the user row is provisioned."
+        },
+        {
+          "info": {
+            "name": "Get User Dictionary",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/user/dictionary",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a user's dictionary."
+        },
+        {
+          "info": {
+            "name": "Update User Dictionary",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/user/dictionary",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Add a word to a user's dictionary."
+        },
+        {
+          "info": {
+            "name": "Delete User Dictionary",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/user/dictionary",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete a user's dictionary."
+        },
+        {
+          "info": {
+            "name": "Delete Word In Dictionary",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/user/dictionary/:word_id",
+            "params": [
+              {
+                "name": "word_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete a word from a user's dictionary."
+        },
+        {
+          "info": {
+            "name": "Get Student Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/user/student_status",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a user's student status."
+        },
+        {
+          "info": {
+            "name": "Update Student Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/user/update_student_status",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-Key",
+              "value": "{{X-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update a user's student status.\n\nArgs:\n    email (EmailStr): The user's email address.\n    is_student (bool): Whether the user is a student.\n    from_now (bool, optional): If True, the trial period will be calculated from the current time.\n        If False, the trial period will be calculated from the original reference point. Defaults to False.\n\nReturns:\n    ORJSONResponse: The result of the update operation."
+        },
+        {
+          "info": {
+            "name": "Onboarding Complete",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/user/onboarding_complete",
+            "params": [
+              {
+                "name": "platform",
+                "value": "",
+                "type": "query",
+                "description": "Platform for attribution tracking"
+              },
+              {
+                "name": "trial_variant",
+                "value": "",
+                "type": "query",
+                "description": "Trial variant for experiment. None = auto-grant (legacy/control)"
+              },
+              {
+                "name": "ga4_client_id",
+                "value": "",
+                "type": "query",
+                "description": "GA4 client_id for attribution tracking"
+              },
+              {
+                "name": "fbp",
+                "value": "",
+                "type": "query",
+                "description": "Meta _fbp cookie value"
+              },
+              {
+                "name": "fbc",
+                "value": "",
+                "type": "query",
+                "description": "Meta _fbc click ID cookie value"
+              },
+              {
+                "name": "utm_source",
+                "value": "",
+                "type": "query",
+                "description": "UTM source parameter"
+              },
+              {
+                "name": "utm_medium",
+                "value": "",
+                "type": "query",
+                "description": "UTM medium parameter"
+              },
+              {
+                "name": "utm_campaign",
+                "value": "",
+                "type": "query",
+                "description": "UTM campaign parameter"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Mark onboarding completed and activate trial if eligible and claimed."
+        },
+        {
+          "info": {
+            "name": "Claim Trial Extension",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/user/claim_trial_extension",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Claim a trial extension day for dictating 100+ words.\nUsers can claim once per day, up to 7 days total, within 7 days of onboarding."
+        },
+        {
+          "info": {
+            "name": "Get User Stats",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/user/user_stats",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a user's stats."
+        },
+        {
+          "info": {
+            "name": "Get Hipaa Baa Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/user/hipaa-baa",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get the status of a HIPAA Business Associate Agreement."
+        },
+        {
+          "info": {
+            "name": "Sign Hipaa Baa",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/user/hipaa-baa",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Sign a HIPAA Business Associate Agreement."
+        },
+        {
+          "info": {
+            "name": "Revoke Hipaa Baa",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/user/hipaa-baa",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Revoke a HIPAA Business Associate Agreement."
+        },
+        {
+          "info": {
+            "name": "Request Push Notification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/user/request_push_notification",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Request a push notification."
+        },
+        {
+          "info": {
+            "name": "Register Device",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/user/register_device",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Register a device."
+        },
+        {
+          "info": {
+            "name": "Get Registered Devices",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/user/registered_devices",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a list of platforms the user has registered."
+        },
+        {
+          "info": {
+            "name": "Export User Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/user/export_data",
+            "params": [
+              {
+                "name": "email",
+                "value": "",
+                "type": "query",
+                "description": "The email address of the user to export data for"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-Key",
+              "value": "{{X-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Export all data associated with a user's email address.\nReturns a JSON file containing all user data from main_db, usage_db, and platform_db.\n\nThis endpoint requires root API key authentication."
+        },
+        {
+          "info": {
+            "name": "Get Trial Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/user/trial_status",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a user's trial status."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

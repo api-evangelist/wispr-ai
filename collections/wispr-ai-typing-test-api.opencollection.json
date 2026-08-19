@@ -1,0 +1,74 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Typing Test API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Typing Test",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Submit Score",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/typing-test/submit-score",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit a typing test score. Validates keystrokes server-side and records the attempt."
+        },
+        {
+          "info": {
+            "name": "Get Leaderboard",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/typing-test/leaderboard",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "email",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Fetch the current typing test leaderboard. Optionally includes caller's rank via JWT or email."
+        },
+        {
+          "info": {
+            "name": "Get Passage",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/typing-test/passage",
+            "params": [
+              {
+                "name": "language",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Fetch a random typing test passage for a given language."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,276 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Teams API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Teams",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Team",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/cost-centers/:cost_center_id/teams",
+            "params": [
+              {
+                "name": "cost_center_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create a new team under a cost center.\n\nThe caller must be an enterprise admin or an active member of some team\nin the cost center."
+        },
+        {
+          "info": {
+            "name": "List Teams",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/:enterprise_id/teams",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "List all active teams for an enterprise.\n\nAny user in the enterprise can call this — including pending users with\n``enterprise_id`` set but no team membership, who need this list to render\nthe desktop team picker. Cross-enterprise callers receive 404 (not 403)\nto avoid leaking enterprise existence."
+        },
+        {
+          "info": {
+            "name": "Get Team",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/teams/:team_id",
+            "params": [
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a single team by id.\n\nThe caller must be an enterprise admin or an active member of the team.\nCross-enterprise callers receive 404 (not 403) to avoid leaking existence."
+        },
+        {
+          "info": {
+            "name": "Update Team",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/teams/:team_id",
+            "params": [
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Rename a team.\n\nThe caller must be an enterprise admin or team admin."
+        },
+        {
+          "info": {
+            "name": "Disband Team",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/teams/:team_id",
+            "params": [
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Disband a team (soft-delete).\n\nSets ``team.status=disbanded`` and soft-removes all active memberships with\n``removal_method=team_disbanded``. The caller must be an enterprise admin\nor the cost center's ``billing_owner_user_id``."
+        },
+        {
+          "info": {
+            "name": "Move Member To Team",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/teams/:team_id/members",
+            "params": [
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Move an enterprise user into this team from their current team.\n\nThe caller must be an enterprise admin or an admin of the destination\nteam. After the move, the refreshed team and its member count are returned."
+        },
+        {
+          "info": {
+            "name": "Update Team Member Role",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/teams/:team_id/members/:user_id",
+            "params": [
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Set the per-team role of a member already on the team.\n\nCaller must be an enterprise admin OR the cost center's billing owner.\nRefuses to demote the team's last effective admin (counting enterprise-level\nsuperadmins/it_admins) when the team still has other active members."
+        },
+        {
+          "info": {
+            "name": "Move Team To Cost Center",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/teams/:team_id/cost-center",
+            "params": [
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Reassign a team to a different cost center within the same enterprise.\n\nCaller must be an enterprise admin. The destination CC must be in a live\nbilling status and belong to the same enterprise. The source CC must\nretain at least one team after the move."
+        },
+        {
+          "info": {
+            "name": "Join Team",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/teams/:team_id/join",
+            "params": [
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Pending enterprise member self-selects into a team via the desktop picker.\n\nMulti-team enterprises leave new SCIM/auto-add users in a pending state\n(no team membership). The desktop client renders a team picker; selecting\na team calls this endpoint, which inserts the membership with\n``add_method=team_picker`` and reconciles seats for the team's cost\ncenter outside the DB transaction.\n\nReturns 400 when the user has no enterprise, 404 when the team is\nmissing, disbanded, or in another enterprise, "
+        },
+        {
+          "info": {
+            "name": "Get Active Cost Center For Caller",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/me/active-cost-center",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Return the caller's cost center plus active members of every team in it.\n\nPowers the create-department dialog's cost-center-scoped picker — callers\ncan pull any active member of their CC into a new team (intra-CC move).\nEach member row carries its ``team_id`` so the frontend can scope the\nsuccessor-admin field to caller's old teammates only.\n\n404 if the caller has no active team membership (e.g. orphaned by SCIM\nprovisioning before placement; or after their only team was disbanded)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

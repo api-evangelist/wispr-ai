@@ -1,0 +1,201 @@
+{
+  "item": [
+    {
+      "id": "987c4b8a-d91f-4ebd-90a4-a36129eddf0e",
+      "name": "Enterpret",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "be7f6dc9-f9b0-416d-83d5-95981ec4927d",
+          "name": "Ingest Enterpret Payload",
+          "request": {
+            "name": "Ingest Enterpret Payload",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "enterpret"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-API-Key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"webhook_payload\": {\n    \"issue_id\": \"<string>\",\n    \"issue_number\": \"<string>\",\n    \"account_id\": \"<string>\",\n    \"contact_id\": \"<string>\",\n    \"requester_email\": \"<string>\",\n    \"account_user_id\": \"<string>\",\n    \"enterprise_id\": \"<string>\",\n    \"is_enterprise\": \"<string>\",\n    \"billing_cycle\": \"<string>\",\n    \"country\": \"<string>\",\n    \"country_code\": \"<string>\",\n    \"country_currency\": \"<string>\",\n    \"discount_type\": \"<string>\",\n    \"account_email\": \"<string>\",\n    \"wispr_flow_account_email\": \"<string>\",\n    \"is_student_account\": \"<string>\",\n    \"max_seats_cycle\": \"<string>\",\n    \"number_seats\": \"<string>\",\n    \"payment_platform\": \"<string>\",\n    \"stripe_customer_id\": \"<string>\",\n    \"stripe_promo_code\": \"<string>\",\n    \"subscription\": \"<string>\",\n    \"subscription_currency\": \"<string>\",\n    \"subscription_plan\": \"<string>\",\n    \"subscription_plan_name\": \"<string>\",\n    \"subscription_status\": \"<string>\",\n    \"trial_ends_at\": \"<string>\",\n    \"vip_user\": \"<string>\",\n    \"body\": \"<string>\",\n    \"created_at\": \"<string>\",\n    \"issue_link\": \"<string>\",\n    \"resolution_time\": \"<string>\",\n    \"issue_source\": \"<string>\",\n    \"issue_status\": \"<string>\",\n    \"issue_title\": \"<string>\",\n    \"article_status\": \"<string>\",\n    \"feedback_type\": \"<string>\",\n    \"issue_complexity\": \"<string>\",\n    \"assignee_id\": \"<string>\",\n    \"assignee_email\": \"<string>\",\n    \"assignee_name\": \"<string>\",\n    \"tags\": \"<string>\",\n    \"account_name\": \"<string>\",\n    \"account_domains\": \"<string>\",\n    \"account_owner_name\": \"<string>\",\n    \"requester_name\": \"<string>\",\n    \"team_name\": \"<string>\",\n    \"customer_portal_url\": \"<string>\",\n    \"last_message_sent_at\": \"<string>\",\n    \"last_message_is_private\": \"<string>\",\n    \"last_message_source\": \"<string>\",\n    \"device_details\": {\n      \"architecture\": \"<string>\",\n      \"device_type\": \"<string>\",\n      \"platform\": \"<string>\",\n      \"version\": \"<string>\",\n      \"region\": \"<string>\"\n    },\n    \"conversation\": {\n      \"message_id\": \"<string>\",\n      \"author_name\": \"<string>\",\n      \"body\": \"<string>\",\n      \"ccs\": \"<string>\",\n      \"key_0\": true\n    }\n  },\n  \"webhook_target\": \"<string>\",\n  \"request_id\": \"<string>\",\n  \"webhook_id\": \"<string>\",\n  \"metadata\": \"<object>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2592425a-90b7-487e-a708-34fca6eb8f35",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "enterpret"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"webhook_payload\": {\n    \"issue_id\": \"<string>\",\n    \"issue_number\": \"<string>\",\n    \"account_id\": \"<string>\",\n    \"contact_id\": \"<string>\",\n    \"requester_email\": \"<string>\",\n    \"account_user_id\": \"<string>\",\n    \"enterprise_id\": \"<string>\",\n    \"is_enterprise\": \"<string>\",\n    \"billing_cycle\": \"<string>\",\n    \"country\": \"<string>\",\n    \"country_code\": \"<string>\",\n    \"country_currency\": \"<string>\",\n    \"discount_type\": \"<string>\",\n    \"account_email\": \"<string>\",\n    \"wispr_flow_account_email\": \"<string>\",\n    \"is_student_account\": \"<string>\",\n    \"max_seats_cycle\": \"<string>\",\n    \"number_seats\": \"<string>\",\n    \"payment_platform\": \"<string>\",\n    \"stripe_customer_id\": \"<string>\",\n    \"stripe_promo_code\": \"<string>\",\n    \"subscription\": \"<string>\",\n    \"subscription_currency\": \"<string>\",\n    \"subscription_plan\": \"<string>\",\n    \"subscription_plan_name\": \"<string>\",\n    \"subscription_status\": \"<string>\",\n    \"trial_ends_at\": \"<string>\",\n    \"vip_user\": \"<string>\",\n    \"body\": \"<string>\",\n    \"created_at\": \"<string>\",\n    \"issue_link\": \"<string>\",\n    \"resolution_time\": \"<string>\",\n    \"issue_source\": \"<string>\",\n    \"issue_status\": \"<string>\",\n    \"issue_title\": \"<string>\",\n    \"article_status\": \"<string>\",\n    \"feedback_type\": \"<string>\",\n    \"issue_complexity\": \"<string>\",\n    \"assignee_id\": \"<string>\",\n    \"assignee_email\": \"<string>\",\n    \"assignee_name\": \"<string>\",\n    \"tags\": \"<string>\",\n    \"account_name\": \"<string>\",\n    \"account_domains\": \"<string>\",\n    \"account_owner_name\": \"<string>\",\n    \"requester_name\": \"<string>\",\n    \"team_name\": \"<string>\",\n    \"customer_portal_url\": \"<string>\",\n    \"last_message_sent_at\": \"<string>\",\n    \"last_message_is_private\": \"<string>\",\n    \"last_message_source\": \"<string>\",\n    \"device_details\": {\n      \"architecture\": \"<string>\",\n      \"device_type\": \"<string>\",\n      \"platform\": \"<string>\",\n      \"version\": \"<string>\",\n      \"region\": \"<string>\"\n    },\n    \"conversation\": {\n      \"message_id\": \"<string>\",\n      \"author_name\": \"<string>\",\n      \"body\": \"<string>\",\n      \"ccs\": \"<string>\"\n    }\n  },\n  \"webhook_target\": \"<string>\",\n  \"request_id\": \"<string>\",\n  \"webhook_id\": \"<string>\",\n  \"metadata\": \"<object>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "95266126-bfa3-45a4-857f-c9358ddc69f5",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "enterpret"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"webhook_payload\": {\n    \"issue_id\": \"<string>\",\n    \"issue_number\": \"<string>\",\n    \"account_id\": \"<string>\",\n    \"contact_id\": \"<string>\",\n    \"requester_email\": \"<string>\",\n    \"account_user_id\": \"<string>\",\n    \"enterprise_id\": \"<string>\",\n    \"is_enterprise\": \"<string>\",\n    \"billing_cycle\": \"<string>\",\n    \"country\": \"<string>\",\n    \"country_code\": \"<string>\",\n    \"country_currency\": \"<string>\",\n    \"discount_type\": \"<string>\",\n    \"account_email\": \"<string>\",\n    \"wispr_flow_account_email\": \"<string>\",\n    \"is_student_account\": \"<string>\",\n    \"max_seats_cycle\": \"<string>\",\n    \"number_seats\": \"<string>\",\n    \"payment_platform\": \"<string>\",\n    \"stripe_customer_id\": \"<string>\",\n    \"stripe_promo_code\": \"<string>\",\n    \"subscription\": \"<string>\",\n    \"subscription_currency\": \"<string>\",\n    \"subscription_plan\": \"<string>\",\n    \"subscription_plan_name\": \"<string>\",\n    \"subscription_status\": \"<string>\",\n    \"trial_ends_at\": \"<string>\",\n    \"vip_user\": \"<string>\",\n    \"body\": \"<string>\",\n    \"created_at\": \"<string>\",\n    \"issue_link\": \"<string>\",\n    \"resolution_time\": \"<string>\",\n    \"issue_source\": \"<string>\",\n    \"issue_status\": \"<string>\",\n    \"issue_title\": \"<string>\",\n    \"article_status\": \"<string>\",\n    \"feedback_type\": \"<string>\",\n    \"issue_complexity\": \"<string>\",\n    \"assignee_id\": \"<string>\",\n    \"assignee_email\": \"<string>\",\n    \"assignee_name\": \"<string>\",\n    \"tags\": \"<string>\",\n    \"account_name\": \"<string>\",\n    \"account_domains\": \"<string>\",\n    \"account_owner_name\": \"<string>\",\n    \"requester_name\": \"<string>\",\n    \"team_name\": \"<string>\",\n    \"customer_portal_url\": \"<string>\",\n    \"last_message_sent_at\": \"<string>\",\n    \"last_message_is_private\": \"<string>\",\n    \"last_message_source\": \"<string>\",\n    \"device_details\": {\n      \"architecture\": \"<string>\",\n      \"device_type\": \"<string>\",\n      \"platform\": \"<string>\",\n      \"version\": \"<string>\",\n      \"region\": \"<string>\"\n    },\n    \"conversation\": {\n      \"message_id\": \"<string>\",\n      \"author_name\": \"<string>\",\n      \"body\": \"<string>\",\n      \"ccs\": \"<string>\"\n    }\n  },\n  \"webhook_target\": \"<string>\",\n  \"request_id\": \"<string>\",\n  \"webhook_id\": \"<string>\",\n  \"metadata\": \"<object>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "ad5cdc2c-3f6f-4e70-96e6-2785460b70d0",
+    "name": "Wispr Backend Analytics Enterpret API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Wispr Backend API",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,305 @@
+{
+  "item": [
+    {
+      "id": "f95bfb0e-2e20-425a-8f65-19c6b47c26c5",
+      "name": "User Voice Preferences",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "480181e0-40e5-429d-9bf9-29247ea04a4e",
+          "name": "List User Voice Preferences",
+          "request": {
+            "name": "List User Voice Preferences",
+            "description": {
+              "content": "Return all voice preference records for the authenticated user.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "user_voice_preferences"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "9387457f-aaad-4101-82f8-213e32d80c88",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "user_voice_preferences"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"voice_preferences\": [\n    {\n      \"id\": \"80144924-05b4-a939-a125-84929d71b53f\",\n      \"preference\": \"string\",\n      \"created_at\": \"1952-11-20T19:16:42.149Z\",\n      \"modified_at\": \"1978-10-14T14:40:46.882Z\",\n      \"filter\": \"string\"\n    },\n    {\n      \"id\": \"3a523543-5755-ca1c-8e02-34cfa05b9578\",\n      \"preference\": \"string\",\n      \"created_at\": \"1994-04-10T13:55:40.371Z\",\n      \"modified_at\": \"1991-09-07T12:37:47.961Z\",\n      \"filter\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fe4ae037-c12e-40bc-b299-67c4a5ec60c7",
+          "name": "Upload User Voice Preferences",
+          "request": {
+            "name": "Upload User Voice Preferences",
+            "description": {
+              "content": "Upsert a batch of voice preference records for the authenticated user.\n\nThe desktop client generates each record's UUID locally. Re-uploading the\nsame record is idempotent: the existing row is updated, not duplicated.\nEach saved row is also scheduled for Graphiti voice-memory ingest (202-style,\nfire-and-forget — same as POST /memory/ingest).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "user_voice_preferences",
+                "upload"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"voice_preferences\": [\n    {\n      \"id\": \"<uuid>\",\n      \"preference\": \"<string>\",\n      \"filter\": \"<string>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"preference\": \"<string>\",\n      \"filter\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "dffd4883-7d19-4d69-9b9f-345a1749d52d",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "user_voice_preferences",
+                    "upload"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"voice_preferences\": [\n    {\n      \"id\": \"<uuid>\",\n      \"preference\": \"<string>\",\n      \"filter\": \"<string>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"preference\": \"<string>\",\n      \"filter\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"num_rows_saved\": 9066,\n  \"ids\": [\n    \"75109f97-7cec-5345-3720-42a8113a5bad\",\n    \"35d57b3c-ad0f-97f4-67bf-de23953426ea\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1c9d6c8c-581a-4c87-963c-c3a0a21fc71e",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "user_voice_preferences",
+                    "upload"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"voice_preferences\": [\n    {\n      \"id\": \"<uuid>\",\n      \"preference\": \"<string>\",\n      \"filter\": \"<string>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"preference\": \"<string>\",\n      \"filter\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "6977ed32-0b84-4434-b311-cfe20e4bf7f7",
+    "name": "Wispr Backend Analytics User Voice Preferences API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Wispr Backend API",
+      "type": "text/plain"
+    }
+  }
+}

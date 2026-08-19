@@ -1,0 +1,190 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Cost Centers API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Cost Centers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Cost Centers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/:enterprise_id/cost-centers",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "List all cost centers for an enterprise.\n\nThe caller must be an enterprise admin. Each entry includes a computed\n``team_count`` fetched via a single GROUP BY query."
+        },
+        {
+          "info": {
+            "name": "Create Cost Center",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/enterprise/:enterprise_id/cost-centers",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create a new cost center for an enterprise (break-away intent step).\n\nThe cost center is named after the caller's current team. The team\nis not moved into the new CC until the Stripe checkout webhook fires.\nThe caller must be an enterprise admin."
+        },
+        {
+          "info": {
+            "name": "Get Cost Center",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/cost-centers/:cost_center_id",
+            "params": [
+              {
+                "name": "cost_center_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a single cost center by id.\n\nThe caller must be an admin of the enterprise that owns this cost center."
+        },
+        {
+          "info": {
+            "name": "Update Cost Center",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/cost-centers/:cost_center_id",
+            "params": [
+              {
+                "name": "cost_center_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Rename a cost center.\n\nCaller must be an enterprise admin or the cost center's billing owner."
+        },
+        {
+          "info": {
+            "name": "Delete Cost Center",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/cost-centers/:cost_center_id",
+            "params": [
+              {
+                "name": "cost_center_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete a cost center.\n\nRefuses if the cost center has an active Stripe subscription or teams\nstill referencing it. The caller must be an enterprise admin."
+        },
+        {
+          "info": {
+            "name": "Get Break Away Preview",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/cost-centers/:cost_center_id/break-away-preview",
+            "params": [
+              {
+                "name": "cost_center_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Return the pre-checkout summary for an in-flight break-away.\n\nCalled after ``create_cost_center`` and before ``create_cost_center_billing``\nto surface team name, source cost center, member counts, and the per-seat\nprice math so the admin can confirm before being redirected to Stripe.\n\nCaller must be an enterprise admin of the owning enterprise or the new CC's\n``billing_owner_user_id``."
+        },
+        {
+          "info": {
+            "name": "Create Cost Center Billing",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/cost-centers/:cost_center_id/billing",
+            "params": [
+              {
+                "name": "cost_center_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create a Stripe checkout session for a cost center in break-away intent state.\n\nThe new cost center inherits the parent enterprise's negotiated price —\ncallers do not pick a plan. The team that will move is inferred from the\ncaller's current active membership (no team_id in the request body)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

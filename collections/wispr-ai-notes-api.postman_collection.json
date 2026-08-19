@@ -1,0 +1,207 @@
+{
+  "item": [
+    {
+      "id": "3253d7c2-b305-45e1-8073-857c3ec10c2e",
+      "name": "Notes",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ee71edc3-1b46-4e92-815d-5de0d7df4471",
+          "name": "Sync Notes",
+          "request": {
+            "name": "Sync Notes",
+            "description": {
+              "content": "Sync notes with the server.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "notes",
+                "sync"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notes\": [\n    {\n      \"id\": \"<uuid>\",\n      \"title\": \"<string>\",\n      \"created_at\": \"<string>\",\n      \"modified_at\": \"<string>\",\n      \"content\": \"<string>\",\n      \"is_deleted\": false,\n      \"image_keys\": [\n        {\n          \"id\": \"<uuid>\",\n          \"key\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"size_bytes\": \"<integer>\"\n        },\n        {\n          \"id\": \"<uuid>\",\n          \"key\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"size_bytes\": \"<integer>\"\n        }\n      ]\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"title\": \"<string>\",\n      \"created_at\": \"<string>\",\n      \"modified_at\": \"<string>\",\n      \"content\": \"<string>\",\n      \"is_deleted\": false,\n      \"image_keys\": [\n        {\n          \"id\": \"<uuid>\",\n          \"key\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"size_bytes\": \"<integer>\"\n        },\n        {\n          \"id\": \"<uuid>\",\n          \"key\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"size_bytes\": \"<integer>\"\n        }\n      ]\n    }\n  ],\n  \"last_sync_time\": \"<string>\",\n  \"hard_refresh\": false,\n  \"cursor\": \"<string>\",\n  \"image_uploads\": [\n    {\n      \"key\": \"<string>\",\n      \"size_bytes\": \"<integer>\",\n      \"content_type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"size_bytes\": \"<integer>\",\n      \"content_type\": \"<string>\"\n    }\n  ],\n  \"refresh_image_ids\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "10b8f0e1-cc82-4abc-85f6-7e939bd310b7",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "notes",
+                    "sync"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"notes\": [\n    {\n      \"id\": \"<uuid>\",\n      \"title\": \"<string>\",\n      \"created_at\": \"<string>\",\n      \"modified_at\": \"<string>\",\n      \"content\": \"<string>\",\n      \"is_deleted\": false,\n      \"image_keys\": [\n        {\n          \"id\": \"<uuid>\",\n          \"key\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"size_bytes\": \"<integer>\"\n        },\n        {\n          \"id\": \"<uuid>\",\n          \"key\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"size_bytes\": \"<integer>\"\n        }\n      ]\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"title\": \"<string>\",\n      \"created_at\": \"<string>\",\n      \"modified_at\": \"<string>\",\n      \"content\": \"<string>\",\n      \"is_deleted\": false,\n      \"image_keys\": [\n        {\n          \"id\": \"<uuid>\",\n          \"key\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"size_bytes\": \"<integer>\"\n        },\n        {\n          \"id\": \"<uuid>\",\n          \"key\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"size_bytes\": \"<integer>\"\n        }\n      ]\n    }\n  ],\n  \"last_sync_time\": \"<string>\",\n  \"hard_refresh\": false,\n  \"cursor\": \"<string>\",\n  \"image_uploads\": [\n    {\n      \"key\": \"<string>\",\n      \"size_bytes\": \"<integer>\",\n      \"content_type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"size_bytes\": \"<integer>\",\n      \"content_type\": \"<string>\"\n    }\n  ],\n  \"refresh_image_ids\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"acked\": [\n    \"81abe906-b712-6449-7113-3392e0f70632\",\n    \"8cb0c02a-6107-572a-0fdd-964a1ae22bef\"\n  ],\n  \"pull\": [\n    {\n      \"id\": \"04ca1a23-3023-df2b-10de-59db04025dca\",\n      \"title\": \"string\",\n      \"created_at\": \"string\",\n      \"modified_at\": \"string\",\n      \"content\": \"string\",\n      \"is_deleted\": false,\n      \"image_keys\": [\n        {\n          \"id\": \"<uuid>\",\n          \"key\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"size_bytes\": \"<integer>\"\n        },\n        {\n          \"id\": \"<uuid>\",\n          \"key\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"size_bytes\": \"<integer>\"\n        }\n      ]\n    },\n    {\n      \"id\": \"a1bf528e-34a1-09fe-0ef6-5db4b513e68b\",\n      \"title\": \"string\",\n      \"created_at\": \"string\",\n      \"modified_at\": \"string\",\n      \"content\": \"string\",\n      \"is_deleted\": false,\n      \"image_keys\": [\n        {\n          \"id\": \"<uuid>\",\n          \"key\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"size_bytes\": \"<integer>\"\n        },\n        {\n          \"id\": \"<uuid>\",\n          \"key\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"size_bytes\": \"<integer>\"\n        }\n      ]\n    }\n  ],\n  \"sync_time\": \"string\",\n  \"upload_urls\": [\n    {\n      \"key\": \"users/843c553ded6794558de15f6fb04c9090e6dc/scratchpad/images/411290d4a3bb93511c4a72f157ffc0967b9918cd5ec0ce929c79509c7662c8c0\",\n      \"url\": \"http://\",\n      \"fields\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      }\n    },\n    {\n      \"key\": \"users/c773882590d464-a103ba7549cdec63cdc8a/scratchpad/images/c418331b7fe5663348c21b01942d057442ea971cbfba4654c9c656e0aee256cc\",\n      \"url\": \"http://\",\n      \"fields\": {\n        \"key_0\": \"string\"\n      }\n    }\n  ],\n  \"refreshed_images\": [\n    {\n      \"id\": \"f743043d-ecd4-9698-1eb3-be8965a2ea18\",\n      \"key\": \"users/15-34119812d0284458a087f0cfcb9875-51/scratchpad/images/f264f821bef55178adaaec55dac7f850700a3f78b1b6eafb40c76847d4be7b9d\",\n      \"width\": 1084,\n      \"height\": 3361,\n      \"size_bytes\": 573524,\n      \"url\": \"https://\",\n      \"expires_at\": \"1978-01-01T04:11:58.280Z\"\n    },\n    {\n      \"id\": \"c9824242-e563-ef74-73e4-0e20d19d4860\",\n      \"key\": \"users/369cf98b597990d1ec53f3ba6dc041c7b-dd/scratchpad/images/6c94f29fe73831d1ab4b96af86415d7a7f160106b3d624503ce419a470841ad0\",\n      \"width\": 81,\n      \"height\": 1276,\n      \"size_bytes\": 1302235,\n      \"url\": \"https://\",\n      \"expires_at\": \"1961-11-06T05:04:14.780Z\"\n    }\n  ],\n  \"next_cursor\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "29158f42-e2cf-4a38-89fc-092893edb633",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "notes",
+                    "sync"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"notes\": [\n    {\n      \"id\": \"<uuid>\",\n      \"title\": \"<string>\",\n      \"created_at\": \"<string>\",\n      \"modified_at\": \"<string>\",\n      \"content\": \"<string>\",\n      \"is_deleted\": false,\n      \"image_keys\": [\n        {\n          \"id\": \"<uuid>\",\n          \"key\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"size_bytes\": \"<integer>\"\n        },\n        {\n          \"id\": \"<uuid>\",\n          \"key\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"size_bytes\": \"<integer>\"\n        }\n      ]\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"title\": \"<string>\",\n      \"created_at\": \"<string>\",\n      \"modified_at\": \"<string>\",\n      \"content\": \"<string>\",\n      \"is_deleted\": false,\n      \"image_keys\": [\n        {\n          \"id\": \"<uuid>\",\n          \"key\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"size_bytes\": \"<integer>\"\n        },\n        {\n          \"id\": \"<uuid>\",\n          \"key\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"size_bytes\": \"<integer>\"\n        }\n      ]\n    }\n  ],\n  \"last_sync_time\": \"<string>\",\n  \"hard_refresh\": false,\n  \"cursor\": \"<string>\",\n  \"image_uploads\": [\n    {\n      \"key\": \"<string>\",\n      \"size_bytes\": \"<integer>\",\n      \"content_type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"size_bytes\": \"<integer>\",\n      \"content_type\": \"<string>\"\n    }\n  ],\n  \"refresh_image_ids\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "b366a60a-1f78-4965-b905-53cd063b739a",
+    "name": "Wispr Backend Analytics Notes API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Wispr Backend API",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "item": [
+    {
+      "id": "646156ac-98e3-44b6-8e9a-052cf920e11a",
+      "name": "Sync",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e474f12f-d8fd-4b71-b4da-fc40fb6bd856",
+          "name": "Check Sync",
+          "request": {
+            "name": "Check Sync",
+            "description": {
+              "content": "Check which sync-managed resources have changed for the current user.\n\nAuth: JWT-only (``Authenticated()``). This endpoint must NOT use\n``get_current_user_stateless`` — its only DB touch is the IP-allowlist\ncheck inside ``Authenticated()`` (a per-user cached join, skipped while\nenforcement is disabled). If this endpoint is ever extended to return\nactual user data, upgrade auth accordingly.\n\nReturns 503 if Redis is unreachable so the client can skip the cycle\nand retry on the next interval.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "sync",
+                "check"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "18284974-66c6-4d1d-81ce-e55a85c7e0b9",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sync",
+                    "check"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"changed\": [\n    \"string\",\n    \"string\"\n  ],\n  \"unchanged\": [\n    \"string\",\n    \"string\"\n  ],\n  \"timestamps\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\",\n    \"key_2\": \"string\",\n    \"key_3\": \"string\"\n  },\n  \"client_region\": \"apac\",\n  \"incident_status\": {\n    \"state\": \"outage\",\n    \"message\": \"string\",\n    \"affected_regions\": [\n      \"europe\",\n      \"apac\"\n    ],\n    \"started_at\": \"1991-05-07T04:17:23.864Z\",\n    \"incident_url\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "752f743d-25b9-4f8f-8f22-bc2c8c1cbf38",
+    "name": "Wispr Backend Analytics Sync API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Wispr Backend API",
+      "type": "text/plain"
+    }
+  }
+}

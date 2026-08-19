@@ -1,0 +1,389 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Support API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Support",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Send Feedback Slack",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/support/slack/:platform",
+            "params": [
+              {
+                "name": "platform",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Send feedback to slack."
+        },
+        {
+          "info": {
+            "name": "Delete User",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/support/users",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete a user and all it's data."
+        },
+        {
+          "info": {
+            "name": "Support Delete User",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/support/users/:email",
+            "params": [
+              {
+                "name": "email",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-Key",
+              "value": "{{X-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Immediately delete a user and all their data (support staff only).\n\nThis endpoint requires the root API key and is intended for support staff only.\nIt performs immediate deletion without using background tasks."
+        },
+        {
+          "info": {
+            "name": "Get Usage Data Erasure Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/support/usage-data-erasure",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "query",
+                "description": "Target user id"
+              },
+              {
+                "name": "email",
+                "value": "",
+                "type": "query",
+                "description": "Target user email"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-Key",
+              "value": "{{X-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Redacted erasure status by `user_id` or `email` (root API key; ids/enums/counts only).\n\nIn-flight from Temporal (`describe_workflow` + the progress query), terminal from the\naudit row, or a clean not-found. PII (raw email / content / errors) never appears."
+        },
+        {
+          "info": {
+            "name": "Start Usage Data Erasure",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/support/usage-data-erasure",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-Key",
+              "value": "{{X-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Start an account-preserving usage-data erasure (support staff, root API key).\n\nGated by the root API key — the same key that authorizes account deletion\n(`support_delete_user`); no JWT path. Email is the PRIMARY identifier; `user_id`+`confirm_orphan` is the\norphan/no-email fallback. `actor`/`reason` are recorded UNTRUSTED. A `start_workflow`\nfailure surfaces as 5xx (nothing persisted pre-start; the caller retries — idempotent\nvia USE_EXISTING)."
+        },
+        {
+          "info": {
+            "name": "Frontapp Feedback",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/support/feedback",
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Frontapp Feedback"
+        },
+        {
+          "info": {
+            "name": "Update Pylon Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/support/update-pylon-account",
+            "params": [
+              {
+                "name": "email",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-Key",
+              "value": "{{X-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update Pylon Account"
+        },
+        {
+          "info": {
+            "name": "Frontapp Feedback With Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/support/image-feedback",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Frontapp Feedback With Image"
+        },
+        {
+          "info": {
+            "name": "Pre Login Feedback",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/support/pre-login-feedback",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint allows users to submit feedback before they have authenticated (for login or account creation issues)"
+        },
+        {
+          "info": {
+            "name": "Support Cancel Subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/support/cancel-subscription",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-Key",
+              "value": "{{X-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Cancel a user's active Stripe subscription and refund based on request.\n\n- refund=\"full\": refund entire current cycle amount\n- refund=\"partial\": prorated refund for unused period\n- refund=\"no\": cancel immediately with no refund"
+        },
+        {
+          "info": {
+            "name": "Sync Individual Stripe Subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/support/sync-individual-stripe-subscription",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-Key",
+              "value": "{{X-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Sync a user's individual Stripe subscription row from current Stripe state.\n\n- dry_run=true (default): preview before/after diff without writing\n- dry_run=false: apply changes to the subscription table"
+        },
+        {
+          "info": {
+            "name": "Sync Individual Mobile Subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/support/sync-individual-mobile-subscription",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-Key",
+              "value": "{{X-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Sync a user's mobile_subscription row from current RevenueCat state.\n\nIntended to patch up state after missed webhooks. Future webhooks with\nnewer event timestamps will still override this sync via the upsert\nstale-event guard.\n\n- dry_run=true (default): preview before/after diff without writing\n- dry_run=false: apply changes to the mobile_subscription table"
+        },
+        {
+          "info": {
+            "name": "Validate User",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/support/validate-user",
+            "params": [
+              {
+                "name": "email",
+                "value": "",
+                "type": "query",
+                "description": "The email of the user to validate"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-Key",
+              "value": "{{X-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Validate that a Supabase user exists for the email and matches the DB user_id."
+        },
+        {
+          "info": {
+            "name": "Create Pylon Feedback",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/support/pylon-feedback",
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create Pylon Feedback"
+        },
+        {
+          "info": {
+            "name": "Attio Sync",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/support/attio-sync",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "type_of_sync",
+                "value": "",
+                "type": "query",
+                "description": "Type of sync: 'workspace' or 'users' or 'invoices"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-Key",
+              "value": "{{X-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Sync the Attio system with the enterprise."
+        },
+        {
+          "info": {
+            "name": "Submit Nps Score",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/support/nps/score",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit an NPS score."
+        },
+        {
+          "info": {
+            "name": "Submit Nps Feedback",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/support/nps/feedback",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit an NPS feedback."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

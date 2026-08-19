@@ -1,0 +1,369 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Team Insights API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Team Insights",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Words Dictated",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/insights/words-dictated",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "query",
+                "description": "Enterprise to query. Wispr admins may pass any; enterprise admins must pass their own."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "user_ids",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "app_keys",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "app_categories",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "comparison_mode",
+                "value": "",
+                "type": "query",
+                "description": "How pct_change picks the prior window. ``rolling`` = trailing N days vs prior N days (for Last 7/30 days). ``calendar`` = MoM/YoY shift (for This month, Last month, This year). Omit to use shape detection."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Words Dictated headline + delta + timeseries. ``app_keys``/``app_categories`` use OR-semantics."
+        },
+        {
+          "info": {
+            "name": "Export Words Dictated",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/insights/words-dictated/export",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "query",
+                "description": "Enterprise to query. Wispr admins may pass any; enterprise admins must pass their own."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "user_ids",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "app_keys",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "app_categories",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "columns",
+                "value": "",
+                "type": "query",
+                "description": "Dimensions to include as CSV columns. Order is fixed by the design; duplicates are deduped server-side."
+              },
+              {
+                "name": "comparison_mode",
+                "value": "",
+                "type": "query",
+                "description": "Accepted for shape parity with ``/words-dictated`` — CSV export has no pct_change column so this is unused."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Dimensional CSV of words/dictations for the Usage page export popover."
+        },
+        {
+          "info": {
+            "name": "Get Team Members",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/insights/team-members",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "query",
+                "description": "Enterprise to query. Wispr admins may pass any; enterprise admins must pass their own."
+              },
+              {
+                "name": "mode",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "user_ids",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "app_keys",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "app_categories",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "comparison_mode",
+                "value": "",
+                "type": "query",
+                "description": "How pct_change picks the prior window. ``rolling`` = trailing N days vs prior N days. ``calendar`` = MoM/YoY shift. Omit to use shape detection."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Total members + active-user timeseries. ``mode`` controls per-day aggregation granularity."
+        },
+        {
+          "info": {
+            "name": "Get Desktop Apps",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/insights/desktop-apps",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "query",
+                "description": "Enterprise to query. Wispr admins may pass any; enterprise admins must pass their own."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "user_ids",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "app_keys",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "app_categories",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "comparison_mode",
+                "value": "",
+                "type": "query",
+                "description": "How pct_change picks the prior window. ``rolling`` = trailing N days vs prior N days. ``calendar`` = MoM/YoY shift. Omit to use shape detection."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Distinct app count + app list (top-2000 from CH, capped). ``app_keys``/``app_categories`` OR-semantics."
+        },
+        {
+          "info": {
+            "name": "Get Impact",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/insights/impact",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "query",
+                "description": "Enterprise to query. Wispr admins may pass any; enterprise admins must pass their own."
+              },
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "All Impact cards in one round trip. ``team_id`` is the only filter."
+        },
+        {
+          "info": {
+            "name": "List Filter Options",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/insights/filter-options",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "query",
+                "description": "Enterprise to query. Wispr admins may pass any; enterprise admins must pass their own."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Page-load dropdowns: teams + apps + categories."
+        },
+        {
+          "info": {
+            "name": "List User Filter Options",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/enterprise/insights/filter-options/users",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "query",
+                "description": "Enterprise to query. Wispr admins may pass any; enterprise admins must pass their own."
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Prefix on first/last/email"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Typeahead user search over the requested enterprise."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

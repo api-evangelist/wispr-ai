@@ -1,0 +1,56 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics sandbox-user API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "sandbox-user",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create and sign in a sandbox user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/sandbox-user/create-and-signin",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create a sandbox user and sign in.\n    **Authentication Required**: Must be logged in with a @wispr.ai email address.\n    This endpoint:\n    1. Creates a Supabase user with @wispr.test email\n    2. Creates all necessary database records with onboarding NOT completed\n    3. Returns auth tokens for immediate sign-in"
+        },
+        {
+          "info": {
+            "name": "Destroy a sandbox user",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/sandbox-user/destroy",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Destroy a sandbox user by deleting all associated data from all tables and services.\n    This endpoint:\n    1. Validates the user has a @wispr.test email\n    2. Checks if user is the only member of an enterprise and deletes the enterprise if so\n    3. Uses the existing compliance-ready user deletion service\n    4. Deletes data from: main DB (incl. Subscription via CASCADE), usage DB, Customer.io, Segment, PostHog, ClickHouse\n    5. Cancels any active subscriptions via Stripe\n    6. Deletes from "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

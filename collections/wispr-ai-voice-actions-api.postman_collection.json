@@ -1,0 +1,182 @@
+{
+  "item": [
+    {
+      "id": "69030d93-9ba5-4db7-b920-933f8951c141",
+      "name": "Voice Actions",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "91dac46d-592a-4f17-acca-2c67e977b529",
+          "name": "Voice Actions Realtime Schema",
+          "request": {
+            "name": "Voice Actions Realtime Schema",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "voice-actions",
+                "realtime",
+                "schema"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "505edf8e-6668-45ce-98c3-d33765a67f28",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "voice-actions",
+                    "realtime",
+                    "schema"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"voice_action_event\": {\n    \"type\": \"string\",\n    \"model\": \"string\",\n    \"provider\": \"openai\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4050935e-353b-4592-ba29-81ca86a8e7f7",
+          "name": "Voice Actions Realtime Client Schema",
+          "request": {
+            "name": "Voice Actions Realtime Client Schema",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "voice-actions",
+                "realtime",
+                "client-schema"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "bb750414-46e6-44f7-8880-5db361111a8d",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "voice-actions",
+                    "realtime",
+                    "client-schema"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"voice_action_frame\": {\n    \"type\": \"string\",\n    \"instructions\": \"\",\n    \"tools\": [\n      {\n        \"name\": \"string\",\n        \"description\": \"\",\n        \"parameters\": {}\n      },\n      {\n        \"name\": \"string\",\n        \"description\": \"\",\n        \"parameters\": {}\n      }\n    ],\n    \"context\": {},\n    \"model\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "debcc4f6-ec85-4bb1-8465-9794df618da3",
+    "name": "Wispr Backend Analytics Voice Actions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Wispr Backend API",
+      "type": "text/plain"
+    }
+  }
+}

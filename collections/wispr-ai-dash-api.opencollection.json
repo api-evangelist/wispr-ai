@@ -1,0 +1,121 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Dash API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Dash",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Dash Api",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/dash/api"
+          },
+          "docs": "Dash Api"
+        },
+        {
+          "info": {
+            "name": "Client Api",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/dash/client_api",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Client-facing API endpoint that uses JWT token authentication.\nFunctionally identical to /api but uses client tokens for authentication."
+        },
+        {
+          "info": {
+            "name": "Warmup Dash",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/dash/warmup_dash"
+          },
+          "docs": "Warmup Dash"
+        },
+        {
+          "info": {
+            "name": "Generate Access Token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/dash/generate_access_token",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generate Access Token"
+        },
+        {
+          "info": {
+            "name": "Chrome Extension Client Key",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/dash/chrome_extension/client_key",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Pre-auth bootstrap endpoint for the Chrome extension.\n\nThe extension does NOT have an org API key. It exchanges an install ID for a short-lived `client_key`\n(JWT) which can be used to connect to `/client_ws` or `/client_ws_v2`.\n\n**Preferred (header-based):** pass the token via the ``Sec-WebSocket-Protocol`` header::\n\n    new WebSocket(url, [\"access_token\", clientKey])\n\n**Legacy (query-param):** ``/client_ws?client_key=<JWT>`` is still supported for\nbackward compatibility but is discouraged becau"
+        },
+        {
+          "info": {
+            "name": "Revoke User Token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/dash/revoke_token",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Revoke User Token"
+        },
+        {
+          "info": {
+            "name": "Generate Webflow Token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/dash/webflow_demo/generate_token",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generate Webflow Token"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

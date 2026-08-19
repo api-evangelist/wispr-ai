@@ -1,0 +1,29 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Analytics Wispr Backend API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Wispr Backend",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Read Root",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/"
+          },
+          "docs": "Read Root"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

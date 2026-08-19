@@ -1,0 +1,188 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Referral API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Referral",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Total Credits",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/referral/credits",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get the reward status for a user."
+        },
+        {
+          "info": {
+            "name": "Get Referrals Info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/referral/",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get comprehensive referral information for a user including:\n- Their referral code (generated if needed)\n- The name of who referred them (referer_name)\n- List of people they have referred (referrals)"
+        },
+        {
+          "info": {
+            "name": "Send Generic Download Email",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/referral/self-refer",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Send a generic download email to a user.\nrefer_to should be either \"ios\" or \"desktop\"."
+        },
+        {
+          "info": {
+            "name": "Refer Emails",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/referral/refer",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Sends referral emails to a list of emails.\nPopulates the referral table with the pending referrals."
+        },
+        {
+          "info": {
+            "name": "Regenerate Referral Code",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/referral/regenerate",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Regenerate the user's referral code based on their current first name."
+        },
+        {
+          "info": {
+            "name": "Get Referral Code",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/referral/:user_id",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a referral code for a user."
+        },
+        {
+          "info": {
+            "name": "Apply Referral Code",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/referral/apply",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Apply Referral Code"
+        },
+        {
+          "info": {
+            "name": "Send Download Link",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/referral/download-link",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Send a download link email to a recipient for a specific platform.\nThis endpoint is unauthenticated and rate-limited."
+        },
+        {
+          "info": {
+            "name": "Get Student Challenge Leaderboard",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/referral/student-challenge/leaderboard",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get the student referral challenge leaderboard.\nOnly readable by users bucketed into the `leaderboard` variant of the `student-referral-challenge`\nPostHog experiment — the same enrollment that surfaces this leaderboard in the client. Eligibility\n(variant, school domain, and challenge window) is resolved server-side in one call, keyed on the\nuser's id (the client's PostHog distinct id), so it can't be spoofed by the caller. Fails closed\n(403) on any PostHog error, non-`leaderboard` variant, or mi"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

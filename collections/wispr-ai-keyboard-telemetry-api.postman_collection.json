@@ -1,0 +1,204 @@
+{
+  "item": [
+    {
+      "id": "9572fc13-56b1-46a3-9b3b-b6962d9472bd",
+      "name": "keyboard_telemetry",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "dc56b7c2-0bd8-404e-9b66-5e9c6adc03d7",
+          "name": "Ingest keyboard touch aggregate cells (staging-gated)",
+          "request": {
+            "name": "Ingest keyboard touch aggregate cells (staging-gated)",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "keyboard_telemetry",
+                "ingest"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"batch_id\": \"<string>\",\n  \"cells\": [\n    {\n      \"device_diag\": \"<string>\",\n      \"device_model\": \"<string>\",\n      \"os_major\": \"<string>\",\n      \"app_version\": \"<string>\",\n      \"layout_id\": \"<string>\",\n      \"orientation\": \"<string>\",\n      \"key_id\": \"<string>\",\n      \"sub_cell\": \"<integer>\",\n      \"intended_key\": \"<string>\",\n      \"label_source\": \"<string>\",\n      \"n\": \"<integer>\",\n      \"sum_dx\": \"<number>\",\n      \"sum_dy\": \"<number>\",\n      \"sum_dx2\": \"<number>\",\n      \"sum_dy2\": \"<number>\",\n      \"sum_dxdy\": \"<number>\",\n      \"sum_t\": \"<number>\",\n      \"sum_t2\": \"<number>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8b06d175-e503-43e6-83fb-ee2aa1e0e559",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "keyboard_telemetry",
+                    "ingest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"batch_id\": \"<string>\",\n  \"cells\": [\n    {\n      \"device_diag\": \"<string>\",\n      \"device_model\": \"<string>\",\n      \"os_major\": \"<string>\",\n      \"app_version\": \"<string>\",\n      \"layout_id\": \"<string>\",\n      \"orientation\": \"<string>\",\n      \"key_id\": \"<string>\",\n      \"sub_cell\": \"<integer>\",\n      \"intended_key\": \"<string>\",\n      \"label_source\": \"<string>\",\n      \"n\": \"<integer>\",\n      \"sum_dx\": \"<number>\",\n      \"sum_dy\": \"<number>\",\n      \"sum_dx2\": \"<number>\",\n      \"sum_dy2\": \"<number>\",\n      \"sum_dxdy\": \"<number>\",\n      \"sum_t\": \"<number>\",\n      \"sum_t2\": \"<number>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accepted\": 7130\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "349ffac8-7e12-4173-8a69-db5d016c0659",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "keyboard_telemetry",
+                    "ingest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"batch_id\": \"<string>\",\n  \"cells\": [\n    {\n      \"device_diag\": \"<string>\",\n      \"device_model\": \"<string>\",\n      \"os_major\": \"<string>\",\n      \"app_version\": \"<string>\",\n      \"layout_id\": \"<string>\",\n      \"orientation\": \"<string>\",\n      \"key_id\": \"<string>\",\n      \"sub_cell\": \"<integer>\",\n      \"intended_key\": \"<string>\",\n      \"label_source\": \"<string>\",\n      \"n\": \"<integer>\",\n      \"sum_dx\": \"<number>\",\n      \"sum_dy\": \"<number>\",\n      \"sum_dx2\": \"<number>\",\n      \"sum_dy2\": \"<number>\",\n      \"sum_dxdy\": \"<number>\",\n      \"sum_t\": \"<number>\",\n      \"sum_t2\": \"<number>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "8d7268e5-d079-47fb-b51c-748f746700f0",
+    "name": "Wispr Backend Analytics keyboard_telemetry API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Wispr Backend API",
+      "type": "text/plain"
+    }
+  }
+}

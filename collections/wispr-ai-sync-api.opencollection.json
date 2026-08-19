@@ -1,0 +1,35 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Sync API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Sync",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Check Sync",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/sync/check",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Check which sync-managed resources have changed for the current user.\n\nAuth: JWT-only (``Authenticated()``). This endpoint must NOT use\n``get_current_user_stateless`` — its only DB touch is the IP-allowlist\ncheck inside ``Authenticated()`` (a per-user cached join, skipped while\nenforcement is disabled). If this endpoint is ever extended to return\nactual user data, upgrade auth accordingly.\n\nReturns 503 if Redis is unreachable so the client can skip the cycle\nand retry on the next interval."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

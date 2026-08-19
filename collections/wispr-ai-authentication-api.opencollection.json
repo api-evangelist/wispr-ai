@@ -1,0 +1,693 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Authentication API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Authentication",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Health",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/health"
+          },
+          "docs": "Health"
+        },
+        {
+          "info": {
+            "name": "Version",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/version"
+          },
+          "docs": "Version"
+        },
+        {
+          "info": {
+            "name": "Warmup",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/warmup",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Warmup"
+        },
+        {
+          "info": {
+            "name": "Google Sign In",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/google/sign_in",
+            "params": [
+              {
+                "name": "source",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "is_platform_user",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Google Sign In"
+        },
+        {
+          "info": {
+            "name": "Apple Sign In",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/apple/sign_in",
+            "params": [
+              {
+                "name": "source",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "is_platform_user",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Apple Sign In"
+        },
+        {
+          "info": {
+            "name": "Microsoft Sign In",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/microsoft/sign_in",
+            "params": [
+              {
+                "name": "source",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "is_platform_user",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Microsoft Sign In"
+        },
+        {
+          "info": {
+            "name": "Sso Sign In",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/sso/sign_in",
+            "params": [
+              {
+                "name": "source",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "email",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "is_platform_user",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Sso Sign In"
+        },
+        {
+          "info": {
+            "name": "Authkit Google Sign In",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/authkit/google/sign_in",
+            "params": [
+              {
+                "name": "source",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Authkit Google Sign In"
+        },
+        {
+          "info": {
+            "name": "Authkit Sso Sign In",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/authkit/sso/sign_in",
+            "params": [
+              {
+                "name": "source",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "email",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Authkit Sso Sign In"
+        },
+        {
+          "info": {
+            "name": "Authkit Google Callback",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/authkit/google/callback",
+            "params": [
+              {
+                "name": "source",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Authkit Google Callback"
+        },
+        {
+          "info": {
+            "name": "Authkit Sso Callback",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/authkit/sso/callback",
+            "params": [
+              {
+                "name": "source",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Authkit Sso Callback"
+        },
+        {
+          "info": {
+            "name": "Google Callback",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/google/login",
+            "params": [
+              {
+                "name": "source",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "is_platform_user",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Google Callback"
+        },
+        {
+          "info": {
+            "name": "Apple Callback",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/apple/login",
+            "params": [
+              {
+                "name": "source",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "is_platform_user",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Apple Callback"
+        },
+        {
+          "info": {
+            "name": "Microsoft Callback",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/microsoft/login",
+            "params": [
+              {
+                "name": "source",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "is_platform_user",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Microsoft Callback"
+        },
+        {
+          "info": {
+            "name": "Sso Callback",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/sso/callback",
+            "params": [
+              {
+                "name": "source",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "is_platform_user",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Handle SSO callback for both SP-initiated and IdP-initiated flows.\n\nSP-initiated: Has session parameter → uses PKCE-enabled Supabase client\nIdP-initiated: No session parameter → uses admin Supabase client\nAuthKit tracer: state parameter without session → AuthKit callback, with legacy fallback"
+        },
+        {
+          "info": {
+            "name": "User Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/user_status",
+            "params": [
+              {
+                "name": "email",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "User Status"
+        },
+        {
+          "info": {
+            "name": "Email Verification Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/email_verification_status",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Check if a user's email is verified by checking the email_confirmed_at field.\n\nArgs:\n    user_id: The Supabase user ID\n\nReturns:\n    A response with the is_verified status"
+        },
+        {
+          "info": {
+            "name": "Signup",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/signup",
+            "params": [
+              {
+                "name": "trial_promo",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Signup"
+        },
+        {
+          "info": {
+            "name": "Signup Raw Email",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/signup_raw_email",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Signup Raw Email"
+        },
+        {
+          "info": {
+            "name": "Confirm Email",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/confirm_raw_email",
+            "params": [
+              {
+                "name": "email",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Confirm Email"
+        },
+        {
+          "info": {
+            "name": "Add To Waitlist",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/add_to_waitlist",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add To Waitlist"
+        },
+        {
+          "info": {
+            "name": "Sign Up With Email",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/email/signup",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Sign Up With Email"
+        },
+        {
+          "info": {
+            "name": "Sign Up With Email Captcha",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/email/signup-captcha",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Sign Up With Email Captcha"
+        },
+        {
+          "info": {
+            "name": "Sign In With Email",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/email/signin",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Sign In With Email"
+        },
+        {
+          "info": {
+            "name": "Sign In With Email Captcha",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/email/signin-captcha",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Sign In With Email Captcha"
+        },
+        {
+          "info": {
+            "name": "Email Callback",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/email/login"
+          },
+          "docs": "Handle email verification callback from Supabase."
+        },
+        {
+          "info": {
+            "name": "Reset Password Callback",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/email/reset-password-callback"
+          },
+          "docs": "Reset Password Callback"
+        },
+        {
+          "info": {
+            "name": "Reset Password",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/email/reset-password",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Reset Password"
+        },
+        {
+          "info": {
+            "name": "Request Reset Password",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/email/request-reset-password",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Request a password reset email for a user.\n\nArgs:\n    reset_request: The request containing the user's email\n    authentication_service: Authentication service instance\n    supabase_client: Supabase client instance\n\nReturns:\n    JSON response indicating success/failure of the request"
+        },
+        {
+          "info": {
+            "name": "Request Reset Password Captcha",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/email/request-reset-password-captcha",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Request a password reset email for a user.\n\nArgs:\n    reset_request: The request containing the user's email and captcha token\n    authentication_service: Authentication service instance\n    supabase_client: Supabase client instance\n\nReturns:\n    JSON response indicating success/failure of the request"
+        },
+        {
+          "info": {
+            "name": "Resend Verification Email",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/email/resend-verification-email",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Resend Verification Email"
+        },
+        {
+          "info": {
+            "name": "Resend Verification Email Captcha",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/email/resend-verification-email-captcha",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Resend Verification Email Captcha"
+        },
+        {
+          "info": {
+            "name": "Validate Email",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/email/validate",
+            "params": [
+              {
+                "name": "email",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Validate an email address using Twilio SendGrid's API for signup.\n\nArgs:\n    email: The email address to validate\n\nReturns:\n    A JSON response with the validation result (dictionary with \"verdict\" and \"score\") and status code"
+        },
+        {
+          "info": {
+            "name": "Apple App Site Association",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/.well-known/apple-app-site-association"
+          },
+          "docs": "Returns the Apple App Site Association file."
+        },
+        {
+          "info": {
+            "name": "Create User",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/email/create-user",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Admin endpoint to create a new user and send them a password reset email.\nOnly accessible by Wispr admins (@wispr.ai emails)."
+        },
+        {
+          "info": {
+            "name": "Device Complete",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/device/complete",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Called by the web app after successful auth to submit tokens for a device code.\nPushes tokens to a Redis list — the Server-Sent Events (SSE) stream picks them up instantly via BLPOP."
+        },
+        {
+          "info": {
+            "name": "Device Stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/device/stream",
+            "params": [
+              {
+                "name": "device_code",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Server-Sent Events (SSE) endpoint — desktop holds this connection open until tokens arrive or timeout.\nUses Redis BLPOP (blocking list pop) to block until data is pushed, with 25s cycles\nfor Application Load Balancer (ALB) heartbeats."
+        },
+        {
+          "info": {
+            "name": "Device Poll",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/device/poll",
+            "params": [
+              {
+                "name": "device_code",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Fallback polling endpoint — desktop uses this if the SSE connection drops.\nChecks both the main list (LPOP) and the delivered key (GETDEL) in case\nBLPOP consumed the token but the SSE stream died before delivery."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

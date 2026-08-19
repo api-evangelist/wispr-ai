@@ -1,0 +1,207 @@
+{
+  "item": [
+    {
+      "id": "e80338fd-66bf-48fe-836a-32bcd413563c",
+      "name": "Polish",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4beffcc8-e53b-477c-b6f8-7eaffd638ed3",
+          "name": "Upload Polish",
+          "request": {
+            "name": "Upload Polish",
+            "description": {
+              "content": "Upload polish records for a user.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "polish",
+                "upload"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": \"<string>\",\n  \"polish_records\": [\n    {\n      \"id\": \"<uuid>\",\n      \"app_version\": \"<string>\",\n      \"polish_initial_text\": \"<string>\",\n      \"polished_text\": \"<string>\",\n      \"polish_initial_word_count\": \"<integer>\",\n      \"polished_word_count\": \"<integer>\",\n      \"app\": \"<string>\",\n      \"processing_time\": \"<number>\",\n      \"status\": \"<string>\",\n      \"polish_undone\": \"<boolean>\",\n      \"instruction\": \"<string>\",\n      \"model_version\": \"<string>\",\n      \"used_provider\": {\n        \"model\": \"<string>\",\n        \"kind\": \"openai\"\n      },\n      \"diff_count\": \"<integer>\",\n      \"feedback\": \"<string>\",\n      \"prompt_name\": \"<string>\",\n      \"shortcut_key\": \"<string>\",\n      \"instruct_history_id\": \"<uuid>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"app_version\": \"<string>\",\n      \"polish_initial_text\": \"<string>\",\n      \"polished_text\": \"<string>\",\n      \"polish_initial_word_count\": \"<integer>\",\n      \"polished_word_count\": \"<integer>\",\n      \"app\": \"<string>\",\n      \"processing_time\": \"<number>\",\n      \"status\": \"<string>\",\n      \"polish_undone\": \"<boolean>\",\n      \"instruction\": \"<string>\",\n      \"model_version\": \"<string>\",\n      \"used_provider\": {\n        \"model\": \"<string>\",\n        \"kind\": \"openai\"\n      },\n      \"diff_count\": \"<integer>\",\n      \"feedback\": \"<string>\",\n      \"prompt_name\": \"<string>\",\n      \"shortcut_key\": \"<string>\",\n      \"instruct_history_id\": \"<uuid>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "57c03909-8b67-46fc-9537-b42cd9af60b1",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "polish",
+                    "upload"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_id\": \"<string>\",\n  \"polish_records\": [\n    {\n      \"id\": \"<uuid>\",\n      \"app_version\": \"<string>\",\n      \"polish_initial_text\": \"<string>\",\n      \"polished_text\": \"<string>\",\n      \"polish_initial_word_count\": \"<integer>\",\n      \"polished_word_count\": \"<integer>\",\n      \"app\": \"<string>\",\n      \"processing_time\": \"<number>\",\n      \"status\": \"<string>\",\n      \"polish_undone\": \"<boolean>\",\n      \"instruction\": \"<string>\",\n      \"model_version\": \"<string>\",\n      \"used_provider\": {\n        \"model\": \"<string>\",\n        \"kind\": \"openai\"\n      },\n      \"diff_count\": \"<integer>\",\n      \"feedback\": \"<string>\",\n      \"prompt_name\": \"<string>\",\n      \"shortcut_key\": \"<string>\",\n      \"instruct_history_id\": \"<uuid>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"app_version\": \"<string>\",\n      \"polish_initial_text\": \"<string>\",\n      \"polished_text\": \"<string>\",\n      \"polish_initial_word_count\": \"<integer>\",\n      \"polished_word_count\": \"<integer>\",\n      \"app\": \"<string>\",\n      \"processing_time\": \"<number>\",\n      \"status\": \"<string>\",\n      \"polish_undone\": \"<boolean>\",\n      \"instruction\": \"<string>\",\n      \"model_version\": \"<string>\",\n      \"used_provider\": {\n        \"model\": \"<string>\",\n        \"kind\": \"openai\"\n      },\n      \"diff_count\": \"<integer>\",\n      \"feedback\": \"<string>\",\n      \"prompt_name\": \"<string>\",\n      \"shortcut_key\": \"<string>\",\n      \"instruct_history_id\": \"<uuid>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"num_rows_saved\": 796,\n  \"ids\": [\n    \"e8e94be9-b9aa-70f9-1d35-c546bb01207b\",\n    \"b2d8de18-007e-a453-fd88-2e2f1465a313\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "203c23f6-acfb-4afc-827c-d231efe86c1f",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "polish",
+                    "upload"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_id\": \"<string>\",\n  \"polish_records\": [\n    {\n      \"id\": \"<uuid>\",\n      \"app_version\": \"<string>\",\n      \"polish_initial_text\": \"<string>\",\n      \"polished_text\": \"<string>\",\n      \"polish_initial_word_count\": \"<integer>\",\n      \"polished_word_count\": \"<integer>\",\n      \"app\": \"<string>\",\n      \"processing_time\": \"<number>\",\n      \"status\": \"<string>\",\n      \"polish_undone\": \"<boolean>\",\n      \"instruction\": \"<string>\",\n      \"model_version\": \"<string>\",\n      \"used_provider\": {\n        \"model\": \"<string>\",\n        \"kind\": \"openai\"\n      },\n      \"diff_count\": \"<integer>\",\n      \"feedback\": \"<string>\",\n      \"prompt_name\": \"<string>\",\n      \"shortcut_key\": \"<string>\",\n      \"instruct_history_id\": \"<uuid>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"app_version\": \"<string>\",\n      \"polish_initial_text\": \"<string>\",\n      \"polished_text\": \"<string>\",\n      \"polish_initial_word_count\": \"<integer>\",\n      \"polished_word_count\": \"<integer>\",\n      \"app\": \"<string>\",\n      \"processing_time\": \"<number>\",\n      \"status\": \"<string>\",\n      \"polish_undone\": \"<boolean>\",\n      \"instruction\": \"<string>\",\n      \"model_version\": \"<string>\",\n      \"used_provider\": {\n        \"model\": \"<string>\",\n        \"kind\": \"openai\"\n      },\n      \"diff_count\": \"<integer>\",\n      \"feedback\": \"<string>\",\n      \"prompt_name\": \"<string>\",\n      \"shortcut_key\": \"<string>\",\n      \"instruct_history_id\": \"<uuid>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "37bc1492-5536-4b3a-a8f5-4159c4b4f482",
+    "name": "Wispr Backend Analytics Polish API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Wispr Backend API",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics SMS API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "SMS",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Handle Incoming Sms",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/sms/handle-incoming-sms"
+          },
+          "docs": "Handle incoming SMS webhook from Twilio"
+        },
+        {
+          "info": {
+            "name": "Check User Has Sms Events",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/sms/user-sms",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Check if the current authenticated user has any SMS events"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

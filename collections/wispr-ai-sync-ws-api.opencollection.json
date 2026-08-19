@@ -1,0 +1,68 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Sync WS API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Sync WS",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Admin Test Publish",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/sync/ws/admin/test-publish",
+            "params": [
+              {
+                "name": "burst",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Synthesize one or more sync events for ``user_id``.\n\n``burst > 1`` is the gap-too-large drill: publishing more than the replay\nbuffer size (``publisher.REPLAY_MAXLEN``) forces the oldest entries out so\na reconnecting client with a stale ``since`` falls through to\n``/sync/check``."
+        },
+        {
+          "info": {
+            "name": "Sync Ws Schema",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/sync/ws/schema"
+          },
+          "docs": "Return a stub envelope. Exists so the ``SyncEvent`` discriminated\nunion is reachable from the OpenAPI spec (and thus the generated TS\nclient). Admin-gating isn't required — it returns no user data."
+        },
+        {
+          "info": {
+            "name": "Sync Ws Client Schema",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/sync/ws/client-schema"
+          },
+          "docs": "Companion to ``/ws/schema`` for the client-to-server frame union."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

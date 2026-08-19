@@ -1,0 +1,136 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics Notetaker Chats API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Notetaker Chats",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Upload Notetaker Chats",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/notetaker-chats/upload",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Upload chat mutations when Cloud Sync is enabled.\n\nReferenced meetings are validated up front, so a missing or unowned meeting\nrejects the entire batch before any write. Each chat then commits\nindependently; a mid-batch conflict can leave earlier chats persisted.\nClients should retry the whole batch because revisions are idempotent.\n\nArgs:\n    body: Batch of chat mutations to upload.\n    user: Authenticated owner of the chats and referenced meetings.\n    db:   Main database executor used for mee"
+        },
+        {
+          "info": {
+            "name": "List Notetaker Chats",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/notetaker-chats",
+            "params": [
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "meeting_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "List hub or meeting-scoped sessions, newest activity first.\n\nOmit ``cursor`` for the most recent page; pass ``next_cursor`` to continue\ninto older sessions."
+        },
+        {
+          "info": {
+            "name": "List Notetaker Chat Messages",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/notetaker-chats/:chat_id/messages",
+            "params": [
+              {
+                "name": "chat_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Load messages for one session, newest page first.\n\nResponse pages are chronological within the page. Pass ``next_cursor`` to\nfetch older messages as the user scrolls up."
+        },
+        {
+          "info": {
+            "name": "Delete Notetaker Chat",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/notetaker-chats/:chat_id",
+            "params": [
+              {
+                "name": "chat_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete a chat even after Cloud Sync has been disabled."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,56 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wispr Backend Analytics User Voice Preferences API",
+    "version": "0.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "User Voice Preferences",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List User Voice Preferences",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/user_voice_preferences",
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Return all voice preference records for the authenticated user."
+        },
+        {
+          "info": {
+            "name": "Upload User Voice Preferences",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/user_voice_preferences/upload",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "Authorization",
+              "value": "{{Authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Upsert a batch of voice preference records for the authenticated user.\n\nThe desktop client generates each record's UUID locally. Re-uploading the\nsame record is idempotent: the existing row is updated, not duplicated.\nEach saved row is also scheduled for Graphiti voice-memory ingest (202-style,\nfire-and-forget — same as POST /memory/ingest)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
