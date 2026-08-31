@@ -143,7 +143,7 @@ apis:
   humanURL: https://wisprflow.ai/developers
   baseURL: https://api.wisprflow.ai
   tags:
-  - DASH
+  - Dash
   tags_raw:
   - Dash
   properties:
@@ -480,7 +480,7 @@ apis:
   humanURL: https://wisprflow.ai/developers
   baseURL: https://api.wisprflow.ai
   tags:
-  - To-Dos
+  - Todos
   tags_raw:
   - Todos
   properties:
