@@ -261,16 +261,6 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/wispr-ai-keyboard-telemetry-api-openapi.yml
-- aid: wispr-ai:wispr-ai-linkedin-api
-  name: Wispr AI LinkedIn API
-  description: The LinkedIn API from Wispr AI — 3 operation(s) for linkedin.
-  humanURL: https://wisprflow.ai/developers
-  baseURL: https://api.wisprflow.ai
-  tags:
-  - LinkedIn
-  properties:
-  - type: OpenAPI
-    url: openapi/wispr-ai-linkedin-api-openapi.yml
 - aid: wispr-ai:wispr-ai-llm-api
   name: Wispr AI LLM API
   description: The LLM API from Wispr AI — 20 operation(s) for llm.
@@ -475,18 +465,6 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/wispr-ai-teams-api-openapi.yml
-- aid: wispr-ai:wispr-ai-todos-api
-  name: Wispr AI Todos API
-  description: The Todos API from Wispr AI — 1 operation(s) for todos.
-  humanURL: https://wisprflow.ai/developers
-  baseURL: https://api.wisprflow.ai
-  tags:
-  - To-Dos
-  tags_raw:
-  - Todos
-  properties:
-  - type: OpenAPI
-    url: openapi/wispr-ai-todos-api-openapi.yml
 - aid: wispr-ai:wispr-ai-tracking-api
   name: Wispr AI Tracking API
   description: The Tracking API from Wispr AI — 1 operation(s) for tracking.
@@ -570,6 +548,26 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/wispr-ai-wispr-backend-api-openapi.yml
+- aid: wispr-ai:wispr-ai-linked-in-api
+  name: Wispr AI Linked In API
+  description: The Linked In API from Wispr AI — 3 operation(s) for linked in.
+  humanURL: https://wisprflow.ai/developers
+  baseURL: https://api.wisprflow.ai
+  tags:
+  - Linked In
+  properties:
+  - type: OpenAPI
+    url: openapi/wispr-ai-linked-in-api-openapi.yml
+- aid: wispr-ai:wispr-ai-to-dos-api
+  name: Wispr AI To Dos API
+  description: The To Dos API from Wispr AI — 1 operation(s) for to dos.
+  humanURL: https://wisprflow.ai/developers
+  baseURL: https://api.wisprflow.ai
+  tags:
+  - To Dos
+  properties:
+  - type: OpenAPI
+    url: openapi/wispr-ai-to-dos-api-openapi.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
