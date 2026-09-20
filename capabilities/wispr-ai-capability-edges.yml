@@ -1,0 +1,78 @@
+slug: wispr-ai
+provider: Wispr AI
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Telecommunications
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 6
+edges:
+- tag: Analytics
+  spec_file: wispr-ai-analytics-api-openapi.yml
+  capability_id: BC-4280.10
+  capability_id_l1: BC-4280
+  capability_name: Product Telemetry Instrumentation
+  confidence: 0.78
+  evidence: POST /api/v1/analytics/track  track_event_endpoint  Track Event Endpoint; TrackEventRequest,
+    UserMetadataRequest
+  reason: Endpoints ingest product usage events and user metadata from the client runtime — product telemetry
+    instrumentation and capture, not business analytics reporting.
+- tag: Analytics Registry
+  spec_file: wispr-ai-analytics-registry-api-openapi.yml
+  capability_id: BC-4280.20
+  capability_id_l1: BC-4280
+  capability_name: Telemetry Quality & Governance
+  confidence: 0.75
+  evidence: GET /api/v1/analytics-registry/events  list_events; PATCH /api/v1/analytics-registry/global-properties  save_global_properties;
+    schemas AnalyticsEventBase, AnalyticsLifecycleState, ChangeSetStatus
+  reason: A registry of analytics event definitions with lifecycle states, global properties and publish/change-set
+    workflow is telemetry schema governance rather than instrumentation or analysis itself.
+- tag: Enterprise
+  spec_file: wispr-ai-enterprise-api-openapi.yml
+  capability_id: BC-4230
+  capability_id_l1: BC-4230
+  capability_name: SaaS Tenant Management
+  confidence: 0.7
+  evidence: POST /api/v1/enterprise/create  Create Enterprise New; PATCH /api/v1/enterprise/settings  Update
+    Enterprise Settings; GET /api/v1/enterprise/members; GET /api/v1/enterprise/domains/verifications;
+    BulkInviteRequest, UpdateMemberRoleRequest
+  reason: 'Creation and administration of an enterprise (tenant) account in the multi-tenant SaaS: tenant
+    settings, member roster, invitations, roles, domain verification and audit logs. That is SaaS tenant
+    management; the operations straddle several sub-capabilities (lifecycle, configuration, identity),
+    so no L2 is asserted.'
+- tag: Payments
+  spec_file: wispr-ai-payments-api-openapi.yml
+  capability_id: BC-4250
+  capability_id_l1: BC-4250
+  capability_name: Subscription Billing & Revenue Management
+  confidence: 0.7
+  evidence: POST /api/v1/payment/create-checkout-session, POST /api/v1/payment/create-bank-transfer-invoice,
+    POST /api/v1/payment/switch-plan; schemas 'ProductPricingResponse', 'SubscriptionWatchStartResponse'
+  reason: Checkout sessions, invoices, Stripe/RevenueCat webhooks and plan switching are the SaaS subscription
+    payment/billing surface; L2 ambiguous between payment collection and subscription modification.
+- tag: Support
+  spec_file: wispr-ai-support-api-openapi.yml
+  capability_id: BC-430
+  capability_id_l1: BC-430
+  capability_name: Customer Service Management
+  confidence: 0.7
+  evidence: POST /api/v1/support/feedback  frontapp_feedback; schemas 'SupportFeedbackRequest', 'NPSScoreRequest';
+    POST /api/v1/support/cancel-subscription
+  reason: Support-agent surface for customer feedback, NPS, account deletion/erasure and subscription
+    cancellation — customer service operations; spans inquiry, feedback and admin actions so L2 left open.
+- tag: Team Insights
+  spec_file: wispr-ai-team-insights-api-openapi.yml
+  capability_id: BC-4280.30
+  capability_id_l1: BC-4280
+  capability_name: Product Usage Analytics
+  confidence: 0.7
+  evidence: GET /api/v1/enterprise/insights/words-dictated  get_words_dictated; GET .../desktop-apps;
+    schemas 'FeatureUtilization', 'MinutesSaved', 'ImpactResponse'
+  reason: Aggregated product usage and feature-utilisation analytics exposed to enterprise admins — product
+    usage analytics rather than enterprise BI.
