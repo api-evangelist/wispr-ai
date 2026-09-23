@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wispr Backend Analytics Calendar API
+  title: Wispr Backend Calendar API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -53,7 +53,30 @@ paths:
       tags:
       - Calendar
       summary: Sync Calendar
-      description: "Return calendar events the desktop hasn't seen yet.\n\nTwo modes:\n\n* ``since`` provided — incremental: events with ``updated_at > since``,\n  ordered ascending by ``(updated_at, id)``. Stable across rows that\n  share an ``updated_at`` (e.g. webhook bulk fan-out).\n* ``since`` null — initial sync: all upcoming events\n  (``start_at_utc >= now``). Ordered ascending by ``(start_at_utc, id)``.\n\nThe response anchors on the server clock — desktop uses ``serverTime`` as\nthe next ``since``. Capped at ``SYNC_PAGE_LIMIT`` events per response;\nwhen more remain ``nextCursor`` is non-null and the caller should refetch\nimmediately with the same ``since`` and the new cursor."
+      description: 'Return calendar events the desktop hasn''t seen yet.
+
+
+        Two modes:
+
+
+        * ``since`` provided — incremental: events with ``updated_at > since``,
+
+        ordered ascending by ``(updated_at, id)``. Stable across rows that
+
+        share an ``updated_at`` (e.g. webhook bulk fan-out).
+
+        * ``since`` null — initial sync: all upcoming events
+
+        (``start_at_utc >= now``). Ordered ascending by ``(start_at_utc, id)``.
+
+
+        The response anchors on the server clock — desktop uses ``serverTime`` as
+
+        the next ``since``. Capped at ``SYNC_PAGE_LIMIT`` events per response;
+
+        when more remain ``nextCursor`` is non-null and the caller should refetch
+
+        immediately with the same ``since`` and the new cursor.'
       operationId: sync_calendar
       security:
       - ApiKeyHeaderPatched: []
@@ -331,87 +354,63 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    PrereadResponse:
-      properties:
-        title:
-          type: string
-          title: Title
-        summary:
-          type: string
-          title: Summary
-        contentMd:
-          type: string
-          title: Contentmd
-        generatedAt:
-          type: string
-          format: date-time
-          title: Generatedat
-      type: object
-      required:
-      - title
-      - summary
-      - contentMd
-      - generatedAt
-      title: PrereadResponse
-      description: 'Response shape for ``GET /api/v1/calendar/events/{external_id}/preread``.
-
-
-        The endpoint generates the pre-read on-the-fly per request (no
-
-        persistence), so ``generated_at`` is the response timestamp.
-
-
-        ``title`` is a very short calendar-event-label suitable for a
-
-        notification card. ``summary`` is a single declarative sentence that
-
-        describes what the meeting is about — surfaced under the calendar
-
-        event title on the desktop hub.'
-    CalendarEventBatchResponse:
+    SyncResponse:
       properties:
         events:
           items:
             $ref: '#/components/schemas/CalendarEventDTO'
           type: array
           title: Events
+        serverTime:
+          type: string
+          format: date-time
+          title: Servertime
+        nextCursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Nextcursor
       type: object
       required:
       - events
-      title: CalendarEventBatchResponse
-      description: 'Response shape for ``GET /api/v1/calendar/events/batch``.
+      - serverTime
+      title: SyncResponse
+      description: 'Response shape for `GET /api/v1/calendar/sync` (Day 2).
 
 
-        Returns events matching the requested ``externalId`` values. Missing ids
+        Defined now so the contract is locked. `server_time` is the timestamp at which
 
-        (not in the DB, or belonging to another user) are simply absent.'
-    AgenticPrereadSyncItemDTO:
+        the server produced the response — desktop should use this as the next `since` cursor.
+
+
+        When `next_cursor` is non-null, the desktop should refetch immediately with
+
+        ``since`` unchanged and ``cursor`` set to this value. When null, the result set
+
+        fits in a single page and the desktop advances to ``server_time`` as the next
+
+        ``since`` value.'
+    ResyncResponse:
       properties:
-        title:
-          type: string
-          title: Title
-        summary:
-          type: string
-          title: Summary
-        contentMd:
-          type: string
-          title: Contentmd
-        generatedAt:
-          type: string
-          format: date-time
-          title: Generatedat
-        externalId:
-          type: string
-          title: Externalid
+        eventsCount:
+          type: integer
+          title: Eventscount
+        success:
+          type: boolean
+          title: Success
       type: object
       required:
-      - title
-      - summary
-      - contentMd
-      - generatedAt
-      - externalId
-      title: AgenticPrereadSyncItemDTO
-      description: One agentic pre-read deliverable keyed by the calendar event's ``external_id``.
+      - eventsCount
+      - success
+      title: ResyncResponse
+      description: 'Response shape for ``POST /api/v1/calendar/resync``.
+
+
+        Returned by the manual-resync debug endpoint. ``events_count`` is the
+
+        number of ``calendar_event`` rows present for the user after the
+
+        backfill completes.'
     AgenticPrereadSyncResponse:
       properties:
         agenticPrereads:
@@ -439,30 +438,6 @@ components:
         Mirrors the calendar sync cursor contract: desktop advances ``since`` to
 
         ``serverTime`` once ``nextCursor`` is null.'
-    ParticipantDTO:
-      properties:
-        name:
-          type: string
-          title: Name
-        photoUrl:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Photourl
-        isSelf:
-          type: boolean
-          title: Isself
-          default: false
-      type: object
-      required:
-      - name
-      title: ParticipantDTO
-      description: 'Per-attendee detail for the desktop: display name, optional real profile photo, and self flag.
-
-
-        Carried alongside the legacy ``participants: list[str]`` (display-name-only) field so existing
-
-        consumers keep working; the desktop reads ``photoUrl`` / ``isSelf`` to render meeting avatars.'
     PrereadFeedbackRequest:
       properties:
         externalId:
@@ -500,68 +475,43 @@ components:
       - rating
       title: PrereadFeedbackRequest
       description: Request shape for ``POST /api/v1/calendar/preread/feedback``.
-    ValidationError:
+    PrereadResponse:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
+        title:
           type: string
-          title: Message
-        type:
+          title: Title
+        summary:
           type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    SyncResponse:
-      properties:
-        events:
-          items:
-            $ref: '#/components/schemas/CalendarEventDTO'
-          type: array
-          title: Events
-        serverTime:
+          title: Summary
+        contentMd:
+          type: string
+          title: Contentmd
+        generatedAt:
           type: string
           format: date-time
-          title: Servertime
-        nextCursor:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Nextcursor
+          title: Generatedat
       type: object
       required:
-      - events
-      - serverTime
-      title: SyncResponse
-      description: 'Response shape for `GET /api/v1/calendar/sync` (Day 2).
+      - title
+      - summary
+      - contentMd
+      - generatedAt
+      title: PrereadResponse
+      description: 'Response shape for ``GET /api/v1/calendar/events/{external_id}/preread``.
 
 
-        Defined now so the contract is locked. `server_time` is the timestamp at which
+        The endpoint generates the pre-read on-the-fly per request (no
 
-        the server produced the response — desktop should use this as the next `since` cursor.
+        persistence), so ``generated_at`` is the response timestamp.
 
 
-        When `next_cursor` is non-null, the desktop should refetch immediately with
+        ``title`` is a very short calendar-event-label suitable for a
 
-        ``since`` unchanged and ``cursor`` set to this value. When null, the result set
+        notification card. ``summary`` is a single declarative sentence that
 
-        fits in a single page and the desktop advances to ``server_time`` as the next
+        describes what the meeting is about — surfaced under the calendar
 
-        ``since`` value.'
+        event title on the desktop hub.'
     CalendarEventDTO:
       properties:
         externalId:
@@ -628,27 +578,73 @@ components:
         Field aliases serialize to camelCase for the desktop client. `populate_by_name=True`
 
         accepts both snake_case and camelCase on input.'
-    ResyncResponse:
+    CalendarEventBatchResponse:
       properties:
-        eventsCount:
-          type: integer
-          title: Eventscount
-        success:
-          type: boolean
-          title: Success
+        events:
+          items:
+            $ref: '#/components/schemas/CalendarEventDTO'
+          type: array
+          title: Events
       type: object
       required:
-      - eventsCount
-      - success
-      title: ResyncResponse
-      description: 'Response shape for ``POST /api/v1/calendar/resync``.
+      - events
+      title: CalendarEventBatchResponse
+      description: 'Response shape for ``GET /api/v1/calendar/events/batch``.
 
 
-        Returned by the manual-resync debug endpoint. ``events_count`` is the
+        Returns events matching the requested ``externalId`` values. Missing ids
 
-        number of ``calendar_event`` rows present for the user after the
+        (not in the DB, or belonging to another user) are simply absent.'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ParticipantDTO:
+      properties:
+        name:
+          type: string
+          title: Name
+        photoUrl:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Photourl
+        isSelf:
+          type: boolean
+          title: Isself
+          default: false
+      type: object
+      required:
+      - name
+      title: ParticipantDTO
+      description: 'Per-attendee detail for the desktop: display name, optional real profile photo, and self flag.
 
-        backfill completes.'
+
+        Carried alongside the legacy ``participants: list[str]`` (display-name-only) field so existing
+
+        consumers keep working; the desktop reads ``photoUrl`` / ``isSelf`` to render meeting avatars.'
     HTTPValidationError:
       properties:
         detail:
@@ -658,6 +654,33 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    AgenticPrereadSyncItemDTO:
+      properties:
+        title:
+          type: string
+          title: Title
+        summary:
+          type: string
+          title: Summary
+        contentMd:
+          type: string
+          title: Contentmd
+        generatedAt:
+          type: string
+          format: date-time
+          title: Generatedat
+        externalId:
+          type: string
+          title: Externalid
+      type: object
+      required:
+      - title
+      - summary
+      - contentMd
+      - generatedAt
+      - externalId
+      title: AgenticPrereadSyncItemDTO
+      description: One agentic pre-read deliverable keyed by the calendar event's ``external_id``.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

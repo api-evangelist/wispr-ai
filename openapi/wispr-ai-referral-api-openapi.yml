@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wispr Backend Analytics Referral API
+  title: Wispr Backend Referral API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -228,127 +228,6 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    DirectDownloadLinkRequest:
-      properties:
-        platform:
-          $ref: '#/components/schemas/src__backend_service__schemas__api__referral__Platform'
-        recipient_email:
-          type: string
-          format: email
-          title: Recipient Email
-      type: object
-      required:
-      - platform
-      - recipient_email
-      title: DirectDownloadLinkRequest
-    SelfReferRequest:
-      properties:
-        refer_to:
-          type: string
-          title: Refer To
-      type: object
-      required:
-      - refer_to
-      title: SelfReferRequest
-    StudentChallengeLeaderboardMember:
-      properties:
-        first_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: First Name
-        last_initial:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Initial
-        referral_count:
-          type: integer
-          title: Referral Count
-        is_current_user:
-          type: boolean
-          title: Is Current User
-      type: object
-      required:
-      - referral_count
-      - is_current_user
-      title: StudentChallengeLeaderboardMember
-    ReferralCodeResponse:
-      properties:
-        referral_code:
-          type: string
-          title: Referral Code
-      type: object
-      required:
-      - referral_code
-      title: ReferralCodeResponse
-    ApplyReferralCodeRequest:
-      properties:
-        referrer_code:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Referrer Code
-        dub_click_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Dub Click Id
-        check_credits:
-          type: boolean
-          title: Check Credits
-          default: false
-      type: object
-      title: ApplyReferralCodeRequest
-    ReferEmailsRequest:
-      properties:
-        emails:
-          items:
-            type: string
-            format: email
-          type: array
-          title: Emails
-      type: object
-      required:
-      - emails
-      title: ReferEmailsRequest
-    StudentChallengeLeaderboardResponse:
-      properties:
-        members:
-          items:
-            $ref: '#/components/schemas/StudentChallengeLeaderboardMember'
-          type: array
-          title: Members
-      type: object
-      required:
-      - members
-      title: StudentChallengeLeaderboardResponse
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     src__backend_service__schemas__api__referral__Platform:
       type: string
       enum:
@@ -358,6 +237,24 @@ components:
       - windows
       title: Platform
       description: Valid platforms for download links
+    SelfReferRequest:
+      properties:
+        refer_to:
+          type: string
+          title: Refer To
+      type: object
+      required:
+      - refer_to
+      title: SelfReferRequest
+    ReferralCodeResponse:
+      properties:
+        referral_code:
+          type: string
+          title: Referral Code
+      type: object
+      required:
+      - referral_code
+      title: ReferralCodeResponse
     ReferralInfoResponse:
       properties:
         referral_code:
@@ -417,6 +314,68 @@ components:
       - status
       - credits
       title: Referral
+    StudentChallengeLeaderboardResponse:
+      properties:
+        members:
+          items:
+            $ref: '#/components/schemas/StudentChallengeLeaderboardMember'
+          type: array
+          title: Members
+      type: object
+      required:
+      - members
+      title: StudentChallengeLeaderboardResponse
+    DirectDownloadLinkRequest:
+      properties:
+        platform:
+          $ref: '#/components/schemas/src__backend_service__schemas__api__referral__Platform'
+        recipient_email:
+          type: string
+          format: email
+          title: Recipient Email
+      type: object
+      required:
+      - platform
+      - recipient_email
+      title: DirectDownloadLinkRequest
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ReferEmailsRequest:
+      properties:
+        emails:
+          items:
+            type: string
+            format: email
+          type: array
+          title: Emails
+      type: object
+      required:
+      - emails
+      title: ReferEmailsRequest
     HTTPValidationError:
       properties:
         detail:
@@ -426,6 +385,47 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    ApplyReferralCodeRequest:
+      properties:
+        referrer_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Referrer Code
+        dub_click_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Dub Click Id
+        check_credits:
+          type: boolean
+          title: Check Credits
+          default: false
+      type: object
+      title: ApplyReferralCodeRequest
+    StudentChallengeLeaderboardMember:
+      properties:
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+        last_initial:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Initial
+        referral_count:
+          type: integer
+          title: Referral Count
+        is_current_user:
+          type: boolean
+          title: Is Current User
+      type: object
+      required:
+      - referral_count
+      - is_current_user
+      title: StudentChallengeLeaderboardMember
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

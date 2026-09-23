@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   title: Wispr Backend Analytics API
   description: Wispr Backend API
@@ -89,71 +89,6 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    PaginationMetadata:
-      properties:
-        page_size:
-          type: integer
-          title: Page Size
-        page_number:
-          type: integer
-          title: Page Number
-        total_pages:
-          type: integer
-          title: Total Pages
-        total_rows:
-          type: integer
-          title: Total Rows
-      type: object
-      required:
-      - page_size
-      - page_number
-      - total_pages
-      - total_rows
-      title: PaginationMetadata
-    src__backend_service__schemas__api__clickhouse__Source:
-      type: string
-      enum:
-      - desktop
-      - ios
-      - web
-      - landing
-      title: Source
-    UserMetadataListResponse:
-      properties:
-        rows:
-          items:
-            $ref: '#/components/schemas/UserMetadataResponse'
-          type: array
-          title: Rows
-        pagination:
-          $ref: '#/components/schemas/PaginationMetadata'
-      type: object
-      required:
-      - rows
-      - pagination
-      title: UserMetadataListResponse
-    TrackEventRequest:
-      properties:
-        event:
-          type: string
-          title: Event
-        source:
-          $ref: '#/components/schemas/src__backend_service__schemas__api__clickhouse__Source'
-        properties:
-          anyOf:
-          - type: object
-          - type: 'null'
-          title: Properties
-        user_id:
-          type: string
-          title: User Id
-      type: object
-      required:
-      - event
-      - source
-      - user_id
-      title: TrackEventRequest
-      description: Request model for tracking events
     UserMetadataResponse:
       properties:
         created_at:
@@ -239,32 +174,28 @@ components:
       - event_type
       - id
       title: UserMetadataResponse
-    ValidationError:
+    src__backend_service__schemas__api__clickhouse__Source:
+      type: string
+      enum:
+      - desktop
+      - ios
+      - web
+      - landing
+      title: Source
+    UserMetadataListResponse:
       properties:
-        loc:
+        rows:
           items:
-            anyOf:
-            - type: string
-            - type: integer
+            $ref: '#/components/schemas/UserMetadataResponse'
           type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          title: Rows
+        pagination:
+          $ref: '#/components/schemas/PaginationMetadata'
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - rows
+      - pagination
+      title: UserMetadataListResponse
     UserMetadataRequest:
       properties:
         id:
@@ -401,6 +332,75 @@ components:
       - end_time
       title: UserMetadataQueryRequest
       description: Request body for querying user metadata with large UUID lists.
+    TrackEventRequest:
+      properties:
+        event:
+          type: string
+          title: Event
+        source:
+          $ref: '#/components/schemas/src__backend_service__schemas__api__clickhouse__Source'
+        properties:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Properties
+        user_id:
+          type: string
+          title: User Id
+      type: object
+      required:
+      - event
+      - source
+      - user_id
+      title: TrackEventRequest
+      description: Request model for tracking events
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    PaginationMetadata:
+      properties:
+        page_size:
+          type: integer
+          title: Page Size
+        page_number:
+          type: integer
+          title: Page Number
+        total_pages:
+          type: integer
+          title: Total Pages
+        total_rows:
+          type: integer
+          title: Total Rows
+      type: object
+      required:
+      - page_size
+      - page_number
+      - total_pages
+      - total_rows
+      title: PaginationMetadata
     HTTPValidationError:
       properties:
         detail:

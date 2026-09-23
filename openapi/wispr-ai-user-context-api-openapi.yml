@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wispr Backend Analytics User Context API
+  title: Wispr Backend User Context API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -62,26 +62,6 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    PolishPrompt:
-      properties:
-        prompt:
-          type: string
-          title: Prompt
-        shortcut:
-          items:
-            type: integer
-          type: array
-          title: Shortcut
-        prompt_name:
-          type: string
-          title: Prompt Name
-      type: object
-      required:
-      - prompt
-      - shortcut
-      - prompt_name
-      title: PolishPrompt
-      description: A single polish prompt provided by the user for polish.
     UpdateUserContextRequest:
       properties:
         writing_samples:
@@ -103,6 +83,52 @@ components:
       description: 'Request model for updating user context. All fields are optional for partial updates.
 
         This will sync across all clients and will be useful for user context for things like actions'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    PolishPrompt:
+      properties:
+        prompt:
+          type: string
+          title: Prompt
+        shortcut:
+          items:
+            type: integer
+          type: array
+          title: Shortcut
+        prompt_name:
+          type: string
+          title: Prompt Name
+      type: object
+      required:
+      - prompt
+      - shortcut
+      - prompt_name
+      title: PolishPrompt
+      description: A single polish prompt provided by the user for polish.
     UserContextResponse:
       properties:
         id:
@@ -137,32 +163,6 @@ components:
       - modified_at
       title: UserContextResponse
       description: Response model for user context.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     WritingSample:
       properties:
         text:

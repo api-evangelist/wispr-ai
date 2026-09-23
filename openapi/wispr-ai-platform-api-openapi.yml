@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wispr Backend Analytics Platform API
+  title: Wispr Backend Platform API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -558,13 +558,30 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ChatRole:
+    CreateOrgRequest:
+      properties:
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - name
+      title: CreateOrgRequest
+    Role:
       type: string
       enum:
-      - user
-      - human
-      - assistant
-      title: ChatRole
+      - admin
+      - member
+      title: Role
+      description: A platform team member's role.
+    UpdateRoleRequest:
+      properties:
+        role:
+          $ref: '#/components/schemas/Role'
+      type: object
+      required:
+      - role
+      title: UpdateRoleRequest
     App:
       properties:
         name:
@@ -591,267 +608,13 @@ components:
           description: URL within the app
       type: object
       title: App
-    UpdateRoleRequest:
-      properties:
-        role:
-          $ref: '#/components/schemas/Role'
-      type: object
-      required:
-      - role
-      title: UpdateRoleRequest
-    Context:
-      properties:
-        app:
-          anyOf:
-          - $ref: '#/components/schemas/App'
-          - type: 'null'
-          description: Information on the app the user is trying to paste in
-        ax_context:
-          items:
-            type: string
-          type: array
-          title: Ax Context
-          description: List of words from accessibility context
-        variable_names:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Variable Names
-          description: Variable names extracted from the app context. These get backticked
-        file_names:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: File Names
-          description: File names extracted from the app context, usually VS Code file names.
-        ocr_context:
-          items:
-            type: string
-          type: array
-          title: Ocr Context
-          description: List of names extracted from user screen content
-        dictionary_context:
-          items:
-            type: string
-          type: array
-          title: Dictionary Context
-          description: List of names in the user's dictionary
-        dictionary_replacements:
-          additionalProperties:
-            type: string
-          type: object
-          title: Dictionary Replacements
-          description: Mapping for replacing phrases/snippets in the user's dictionary
-        dictionary_snippets:
-          additionalProperties:
-            items:
-              type: string
-            type: array
-          type: object
-          title: Dictionary Snippets
-          description: Mapping of stripped snippet triggers to full triggers
-        user_identifier:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Identifier
-          description: Identifier of the user within the foreground app (e.g., X username, email, etc.)
-        user_first_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User First Name
-          description: First name of the user making the request
-        user_last_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Last Name
-          description: Last name of the user making the request
-        textbox_contents:
-          anyOf:
-          - $ref: '#/components/schemas/TextboxContents'
-          - type: 'null'
-          description: Selected and surrounding text in the textbox that is being dictated into
-        screenshot:
-          anyOf:
-          - type: string
-            contentMediaType: application/octet-stream
-          - type: 'null'
-          title: Screenshot
-          description: Screenshot of the user's screen at time of dictation
-        content_text:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Content Text
-          description: Text content of the foreground app at time of dictation
-        content_html:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Content Html
-          description: HTML content of the foreground app at time of dictation
-        conversation:
-          anyOf:
-          - $ref: '#/components/schemas/Conversation'
-          - type: 'null'
-          description: Conversation history for a dictation
-        session_dictation_apps:
-          items:
-            type: string
-          type: array
-          title: Session Dictation Apps
-          description: List of all applications (names, bundle IDs, URLs) used for dictation in this session
-      type: object
-      title: Context
-    UpdateOrgRequest:
-      properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-        logo:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Logo
-      type: object
-      title: UpdateOrgRequest
-    UpdateAPIKeyRequest:
-      properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-      type: object
-      title: UpdateAPIKeyRequest
-    Body_playground_api_v1_platform_organizations__organization_id__playground_post:
-      properties:
-        audio:
-          type: string
-          title: Audio
-          description: Base64 encoded audio
-        language:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: string
-          - type: 'null'
-          title: Language
-          description: List of languages the user speaks
-        context:
-          anyOf:
-          - $ref: '#/components/schemas/Context'
-          - type: 'null'
-          description: Full context surrounding the dictation
-        properties:
-          anyOf:
-          - $ref: '#/components/schemas/APIProperties'
-          - type: 'null'
-          description: Additional properties
-      type: object
-      required:
-      - audio
-      title: Body_playground_api_v1_platform_organizations__organization_id__playground_post
-    CreateOrgRequest:
-      properties:
-        name:
-          type: string
-          title: Name
-      type: object
-      required:
-      - name
-      title: CreateOrgRequest
-    Conversation:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: Identifier of the conversation
-        participants:
-          items:
-            type: string
-          type: array
-          title: Participants
-          description: List of participants in the conversation
-        messages:
-          items:
-            $ref: '#/components/schemas/ChatMessage'
-          type: array
-          title: Messages
-          description: List of messages in the conversation
-      type: object
-      required:
-      - id
-      title: Conversation
-    TextboxContents:
-      properties:
-        beforeText:
-          type: string
-          title: Beforetext
-          description: Text right before the cursor position or start of selected text
-          default: ''
-        selectedText:
-          type: string
-          title: Selectedtext
-          description: Highlited text in the textbox
-          default: ''
-        afterText:
-          type: string
-          title: Aftertext
-          description: Text right after the cursor position or end of selected text
-          default: ''
-        contents:
-          type: string
-          title: Contents
-          description: All of the text in the textbox
-          default: ''
-      type: object
-      title: TextboxContents
-    AppType:
+    ChatRole:
       type: string
       enum:
-      - email
-      - ai
-      - word
-      - terminal
-      - other
-      title: AppType
-      description: Represents the type of app the user is trying to paste in.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - user
+      - human
+      - assistant
+      title: ChatRole
     APIProperties:
       properties:
         language:
@@ -1019,6 +782,20 @@ components:
       - emails
       - role
       title: CreateUserInviteRequest
+    UpdateOrgRequest:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+        logo:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Logo
+      type: object
+      title: UpdateOrgRequest
     ChatMessage:
       properties:
         role:
@@ -1039,13 +816,6 @@ components:
       - role
       - content
       title: ChatMessage
-    Role:
-      type: string
-      enum:
-      - admin
-      - member
-      title: Role
-      description: A platform team member's role.
     CreateAPIKeyRequest:
       properties:
         name:
@@ -1055,6 +825,202 @@ components:
       required:
       - name
       title: CreateAPIKeyRequest
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    Body_playground_api_v1_platform_organizations__organization_id__playground_post:
+      properties:
+        audio:
+          type: string
+          title: Audio
+          description: Base64 encoded audio
+        language:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: string
+          - type: 'null'
+          title: Language
+          description: List of languages the user speaks
+        context:
+          anyOf:
+          - $ref: '#/components/schemas/Context'
+          - type: 'null'
+          description: Full context surrounding the dictation
+        properties:
+          anyOf:
+          - $ref: '#/components/schemas/APIProperties'
+          - type: 'null'
+          description: Additional properties
+      type: object
+      required:
+      - audio
+      title: Body_playground_api_v1_platform_organizations__organization_id__playground_post
+    Conversation:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Identifier of the conversation
+        participants:
+          items:
+            type: string
+          type: array
+          title: Participants
+          description: List of participants in the conversation
+        messages:
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+          type: array
+          title: Messages
+          description: List of messages in the conversation
+      type: object
+      required:
+      - id
+      title: Conversation
+    UpdateAPIKeyRequest:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+      type: object
+      title: UpdateAPIKeyRequest
+    Context:
+      properties:
+        app:
+          anyOf:
+          - $ref: '#/components/schemas/App'
+          - type: 'null'
+          description: Information on the app the user is trying to paste in
+        ax_context:
+          items:
+            type: string
+          type: array
+          title: Ax Context
+          description: List of words from accessibility context
+        variable_names:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Variable Names
+          description: Variable names extracted from the app context. These get backticked
+        file_names:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: File Names
+          description: File names extracted from the app context, usually VS Code file names.
+        ocr_context:
+          items:
+            type: string
+          type: array
+          title: Ocr Context
+          description: List of names extracted from user screen content
+        dictionary_context:
+          items:
+            type: string
+          type: array
+          title: Dictionary Context
+          description: List of names in the user's dictionary
+        dictionary_replacements:
+          additionalProperties:
+            type: string
+          type: object
+          title: Dictionary Replacements
+          description: Mapping for replacing phrases/snippets in the user's dictionary
+        dictionary_snippets:
+          additionalProperties:
+            items:
+              type: string
+            type: array
+          type: object
+          title: Dictionary Snippets
+          description: Mapping of stripped snippet triggers to full triggers
+        user_identifier:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Identifier
+          description: Identifier of the user within the foreground app (e.g., X username, email, etc.)
+        user_first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User First Name
+          description: First name of the user making the request
+        user_last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Last Name
+          description: Last name of the user making the request
+        textbox_contents:
+          anyOf:
+          - $ref: '#/components/schemas/TextboxContents'
+          - type: 'null'
+          description: Selected and surrounding text in the textbox that is being dictated into
+        screenshot:
+          anyOf:
+          - type: string
+            contentMediaType: application/octet-stream
+          - type: 'null'
+          title: Screenshot
+          description: Screenshot of the user's screen at time of dictation
+        content_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Content Text
+          description: Text content of the foreground app at time of dictation
+        content_html:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Content Html
+          description: HTML content of the foreground app at time of dictation
+        conversation:
+          anyOf:
+          - $ref: '#/components/schemas/Conversation'
+          - type: 'null'
+          description: Conversation history for a dictation
+        session_dictation_apps:
+          items:
+            type: string
+          type: array
+          title: Session Dictation Apps
+          description: List of all applications (names, bundle IDs, URLs) used for dictation in this session
+      type: object
+      title: Context
     HTTPValidationError:
       properties:
         detail:
@@ -1064,6 +1030,40 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    AppType:
+      type: string
+      enum:
+      - email
+      - ai
+      - word
+      - terminal
+      - other
+      title: AppType
+      description: Represents the type of app the user is trying to paste in.
+    TextboxContents:
+      properties:
+        beforeText:
+          type: string
+          title: Beforetext
+          description: Text right before the cursor position or start of selected text
+          default: ''
+        selectedText:
+          type: string
+          title: Selectedtext
+          description: Highlited text in the textbox
+          default: ''
+        afterText:
+          type: string
+          title: Aftertext
+          description: Text right after the cursor position or end of selected text
+          default: ''
+        contents:
+          type: string
+          title: Contents
+          description: All of the text in the textbox
+          default: ''
+      type: object
+      title: TextboxContents
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

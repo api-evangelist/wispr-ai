@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wispr Backend Analytics Internal Marketing API
+  title: Wispr Backend Internal Marketing API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -182,129 +182,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    FlowStateProfilePreviewItem:
-      properties:
-        user_id:
-          type: string
-          title: User Id
-        email:
-          type: string
-          title: Email
-        eligibility_word_count:
-          type: integer
-          title: Eligibility Word Count
-        generated_at:
-          type: string
-          format: date-time
-          title: Generated At
-        send_status:
-          type: string
-          title: Send Status
-        send_attempts:
-          type: integer
-          title: Send Attempts
-        sent_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Sent At
-        send_error:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Send Error
-        profile:
-          type: object
-          title: Profile
-      type: object
-      required:
-      - user_id
-      - email
-      - eligibility_word_count
-      - generated_at
-      - send_status
-      - send_attempts
-      - profile
-      title: FlowStateProfilePreviewItem
-      description: Generated Flow State profile row for internal admin preview.
-    FlowStatePreviewRequest:
-      properties:
-        reporting_month:
-          type: string
-          format: date
-          title: Reporting Month
-        emails:
-          anyOf:
-          - items:
-              type: string
-              format: email
-            type: array
-          - type: 'null'
-          title: Emails
-        domain:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Domain
-        user_ids:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: User Ids
-        limit:
-          type: integer
-          maximum: 500.0
-          minimum: 1.0
-          title: Limit
-          default: 100
-        offset:
-          type: integer
-          minimum: 0.0
-          title: Offset
-          default: 0
-      type: object
-      required:
-      - reporting_month
-      title: FlowStatePreviewRequest
-      description: Request body for previewing generated profiles before send.
-    FlowStateProfilePreviewResponse:
-      properties:
-        total:
-          type: integer
-          title: Total
-        items:
-          items:
-            $ref: '#/components/schemas/FlowStateProfilePreviewItem'
-          type: array
-          title: Items
-      type: object
-      required:
-      - total
-      - items
-      title: FlowStateProfilePreviewResponse
-      description: Paginated generated profile preview.
-    MarketingJobResponse:
-      properties:
-        job_id:
-          type: string
-          format: uuid
-          title: Job Id
-        message:
-          type: string
-          title: Message
-        log_query:
-          type: string
-          title: Log Query
-      type: object
-      required:
-      - job_id
-      - message
-      - log_query
-      title: MarketingJobResponse
-      description: Response returned after kicking off a generate-or-send job.
     GenerateFlowStateRequest:
       properties:
         reporting_month:
@@ -349,152 +226,6 @@ components:
       - reporting_month
       title: GenerateFlowStateRequest
       description: Request body for the marketing profile generation endpoint.
-    FlowStateMonthSummaryResponse:
-      properties:
-        reporting_month:
-          type: string
-          format: date
-          title: Reporting Month
-          description: First day of the reporting month.
-        generated_total:
-          type: integer
-          title: Generated Total
-          description: Profiles generated for this reporting month.
-        pending_send_total:
-          type: integer
-          title: Pending Send Total
-          description: Generated profiles still pending send.
-        sent_total:
-          type: integer
-          title: Sent Total
-          description: Profiles already sent.
-        failed_send_total:
-          type: integer
-          title: Failed Send Total
-          description: Profiles whose send failed.
-        sending_total:
-          type: integer
-          title: Sending Total
-          description: Profiles currently claimed for send.
-        skipped_total:
-          type: integer
-          title: Skipped Total
-          description: Profiles skipped during send.
-        active_job:
-          anyOf:
-          - $ref: '#/components/schemas/MarketingJobStatusResponse'
-          - type: 'null'
-          description: Pending or running job for this reporting month.
-        latest_job:
-          anyOf:
-          - $ref: '#/components/schemas/MarketingJobStatusResponse'
-          - type: 'null'
-          description: Most recent job for this reporting month.
-        can_send_existing:
-          type: boolean
-          title: Can Send Existing
-          description: Whether already generated profiles can be sent.
-        can_regenerate_send:
-          type: boolean
-          title: Can Regenerate Send
-          description: Whether regenerate-and-send can be enqueued.
-      type: object
-      required:
-      - reporting_month
-      - generated_total
-      - pending_send_total
-      - sent_total
-      - failed_send_total
-      - sending_total
-      - skipped_total
-      - can_send_existing
-      - can_regenerate_send
-      title: FlowStateMonthSummaryResponse
-      description: Month-level Flow State generation/send state for the admin portal.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    MarketingJobStatusResponse:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-        job_type:
-          type: string
-          title: Job Type
-        reporting_month:
-          type: string
-          format: date
-          title: Reporting Month
-        status:
-          type: string
-          title: Status
-        total:
-          type: integer
-          title: Total
-        succeeded:
-          type: integer
-          title: Succeeded
-        failed:
-          type: integer
-          title: Failed
-        stage:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Stage
-        started_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Started At
-        completed_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Completed At
-        error:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Error
-      type: object
-      required:
-      - id
-      - job_type
-      - reporting_month
-      - status
-      - total
-      - succeeded
-      - failed
-      title: MarketingJobStatusResponse
-      description: Latest persisted state of a marketing generate-or-send job.
     GenerateAndSendFlowStateRequest:
       properties:
         reporting_month:
@@ -571,6 +302,152 @@ components:
         Requires at least one explicit filter (emails, domain, or user_ids) to prevent
 
         accidentally blasting every user with a profile for the reporting month.'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    FlowStatePreviewRequest:
+      properties:
+        reporting_month:
+          type: string
+          format: date
+          title: Reporting Month
+        emails:
+          anyOf:
+          - items:
+              type: string
+              format: email
+            type: array
+          - type: 'null'
+          title: Emails
+        domain:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Domain
+        user_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: User Ids
+        limit:
+          type: integer
+          maximum: 500.0
+          minimum: 1.0
+          title: Limit
+          default: 100
+        offset:
+          type: integer
+          minimum: 0.0
+          title: Offset
+          default: 0
+      type: object
+      required:
+      - reporting_month
+      title: FlowStatePreviewRequest
+      description: Request body for previewing generated profiles before send.
+    FlowStateMonthSummaryResponse:
+      properties:
+        reporting_month:
+          type: string
+          format: date
+          title: Reporting Month
+          description: First day of the reporting month.
+        generated_total:
+          type: integer
+          title: Generated Total
+          description: Profiles generated for this reporting month.
+        pending_send_total:
+          type: integer
+          title: Pending Send Total
+          description: Generated profiles still pending send.
+        sent_total:
+          type: integer
+          title: Sent Total
+          description: Profiles already sent.
+        failed_send_total:
+          type: integer
+          title: Failed Send Total
+          description: Profiles whose send failed.
+        sending_total:
+          type: integer
+          title: Sending Total
+          description: Profiles currently claimed for send.
+        skipped_total:
+          type: integer
+          title: Skipped Total
+          description: Profiles skipped during send.
+        active_job:
+          anyOf:
+          - $ref: '#/components/schemas/MarketingJobStatusResponse'
+          - type: 'null'
+          description: Pending or running job for this reporting month.
+        latest_job:
+          anyOf:
+          - $ref: '#/components/schemas/MarketingJobStatusResponse'
+          - type: 'null'
+          description: Most recent job for this reporting month.
+        can_send_existing:
+          type: boolean
+          title: Can Send Existing
+          description: Whether already generated profiles can be sent.
+        can_regenerate_send:
+          type: boolean
+          title: Can Regenerate Send
+          description: Whether regenerate-and-send can be enqueued.
+      type: object
+      required:
+      - reporting_month
+      - generated_total
+      - pending_send_total
+      - sent_total
+      - failed_send_total
+      - sending_total
+      - skipped_total
+      - can_send_existing
+      - can_regenerate_send
+      title: FlowStateMonthSummaryResponse
+      description: Month-level Flow State generation/send state for the admin portal.
+    FlowStateProfilePreviewResponse:
+      properties:
+        total:
+          type: integer
+          title: Total
+        items:
+          items:
+            $ref: '#/components/schemas/FlowStateProfilePreviewItem'
+          type: array
+          title: Items
+      type: object
+      required:
+      - total
+      - items
+      title: FlowStateProfilePreviewResponse
+      description: Paginated generated profile preview.
     HTTPValidationError:
       properties:
         detail:
@@ -580,6 +457,129 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    MarketingJobResponse:
+      properties:
+        job_id:
+          type: string
+          format: uuid
+          title: Job Id
+        message:
+          type: string
+          title: Message
+        log_query:
+          type: string
+          title: Log Query
+      type: object
+      required:
+      - job_id
+      - message
+      - log_query
+      title: MarketingJobResponse
+      description: Response returned after kicking off a generate-or-send job.
+    FlowStateProfilePreviewItem:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        email:
+          type: string
+          title: Email
+        eligibility_word_count:
+          type: integer
+          title: Eligibility Word Count
+        generated_at:
+          type: string
+          format: date-time
+          title: Generated At
+        send_status:
+          type: string
+          title: Send Status
+        send_attempts:
+          type: integer
+          title: Send Attempts
+        sent_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Sent At
+        send_error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Send Error
+        profile:
+          type: object
+          title: Profile
+      type: object
+      required:
+      - user_id
+      - email
+      - eligibility_word_count
+      - generated_at
+      - send_status
+      - send_attempts
+      - profile
+      title: FlowStateProfilePreviewItem
+      description: Generated Flow State profile row for internal admin preview.
+    MarketingJobStatusResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        job_type:
+          type: string
+          title: Job Type
+        reporting_month:
+          type: string
+          format: date
+          title: Reporting Month
+        status:
+          type: string
+          title: Status
+        total:
+          type: integer
+          title: Total
+        succeeded:
+          type: integer
+          title: Succeeded
+        failed:
+          type: integer
+          title: Failed
+        stage:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stage
+        started_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Started At
+        completed_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Completed At
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+      type: object
+      required:
+      - id
+      - job_type
+      - reporting_month
+      - status
+      - total
+      - succeeded
+      - failed
+      title: MarketingJobStatusResponse
+      description: Latest persisted state of a marketing generate-or-send job.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

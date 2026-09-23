@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wispr Backend Analytics sandbox-user API
+  title: Wispr Backend Sandbox User API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -11,7 +11,17 @@ paths:
       tags:
       - sandbox-user
       summary: Create and sign in a sandbox user
-      description: "Create a sandbox user and sign in.\n    **Authentication Required**: Must be logged in with a @wispr.ai email address.\n    This endpoint:\n    1. Creates a Supabase user with @wispr.test email\n    2. Creates all necessary database records with onboarding NOT completed\n    3. Returns auth tokens for immediate sign-in"
+      description: 'Create a sandbox user and sign in.
+
+        **Authentication Required**: Must be logged in with a @wispr.ai email address.
+
+        This endpoint:
+
+        1. Creates a Supabase user with @wispr.test email
+
+        2. Creates all necessary database records with onboarding NOT completed
+
+        3. Returns auth tokens for immediate sign-in'
       operationId: create_and_signin_sandbox_user
       requestBody:
         content:
@@ -39,7 +49,23 @@ paths:
       tags:
       - sandbox-user
       summary: Destroy a sandbox user
-      description: "Destroy a sandbox user by deleting all associated data from all tables and services.\n    This endpoint:\n    1. Validates the user has a @wispr.test email\n    2. Checks if user is the only member of an enterprise and deletes the enterprise if so\n    3. Uses the existing compliance-ready user deletion service\n    4. Deletes data from: main DB (incl. Subscription via CASCADE), usage DB, Customer.io, Segment, PostHog, ClickHouse\n    5. Cancels any active subscriptions via Stripe\n    6. Deletes from Supabase Auth\n    **WARNING**: This permanently deletes all data for the sandbox user and their enterprise if they're the only member."
+      description: 'Destroy a sandbox user by deleting all associated data from all tables and services.
+
+        This endpoint:
+
+        1. Validates the user has a @wispr.test email
+
+        2. Checks if user is the only member of an enterprise and deletes the enterprise if so
+
+        3. Uses the existing compliance-ready user deletion service
+
+        4. Deletes data from: main DB (incl. Subscription via CASCADE), usage DB, Customer.io, Segment, PostHog, ClickHouse
+
+        5. Cancels any active subscriptions via Stripe
+
+        6. Deletes from Supabase Auth
+
+        **WARNING**: This permanently deletes all data for the sandbox user and their enterprise if they''re the only member.'
       operationId: destroy_sandbox_user
       responses:
         '200':
@@ -52,55 +78,6 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    CreateSandboxUserRequest:
-      properties:
-        plan:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Plan
-          description: Subscription plan type (free, pro, student, team, business)
-        billing_interval:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Billing Interval
-          description: Billing interval (monthly, yearly)
-        skip_default_trial:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Skip Default Trial
-          description: Seed user.skip_default_trial column
-        bonus_ends_at:
-          anyOf:
-          - type: integer
-            format: int64
-          - type: 'null'
-          title: Bonus Ends At
-          description: Seed user.bonus_ends_at column (Unix epoch seconds)
-        words_this_week:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Words This Week
-          description: Seed user_stats.words_this_week column
-        first_weekly_limit_hit_at:
-          anyOf:
-          - type: integer
-            format: int64
-          - type: 'null'
-          title: First Weekly Limit Hit At
-          description: Seed user_stats.first_weekly_limit_hit_at column (Unix epoch seconds)
-        is_student:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Is Student
-          description: Seed user.is_student column
-      type: object
-      title: CreateSandboxUserRequest
-      description: Request model for creating a sandbox user.
     CreateSandboxUserResponse:
       properties:
         access_token:
@@ -158,6 +135,64 @@ components:
       - msg
       - type
       title: ValidationError
+    CreateSandboxUserRequest:
+      properties:
+        plan:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Plan
+          description: Subscription plan type (free, pro, student, team, business)
+        billing_interval:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Billing Interval
+          description: Billing interval (monthly, yearly)
+        skip_default_trial:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Skip Default Trial
+          description: Seed user.skip_default_trial column
+        bonus_ends_at:
+          anyOf:
+          - type: integer
+            format: int64
+          - type: 'null'
+          title: Bonus Ends At
+          description: Seed user.bonus_ends_at column (Unix epoch seconds)
+        words_this_week:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Words This Week
+          description: Seed user_stats.words_this_week column
+        first_weekly_limit_hit_at:
+          anyOf:
+          - type: integer
+            format: int64
+          - type: 'null'
+          title: First Weekly Limit Hit At
+          description: Seed user_stats.first_weekly_limit_hit_at column (Unix epoch seconds)
+        is_student:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Student
+          description: Seed user.is_student column
+      type: object
+      title: CreateSandboxUserRequest
+      description: Request model for creating a sandbox user.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     DestroySandboxUserResponse:
       properties:
         message:
@@ -175,15 +210,6 @@ components:
       - message
       title: DestroySandboxUserResponse
       description: Response model for sandbox user destruction.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

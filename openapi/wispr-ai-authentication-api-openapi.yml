@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wispr Backend Analytics Authentication API
+  title: Wispr Backend Authentication API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -485,7 +485,17 @@ paths:
       tags:
       - Authentication
       summary: Email Verification Status
-      description: "Check if a user's email is verified by checking the email_confirmed_at field.\n\nArgs:\n    user_id: The Supabase user ID\n\nReturns:\n    A response with the is_verified status"
+      description: 'Check if a user''s email is verified by checking the email_confirmed_at field.
+
+
+        Args:
+
+        user_id: The Supabase user ID
+
+
+        Returns:
+
+        A response with the is_verified status'
       operationId: email_verification_status
       parameters:
       - name: user_id
@@ -769,7 +779,21 @@ paths:
       tags:
       - Authentication
       summary: Request Reset Password
-      description: "Request a password reset email for a user.\n\nArgs:\n    reset_request: The request containing the user's email\n    authentication_service: Authentication service instance\n    supabase_client: Supabase client instance\n\nReturns:\n    JSON response indicating success/failure of the request"
+      description: 'Request a password reset email for a user.
+
+
+        Args:
+
+        reset_request: The request containing the user''s email
+
+        authentication_service: Authentication service instance
+
+        supabase_client: Supabase client instance
+
+
+        Returns:
+
+        JSON response indicating success/failure of the request'
       operationId: request_reset_password
       requestBody:
         content:
@@ -794,7 +818,21 @@ paths:
       tags:
       - Authentication
       summary: Request Reset Password Captcha
-      description: "Request a password reset email for a user.\n\nArgs:\n    reset_request: The request containing the user's email and captcha token\n    authentication_service: Authentication service instance\n    supabase_client: Supabase client instance\n\nReturns:\n    JSON response indicating success/failure of the request"
+      description: 'Request a password reset email for a user.
+
+
+        Args:
+
+        reset_request: The request containing the user''s email and captcha token
+
+        authentication_service: Authentication service instance
+
+        supabase_client: Supabase client instance
+
+
+        Returns:
+
+        JSON response indicating success/failure of the request'
       operationId: request_reset_password_captcha
       requestBody:
         content:
@@ -867,7 +905,17 @@ paths:
       tags:
       - Authentication
       summary: Validate Email
-      description: "Validate an email address using Twilio SendGrid's API for signup.\n\nArgs:\n    email: The email address to validate\n\nReturns:\n    A JSON response with the validation result (dictionary with \"verdict\" and \"score\") and status code"
+      description: 'Validate an email address using Twilio SendGrid''s API for signup.
+
+
+        Args:
+
+        email: The email address to validate
+
+
+        Returns:
+
+        A JSON response with the validation result (dictionary with "verdict" and "score") and status code'
       operationId: validate_email
       parameters:
       - name: email
@@ -1026,400 +1074,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    SignupWithEmailRequest:
-      properties:
-        email:
-          type: string
-          format: email
-          title: Email
-        password:
-          type: string
-          title: Password
-        full_name:
-          type: string
-          title: Full Name
-        device_code:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Device Code
-      type: object
-      required:
-      - email
-      - password
-      - full_name
-      title: SignupWithEmailRequest
-      description: Email-and-password signup request, optionally tied to a device code.
-    RequestResetPasswordRequest:
-      properties:
-        email:
-          type: string
-          format: email
-          title: Email
-      type: object
-      required:
-      - email
-      title: RequestResetPasswordRequest
-      description: Request to send a password-reset email to the given address.
-    ResetPasswordRequest:
-      properties:
-        access_token:
-          type: string
-          title: Access Token
-        refresh_token:
-          type: string
-          title: Refresh Token
-        new_password:
-          type: string
-          title: New Password
-      type: object
-      required:
-      - access_token
-      - refresh_token
-      - new_password
-      title: ResetPasswordRequest
-      description: Password-reset request authenticated by access and refresh tokens.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    SigninWithEmailRequest:
-      properties:
-        email:
-          type: string
-          format: email
-          title: Email
-        password:
-          type: string
-          title: Password
-        is_platform_user:
-          type: boolean
-          title: Is Platform User
-          default: false
-        workos_capable:
-          type: boolean
-          title: Workos Capable
-          default: false
-        mcp_login_state:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Mcp Login State
-        provision:
-          type: boolean
-          title: Provision
-          default: true
-      type: object
-      required:
-      - email
-      - password
-      title: SigninWithEmailRequest
-      description: Email-and-password sign-in request with platform and WorkOS flags.
-    SignupWithEmailCaptchaRequest:
-      properties:
-        email:
-          type: string
-          format: email
-          title: Email
-        password:
-          type: string
-          title: Password
-        full_name:
-          type: string
-          title: Full Name
-        captcha_token:
-          type: string
-          title: Captcha Token
-        device_code:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Device Code
-        redirect_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Redirect Url
-      type: object
-      required:
-      - email
-      - password
-      - full_name
-      - captcha_token
-      title: SignupWithEmailCaptchaRequest
-      description: Email-and-password signup request guarded by a required captcha token.
-    SigninWithEmailCaptchaRequest:
-      properties:
-        email:
-          type: string
-          format: email
-          title: Email
-        password:
-          type: string
-          title: Password
-        is_platform_user:
-          type: boolean
-          title: Is Platform User
-          default: false
-        workos_capable:
-          type: boolean
-          title: Workos Capable
-          default: false
-        mcp_login_state:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Mcp Login State
-        provision:
-          type: boolean
-          title: Provision
-          default: true
-        captcha_token:
-          type: string
-          title: Captcha Token
-      type: object
-      required:
-      - email
-      - password
-      - captcha_token
-      title: SigninWithEmailCaptchaRequest
-      description: Email sign-in request that additionally carries a captcha token.
-    ResendVerificationEmailCaptchaRequest:
-      properties:
-        email:
-          type: string
-          format: email
-          title: Email
-        captcha_token:
-          type: string
-          title: Captcha Token
-        redirect_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Redirect Url
-      type: object
-      required:
-      - email
-      - captcha_token
-      title: ResendVerificationEmailCaptchaRequest
-      description: Resend-verification request guarded by a required captcha token.
-    CreateUserRequest:
-      properties:
-        email:
-          type: string
-          format: email
-          title: Email
-        first_name:
-          type: string
-          title: First Name
-        last_name:
-          type: string
-          title: Last Name
-      type: object
-      required:
-      - email
-      - first_name
-      - last_name
-      title: CreateUserRequest
-      description: Minimal user-creation payload (email and name).
-    DeviceCodeCompleteRequest:
-      properties:
-        device_code:
-          type: string
-          format: uuid
-          title: Device Code
-        access_token:
-          type: string
-          title: Access Token
-        refresh_token:
-          type: string
-          title: Refresh Token
-        dub_click_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Dub Click Id
-        referral:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Referral
-        promo_code:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Promo Code
-        fbp:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Fbp
-        fbc:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Fbc
-        team_invite_code:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Team Invite Code
-        utm:
-          anyOf:
-          - $ref: '#/components/schemas/UtmParams'
-          - type: 'null'
-      type: object
-      required:
-      - device_code
-      - access_token
-      - refresh_token
-      title: DeviceCodeCompleteRequest
-      description: Request completing a device-code auth flow with tokens and attribution.
-    SignupUserRequest:
-      properties:
-        access_token:
-          type: string
-          title: Access Token
-          default: ''
-        first_name:
-          type: string
-          title: First Name
-        last_name:
-          type: string
-          title: Last Name
-        dub_click_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Dub Click Id
-        referral:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Referral
-        promo_code:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Promo Code
-        team_invite_code:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Team Invite Code
-        utm:
-          anyOf:
-          - $ref: '#/components/schemas/UtmParams'
-          - type: 'null'
-      type: object
-      required:
-      - first_name
-      - last_name
-      title: SignupUserRequest
-      description: Signup payload for an OAuth-authenticated user, with attribution fields.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    RequestResetPasswordCaptchaRequest:
-      properties:
-        email:
-          type: string
-          format: email
-          title: Email
-        captcha_token:
-          type: string
-          title: Captcha Token
-      type: object
-      required:
-      - email
-      - captcha_token
-      title: RequestResetPasswordCaptchaRequest
-      description: Password-reset-email request guarded by a required captcha token.
-    AddToWaitlistRequest:
-      properties:
-        email:
-          type: string
-          format: email
-          title: Email
-        device_type:
-          type: string
-          title: Device Type
-      type: object
-      required:
-      - email
-      - device_type
-      title: AddToWaitlistRequest
-      description: Request to add an email to the waitlist for a given device type.
-    UserStatusResponse:
-      properties:
-        exists:
-          type: boolean
-          title: Exists
-        provider:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Provider
-        verified:
-          type: boolean
-          title: Verified
-        enforce_sso:
-          type: boolean
-          title: Enforce Sso
-        scim_managed:
-          type: boolean
-          title: Scim Managed
-      type: object
-      required:
-      - exists
-      - provider
-      - verified
-      - enforce_sso
-      - scim_managed
-      title: UserStatusResponse
-      description: Account-existence and auth-provider status for a queried email.
-    ResendVerificationEmailRequest:
-      properties:
-        email:
-          type: string
-          format: email
-          title: Email
-      type: object
-      required:
-      - email
-      title: ResendVerificationEmailRequest
-      description: Request to resend the verification email to the given address.
     DeviceAuthResponse:
       properties:
         status:
@@ -1489,6 +1143,237 @@ components:
       - status
       title: DeviceAuthResponse
       description: 'Device-auth poll result: status plus tokens and attribution when complete.'
+    ResendVerificationEmailCaptchaRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        captcha_token:
+          type: string
+          title: Captcha Token
+        redirect_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Redirect Url
+      type: object
+      required:
+      - email
+      - captcha_token
+      title: ResendVerificationEmailCaptchaRequest
+      description: Resend-verification request guarded by a required captcha token.
+    DeviceCodeCompleteRequest:
+      properties:
+        device_code:
+          type: string
+          format: uuid
+          title: Device Code
+        access_token:
+          type: string
+          title: Access Token
+        refresh_token:
+          type: string
+          title: Refresh Token
+        dub_click_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Dub Click Id
+        referral:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Referral
+        promo_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Promo Code
+        fbp:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Fbp
+        fbc:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Fbc
+        team_invite_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Invite Code
+        utm:
+          anyOf:
+          - $ref: '#/components/schemas/UtmParams'
+          - type: 'null'
+      type: object
+      required:
+      - device_code
+      - access_token
+      - refresh_token
+      title: DeviceCodeCompleteRequest
+      description: Request completing a device-code auth flow with tokens and attribution.
+    UserStatusResponse:
+      properties:
+        exists:
+          type: boolean
+          title: Exists
+        provider:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Provider
+        verified:
+          type: boolean
+          title: Verified
+        enforce_sso:
+          type: boolean
+          title: Enforce Sso
+        scim_managed:
+          type: boolean
+          title: Scim Managed
+      type: object
+      required:
+      - exists
+      - provider
+      - verified
+      - enforce_sso
+      - scim_managed
+      title: UserStatusResponse
+      description: Account-existence and auth-provider status for a queried email.
+    RawEmailSignupRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        first_name:
+          type: string
+          title: First Name
+        last_name:
+          type: string
+          title: Last Name
+        dub_click_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Dub Click Id
+        referral:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Referral
+        promo_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Promo Code
+        utm:
+          anyOf:
+          - $ref: '#/components/schemas/UtmParams'
+          - type: 'null'
+      type: object
+      required:
+      - email
+      - first_name
+      - last_name
+      title: RawEmailSignupRequest
+      description: Lightweight email signup capturing name and attribution fields.
+    AddToWaitlistRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        device_type:
+          type: string
+          title: Device Type
+      type: object
+      required:
+      - email
+      - device_type
+      title: AddToWaitlistRequest
+      description: Request to add an email to the waitlist for a given device type.
+    RequestResetPasswordCaptchaRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        captcha_token:
+          type: string
+          title: Captcha Token
+      type: object
+      required:
+      - email
+      - captcha_token
+      title: RequestResetPasswordCaptchaRequest
+      description: Password-reset-email request guarded by a required captcha token.
+    SigninWithEmailCaptchaRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        password:
+          type: string
+          title: Password
+        is_platform_user:
+          type: boolean
+          title: Is Platform User
+          default: false
+        workos_capable:
+          type: boolean
+          title: Workos Capable
+          default: false
+        mcp_login_state:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mcp Login State
+        provision:
+          type: boolean
+          title: Provision
+          default: true
+        captcha_token:
+          type: string
+          title: Captcha Token
+      type: object
+      required:
+      - email
+      - password
+      - captcha_token
+      title: SigninWithEmailCaptchaRequest
+      description: Email sign-in request that additionally carries a captcha token.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     SigninWithEmailResponse:
       properties:
         message:
@@ -1544,12 +1429,32 @@ components:
       - message
       title: SigninWithEmailResponse
       description: 'Sign-in result: tokens, profile fields, and an optional error message.'
-    RawEmailSignupRequest:
+    UtmParams:
       properties:
-        email:
+        utm_source:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Utm Source
+        utm_medium:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Utm Medium
+        utm_campaign:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Utm Campaign
+      type: object
+      title: UtmParams
+      description: UTM attribution parameters carried through signup.
+    SignupUserRequest:
+      properties:
+        access_token:
           type: string
-          format: email
-          title: Email
+          title: Access Token
+          default: ''
         first_name:
           type: string
           title: First Name
@@ -1571,37 +1476,180 @@ components:
           - type: string
           - type: 'null'
           title: Promo Code
+        team_invite_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Invite Code
         utm:
           anyOf:
           - $ref: '#/components/schemas/UtmParams'
           - type: 'null'
       type: object
       required:
+      - first_name
+      - last_name
+      title: SignupUserRequest
+      description: Signup payload for an OAuth-authenticated user, with attribution fields.
+    SignupWithEmailCaptchaRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        password:
+          type: string
+          title: Password
+        full_name:
+          type: string
+          title: Full Name
+        captcha_token:
+          type: string
+          title: Captcha Token
+        device_code:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Device Code
+        redirect_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Redirect Url
+      type: object
+      required:
+      - email
+      - password
+      - full_name
+      - captcha_token
+      title: SignupWithEmailCaptchaRequest
+      description: Email-and-password signup request guarded by a required captcha token.
+    CreateUserRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        first_name:
+          type: string
+          title: First Name
+        last_name:
+          type: string
+          title: Last Name
+      type: object
+      required:
       - email
       - first_name
       - last_name
-      title: RawEmailSignupRequest
-      description: Lightweight email signup capturing name and attribution fields.
-    UtmParams:
+      title: CreateUserRequest
+      description: Minimal user-creation payload (email and name).
+    ResetPasswordRequest:
       properties:
-        utm_source:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Utm Source
-        utm_medium:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Utm Medium
-        utm_campaign:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Utm Campaign
+        access_token:
+          type: string
+          title: Access Token
+        refresh_token:
+          type: string
+          title: Refresh Token
+        new_password:
+          type: string
+          title: New Password
       type: object
-      title: UtmParams
-      description: UTM attribution parameters carried through signup.
+      required:
+      - access_token
+      - refresh_token
+      - new_password
+      title: ResetPasswordRequest
+      description: Password-reset request authenticated by access and refresh tokens.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    SigninWithEmailRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        password:
+          type: string
+          title: Password
+        is_platform_user:
+          type: boolean
+          title: Is Platform User
+          default: false
+        workos_capable:
+          type: boolean
+          title: Workos Capable
+          default: false
+        mcp_login_state:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mcp Login State
+        provision:
+          type: boolean
+          title: Provision
+          default: true
+      type: object
+      required:
+      - email
+      - password
+      title: SigninWithEmailRequest
+      description: Email-and-password sign-in request with platform and WorkOS flags.
+    RequestResetPasswordRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+      type: object
+      required:
+      - email
+      title: RequestResetPasswordRequest
+      description: Request to send a password-reset email to the given address.
+    SignupWithEmailRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        password:
+          type: string
+          title: Password
+        full_name:
+          type: string
+          title: Full Name
+        device_code:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Device Code
+      type: object
+      required:
+      - email
+      - password
+      - full_name
+      title: SignupWithEmailRequest
+      description: Email-and-password signup request, optionally tied to a device code.
+    ResendVerificationEmailRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+      type: object
+      required:
+      - email
+      title: ResendVerificationEmailRequest
+      description: Request to resend the verification email to the given address.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

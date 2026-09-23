@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wispr Backend Analytics keyboard_telemetry API
+  title: Wispr Backend Keyboard Telemetry API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -35,16 +35,27 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    KbTouchIngestResponse:
+    KbTouchBatch:
       properties:
-        accepted:
-          type: integer
-          title: Accepted
+        batch_id:
+          type: string
+          maxLength: 36
+          minLength: 36
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Batch Id
+        cells:
+          items:
+            $ref: '#/components/schemas/KbTouchCell'
+          type: array
+          maxItems: 500
+          minItems: 1
+          title: Cells
       type: object
       required:
-      - accepted
-      title: KbTouchIngestResponse
-      description: Response reporting how many touch cells were accepted for ingestion.
+      - batch_id
+      - cells
+      title: KbTouchBatch
+      description: A batch of keyboard touch aggregate cells uploaded by the client.
     KbTouchCell:
       properties:
         device_diag:
@@ -149,27 +160,6 @@ components:
       - sum_t2
       title: KbTouchCell
       description: A single per-key moment-counter cell aggregated on-device.
-    KbTouchBatch:
-      properties:
-        batch_id:
-          type: string
-          maxLength: 36
-          minLength: 36
-          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          title: Batch Id
-        cells:
-          items:
-            $ref: '#/components/schemas/KbTouchCell'
-          type: array
-          maxItems: 500
-          minItems: 1
-          title: Cells
-      type: object
-      required:
-      - batch_id
-      - cells
-      title: KbTouchBatch
-      description: A batch of keyboard touch aggregate cells uploaded by the client.
     ValidationError:
       properties:
         loc:
@@ -205,6 +195,16 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    KbTouchIngestResponse:
+      properties:
+        accepted:
+          type: integer
+          title: Accepted
+      type: object
+      required:
+      - accepted
+      title: KbTouchIngestResponse
+      description: Response reporting how many touch cells were accepted for ingestion.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

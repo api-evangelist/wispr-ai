@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wispr Backend Analytics Polish API
+  title: Wispr Backend Polish API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -36,21 +36,6 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    PolishStatus:
-      type: string
-      enum:
-      - succeeded
-      - long_text
-      - short_text
-      - timeout
-      - error
-      - cancelled
-      - no_changes
-      - not_editable
-      - no_text
-      - no_instructions
-      title: PolishStatus
-      description: Outcome of a Polish text-refinement request.
     UploadPolishResponse:
       properties:
         num_rows_saved:
@@ -166,48 +151,6 @@ components:
       - app_version
       title: PolishRecord
       description: 'A single polish record: the original text, its polished result, and metadata.'
-    CerebrasProviderConfig:
-      properties:
-        kind:
-          type: string
-          enum:
-          - cerebras
-          title: Kind
-          default: cerebras
-        model:
-          type: string
-          title: Model
-      type: object
-      required:
-      - model
-      title: CerebrasProviderConfig
-      description: Provider config for a Cerebras-backed model.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     OpenAIProviderConfig:
       properties:
         kind:
@@ -282,6 +225,48 @@ components:
       - model
       title: OpenAIProviderConfig
       description: Provider config for an OpenAI-backed model.
+    UploadPolishRequest:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        polish_records:
+          items:
+            $ref: '#/components/schemas/PolishRecord'
+          type: array
+          title: Polish Records
+      type: object
+      required:
+      - user_id
+      - polish_records
+      title: UploadPolishRequest
+      description: Request payload for bulk-uploading polish records for a user.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     AnthropicProviderConfig:
       properties:
         kind:
@@ -318,22 +303,6 @@ components:
       - model
       title: AnthropicProviderConfig
       description: Provider config for an Anthropic-backed model.
-    UploadPolishRequest:
-      properties:
-        user_id:
-          type: string
-          title: User Id
-        polish_records:
-          items:
-            $ref: '#/components/schemas/PolishRecord'
-          type: array
-          title: Polish Records
-      type: object
-      required:
-      - user_id
-      - polish_records
-      title: UploadPolishRequest
-      description: Request payload for bulk-uploading polish records for a user.
     HTTPValidationError:
       properties:
         detail:
@@ -343,6 +312,37 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    CerebrasProviderConfig:
+      properties:
+        kind:
+          type: string
+          enum:
+          - cerebras
+          title: Kind
+          default: cerebras
+        model:
+          type: string
+          title: Model
+      type: object
+      required:
+      - model
+      title: CerebrasProviderConfig
+      description: Provider config for a Cerebras-backed model.
+    PolishStatus:
+      type: string
+      enum:
+      - succeeded
+      - long_text
+      - short_text
+      - timeout
+      - error
+      - cancelled
+      - no_changes
+      - not_editable
+      - no_text
+      - no_instructions
+      title: PolishStatus
+      description: Outcome of a Polish text-refinement request.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

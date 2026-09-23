@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wispr Backend Analytics Dash API
+  title: Wispr Backend Dash API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -82,7 +82,25 @@ paths:
       tags:
       - Dash
       summary: Chrome Extension Client Key
-      description: "Pre-auth bootstrap endpoint for the Chrome extension.\n\nThe extension does NOT have an org API key. It exchanges an install ID for a short-lived `client_key`\n(JWT) which can be used to connect to `/client_ws` or `/client_ws_v2`.\n\n**Preferred (header-based):** pass the token via the ``Sec-WebSocket-Protocol`` header::\n\n    new WebSocket(url, [\"access_token\", clientKey])\n\n**Legacy (query-param):** ``/client_ws?client_key=<JWT>`` is still supported for\nbackward compatibility but is discouraged because tokens in URLs can appear in\nserver access logs."
+      description: 'Pre-auth bootstrap endpoint for the Chrome extension.
+
+
+        The extension does NOT have an org API key. It exchanges an install ID for a short-lived `client_key`
+
+        (JWT) which can be used to connect to `/client_ws` or `/client_ws_v2`.
+
+
+        **Preferred (header-based):** pass the token via the ``Sec-WebSocket-Protocol`` header::
+
+
+        new WebSocket(url, ["access_token", clientKey])
+
+
+        **Legacy (query-param):** ``/client_ws?client_key=`` is still supported for
+
+        backward compatibility but is discouraged because tokens in URLs can appear in
+
+        server access logs.'
       operationId: chrome_extension_client_key
       requestBody:
         content:
@@ -154,6 +172,19 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    ChromeExtensionClientKeyResponse:
+      properties:
+        client_key:
+          type: string
+          title: Client Key
+        expires_in:
+          type: integer
+          title: Expires In
+      type: object
+      required:
+      - client_key
+      - expires_in
+      title: ChromeExtensionClientKeyResponse
     TokenResponse:
       properties:
         access_token:
@@ -233,28 +264,6 @@ components:
       - client_id
       title: ChromeExtensionClientKeyRequest
       description: Pre-auth request from the Chrome extension to mint a short-lived `client_key`.
-    RevokeTokenRequest:
-      properties:
-        access_token:
-          type: string
-          title: Access Token
-      type: object
-      required:
-      - access_token
-      title: RevokeTokenRequest
-    ChromeExtensionClientKeyResponse:
-      properties:
-        client_key:
-          type: string
-          title: Client Key
-        expires_in:
-          type: integer
-          title: Expires In
-      type: object
-      required:
-      - client_key
-      - expires_in
-      title: ChromeExtensionClientKeyResponse
     HTTPValidationError:
       properties:
         detail:
@@ -264,6 +273,15 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    RevokeTokenRequest:
+      properties:
+        access_token:
+          type: string
+          title: Access Token
+      type: object
+      required:
+      - access_token
+      title: RevokeTokenRequest
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

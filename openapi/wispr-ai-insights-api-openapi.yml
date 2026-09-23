@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wispr Backend Analytics Insights API
+  title: Wispr Backend Insights API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -88,39 +88,36 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    HeatmapDay:
+    AppCategoryUsage:
       properties:
-        date:
+        key:
           type: string
-          format: date
-          title: Date
-        desktop_words:
+          title: Key
+        category:
+          type: string
+          title: Category
+        word_count:
           type: integer
-          title: Desktop Words
-        mobile_words:
+          minimum: 0.0
+          title: Word Count
+        dictation_count:
           type: integer
-          title: Mobile Words
-        desktop_apps:
-          anyOf:
-          - additionalProperties:
-              type: integer
-            type: object
-          - type: 'null'
-          title: Desktop Apps
-        mobile_apps:
-          anyOf:
-          - additionalProperties:
-              type: integer
-            type: object
-          - type: 'null'
-          title: Mobile Apps
+          minimum: 0.0
+          title: Dictation Count
+        percentage:
+          type: number
+          maximum: 100.0
+          minimum: 0.0
+          title: Percentage
       type: object
       required:
-      - date
-      - desktop_words
-      - mobile_words
-      title: HeatmapDay
-      description: Per-day data for the calendar heatmap.
+      - key
+      - category
+      - word_count
+      - dictation_count
+      - percentage
+      title: AppCategoryUsage
+      description: Word and dictation count breakdown for one app category.
     HeatmapResponse:
       properties:
         days:
@@ -138,32 +135,6 @@ components:
       - account_created_at
       title: HeatmapResponse
       description: Heatmap data for a date range.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     InsightsResponse:
       properties:
         words_per_minute:
@@ -259,36 +230,65 @@ components:
       - desktop_words_corrected_delta
       title: StatsBackfillRequest
       description: Desktop client sends a pre-aggregated correction delta for backfilling user_stats.
-    AppCategoryUsage:
+    ValidationError:
       properties:
-        key:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
           type: string
-          title: Key
-        category:
+          title: Message
+        type:
           type: string
-          title: Category
-        word_count:
-          type: integer
-          minimum: 0.0
-          title: Word Count
-        dictation_count:
-          type: integer
-          minimum: 0.0
-          title: Dictation Count
-        percentage:
-          type: number
-          maximum: 100.0
-          minimum: 0.0
-          title: Percentage
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
       required:
-      - key
-      - category
-      - word_count
-      - dictation_count
-      - percentage
-      title: AppCategoryUsage
-      description: Word and dictation count breakdown for one app category.
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HeatmapDay:
+      properties:
+        date:
+          type: string
+          format: date
+          title: Date
+        desktop_words:
+          type: integer
+          title: Desktop Words
+        mobile_words:
+          type: integer
+          title: Mobile Words
+        desktop_apps:
+          anyOf:
+          - additionalProperties:
+              type: integer
+            type: object
+          - type: 'null'
+          title: Desktop Apps
+        mobile_apps:
+          anyOf:
+          - additionalProperties:
+              type: integer
+            type: object
+          - type: 'null'
+          title: Mobile Apps
+      type: object
+      required:
+      - date
+      - desktop_words
+      - mobile_words
+      title: HeatmapDay
+      description: Per-day data for the calendar heatmap.
     HTTPValidationError:
       properties:
         detail:

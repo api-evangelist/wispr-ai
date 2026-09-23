@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wispr Backend Analytics Incidents API
+  title: Wispr Backend Incidents API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -29,6 +29,25 @@ paths:
                 $ref: '#/components/schemas/IncidentStatusResponse'
 components:
   schemas:
+    IncidentStatusResponse:
+      properties:
+        client_region:
+          type: string
+          enum:
+          - us
+          - europe
+          - apac
+          title: Client Region
+        incident_status:
+          anyOf:
+          - $ref: '#/components/schemas/IncidentStatusDetail'
+          - type: 'null'
+      type: object
+      required:
+      - client_region
+      - incident_status
+      title: IncidentStatusResponse
+      description: Response for the unauthenticated incident-status endpoint.
     IncidentStatusDetail:
       properties:
         state:
@@ -65,25 +84,6 @@ components:
       - incident_url
       title: IncidentStatusDetail
       description: Active incident details returned in the status response.
-    IncidentStatusResponse:
-      properties:
-        client_region:
-          type: string
-          enum:
-          - us
-          - europe
-          - apac
-          title: Client Region
-        incident_status:
-          anyOf:
-          - $ref: '#/components/schemas/IncidentStatusDetail'
-          - type: 'null'
-      type: object
-      required:
-      - client_region
-      - incident_status
-      title: IncidentStatusResponse
-      description: Response for the unauthenticated incident-status endpoint.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

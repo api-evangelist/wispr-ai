@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wispr Backend Analytics Geo API
+  title: Wispr Backend Geo API
   description: Wispr Backend API
   version: 0.5.2
 tags:

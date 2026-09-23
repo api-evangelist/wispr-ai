@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wispr Backend Analytics Connectors API
+  title: Wispr Backend Connectors API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -165,15 +165,39 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    DisconnectRequest:
+    InitiateConnectionResponse:
       properties:
-        key:
-          $ref: '#/components/schemas/ConnectorKey'
+        connection_id:
+          type: string
+          title: Connection Id
+        redirect_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Redirect Url
       type: object
       required:
-      - key
-      title: DisconnectRequest
-      description: Request to disconnect a connector identified by its key.
+      - connection_id
+      title: InitiateConnectionResponse
+    ConnectorKey:
+      type: string
+      enum:
+      - calendar
+      - github
+      - gmail
+      - linear
+      - notion
+      - slack
+      - wispr
+      title: ConnectorKey
+      x-enum-varnames:
+      - Calendar
+      - Github
+      - GoogleAutomations
+      - Linear
+      - Notion
+      - Slack
+      - Wispr
     GoogleCalendarEvent:
       properties:
         summary:
@@ -212,61 +236,6 @@ components:
       - start
       - end
       title: GoogleCalendarEvent
-    ConnectorStatus:
-      type: string
-      enum:
-      - pending
-      - active
-      - failed
-      title: ConnectorStatus
-    InitiateConnectionRequest:
-      properties:
-        key:
-          $ref: '#/components/schemas/ConnectorKey'
-        callback_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Callback Url
-      type: object
-      required:
-      - key
-      title: InitiateConnectionRequest
-      description: Request to start connecting a connector identified by its key.
-    RawInitiateConnectionRequest:
-      properties:
-        app:
-          type: string
-          title: App
-        callback_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Callback Url
-      type: object
-      required:
-      - app
-      title: RawInitiateConnectionRequest
-      description: Request to start connecting a connector identified by a raw app string.
-    ConnectorKey:
-      type: string
-      enum:
-      - calendar
-      - github
-      - gmail
-      - linear
-      - notion
-      - slack
-      - wispr
-      title: ConnectorKey
-      x-enum-varnames:
-      - Calendar
-      - Github
-      - GoogleAutomations
-      - Linear
-      - Notion
-      - Slack
-      - Wispr
     ListCalendarEventsRequest:
       properties:
         time_min:
@@ -288,26 +257,44 @@ components:
       - time_max
       title: ListCalendarEventsRequest
       description: Request to list calendar events within a time window.
-    ConnectionStatusResponse:
+    DisconnectRequest:
       properties:
-        connection_id:
-          type: string
-          title: Connection Id
-        status:
-          $ref: '#/components/schemas/ConnectorStatus'
-        toolkit_slug:
-          type: string
-          title: Toolkit Slug
-        incomplete_scopes:
-          type: boolean
-          title: Incomplete Scopes
-          default: false
+        key:
+          $ref: '#/components/schemas/ConnectorKey'
       type: object
       required:
-      - connection_id
-      - status
-      - toolkit_slug
-      title: ConnectionStatusResponse
+      - key
+      title: DisconnectRequest
+      description: Request to disconnect a connector identified by its key.
+    RawInitiateConnectionRequest:
+      properties:
+        app:
+          type: string
+          title: App
+        callback_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Callback Url
+      type: object
+      required:
+      - app
+      title: RawInitiateConnectionRequest
+      description: Request to start connecting a connector identified by a raw app string.
+    InitiateConnectionRequest:
+      properties:
+        key:
+          $ref: '#/components/schemas/ConnectorKey'
+        callback_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Callback Url
+      type: object
+      required:
+      - key
+      title: InitiateConnectionRequest
+      description: Request to start connecting a connector identified by its key.
     ListCalendarEventsResponse:
       properties:
         successful:
@@ -327,27 +314,38 @@ components:
       required:
       - successful
       title: ListCalendarEventsResponse
-    DisconnectResponse:
+    ConnectorInfo:
       properties:
-        successful:
+        key:
+          $ref: '#/components/schemas/ConnectorKey'
+        label:
+          type: string
+          title: Label
+        connected:
           type: boolean
-          title: Successful
+          title: Connected
+        incomplete_scopes:
+          type: boolean
+          title: Incomplete Scopes
+          default: false
+        connected_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Connected Email
       type: object
       required:
-      - successful
-      title: DisconnectResponse
-    ConnectorsResponse:
-      properties:
-        connectors:
-          items:
-            $ref: '#/components/schemas/ConnectorInfo'
-          type: array
-          title: Connectors
-      type: object
-      required:
-      - connectors
-      title: ConnectorsResponse
-      description: The list of connectors and their status for the user.
+      - key
+      - label
+      - connected
+      title: ConnectorInfo
+    ConnectorStatus:
+      type: string
+      enum:
+      - pending
+      - active
+      - failed
+      title: ConnectorStatus
     ValidationError:
       properties:
         loc:
@@ -374,45 +372,15 @@ components:
       - msg
       - type
       title: ValidationError
-    InitiateConnectionResponse:
+    DisconnectResponse:
       properties:
-        connection_id:
-          type: string
-          title: Connection Id
-        redirect_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Redirect Url
+        successful:
+          type: boolean
+          title: Successful
       type: object
       required:
-      - connection_id
-      title: InitiateConnectionResponse
-    ConnectorInfo:
-      properties:
-        key:
-          $ref: '#/components/schemas/ConnectorKey'
-        label:
-          type: string
-          title: Label
-        connected:
-          type: boolean
-          title: Connected
-        incomplete_scopes:
-          type: boolean
-          title: Incomplete Scopes
-          default: false
-        connected_email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Connected Email
-      type: object
-      required:
-      - key
-      - label
-      - connected
-      title: ConnectorInfo
+      - successful
+      title: DisconnectResponse
     HTTPValidationError:
       properties:
         detail:
@@ -422,6 +390,38 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    ConnectorsResponse:
+      properties:
+        connectors:
+          items:
+            $ref: '#/components/schemas/ConnectorInfo'
+          type: array
+          title: Connectors
+      type: object
+      required:
+      - connectors
+      title: ConnectorsResponse
+      description: The list of connectors and their status for the user.
+    ConnectionStatusResponse:
+      properties:
+        connection_id:
+          type: string
+          title: Connection Id
+        status:
+          $ref: '#/components/schemas/ConnectorStatus'
+        toolkit_slug:
+          type: string
+          title: Toolkit Slug
+        incomplete_scopes:
+          type: boolean
+          title: Incomplete Scopes
+          default: false
+      type: object
+      required:
+      - connection_id
+      - status
+      - toolkit_slug
+      title: ConnectionStatusResponse
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

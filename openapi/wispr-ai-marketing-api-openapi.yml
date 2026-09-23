@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wispr Backend Analytics Marketing API
+  title: Wispr Backend Marketing API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -212,6 +212,27 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    MicQuizV2EmailRequest:
+      properties:
+        best_match:
+          type: string
+          enum:
+          - podcastMic
+          - gooseneckMic
+          - lavMic
+          - headsetWithMic
+          title: Best Match
+        title:
+          type: string
+          title: Title
+      type: object
+      required:
+      - best_match
+      - title
+      title: MicQuizV2EmailRequest
+      description: 'Payload for the V2 mic quiz email. Both fields are required — the template uses them
+
+        directly without fallbacks, so missing data will render as an empty highlight/title.'
     MicQuizEmailRequest:
       properties:
         title:
@@ -239,6 +260,35 @@ components:
       required:
       - recommendations
       title: MicQuizEmailRequest
+    MicRecommendation:
+      properties:
+        badge:
+          type: string
+          title: Badge
+        is_best:
+          type: boolean
+          title: Is Best
+          default: false
+        name:
+          type: string
+          title: Name
+        brand:
+          type: string
+          title: Brand
+          default: ''
+        description:
+          type: string
+          title: Description
+        amazon_url:
+          type: string
+          title: Amazon Url
+          default: ''
+      type: object
+      required:
+      - badge
+      - name
+      - description
+      title: MicRecommendation
     OnboardingWebhookRequest:
       properties:
         email:
@@ -280,56 +330,6 @@ components:
       - msg
       - type
       title: ValidationError
-    MicQuizV2EmailRequest:
-      properties:
-        best_match:
-          type: string
-          enum:
-          - podcastMic
-          - gooseneckMic
-          - lavMic
-          - headsetWithMic
-          title: Best Match
-        title:
-          type: string
-          title: Title
-      type: object
-      required:
-      - best_match
-      - title
-      title: MicQuizV2EmailRequest
-      description: 'Payload for the V2 mic quiz email. Both fields are required — the template uses them
-
-        directly without fallbacks, so missing data will render as an empty highlight/title.'
-    MicRecommendation:
-      properties:
-        badge:
-          type: string
-          title: Badge
-        is_best:
-          type: boolean
-          title: Is Best
-          default: false
-        name:
-          type: string
-          title: Name
-        brand:
-          type: string
-          title: Brand
-          default: ''
-        description:
-          type: string
-          title: Description
-        amazon_url:
-          type: string
-          title: Amazon Url
-          default: ''
-      type: object
-      required:
-      - badge
-      - name
-      - description
-      title: MicRecommendation
     HTTPValidationError:
       properties:
         detail:

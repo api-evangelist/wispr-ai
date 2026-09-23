@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wispr Backend Analytics Notification API
+  title: Wispr Backend Notification API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -270,143 +270,14 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    NotificationListResponse:
-      properties:
-        notifications:
-          items:
-            $ref: '#/components/schemas/NotificationResponse'
-          type: array
-          title: Notifications
-        unread_count:
-          type: integer
-          title: Unread Count
-        total:
-          type: integer
-          title: Total
-      type: object
-      required:
-      - notifications
-      - unread_count
-      - total
-      title: NotificationListResponse
-      description: A page of notifications with unread and total counts.
-    NotificationResponse:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-        type:
-          $ref: '#/components/schemas/NotificationType'
-        key:
-          type: string
-          title: Key
-        title:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Title
-        text:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Text
-        ios_title:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Ios Title
-        ios_text:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Ios Text
-        platform_type:
-          $ref: '#/components/schemas/NotificationPlatformType'
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        is_archived:
-          type: boolean
-          title: Is Archived
-      type: object
-      required:
-      - id
-      - type
-      - key
-      - title
-      - text
-      - ios_title
-      - ios_text
-      - platform_type
-      - created_at
-      - is_archived
-      title: NotificationResponse
-      description: A single notification as returned to the client.
-    NotificationPlatformType:
+    NotificationType:
       type: string
       enum:
-      - desktop
-      - ios
-      - both
-      title: NotificationPlatformType
-      description: Client platform(s) a notification targets.
-    SendSMSRequest:
-      properties:
-        country_code:
-          type: string
-          title: Country Code
-        number:
-          type: string
-          title: Number
-      type: object
-      required:
-      - country_code
-      - number
-      title: SendSMSRequest
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    InternalNotificationCreateRequest:
-      properties:
-        emails:
-          items:
-            type: string
-            format: email
-          type: array
-          title: Emails
-        notification:
-          $ref: '#/components/schemas/NotificationCreateRequest'
-      type: object
-      required:
-      - emails
-      - notification
-      title: InternalNotificationCreateRequest
-      description: Internal admin request to send a notification to specific email addresses.
+      - achievement
+      - referral
+      - announcement
+      title: NotificationType
+      description: Category of a user notification.
     BulkAnnouncementCreateRequest:
       properties:
         key:
@@ -489,14 +360,73 @@ components:
       - key
       title: NotificationCreateRequest
       description: Request body describing a notification to create.
-    NotificationType:
+    NotificationPlatformType:
       type: string
       enum:
-      - achievement
-      - referral
-      - announcement
-      title: NotificationType
-      description: Category of a user notification.
+      - desktop
+      - ios
+      - both
+      title: NotificationPlatformType
+      description: Client platform(s) a notification targets.
+    SendSMSRequest:
+      properties:
+        country_code:
+          type: string
+          title: Country Code
+        number:
+          type: string
+          title: Number
+      type: object
+      required:
+      - country_code
+      - number
+      title: SendSMSRequest
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    NotificationListResponse:
+      properties:
+        notifications:
+          items:
+            $ref: '#/components/schemas/NotificationResponse'
+          type: array
+          title: Notifications
+        unread_count:
+          type: integer
+          title: Unread Count
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - notifications
+      - unread_count
+      - total
+      title: NotificationListResponse
+      description: A page of notifications with unread and total counts.
     HTTPValidationError:
       properties:
         detail:
@@ -506,6 +436,76 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    InternalNotificationCreateRequest:
+      properties:
+        emails:
+          items:
+            type: string
+            format: email
+          type: array
+          title: Emails
+        notification:
+          $ref: '#/components/schemas/NotificationCreateRequest'
+      type: object
+      required:
+      - emails
+      - notification
+      title: InternalNotificationCreateRequest
+      description: Internal admin request to send a notification to specific email addresses.
+    NotificationResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        type:
+          $ref: '#/components/schemas/NotificationType'
+        key:
+          type: string
+          title: Key
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+        text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Text
+        ios_title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ios Title
+        ios_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ios Text
+        platform_type:
+          $ref: '#/components/schemas/NotificationPlatformType'
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        is_archived:
+          type: boolean
+          title: Is Archived
+      type: object
+      required:
+      - id
+      - type
+      - key
+      - title
+      - text
+      - ios_title
+      - ios_text
+      - platform_type
+      - created_at
+      - is_archived
+      title: NotificationResponse
+      description: A single notification as returned to the client.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

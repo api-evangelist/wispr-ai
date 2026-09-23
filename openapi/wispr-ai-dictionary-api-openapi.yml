@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wispr Backend Analytics Dictionary API
+  title: Wispr Backend Dictionary API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -180,24 +180,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    BulkCreateTeamDictionaryResult:
-      properties:
-        success:
-          type: boolean
-          title: Success
-        imported_count:
-          type: integer
-          title: Imported Count
-        duplicate_count:
-          type: integer
-          title: Duplicate Count
-      type: object
-      required:
-      - success
-      - imported_count
-      - duplicate_count
-      title: BulkCreateTeamDictionaryResult
-      description: Result summary of a bulk team dictionary import (imported and duplicate counts).
     CreateTeamDictionaryItem:
       properties:
         word:
@@ -273,6 +255,24 @@ components:
       - is_snippet
       title: UpdateTeamDictionaryItem
       description: Request payload for updating an existing team dictionary item.
+    BulkCreateTeamDictionaryResult:
+      properties:
+        success:
+          type: boolean
+          title: Success
+        imported_count:
+          type: integer
+          title: Imported Count
+        duplicate_count:
+          type: integer
+          title: Duplicate Count
+      type: object
+      required:
+      - success
+      - imported_count
+      - duplicate_count
+      title: BulkCreateTeamDictionaryResult
+      description: Result summary of a bulk team dictionary import (imported and duplicate counts).
     ValidationError:
       properties:
         loc:
@@ -299,6 +299,15 @@ components:
       - msg
       - type
       title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     DictionaryItem:
       properties:
         id:
@@ -368,15 +377,6 @@ components:
       - is_snippet
       title: DictionaryItem
       description: A team dictionary word or snippet entry as returned to clients.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wispr Backend Analytics User Voice Preferences API
+  title: Wispr Backend User Voice Preferences API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -61,58 +61,6 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    UploadUserVoicePreferencesResponse:
-      properties:
-        num_rows_saved:
-          type: integer
-          title: Num Rows Saved
-        ids:
-          items:
-            type: string
-            format: uuid
-          type: array
-          title: Ids
-      type: object
-      required:
-      - num_rows_saved
-      - ids
-      title: UploadUserVoicePreferencesResponse
-      description: Response model confirming which voice preference records were saved.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     VoicePreferenceUploadRecord:
       properties:
         id:
@@ -138,6 +86,35 @@ components:
         `filter` is the LLM-derived scope string (e.g. "app:gmail-language:de").
 
         `None` means a general preference that is not scoped to any dimension.'
+    UploadUserVoicePreferencesRequest:
+      properties:
+        voice_preferences:
+          items:
+            $ref: '#/components/schemas/VoicePreferenceUploadRecord'
+          type: array
+          title: Voice Preferences
+      type: object
+      required:
+      - voice_preferences
+      title: UploadUserVoicePreferencesRequest
+      description: Request model for bulk-uploading voice preference records.
+    UploadUserVoicePreferencesResponse:
+      properties:
+        num_rows_saved:
+          type: integer
+          title: Num Rows Saved
+        ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Ids
+      type: object
+      required:
+      - num_rows_saved
+      - ids
+      title: UploadUserVoicePreferencesResponse
+      description: Response model confirming which voice preference records were saved.
     VoicePreferenceRecord:
       properties:
         id:
@@ -168,18 +145,6 @@ components:
       - modified_at
       title: VoicePreferenceRecord
       description: A voice preference row returned from GET /user_voice_preferences.
-    UploadUserVoicePreferencesRequest:
-      properties:
-        voice_preferences:
-          items:
-            $ref: '#/components/schemas/VoicePreferenceUploadRecord'
-          type: array
-          title: Voice Preferences
-      type: object
-      required:
-      - voice_preferences
-      title: UploadUserVoicePreferencesRequest
-      description: Request model for bulk-uploading voice preference records.
     ListUserVoicePreferencesResponse:
       properties:
         voice_preferences:
@@ -192,6 +157,41 @@ components:
       - voice_preferences
       title: ListUserVoicePreferencesResponse
       description: All voice preference rows for the authenticated user, newest first.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

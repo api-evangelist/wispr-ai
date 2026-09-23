@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wispr Backend Analytics Cost Centers API
+  title: Wispr Backend Cost Centers API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -259,18 +259,77 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    CostCenterListResponse:
+    BreakAwayPreview:
       properties:
-        cost_centers:
-          items:
-            $ref: '#/components/schemas/CostCenterResponse'
-          type: array
-          title: Cost Centers
+        team_name:
+          type: string
+          title: Team Name
+        source_cost_center_name:
+          type: string
+          title: Source Cost Center Name
+        members_moving:
+          type: integer
+          title: Members Moving
+        per_seat_amount_cents:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Per Seat Amount Cents
+        currency:
+          type: string
+          title: Currency
+        billing_interval:
+          anyOf:
+          - type: string
+            enum:
+            - month
+            - year
+          - type: 'null'
+          title: Billing Interval
+        new_cc_annual_amount_cents:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: New Cc Annual Amount Cents
+        pricing_unavailable_reason:
+          anyOf:
+          - type: string
+            enum:
+            - tiered_pricing_not_supported
+            - unexpected_stripe_shape
+          - type: 'null'
+          title: Pricing Unavailable Reason
       type: object
       required:
-      - cost_centers
-      title: CostCenterListResponse
-      description: A list of cost centers for an enterprise.
+      - team_name
+      - source_cost_center_name
+      - members_moving
+      - per_seat_amount_cents
+      - currency
+      - billing_interval
+      - new_cc_annual_amount_cents
+      title: BreakAwayPreview
+      description: 'Pre-checkout summary shown to admins initiating a break-away.
+
+
+        All amounts are integer cents in the source CC''s currency. ``billing_interval``
+
+        is the underlying Stripe price interval; the annual amount is always
+
+        pre-multiplied so the frontend never has to apply ``× 12`` itself.
+
+
+        Pricing fields are nullable so the preview can still surface team / member
+
+        counts even when Stripe''s price shape is incompatible with flat per-seat
+
+        math (e.g. ``billing_scheme=tiered`` on most negotiated enterprise contracts).
+
+        ``pricing_unavailable_reason`` is populated whenever any pricing field is
+
+        null so the frontend can show a precise explanation instead of a generic
+
+        "try again" fallback.'
     CostCenterDetailResponse:
       properties:
         id:
@@ -366,28 +425,6 @@ components:
       - cancel_at
       title: CostCenterDetailResponse
       description: A cost center with additional Stripe and billing-cycle detail.
-    CheckoutUrlResponse:
-      properties:
-        url:
-          type: string
-          title: Url
-      type: object
-      required:
-      - url
-      title: CheckoutUrlResponse
-      description: A Stripe checkout URL for the client to redirect to.
-    UpdateCostCenterRequest:
-      properties:
-        name:
-          type: string
-          maxLength: 120
-          minLength: 1
-          title: Name
-      type: object
-      required:
-      - name
-      title: UpdateCostCenterRequest
-      description: Request to rename a cost center.
     CostCenterResponse:
       properties:
         id:
@@ -445,77 +482,16 @@ components:
       - created_at
       title: CostCenterResponse
       description: A cost center's core billing and membership fields.
-    BreakAwayPreview:
+    CheckoutUrlResponse:
       properties:
-        team_name:
+        url:
           type: string
-          title: Team Name
-        source_cost_center_name:
-          type: string
-          title: Source Cost Center Name
-        members_moving:
-          type: integer
-          title: Members Moving
-        per_seat_amount_cents:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Per Seat Amount Cents
-        currency:
-          type: string
-          title: Currency
-        billing_interval:
-          anyOf:
-          - type: string
-            enum:
-            - month
-            - year
-          - type: 'null'
-          title: Billing Interval
-        new_cc_annual_amount_cents:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: New Cc Annual Amount Cents
-        pricing_unavailable_reason:
-          anyOf:
-          - type: string
-            enum:
-            - tiered_pricing_not_supported
-            - unexpected_stripe_shape
-          - type: 'null'
-          title: Pricing Unavailable Reason
+          title: Url
       type: object
       required:
-      - team_name
-      - source_cost_center_name
-      - members_moving
-      - per_seat_amount_cents
-      - currency
-      - billing_interval
-      - new_cc_annual_amount_cents
-      title: BreakAwayPreview
-      description: 'Pre-checkout summary shown to admins initiating a break-away.
-
-
-        All amounts are integer cents in the source CC''s currency. ``billing_interval``
-
-        is the underlying Stripe price interval; the annual amount is always
-
-        pre-multiplied so the frontend never has to apply ``× 12`` itself.
-
-
-        Pricing fields are nullable so the preview can still surface team / member
-
-        counts even when Stripe''s price shape is incompatible with flat per-seat
-
-        math (e.g. ``billing_scheme=tiered`` on most negotiated enterprise contracts).
-
-        ``pricing_unavailable_reason`` is populated whenever any pricing field is
-
-        null so the frontend can show a precise explanation instead of a generic
-
-        "try again" fallback.'
+      - url
+      title: CheckoutUrlResponse
+      description: A Stripe checkout URL for the client to redirect to.
     ValidationError:
       properties:
         loc:
@@ -542,6 +518,18 @@ components:
       - msg
       - type
       title: ValidationError
+    UpdateCostCenterRequest:
+      properties:
+        name:
+          type: string
+          maxLength: 120
+          minLength: 1
+          title: Name
+      type: object
+      required:
+      - name
+      title: UpdateCostCenterRequest
+      description: Request to rename a cost center.
     HTTPValidationError:
       properties:
         detail:
@@ -551,6 +539,18 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    CostCenterListResponse:
+      properties:
+        cost_centers:
+          items:
+            $ref: '#/components/schemas/CostCenterResponse'
+          type: array
+          title: Cost Centers
+      type: object
+      required:
+      - cost_centers
+      title: CostCenterListResponse
+      description: A list of cost centers for an enterprise.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

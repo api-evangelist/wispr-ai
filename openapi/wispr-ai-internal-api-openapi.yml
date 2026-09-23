@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wispr Backend Analytics Internal API
+  title: Wispr Backend Internal API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -867,7 +867,12 @@ paths:
       tags:
       - Internal
       summary: List Enterprise Pilots
-      description: "List enterprise pilots with optional filtering (internal admin only).\n\nArgs:\n    status_filter: Filter option - 'active' (future pilot_end), 'expired' (past pilot_end or canceled), or omit for all"
+      description: 'List enterprise pilots with optional filtering (internal admin only).
+
+
+        Args:
+
+        status_filter: Filter option - ''active'' (future pilot_end), ''expired'' (past pilot_end or canceled), or omit for all'
       operationId: list_enterprise_pilots
       security:
       - ApiKeyHeaderPatched: []
@@ -1060,7 +1065,23 @@ paths:
       tags:
       - Internal
       summary: Add Users To Enterprise
-      description: "Add user(s) to an enterprise (internal admin only).\n\n- If a user is not in any enterprise: onboards them to the enterprise\n- If a user is already in this enterprise: skips them (included in skipped_count)\n- If a user is in a different enterprise: marks as failed\n- If a user is not found and create_missing_users is False: marks as failed\n- If a user is not found and create_missing_users is True: creates Supabase auth\n  account and DB user, then adds them to the enterprise\n\nPartial success: Adds all users that can be added and returns details about failures."
+      description: 'Add user(s) to an enterprise (internal admin only).
+
+
+        - If a user is not in any enterprise: onboards them to the enterprise
+
+        - If a user is already in this enterprise: skips them (included in skipped_count)
+
+        - If a user is in a different enterprise: marks as failed
+
+        - If a user is not found and create_missing_users is False: marks as failed
+
+        - If a user is not found and create_missing_users is True: creates Supabase auth
+
+        account and DB user, then adds them to the enterprise
+
+
+        Partial success: Adds all users that can be added and returns details about failures.'
       operationId: add_users_to_enterprise
       security:
       - ApiKeyHeaderPatched: []
@@ -2561,21 +2582,128 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    ProvisionedCostCenterSummary:
+    GenerateFlowStateRequest:
       properties:
-        id:
+        reporting_month:
           type: string
-          format: uuid
-          title: Id
-        name:
-          type: string
-          title: Name
+          format: date
+          title: Reporting Month
+        min_word_count:
+          type: integer
+          title: Min Word Count
+          default: 500
+        min_app_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Min App Count
+        user_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: User Ids
+        emails:
+          anyOf:
+          - items:
+              type: string
+              format: email
+            type: array
+          - type: 'null'
+          title: Emails
+        domain:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Domain
+        all_users:
+          type: boolean
+          title: All Users
+          default: false
       type: object
       required:
-      - id
-      - name
-      title: ProvisionedCostCenterSummary
-      description: The cost center created by a successful provision.
+      - reporting_month
+      title: GenerateFlowStateRequest
+      description: Request body for the marketing profile generation endpoint.
+    UpdateUsersRoleResponse:
+      properties:
+        updated_count:
+          type: integer
+          title: Updated Count
+        skipped_count:
+          type: integer
+          title: Skipped Count
+          default: 0
+        failed:
+          items:
+            $ref: '#/components/schemas/FailedUpdateUserItem'
+          type: array
+          title: Failed
+          default: []
+      type: object
+      required:
+      - updated_count
+      title: UpdateUsersRoleResponse
+      description: Response model for bulk update users role operation.
+    EnterpriseMember:
+      properties:
+        userId:
+          type: string
+          title: Userid
+        firstName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Firstname
+        lastName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Lastname
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+        role:
+          anyOf:
+          - $ref: '#/components/schemas/EnterpriseRole'
+          - type: 'null'
+        joinedAt:
+          anyOf:
+          - type: integer
+            format: int64
+          - type: 'null'
+          title: Joinedat
+      type: object
+      required:
+      - userId
+      - firstName
+      - lastName
+      - email
+      - role
+      - joinedAt
+      title: EnterpriseMember
+      description: 'Response model for an enterprise member.
+
+
+        ``firstName``, ``lastName``, ``email`` are nullable because the underlying
+
+        ``User`` columns are nullable (see ``models/user.py``). ``role`` is nullable
+
+        because the column is free-text and may contain stray strings outside the
+
+        canonical ``EnterpriseRole`` enum (FLOW-BACKEND-8NW); the validator below
+
+        silently coerces those to ``None``.
+
+
+        ``joinedAt`` is unix seconds of ``MIN(user_team_membership.added_at)`` across
+
+        all the user''s memberships in this enterprise (active + soft-deleted).
+
+        ``None`` when the user has no membership row (edge case).'
     EnterpriseDomainItem:
       properties:
         id:
@@ -2608,93 +2736,143 @@ components:
       - domain_capture_policy
       title: EnterpriseDomainItem
       description: Response model for an enterprise domain.
-    MeetingAudioUrlResponse:
+    FlowStateProfilePreviewResponse:
       properties:
-        url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Url
-      type: object
-      title: MeetingAudioUrlResponse
-      description: Presigned GET URL for one meeting's audio, if present.
-    ProvisionedInvoiceSummary:
-      properties:
-        stripe_invoice_id:
-          type: string
-          title: Stripe Invoice Id
-        status:
-          type: string
-          enum:
-          - sent
-          - already_paid
-          title: Status
+        total:
+          type: integer
+          title: Total
+        items:
+          items:
+            $ref: '#/components/schemas/FlowStateProfilePreviewItem'
+          type: array
+          title: Items
       type: object
       required:
-      - stripe_invoice_id
-      - status
-      title: ProvisionedInvoiceSummary
-      description: The invoice sent (or already paid) by a successful provision.
-    EnterprisePilotsResponse:
+      - total
+      - items
+      title: FlowStateProfilePreviewResponse
+      description: Paginated generated profile preview.
+    CodeListResponse:
       properties:
-        pilots:
+        codes:
           items:
-            $ref: '#/components/schemas/EnterprisePilotItem'
+            $ref: '#/components/schemas/CodeListItem'
           type: array
-          title: Pilots
+          title: Codes
         total:
           type: integer
           title: Total
       type: object
       required:
-      - pilots
+      - codes
       - total
-      title: EnterprisePilotsResponse
-      description: Response model for listing enterprise pilots.
-    SyncDomainsToWorkosResponse:
+      title: CodeListResponse
+      description: A page of promo codes with a total count.
+    UpdatePilotEndRequest:
       properties:
-        message:
+        pilot_end:
           type: string
-          title: Message
-        workos_synced:
+          format: date
+          title: Pilot End
+      type: object
+      required:
+      - pilot_end
+      title: UpdatePilotEndRequest
+      description: Request model for updating an enterprise pilot end date.
+    AlgorithmId:
+      type: string
+      enum:
+      - cluster-v1
+      - segment-v3
+      title: AlgorithmId
+      description: Closed registry of consensus implementations exposed for preview.
+    TranscriptEntry:
+      properties:
+        id:
+          type: string
+          title: Id
+        timestamp:
+          type: string
+          title: Timestamp
+        text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Text
+        speaker:
+          anyOf:
+          - $ref: '#/components/schemas/TranscriptSpeaker'
+          - type: 'null'
+        latched:
           type: boolean
-          title: Workos Synced
-          description: Whether the domains were successfully synced to WorkOS
+          title: Latched
+          default: false
+        marker:
+          anyOf:
+          - $ref: '#/components/schemas/TranscriptMarkerType'
+          - type: 'null'
+        label:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Label
+      additionalProperties: false
       type: object
       required:
-      - message
-      - workos_synced
-      title: SyncDomainsToWorkosResponse
-      description: Response model for syncing enterprise domains to WorkOS.
-    PreviewResponse:
+      - id
+      - timestamp
+      title: TranscriptEntry
+      description: Generator-safe wire model enforcing the three persisted entry shapes.
+    ErrorDetail:
       properties:
-        preview:
-          type: object
-          title: Preview
+        detail:
+          type: string
+          title: Detail
       type: object
       required:
-      - preview
-      title: PreviewResponse
-    SendInvoiceRequest:
+      - detail
+      title: ErrorDetail
+      description: 'Standard FastAPI HTTPException envelope: `{"detail": "..."}`.'
+    EnterpriseMembersResponse:
       properties:
-        invoice_id:
-          type: string
-          minLength: 1
-          title: Invoice Id
-          description: Stripe draft invoice ID to finalize and send
-        po_number:
-          type: string
-          maxLength: 100
-          minLength: 1
-          title: Po Number
-          description: Purchase order number
+        members:
+          items:
+            $ref: '#/components/schemas/EnterpriseMember'
+          type: array
+          title: Members
+        total:
+          type: integer
+          title: Total
+        limit:
+          type: integer
+          title: Limit
+        offset:
+          type: integer
+          title: Offset
       type: object
       required:
-      - invoice_id
-      - po_number
-      title: SendInvoiceRequest
-      description: Request model for sending a pending invoice.
-    EnterpriseBillingConfigCreate:
+      - members
+      - total
+      - limit
+      - offset
+      title: EnterpriseMembersResponse
+      description: Response model for list of enterprise members with pagination
+    RemoveUsersFromEnterpriseRequest:
+      properties:
+        emails:
+          items:
+            type: string
+            format: email
+          type: array
+          maxItems: 100
+          title: Emails
+          description: List of user emails to remove (max 100)
+      type: object
+      required:
+      - emails
+      title: RemoveUsersFromEnterpriseRequest
+      description: Request model for removing users from an enterprise by email
+    EnterpriseBillingConfigUpdate:
       properties:
         next_true_up_date:
           type: string
@@ -2758,383 +2936,31 @@ components:
             minimum: 1.0
           - type: 'null'
           title: Contract Period Days
-        enterprise_id:
-          type: string
-          format: uuid
-          title: Enterprise Id
       type: object
       required:
       - next_true_up_date
       - true_up_period_days
       - product_name
-      - enterprise_id
-      title: EnterpriseBillingConfigCreate
-      description: Request model for creating a billing config.
-    ListRecentInvoicesResponse:
+      title: EnterpriseBillingConfigUpdate
+      description: Request model for updating a billing config.
+    EnterpriseListItem:
       properties:
-        draft:
-          anyOf:
-          - $ref: '#/components/schemas/InvoiceSummary'
-          - type: 'null'
-        open:
-          anyOf:
-          - $ref: '#/components/schemas/InvoiceSummary'
-          - type: 'null'
+        id:
+          type: string
+          format: uuid
+          title: Id
+        name:
+          type: string
+          title: Name
+        status:
+          $ref: '#/components/schemas/EnterpriseStatus'
       type: object
       required:
-      - draft
-      - open
-      title: ListRecentInvoicesResponse
-      description: 'The two most-recent invoices an operator might want to act on.
-
-
-        ``open`` covers the past_due case as well — Stripe treats past_due as just
-
-        an ``open`` invoice past its due_date, so a single ``open`` slot is enough
-
-        for the picker. Acting on the ``open`` row triggers the void-and-reissue
-
-        flow inside ``add_po_to_invoice``; the ``draft`` row is editable in place.
-
-        Either slot may be null when no such invoice exists for the customer.'
-    UpdatePilotEndRequest:
-      properties:
-        pilot_end:
-          type: string
-          format: date
-          title: Pilot End
-      type: object
-      required:
-      - pilot_end
-      title: UpdatePilotEndRequest
-      description: Request model for updating an enterprise pilot end date.
-    CreateCodesResponse:
-      properties:
-        created_count:
-          type: integer
-          title: Created Count
-        created_codes:
-          items:
-            $ref: '#/components/schemas/CodeListItem'
-          type: array
-          title: Created Codes
-      type: object
-      required:
-      - created_count
-      - created_codes
-      title: CreateCodesResponse
-      description: 'Result of creating promo codes: count and the created rows.'
-    ConsensusPreviewRequest:
-      properties:
-        algorithm_id:
-          $ref: '#/components/schemas/AlgorithmId'
-      type: object
-      required:
-      - algorithm_id
-      title: ConsensusPreviewRequest
-      description: Explicit consensus implementation selection.
-    FlowStatePreviewRequest:
-      properties:
-        reporting_month:
-          type: string
-          format: date
-          title: Reporting Month
-        emails:
-          anyOf:
-          - items:
-              type: string
-              format: email
-            type: array
-          - type: 'null'
-          title: Emails
-        domain:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Domain
-        user_ids:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: User Ids
-        limit:
-          type: integer
-          maximum: 500.0
-          minimum: 1.0
-          title: Limit
-          default: 100
-        offset:
-          type: integer
-          minimum: 0.0
-          title: Offset
-          default: 0
-      type: object
-      required:
-      - reporting_month
-      title: FlowStatePreviewRequest
-      description: Request body for previewing generated profiles before send.
-    ConsensusActualMode:
-      type: string
-      enum:
-      - anonymous
-      - cluster
-      - segment
-      title: ConsensusActualMode
-      description: The implementation path that produced a preview result.
-    FailedAddUserItem:
-      properties:
-        email:
-          type: string
-          format: email
-          title: Email
-        reason:
-          type: string
-          title: Reason
-      type: object
-      required:
-      - email
-      - reason
-      title: FailedAddUserItem
-      description: Details about a user that failed to be added
-    DomainVerificationStatus:
-      properties:
-        domain_id:
-          type: string
-          title: Domain Id
-        enterprise_id:
-          type: string
-          title: Enterprise Id
-        domain:
-          type: string
-          title: Domain
-        verified:
-          type: boolean
-          title: Verified
-        verified_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Verified At
-          description: ISO-8601 timestamp of verification, or ``null`` if unverified.
-        verification_initiated_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Verification Initiated At
-          description: ISO-8601 timestamp of when the token was first issued, or ``null`` if never initiated.
-        last_verification_check_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Verification Check At
-          description: ISO-8601 timestamp of the last DNS poll, or ``null`` if never polled.
-        verification_attempts:
-          type: integer
-          title: Verification Attempts
-          description: Number of DNS check attempts made against this domain.
-        token_active:
-          type: boolean
-          title: Token Active
-          description: True iff a verification token is currently issued and the domain is not yet verified.
-        record:
-          anyOf:
-          - $ref: '#/components/schemas/DomainVerificationRecord'
-          - type: 'null'
-          description: The TXT record to publish. Populated only on superadmin reads while unverified; always ``null`` on admin-facing reads.
-        domain_capture_policy:
-          $ref: '#/components/schemas/DomainCapturePolicy'
-          description: Per-domain capture policy. ``unset`` while unverified; ``off``/``require`` once verified.
-      type: object
-      required:
-      - domain_id
-      - enterprise_id
-      - domain
-      - verified
-      - verified_at
-      - verification_initiated_at
-      - last_verification_check_at
-      - verification_attempts
-      - token_active
-      - record
-      - domain_capture_policy
-      title: DomainVerificationStatus
-      description: 'Per-domain verification state returned by the enterprise and internal APIs.
-
-
-        The ``record`` field is populated only on superadmin (internal) reads while
-
-        the domain is still unverified. Admin-facing reads always set it to ``None``.'
-    AdminMemorySearchResponse:
-      properties:
-        results:
-          items:
-            $ref: '#/components/schemas/AdminMemorySearchResult'
-          type: array
-          title: Results
-      type: object
-      required:
-      - results
-      title: AdminMemorySearchResponse
-    AdminApplyReferralRequest:
-      properties:
-        user_email:
-          type: string
-          format: email
-          title: User Email
-        referral_code:
-          type: string
-          maxLength: 50
-          minLength: 1
-          title: Referral Code
-      type: object
-      required:
-      - user_email
-      - referral_code
-      title: AdminApplyReferralRequest
-      description: Request model for applying a referral code to a user on their behalf.
-    AdminUpdateStripeCustomerIdRequest:
-      properties:
-        user_id:
-          type: string
-          title: User Id
-        stripe_customer_id:
-          type: string
-          minLength: 1
-          title: Stripe Customer Id
-        dry_run:
-          type: boolean
-          title: Dry Run
-          default: true
-      type: object
-      required:
-      - user_id
-      - stripe_customer_id
-      title: AdminUpdateStripeCustomerIdRequest
-    FlowStateProfilePreviewItem:
-      properties:
-        user_id:
-          type: string
-          title: User Id
-        email:
-          type: string
-          title: Email
-        eligibility_word_count:
-          type: integer
-          title: Eligibility Word Count
-        generated_at:
-          type: string
-          format: date-time
-          title: Generated At
-        send_status:
-          type: string
-          title: Send Status
-        send_attempts:
-          type: integer
-          title: Send Attempts
-        sent_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Sent At
-        send_error:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Send Error
-        profile:
-          type: object
-          title: Profile
-      type: object
-      required:
-      - user_id
-      - email
-      - eligibility_word_count
-      - generated_at
-      - send_status
-      - send_attempts
-      - profile
-      title: FlowStateProfilePreviewItem
-      description: Generated Flow State profile row for internal admin preview.
-    BillingAddress:
-      properties:
-        line1:
-          anyOf:
-          - type: string
-            maxLength: 500
-          - type: 'null'
-          title: Line1
-        line2:
-          anyOf:
-          - type: string
-            maxLength: 500
-          - type: 'null'
-          title: Line2
-        city:
-          anyOf:
-          - type: string
-            maxLength: 500
-          - type: 'null'
-          title: City
-        state:
-          anyOf:
-          - type: string
-            maxLength: 500
-          - type: 'null'
-          title: State
-        postal_code:
-          anyOf:
-          - type: string
-            maxLength: 500
-          - type: 'null'
-          title: Postal Code
-        country:
-          anyOf:
-          - type: string
-            maxLength: 2
-            minLength: 2
-            pattern: ^[A-Z]{2}$
-          - type: 'null'
-          title: Country
-          description: ISO 3166-1 alpha-2 country code (uppercase, e.g. 'US', 'GB')
-      type: object
-      title: BillingAddress
-      description: 'Billing address fields propagated to the Stripe customer address object.
-
-
-        All fields optional so admins can supply partial info. ISO 3166-1 alpha-2
-
-        country code (e.g. "US", "GB") is what Stripe expects.'
-    FlowStateProfilePreviewResponse:
-      properties:
-        total:
-          type: integer
-          title: Total
-        items:
-          items:
-            $ref: '#/components/schemas/FlowStateProfilePreviewItem'
-          type: array
-          title: Items
-      type: object
-      required:
-      - total
-      - items
-      title: FlowStateProfilePreviewResponse
-      description: Paginated generated profile preview.
-    EnterpriseBillingConfigListResponse:
-      properties:
-        configs:
-          items:
-            $ref: '#/components/schemas/EnterpriseBillingConfigResponse'
-          type: array
-          title: Configs
-      type: object
-      required:
-      - configs
-      title: EnterpriseBillingConfigListResponse
-      description: Response model for list of billing configs.
+      - id
+      - name
+      - status
+      title: EnterpriseListItem
+      description: Response model for an enterprise in a list
     CommitResponse:
       properties:
         ok:
@@ -3155,89 +2981,142 @@ components:
         can show what happened. No audit row is persisted; see the structured log
 
         line emitted by ``BillingOpsService.commit`` for the operational record.'
-    UpdateWorkosDirectoryIdRequest:
+    ProvisionedCostCenterSummary:
       properties:
-        workos_directory_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Workos Directory Id
+        id:
+          type: string
+          format: uuid
+          title: Id
+        name:
+          type: string
+          title: Name
       type: object
       required:
-      - workos_directory_id
-      title: UpdateWorkosDirectoryIdRequest
-      description: Request model for setting or unlinking workos_directory_id on an enterprise.
-    ListCostCentersResponse:
+      - id
+      - name
+      title: ProvisionedCostCenterSummary
+      description: The cost center created by a successful provision.
+    CampaignListResponse:
       properties:
-        cost_centers:
+        campaigns:
           items:
-            $ref: '#/components/schemas/CostCenterListItem'
+            $ref: '#/components/schemas/CampaignListItem'
           type: array
-          title: Cost Centers
-      type: object
-      required:
-      - cost_centers
-      title: ListCostCentersResponse
-      description: 'Cost centers under an enterprise, sorted by ``created_at`` ascending.
-
-
-        The UI uses this to populate a picker before running a billing op: when an
-
-        enterprise has exactly one cost_center the picker auto-selects it; with
-
-        multiple, the operator must choose explicitly.'
-    EnterpriseMembersResponse:
-      properties:
-        members:
-          items:
-            $ref: '#/components/schemas/EnterpriseMember'
-          type: array
-          title: Members
+          title: Campaigns
         total:
           type: integer
           title: Total
-        limit:
-          type: integer
-          title: Limit
-        offset:
-          type: integer
-          title: Offset
       type: object
       required:
-      - members
+      - campaigns
       - total
-      - limit
-      - offset
-      title: EnterpriseMembersResponse
-      description: Response model for list of enterprise members with pagination
-    PricingTierSchema:
+      title: CampaignListResponse
+      description: A page of promo campaigns with a total count.
+    AddUsersToEnterpriseResponse:
       properties:
-        max_seats:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Max Seats
-          description: Maximum seats in this tier (None = unlimited)
-        price_cents_per_seat_per_year:
+        added_count:
           type: integer
-          minimum: 0.0
-          title: Price Cents Per Seat Per Year
-          description: Price per seat per year in cents
+          title: Added Count
+        created_count:
+          type: integer
+          title: Created Count
+          default: 0
+        skipped_count:
+          type: integer
+          title: Skipped Count
+          default: 0
+        failed:
+          items:
+            $ref: '#/components/schemas/FailedAddUserItem'
+          type: array
+          title: Failed
+          default: []
       type: object
       required:
-      - price_cents_per_seat_per_year
-      title: PricingTierSchema
-      description: Schema for a single pricing tier.
-    Body_add_users_to_enterprise_file_upload_api_v1_internal_enterprises__enterprise_id__members_upload_post:
+      - added_count
+      title: AddUsersToEnterpriseResponse
+      description: Response model for bulk add users operation
+    AddEnterpriseDomainRequest:
       properties:
-        file:
+        enterprise_id:
           type: string
-          contentMediaType: application/octet-stream
-          title: File
+          format: uuid
+          title: Enterprise Id
+        domain:
+          type: string
+          minLength: 3
+          pattern: ^[^@\s]+\.[^@\s]+$
+          title: Domain
+          description: Domain to add (e.g. acme.com)
+        allow_forbidden_domain:
+          type: boolean
+          title: Allow Forbidden Domain
+          description: Allow adding forbidden domains (e.g. .edu)
+          default: false
       type: object
       required:
-      - file
-      title: Body_add_users_to_enterprise_file_upload_api_v1_internal_enterprises__enterprise_id__members_upload_post
+      - enterprise_id
+      - domain
+      title: AddEnterpriseDomainRequest
+      description: Request model for adding a domain to an enterprise.
+    InternalCostCenterProvisionResponse:
+      properties:
+        cost_center:
+          $ref: '#/components/schemas/ProvisionedCostCenterSummary'
+        team:
+          $ref: '#/components/schemas/ProvisionedTeamSummary'
+        invoice:
+          $ref: '#/components/schemas/ProvisionedInvoiceSummary'
+        stripe_subscription_id:
+          type: string
+          title: Stripe Subscription Id
+      type: object
+      required:
+      - cost_center
+      - team
+      - invoice
+      - stripe_subscription_id
+      title: InternalCostCenterProvisionResponse
+      description: 'Successful-provision result: the created cost center, team, and invoice.'
+    AdminMemorySearchResult:
+      properties:
+        email:
+          type: string
+          title: Email
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        status:
+          type: string
+          enum:
+          - ok
+          - no_memories
+          - user_not_found
+          - error
+          title: Status
+        facts:
+          items:
+            type: object
+          type: array
+          title: Facts
+        nodes:
+          items:
+            type: object
+          type: array
+          title: Nodes
+        error_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error Code
+      type: object
+      required:
+      - email
+      - status
+      title: AdminMemorySearchResult
+      description: Per-user search result. Payload dicts are stripped of internal Graphiti identifiers.
     GenerateAndSendFlowStateRequest:
       properties:
         reporting_month:
@@ -3266,525 +3145,6 @@ components:
       - reporting_month
       title: GenerateAndSendFlowStateRequest
       description: Request body for the backend-owned all-user generate-and-send endpoint.
-    BlockedDomainsListResponse:
-      properties:
-        blocked_domains:
-          items:
-            $ref: '#/components/schemas/BlockedDomainItem'
-          type: array
-          title: Blocked Domains
-        total:
-          type: integer
-          title: Total
-      type: object
-      required:
-      - blocked_domains
-      - total
-      title: BlockedDomainsListResponse
-      description: Response model for list of blocked domains.
-    RemoveUsersFromEnterpriseRequest:
-      properties:
-        emails:
-          items:
-            type: string
-            format: email
-          type: array
-          maxItems: 100
-          title: Emails
-          description: List of user emails to remove (max 100)
-      type: object
-      required:
-      - emails
-      title: RemoveUsersFromEnterpriseRequest
-      description: Request model for removing users from an enterprise by email
-    UpdateEnterpriseSettingsRequest:
-      properties:
-        settings:
-          type: object
-          title: Settings
-      type: object
-      required:
-      - settings
-      title: UpdateEnterpriseSettingsRequest
-    PendingInvoiceResponse:
-      properties:
-        pending_invoice_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Pending Invoice Id
-      type: object
-      title: PendingInvoiceResponse
-      description: Response model for checking pending invoice status.
-    ListOperationsResponse:
-      properties:
-        operations:
-          items:
-            $ref: '#/components/schemas/OperationDescriptor'
-          type: array
-          title: Operations
-      type: object
-      required:
-      - operations
-      title: ListOperationsResponse
-    CreateCodesRequest:
-      properties:
-        codes:
-          items:
-            type: string
-          type: array
-          minItems: 1
-          title: Codes
-        max_redemptions:
-          anyOf:
-          - type: integer
-            minimum: 1.0
-          - type: 'null'
-          title: Max Redemptions
-      type: object
-      required:
-      - codes
-      title: CreateCodesRequest
-      description: Request to create one or more promo codes for a campaign.
-    CreateEnterpriseFromAdminRequest:
-      properties:
-        admin_email:
-          type: string
-          format: email
-          title: Admin Email
-        enterprise_domain:
-          type: string
-          minLength: 1
-          title: Enterprise Domain
-          description: Domain cannot be empty
-        enterprise_name:
-          type: string
-          minLength: 1
-          title: Enterprise Name
-          description: Name cannot be empty
-        preserve_contracted_seats:
-          type: boolean
-          title: Preserve Contracted Seats
-          description: If true, seats are never automatically reduced
-          default: false
-        billing_info:
-          anyOf:
-          - $ref: '#/components/schemas/BillingInfo'
-          - type: 'null'
-          description: Optional Stripe billing contact email + address. Stripe customer name is always enterprise_name.
-        create_admin_user_if_missing:
-          type: boolean
-          title: Create Admin User If Missing
-          description: If true and admin_email has no Wispr user, provision one (requires admin_first_name and admin_last_name).
-          default: false
-        admin_first_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Admin First Name
-          description: First name for the new admin user (required if create_admin_user_if_missing).
-        admin_last_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Admin Last Name
-          description: Last name for the new admin user (required if create_admin_user_if_missing).
-      type: object
-      required:
-      - admin_email
-      - enterprise_domain
-      - enterprise_name
-      title: CreateEnterpriseFromAdminRequest
-      description: Request model for creating an enterprise with an admin user.
-    ToggleDomainDeletedResponse:
-      properties:
-        message:
-          type: string
-          title: Message
-        workos_synced:
-          type: boolean
-          title: Workos Synced
-          description: Whether active domains were successfully synced to WorkOS
-          default: true
-      type: object
-      required:
-      - message
-      title: ToggleDomainDeletedResponse
-      description: Response model for toggling domain deleted status.
-    AdminMemorySearchRequest:
-      properties:
-        emails:
-          items:
-            type: string
-            format: email
-          type: array
-          maxItems: 25
-          minItems: 1
-          title: Emails
-        reason:
-          type: string
-          maxLength: 500
-          minLength: 3
-          title: Reason
-          description: Required justification for accessing these users' private memory; recorded in the audit log.
-        context:
-          type: string
-          maxLength: 500
-          minLength: 1
-          title: Context
-        max_facts:
-          type: integer
-          maximum: 50.0
-          minimum: 1.0
-          title: Max Facts
-          default: 10
-        max_nodes:
-          type: integer
-          maximum: 50.0
-          minimum: 1.0
-          title: Max Nodes
-          default: 10
-      type: object
-      required:
-      - emails
-      - reason
-      - context
-      title: AdminMemorySearchRequest
-      description: 'Super-admin request: semantic-search each user''s voice memory by ``context``.'
-    AddBlockedDomainResponse:
-      properties:
-        warning:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Warning
-      type: object
-      title: AddBlockedDomainResponse
-      description: Response model for adding a blocked domain.
-    UpdateEnterpriseGatesRequest:
-      properties:
-        gates:
-          additionalProperties:
-            type: boolean
-          type: object
-          title: Gates
-      type: object
-      required:
-      - gates
-      title: UpdateEnterpriseGatesRequest
-    Currency:
-      type: string
-      enum:
-      - usd
-      - gbp
-      - eur
-      - inr
-      - cad
-      - cny
-      - aud
-      - rub
-      - pln
-      - brl
-      - ils
-      - try
-      - jpy
-      - chf
-      - mxn
-      - aed
-      - sek
-      - sgd
-      - zar
-      - nzd
-      - thb
-      - twd
-      - czk
-      - krw
-      title: Currency
-      description: Supported billing currencies as lowercase ISO 4217 codes.
-    MarketingJobStatusResponse:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-        job_type:
-          type: string
-          title: Job Type
-        reporting_month:
-          type: string
-          format: date
-          title: Reporting Month
-        status:
-          type: string
-          title: Status
-        total:
-          type: integer
-          title: Total
-        succeeded:
-          type: integer
-          title: Succeeded
-        failed:
-          type: integer
-          title: Failed
-        stage:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Stage
-        started_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Started At
-        completed_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Completed At
-        error:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Error
-      type: object
-      required:
-      - id
-      - job_type
-      - reporting_month
-      - status
-      - total
-      - succeeded
-      - failed
-      title: MarketingJobStatusResponse
-      description: Latest persisted state of a marketing generate-or-send job.
-    DisbandEnterpriseRequest:
-      properties:
-        reason:
-          type: string
-          maxLength: 500
-          minLength: 1
-          title: Reason
-          description: Reason for disbanding the enterprise
-      type: object
-      required:
-      - reason
-      title: DisbandEnterpriseRequest
-      description: Request model for disbanding an enterprise.
-    UpdatePreserveContractedSeatsRequest:
-      properties:
-        preserve_contracted_seats:
-          type: boolean
-          title: Preserve Contracted Seats
-      type: object
-      required:
-      - preserve_contracted_seats
-      title: UpdatePreserveContractedSeatsRequest
-      description: Request model for toggling preserve_contracted_seats on an enterprise.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    BillingInfo:
-      properties:
-        billing_contact:
-          anyOf:
-          - type: string
-            format: email
-          - type: 'null'
-          title: Billing Contact
-        address:
-          anyOf:
-          - $ref: '#/components/schemas/BillingAddress'
-          - type: 'null'
-      type: object
-      title: BillingInfo
-      description: 'Billing info propagated to the Stripe customer record.
-
-
-        `billing_contact` is the email Stripe sends invoices and receipts to;
-
-        overrides the Stripe customer''s `email` (which otherwise defaults to the
-
-        admin user''s address). The Stripe customer `name` is always set to the
-
-        enterprise name server-side.'
-    CampaignStatus:
-      type: string
-      enum:
-      - active
-      - paused
-      - ended
-      - archived
-      title: CampaignStatus
-      description: Lifecycle status of a promotional campaign.
-    GenerateFlowStateRequest:
-      properties:
-        reporting_month:
-          type: string
-          format: date
-          title: Reporting Month
-        min_word_count:
-          type: integer
-          title: Min Word Count
-          default: 500
-        min_app_count:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Min App Count
-        user_ids:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: User Ids
-        emails:
-          anyOf:
-          - items:
-              type: string
-              format: email
-            type: array
-          - type: 'null'
-          title: Emails
-        domain:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Domain
-        all_users:
-          type: boolean
-          title: All Users
-          default: false
-      type: object
-      required:
-      - reporting_month
-      title: GenerateFlowStateRequest
-      description: Request body for the marketing profile generation endpoint.
-    AdminApplyReferralResponse:
-      properties:
-        message:
-          type: string
-          title: Message
-      type: object
-      required:
-      - message
-      title: AdminApplyReferralResponse
-      description: Response model for admin referral application.
-    AdminUpdateStripeCustomerIdResponse:
-      properties:
-        user_id:
-          type: string
-          title: User Id
-        old_stripe_customer_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Old Stripe Customer Id
-        new_stripe_customer_id:
-          type: string
-          title: New Stripe Customer Id
-        stripe_customer_email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Stripe Customer Email
-        applied:
-          type: boolean
-          title: Applied
-        warnings:
-          items:
-            type: string
-          type: array
-          title: Warnings
-      type: object
-      required:
-      - user_id
-      - old_stripe_customer_id
-      - new_stripe_customer_id
-      - stripe_customer_email
-      - applied
-      - warnings
-      title: AdminUpdateStripeCustomerIdResponse
-    EnterpriseListItem:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-        name:
-          type: string
-          title: Name
-        status:
-          $ref: '#/components/schemas/EnterpriseStatus'
-      type: object
-      required:
-      - id
-      - name
-      - status
-      title: EnterpriseListItem
-      description: Response model for an enterprise in a list
-    InvoiceSummary:
-      properties:
-        id:
-          type: string
-          title: Id
-        number:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Number
-        status:
-          type: string
-          title: Status
-        amount_due:
-          type: integer
-          title: Amount Due
-          description: Amount due in the currency's minor unit (e.g. cents).
-        currency:
-          type: string
-          title: Currency
-        created:
-          type: string
-          format: date-time
-          title: Created
-        due_date:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Due Date
-        hosted_invoice_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Hosted Invoice Url
-      type: object
-      required:
-      - id
-      - number
-      - status
-      - amount_due
-      - currency
-      - created
-      - due_date
-      - hosted_invoice_url
-      title: InvoiceSummary
-      description: 'A minimal Stripe invoice projection for the operator-UI picker.
-
-
-        Fields are taken directly from the Stripe ``Invoice`` object. ``amount_due``
-
-        is in the currency''s minor unit (cents for USD). ``number`` is null on
-
-        invoices that have never been finalized (drafts).'
     CreateSalesLedEnterpriseCustomBillingRequest:
       properties:
         email:
@@ -3867,6 +3227,772 @@ components:
         surfaces the auth escalation in the route signature and OpenAPI rather
 
         than hiding it behind a runtime branch.'
+    EnterprisePilotItem:
+      properties:
+        enterprise_id:
+          type: string
+          title: Enterprise Id
+        enterprise_name:
+          type: string
+          title: Enterprise Name
+        pilot_end:
+          type: string
+          format: date-time
+          title: Pilot End
+        stripe_subscription_id:
+          type: string
+          title: Stripe Subscription Id
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        status:
+          type: string
+          title: Status
+      type: object
+      required:
+      - enterprise_id
+      - enterprise_name
+      - pilot_end
+      - stripe_subscription_id
+      - created_at
+      - status
+      title: EnterprisePilotItem
+      description: Single enterprise pilot item for list response.
+    RemoveUsersFromEnterpriseResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+        removed_count:
+          type: integer
+          title: Removed Count
+      type: object
+      required:
+      - message
+      - removed_count
+      title: RemoveUsersFromEnterpriseResponse
+      description: Response model for remove users operation
+    Body_remove_users_from_enterprise_file_upload_api_v1_internal_enterprises__enterprise_id__members_remove_upload_post:
+      properties:
+        file:
+          type: string
+          contentMediaType: application/octet-stream
+          title: File
+      type: object
+      required:
+      - file
+      title: Body_remove_users_from_enterprise_file_upload_api_v1_internal_enterprises__enterprise_id__members_remove_upload_post
+    TranscriptSpeaker:
+      properties:
+        id:
+          type: integer
+          title: Id
+        source:
+          $ref: '#/components/schemas/TranscriptSpeakerSource'
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+      additionalProperties: false
+      type: object
+      required:
+      - id
+      - source
+      - name
+      title: TranscriptSpeaker
+      description: Canonical speaker identity; source and ID form the stable key.
+    MarketingJobResponse:
+      properties:
+        job_id:
+          type: string
+          format: uuid
+          title: Job Id
+        message:
+          type: string
+          title: Message
+        log_query:
+          type: string
+          title: Log Query
+      type: object
+      required:
+      - job_id
+      - message
+      - log_query
+      title: MarketingJobResponse
+      description: Response returned after kicking off a generate-or-send job.
+    AdminUpdateStripeCustomerIdRequest:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        stripe_customer_id:
+          type: string
+          minLength: 1
+          title: Stripe Customer Id
+        dry_run:
+          type: boolean
+          title: Dry Run
+          default: true
+      type: object
+      required:
+      - user_id
+      - stripe_customer_id
+      title: AdminUpdateStripeCustomerIdRequest
+    AdminMemoryListResponse:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/AdminMemoryListResult'
+          type: array
+          title: Results
+      type: object
+      required:
+      - results
+      title: AdminMemoryListResponse
+    AddEnterpriseDomainResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+        workos_synced:
+          type: boolean
+          title: Workos Synced
+          description: Whether the domain was successfully synced to WorkOS (only relevant for SSO-enabled enterprises)
+          default: true
+      type: object
+      required:
+      - message
+      title: AddEnterpriseDomainResponse
+      description: Response model for adding a domain to an enterprise.
+    ConsensusPreviewResponse:
+      properties:
+        meeting_id:
+          type: string
+          format: uuid
+          title: Meeting Id
+        requested_algorithm_id:
+          $ref: '#/components/schemas/AlgorithmId'
+        consensus_mode:
+          $ref: '#/components/schemas/ConsensusActualMode'
+        algorithm_version:
+          type: integer
+          title: Algorithm Version
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reason
+        signal_quality:
+          $ref: '#/components/schemas/SignalQuality'
+        speaker_map:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Speaker Map
+        entries:
+          items:
+            $ref: '#/components/schemas/TranscriptEntry'
+          type: array
+          title: Entries
+      type: object
+      required:
+      - meeting_id
+      - requested_algorithm_id
+      - consensus_mode
+      - algorithm_version
+      - signal_quality
+      title: ConsensusPreviewResponse
+      description: Ephemeral, non-persisted consensus preview result.
+    ProvisionedTeamSummary:
+      properties:
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - name
+      title: ProvisionedTeamSummary
+      description: The team created by a successful provision.
+    AddUsersToEnterpriseRequest:
+      properties:
+        users:
+          items:
+            $ref: '#/components/schemas/UserInput'
+          type: array
+          maxItems: 100
+          title: Users
+          description: List of users to add (max 100)
+        role:
+          $ref: '#/components/schemas/EnterpriseRole'
+          default: member
+        create_missing_users:
+          type: boolean
+          title: Create Missing Users
+          default: false
+      type: object
+      required:
+      - users
+      title: AddUsersToEnterpriseRequest
+      description: Request model for bulk adding users to an enterprise.
+    DomainVerificationInitiateResponse:
+      properties:
+        domain_id:
+          type: string
+          title: Domain Id
+        enterprise_id:
+          type: string
+          title: Enterprise Id
+        domain:
+          type: string
+          title: Domain
+        verified:
+          type: boolean
+          title: Verified
+        verified_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Verified At
+        verification_initiated_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Verification Initiated At
+        record:
+          anyOf:
+          - $ref: '#/components/schemas/DomainVerificationRecord'
+          - type: 'null'
+      type: object
+      required:
+      - domain_id
+      - enterprise_id
+      - domain
+      - verified
+      - verified_at
+      - verification_initiated_at
+      - record
+      title: DomainVerificationInitiateResponse
+      description: 'Response returned by the superadmin ``initiate-verification`` endpoint.
+
+
+        Narrower than :class:`DomainVerificationStatus` — does not expose check
+
+        counters or capture policy, only what is needed to issue the TXT record.'
+    CreateSalesLedEnterpriseResponse:
+      properties:
+        enterprise_id:
+          type: string
+          title: Enterprise Id
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - enterprise_id
+      - message
+      title: CreateSalesLedEnterpriseResponse
+      description: Response model for creating a sales-led enterprise.
+    InternalCostCenterProvisionRequest:
+      properties:
+        enterprise_id:
+          type: string
+          format: uuid
+          title: Enterprise Id
+        user_id:
+          type: string
+          format: uuid
+          title: User Id
+          description: 'Picked user: becomes the cost center''s billing owner and invoice recipient'
+        team_name:
+          type: string
+          maxLength: 100
+          minLength: 1
+          title: Team Name
+        committed_seats:
+          type: integer
+          maximum: 10000.0
+          minimum: 1.0
+          title: Committed Seats
+          description: Committed seat count (high-water mark) the subscription is created with
+        idempotency_root:
+          type: string
+          maxLength: 128
+          minLength: 1
+          title: Idempotency Root
+          description: Client-minted per commit; keys the Stripe create calls so a double submit can't duplicate them
+      type: object
+      required:
+      - enterprise_id
+      - user_id
+      - team_name
+      - committed_seats
+      - idempotency_root
+      title: InternalCostCenterProvisionRequest
+      description: Shared body for preview-provision and provision (same payload for both).
+    DirectorySyncStartedResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+        log_query:
+          type: string
+          title: Log Query
+      type: object
+      required:
+      - message
+      - log_query
+      title: DirectorySyncStartedResponse
+      description: Response for async directory sync endpoints (202 Accepted).
+    DomainCapturePolicy:
+      type: string
+      enum:
+      - unset
+      - 'off'
+      - require
+      title: DomainCapturePolicy
+      description: 'Whether unclaimed users on a verified domain are required to request to join the enterprise.
+
+
+        ``unset`` indicates the admin has not chosen a policy — distinct from explicitly ``off``.
+
+        Both ``off`` and ``require`` require a DNS-verified domain before they may be set;
+
+        ``unset`` is the only value allowed when no domain has been verified yet.
+
+        ``off`` means that they have intentionally turned off domain capture so users can keep using flow without being prompted to join the enterprise.'
+    DisbandEnterpriseRequest:
+      properties:
+        reason:
+          type: string
+          maxLength: 500
+          minLength: 1
+          title: Reason
+          description: Reason for disbanding the enterprise
+      type: object
+      required:
+      - reason
+      title: DisbandEnterpriseRequest
+      description: Request model for disbanding an enterprise.
+    AddBlockedDomainResponse:
+      properties:
+        warning:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Warning
+      type: object
+      title: AddBlockedDomainResponse
+      description: Response model for adding a blocked domain.
+    DirectorySyncPreview:
+      properties:
+        enterprise_id:
+          type: string
+          format: uuid
+          title: Enterprise Id
+        enterprise_name:
+          type: string
+          title: Enterprise Name
+        workos_directory_user_count:
+          type: integer
+          title: Workos Directory User Count
+        db_user_count:
+          type: integer
+          title: Db User Count
+        to_provision:
+          items:
+            $ref: '#/components/schemas/DirectorySyncUserAction'
+          type: array
+          title: To Provision
+        to_remove:
+          items:
+            $ref: '#/components/schemas/DirectorySyncUserAction'
+          type: array
+          title: To Remove
+        to_link:
+          items:
+            $ref: '#/components/schemas/DirectorySyncUserAction'
+          type: array
+          title: To Link
+      type: object
+      required:
+      - enterprise_id
+      - enterprise_name
+      - workos_directory_user_count
+      - db_user_count
+      - to_provision
+      - to_remove
+      - to_link
+      title: DirectorySyncPreview
+      description: Dry-run diff of a directory sync, shown to the admin before confirming.
+    TranscriptSpeakerSource:
+      type: string
+      enum:
+      - mic
+      - system
+      - refined
+      title: TranscriptSpeakerSource
+      description: The transcript identity namespace that produced a speaker ID.
+    ProvisionedInvoiceSummary:
+      properties:
+        stripe_invoice_id:
+          type: string
+          title: Stripe Invoice Id
+        status:
+          type: string
+          enum:
+          - sent
+          - already_paid
+          title: Status
+      type: object
+      required:
+      - stripe_invoice_id
+      - status
+      title: ProvisionedInvoiceSummary
+      description: The invoice sent (or already paid) by a successful provision.
+    FailedAddUserItem:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        reason:
+          type: string
+          title: Reason
+      type: object
+      required:
+      - email
+      - reason
+      title: FailedAddUserItem
+      description: Details about a user that failed to be added
+    BillingAddress:
+      properties:
+        line1:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Line1
+        line2:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Line2
+        city:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: City
+        state:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: State
+        postal_code:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Postal Code
+        country:
+          anyOf:
+          - type: string
+            maxLength: 2
+            minLength: 2
+            pattern: ^[A-Z]{2}$
+          - type: 'null'
+          title: Country
+          description: ISO 3166-1 alpha-2 country code (uppercase, e.g. 'US', 'GB')
+      type: object
+      title: BillingAddress
+      description: 'Billing address fields propagated to the Stripe customer address object.
+
+
+        All fields optional so admins can supply partial info. ISO 3166-1 alpha-2
+
+        country code (e.g. "US", "GB") is what Stripe expects.'
+    AdminMemorySearchRequest:
+      properties:
+        emails:
+          items:
+            type: string
+            format: email
+          type: array
+          maxItems: 25
+          minItems: 1
+          title: Emails
+        reason:
+          type: string
+          maxLength: 500
+          minLength: 3
+          title: Reason
+          description: Required justification for accessing these users' private memory; recorded in the audit log.
+        context:
+          type: string
+          maxLength: 500
+          minLength: 1
+          title: Context
+        max_facts:
+          type: integer
+          maximum: 50.0
+          minimum: 1.0
+          title: Max Facts
+          default: 10
+        max_nodes:
+          type: integer
+          maximum: 50.0
+          minimum: 1.0
+          title: Max Nodes
+          default: 10
+      type: object
+      required:
+      - emails
+      - reason
+      - context
+      title: AdminMemorySearchRequest
+      description: 'Super-admin request: semantic-search each user''s voice memory by ``context``.'
+    ConsensusActualMode:
+      type: string
+      enum:
+      - anonymous
+      - cluster
+      - segment
+      title: ConsensusActualMode
+      description: The implementation path that produced a preview result.
+    InvoiceSummary:
+      properties:
+        id:
+          type: string
+          title: Id
+        number:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Number
+        status:
+          type: string
+          title: Status
+        amount_due:
+          type: integer
+          title: Amount Due
+          description: Amount due in the currency's minor unit (e.g. cents).
+        currency:
+          type: string
+          title: Currency
+        created:
+          type: string
+          format: date-time
+          title: Created
+        due_date:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Due Date
+        hosted_invoice_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Hosted Invoice Url
+      type: object
+      required:
+      - id
+      - number
+      - status
+      - amount_due
+      - currency
+      - created
+      - due_date
+      - hosted_invoice_url
+      title: InvoiceSummary
+      description: 'A minimal Stripe invoice projection for the operator-UI picker.
+
+
+        Fields are taken directly from the Stripe ``Invoice`` object. ``amount_due``
+
+        is in the currency''s minor unit (cents for USD). ``number`` is null on
+
+        invoices that have never been finalized (drafts).'
+    SignalQuality:
+      properties:
+        vote_margin:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Vote Margin
+        tile_agreement:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Tile Agreement
+        tile_log_event_count:
+          type: integer
+          title: Tile Log Event Count
+        tile_log_cadence_ms:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Tile Log Cadence Ms
+        tile_log_longest_gap_ms:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tile Log Longest Gap Ms
+        cluster_count:
+          type: integer
+          title: Cluster Count
+        token_confidence_avg:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Token Confidence Avg
+        token_confidence_min:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Token Confidence Min
+        token_count:
+          type: integer
+          title: Token Count
+      type: object
+      required:
+      - tile_log_event_count
+      - cluster_count
+      - token_count
+      title: SignalQuality
+      description: Bounded diagnostics emitted by the consensus engine.
+    MarketingJobStatusResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        job_type:
+          type: string
+          title: Job Type
+        reporting_month:
+          type: string
+          format: date
+          title: Reporting Month
+        status:
+          type: string
+          title: Status
+        total:
+          type: integer
+          title: Total
+        succeeded:
+          type: integer
+          title: Succeeded
+        failed:
+          type: integer
+          title: Failed
+        stage:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stage
+        started_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Started At
+        completed_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Completed At
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+      type: object
+      required:
+      - id
+      - job_type
+      - reporting_month
+      - status
+      - total
+      - succeeded
+      - failed
+      title: MarketingJobStatusResponse
+      description: Latest persisted state of a marketing generate-or-send job.
+    AdminMemoryListRequest:
+      properties:
+        emails:
+          items:
+            type: string
+            format: email
+          type: array
+          maxItems: 25
+          minItems: 1
+          title: Emails
+        reason:
+          type: string
+          maxLength: 500
+          minLength: 3
+          title: Reason
+          description: Required justification for accessing these users' private memory; recorded in the audit log.
+        limit:
+          type: integer
+          maximum: 500.0
+          minimum: 1.0
+          title: Limit
+          default: 100
+      type: object
+      required:
+      - emails
+      - reason
+      title: AdminMemoryListRequest
+      description: 'Super-admin request: list all stored voice memories for each user.'
+    BlockedDomainsListResponse:
+      properties:
+        blocked_domains:
+          items:
+            $ref: '#/components/schemas/BlockedDomainItem'
+          type: array
+          title: Blocked Domains
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - blocked_domains
+      - total
+      title: BlockedDomainsListResponse
+      description: Response model for list of blocked domains.
+    CommitRequest:
+      properties:
+        cost_center_id:
+          type: string
+          format: uuid
+          title: Cost Center Id
+          description: Cost center the operation targets. Stripe customer/subscription artifacts are keyed on cost_center, not enterprise.
+        operation_kind:
+          type: string
+          title: Operation Kind
+        input:
+          type: object
+          title: Input
+        idempotency_root:
+          type: string
+          maxLength: 64
+          minLength: 1
+          title: Idempotency Root
+          description: Client-generated key (typically a UUID hex) mixed into every Stripe idempotency key emitted by this commit. The UI must generate it once per commit attempt and reuse it on retries so Stripe dedupes.
+      type: object
+      required:
+      - cost_center_id
+      - operation_kind
+      - input
+      - idempotency_root
+      title: CommitRequest
     SendFlowStateRequest:
       properties:
         reporting_month:
@@ -3915,106 +4041,26 @@ components:
         Requires at least one explicit filter (emails, domain, or user_ids) to prevent
 
         accidentally blasting every user with a profile for the reporting month.'
-    CreateEnterprisePilotRequest:
+    ToggleDomainDeletedRequest:
       properties:
-        email:
-          type: string
-          format: email
-          title: Email
-        domain:
-          type: string
-          title: Domain
-        enterprise_name:
-          type: string
-          title: Enterprise Name
-        trial_end:
-          type: string
-          format: date
-          title: Trial End
+        deleted:
+          type: boolean
+          title: Deleted
       type: object
       required:
-      - email
-      - domain
-      - enterprise_name
-      - trial_end
-      title: CreateEnterprisePilotRequest
-      description: Request model for creating an enterprise pilot.
-    UserInput:
+      - deleted
+      title: ToggleDomainDeletedRequest
+      description: Request model for toggling domain deleted status.
+    AdminApplyReferralResponse:
       properties:
-        email:
+        message:
           type: string
-          format: email
-          title: Email
-        first_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: First Name
-        last_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Name
+          title: Message
       type: object
       required:
-      - email
-      title: UserInput
-      description: Input for a single user in bulk add operations.
-    CustomBillingConfigInput:
-      properties:
-        custom_unit_price_cents:
-          type: integer
-          minimum: 1.0
-          title: Custom Unit Price Cents
-          description: Per-seat USD price in cents over the plan's billing period (year for *_YEARLY plans, month for *_MONTHLY).
-      type: object
-      required:
-      - custom_unit_price_cents
-      title: CustomBillingConfigInput
-      description: 'Custom-pricing fields collected inline during sales-led enterprise creation.
-
-
-        All other billing-config fields are derived server-side: product_name from plan,
-
-        true_up_period_days from plan cadence, payment_terms_days from days_until_due,
-
-        currency is always USD (the sales-led subscription path is USD-only end-to-end —
-
-        platform-fee prices and the subscription currency arg are both USD).'
-    CodeListResponse:
-      properties:
-        codes:
-          items:
-            $ref: '#/components/schemas/CodeListItem'
-          type: array
-          title: Codes
-        total:
-          type: integer
-          title: Total
-      type: object
-      required:
-      - codes
-      - total
-      title: CodeListResponse
-      description: A page of promo codes with a total count.
-    ReactivateEnterprisePilotRequest:
-      properties:
-        trial_end:
-          type: string
-          format: date
-          title: Trial End
-      type: object
-      required:
-      - trial_end
-      title: ReactivateEnterprisePilotRequest
-      description: 'Request model for reactivating a canceled enterprise pilot.
-
-
-        The enterprise is identified by path param; the server resolves the
-
-        admin email + primary domain from existing records so callers don''t
-
-        have to re-supply them.'
+      - message
+      title: AdminApplyReferralResponse
+      description: Response model for admin referral application.
     CreateCampaignRequest:
       properties:
         name:
@@ -4070,6 +4116,150 @@ components:
       - source_name
       title: CreateCampaignRequest
       description: Request to create a promo campaign.
+    UpdateUserTrialEndRequest:
+      properties:
+        user_email:
+          type: string
+          format: email
+          title: User Email
+        trial_end:
+          type: string
+          format: date
+          title: Trial End
+          description: New trial end date (YYYY-MM-DD). The date is interpreted as 23:59:59 UTC on that day; the server rejects dates whose end-of-day UTC has already passed, and caps the value at 365 days from now (UTC).
+      type: object
+      required:
+      - user_email
+      - trial_end
+      title: UpdateUserTrialEndRequest
+      description: Request model for updating a user's personal trial end date (internal admin).
+    SendInvoiceRequest:
+      properties:
+        invoice_id:
+          type: string
+          minLength: 1
+          title: Invoice Id
+          description: Stripe draft invoice ID to finalize and send
+        po_number:
+          type: string
+          maxLength: 100
+          minLength: 1
+          title: Po Number
+          description: Purchase order number
+      type: object
+      required:
+      - invoice_id
+      - po_number
+      title: SendInvoiceRequest
+      description: Request model for sending a pending invoice.
+    UserInput:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+      type: object
+      required:
+      - email
+      title: UserInput
+      description: Input for a single user in bulk add operations.
+    EnterpriseRole:
+      type: string
+      enum:
+      - admin
+      - member
+      - superadmin
+      - it_admin
+      title: EnterpriseRole
+    RedemptionListItem:
+      properties:
+        id:
+          type: string
+          title: Id
+        user_id:
+          type: string
+          title: User Id
+        campaign_name:
+          type: string
+          title: Campaign Name
+        code_string:
+          type: string
+          title: Code String
+        outcome:
+          type: string
+          title: Outcome
+        trial_days_granted:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Trial Days Granted
+        stripe_subscription_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stripe Subscription Id
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+      type: object
+      required:
+      - id
+      - user_id
+      - campaign_name
+      - code_string
+      - outcome
+      - trial_days_granted
+      - stripe_subscription_id
+      - created_at
+      title: RedemptionListItem
+      description: A promo redemption summary row for the admin list view.
+    EnterpriseBillingConfigListResponse:
+      properties:
+        configs:
+          items:
+            $ref: '#/components/schemas/EnterpriseBillingConfigResponse'
+          type: array
+          title: Configs
+      type: object
+      required:
+      - configs
+      title: EnterpriseBillingConfigListResponse
+      description: Response model for list of billing configs.
+    BillingInfo:
+      properties:
+        billing_contact:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Billing Contact
+        address:
+          anyOf:
+          - $ref: '#/components/schemas/BillingAddress'
+          - type: 'null'
+      type: object
+      title: BillingInfo
+      description: 'Billing info propagated to the Stripe customer record.
+
+
+        `billing_contact` is the email Stripe sends invoices and receipts to;
+
+        overrides the Stripe customer''s `email` (which otherwise defaults to the
+
+        admin user''s address). The Stripe customer `name` is always set to the
+
+        enterprise name server-side.'
     AdminUserLookupResponse:
       properties:
         user_id:
@@ -4164,80 +4354,419 @@ components:
       - trial_ends_at
       title: AdminUserLookupResponse
       description: Admin view of a user's profile and subscription info.
-    AlgorithmId:
-      type: string
-      enum:
-      - cluster-v1
-      - segment-v3
-      title: AlgorithmId
-      description: Closed registry of consensus implementations exposed for preview.
-    BlockedDomainItem:
+    EnterpriseBillingConfigResponse:
       properties:
+        next_true_up_date:
+          type: string
+          format: date-time
+          title: Next True Up Date
+        true_up_period_days:
+          type: integer
+          enum:
+          - 30
+          - 90
+          - 365
+          title: True Up Period Days
+          description: Billing period in days (monthly, quarterly, annual)
+        stripe_price_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stripe Price Id
+          description: Stripe price ID. If omitted, resolved from product_name + currency.
+        product_name:
+          type: string
+          minLength: 1
+          title: Product Name
+        payment_terms_days:
+          type: integer
+          minimum: 1.0
+          title: Payment Terms Days
+          default: 7
+        custom_unit_price_cents:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Custom Unit Price Cents
+        pricing_tiers:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/PricingTierSchema'
+            type: array
+          - type: 'null'
+          title: Pricing Tiers
+        currency:
+          $ref: '#/components/schemas/Currency'
+          default: usd
+        seat_cap:
+          anyOf:
+          - type: integer
+            minimum: 1.0
+          - type: 'null'
+          title: Seat Cap
+          description: Maximum seats allowed for this enterprise
+        contract_end_date:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Contract End Date
+        contract_period_days:
+          anyOf:
+          - type: integer
+            minimum: 1.0
+          - type: 'null'
+          title: Contract Period Days
         id:
           type: string
           format: uuid
           title: Id
-        domain:
+        enterprise_id:
           type: string
-          title: Domain
-        notes:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Notes
-        created_by:
+          format: uuid
+          title: Enterprise Id
+        enterprise_name:
           type: string
-          title: Created By
+          title: Enterprise Name
         created_at:
           type: string
           format: date-time
           title: Created At
       type: object
       required:
+      - next_true_up_date
+      - true_up_period_days
+      - product_name
       - id
-      - domain
-      - notes
-      - created_by
+      - enterprise_id
+      - enterprise_name
       - created_at
-      title: BlockedDomainItem
-      description: Response model for a blocked domain.
-    TranscriptEntry:
+      title: EnterpriseBillingConfigResponse
+      description: Response model for a billing config.
+    AddBlockedDomainRequest:
       properties:
-        id:
+        domain:
           type: string
-          title: Id
-        timestamp:
-          type: string
-          title: Timestamp
-        text:
+          minLength: 1
+          title: Domain
+          description: Domain to block
+        notes:
           anyOf:
           - type: string
           - type: 'null'
-          title: Text
-        speaker:
-          anyOf:
-          - $ref: '#/components/schemas/TranscriptSpeaker'
-          - type: 'null'
-        latched:
-          type: boolean
-          title: Latched
-          default: false
-        marker:
-          anyOf:
-          - $ref: '#/components/schemas/TranscriptMarkerType'
-          - type: 'null'
-        label:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Label
-      additionalProperties: false
+          title: Notes
+          description: Optional notes/reason for blocking
       type: object
       required:
-      - id
-      - timestamp
-      title: TranscriptEntry
-      description: Generator-safe wire model enforcing the three persisted entry shapes.
+      - domain
+      title: AddBlockedDomainRequest
+      description: Request model for adding a domain to the block list.
+    PendingInvoiceResponse:
+      properties:
+        pending_invoice_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Pending Invoice Id
+      type: object
+      title: PendingInvoiceResponse
+      description: Response model for checking pending invoice status.
+    ListRecentInvoicesResponse:
+      properties:
+        draft:
+          anyOf:
+          - $ref: '#/components/schemas/InvoiceSummary'
+          - type: 'null'
+        open:
+          anyOf:
+          - $ref: '#/components/schemas/InvoiceSummary'
+          - type: 'null'
+      type: object
+      required:
+      - draft
+      - open
+      title: ListRecentInvoicesResponse
+      description: 'The two most-recent invoices an operator might want to act on.
+
+
+        ``open`` covers the past_due case as well — Stripe treats past_due as just
+
+        an ``open`` invoice past its due_date, so a single ``open`` slot is enough
+
+        for the picker. Acting on the ``open`` row triggers the void-and-reissue
+
+        flow inside ``add_po_to_invoice``; the ``draft`` row is editable in place.
+
+        Either slot may be null when no such invoice exists for the customer.'
+    FlowStateMonthSummaryResponse:
+      properties:
+        reporting_month:
+          type: string
+          format: date
+          title: Reporting Month
+          description: First day of the reporting month.
+        generated_total:
+          type: integer
+          title: Generated Total
+          description: Profiles generated for this reporting month.
+        pending_send_total:
+          type: integer
+          title: Pending Send Total
+          description: Generated profiles still pending send.
+        sent_total:
+          type: integer
+          title: Sent Total
+          description: Profiles already sent.
+        failed_send_total:
+          type: integer
+          title: Failed Send Total
+          description: Profiles whose send failed.
+        sending_total:
+          type: integer
+          title: Sending Total
+          description: Profiles currently claimed for send.
+        skipped_total:
+          type: integer
+          title: Skipped Total
+          description: Profiles skipped during send.
+        active_job:
+          anyOf:
+          - $ref: '#/components/schemas/MarketingJobStatusResponse'
+          - type: 'null'
+          description: Pending or running job for this reporting month.
+        latest_job:
+          anyOf:
+          - $ref: '#/components/schemas/MarketingJobStatusResponse'
+          - type: 'null'
+          description: Most recent job for this reporting month.
+        can_send_existing:
+          type: boolean
+          title: Can Send Existing
+          description: Whether already generated profiles can be sent.
+        can_regenerate_send:
+          type: boolean
+          title: Can Regenerate Send
+          description: Whether regenerate-and-send can be enqueued.
+      type: object
+      required:
+      - reporting_month
+      - generated_total
+      - pending_send_total
+      - sent_total
+      - failed_send_total
+      - sending_total
+      - skipped_total
+      - can_send_existing
+      - can_regenerate_send
+      title: FlowStateMonthSummaryResponse
+      description: Month-level Flow State generation/send state for the admin portal.
+    UpdatePilotEndResponse:
+      properties:
+        enterprise_id:
+          type: string
+          title: Enterprise Id
+        new_pilot_end:
+          type: string
+          format: date-time
+          title: New Pilot End
+      type: object
+      required:
+      - enterprise_id
+      - new_pilot_end
+      title: UpdatePilotEndResponse
+      description: Response model for updating an enterprise pilot end date.
+    CreateSalesLedEnterpriseRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        domain:
+          type: string
+          minLength: 1
+          title: Domain
+          description: Enterprise domain
+        enterprise_name:
+          type: string
+          minLength: 1
+          title: Enterprise Name
+          description: Enterprise name
+        plan:
+          $ref: '#/components/schemas/StripeProductOption'
+          description: Stripe plan (e.g. FLOW_BUSINESS_YEARLY)
+        seats:
+          type: integer
+          exclusiveMinimum: 0.0
+          title: Seats
+          description: Number of seats
+        platform_fee_monthly_rate:
+          type: integer
+          minimum: 0.0
+          title: Platform Fee Monthly Rate
+          description: Platform fee rate in $/month. For yearly plans, charged as 12x upfront. Must match a configured Stripe price.
+          default: 0
+        days_until_due:
+          type: integer
+          exclusiveMinimum: 0.0
+          title: Days Until Due
+          description: Payment terms in days (e.g., 30 for Net30)
+          default: 30
+        preserve_contracted_seats:
+          type: boolean
+          title: Preserve Contracted Seats
+          description: If true, seats are never automatically reduced
+          default: false
+        billing_info:
+          $ref: '#/components/schemas/BillingInfo'
+          description: 'Stripe billing contact email + address. Required for sales-led: contact + address.line1, city, postal_code, country must all be present; state is additionally required for US/CA.'
+        create_admin_user_if_missing:
+          type: boolean
+          title: Create Admin User If Missing
+          description: If true and email has no Wispr user, provision one (requires admin_first_name and admin_last_name).
+          default: false
+        admin_first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Admin First Name
+          description: First name for the new admin user (required if create_admin_user_if_missing).
+        admin_last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Admin Last Name
+          description: Last name for the new admin user (required if create_admin_user_if_missing).
+      type: object
+      required:
+      - email
+      - domain
+      - enterprise_name
+      - plan
+      - seats
+      - billing_info
+      title: CreateSalesLedEnterpriseRequest
+      description: Request model for creating a sales-led enterprise with deferred invoicing.
+    FlowStateProfilePreviewItem:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        email:
+          type: string
+          title: Email
+        eligibility_word_count:
+          type: integer
+          title: Eligibility Word Count
+        generated_at:
+          type: string
+          format: date-time
+          title: Generated At
+        send_status:
+          type: string
+          title: Send Status
+        send_attempts:
+          type: integer
+          title: Send Attempts
+        sent_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Sent At
+        send_error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Send Error
+        profile:
+          type: object
+          title: Profile
+      type: object
+      required:
+      - user_id
+      - email
+      - eligibility_word_count
+      - generated_at
+      - send_status
+      - send_attempts
+      - profile
+      title: FlowStateProfilePreviewItem
+      description: Generated Flow State profile row for internal admin preview.
+    Body_add_users_to_enterprise_file_upload_api_v1_internal_enterprises__enterprise_id__members_upload_post:
+      properties:
+        file:
+          type: string
+          contentMediaType: application/octet-stream
+          title: File
+      type: object
+      required:
+      - file
+      title: Body_add_users_to_enterprise_file_upload_api_v1_internal_enterprises__enterprise_id__members_upload_post
+    PreviewRequest:
+      properties:
+        cost_center_id:
+          type: string
+          format: uuid
+          title: Cost Center Id
+          description: Cost center the operation targets. Stripe customer/subscription artifacts are keyed on cost_center, not enterprise.
+        operation_kind:
+          type: string
+          title: Operation Kind
+        input:
+          type: object
+          title: Input
+      type: object
+      required:
+      - cost_center_id
+      - operation_kind
+      - input
+      title: PreviewRequest
+    CreateCodesResponse:
+      properties:
+        created_count:
+          type: integer
+          title: Created Count
+        created_codes:
+          items:
+            $ref: '#/components/schemas/CodeListItem'
+          type: array
+          title: Created Codes
+      type: object
+      required:
+      - created_count
+      - created_codes
+      title: CreateCodesResponse
+      description: 'Result of creating promo codes: count and the created rows.'
+    ListOperationsResponse:
+      properties:
+        operations:
+          items:
+            $ref: '#/components/schemas/OperationDescriptor'
+          type: array
+          title: Operations
+      type: object
+      required:
+      - operations
+      title: ListOperationsResponse
+    ReactivateEnterprisePilotRequest:
+      properties:
+        trial_end:
+          type: string
+          format: date
+          title: Trial End
+      type: object
+      required:
+      - trial_end
+      title: ReactivateEnterprisePilotRequest
+      description: 'Request model for reactivating a canceled enterprise pilot.
+
+
+        The enterprise is identified by path param; the server resolves the
+
+        admin email + primary domain from existing records so callers don''t
+
+        have to re-supply them.'
     InternalCostCenterProvisionPreviewResponse:
       properties:
         user_email:
@@ -4288,168 +4817,289 @@ components:
       - blocking_errors
       title: InternalCostCenterProvisionPreviewResponse
       description: Server-computed provisioning math plus warnings/blockers. No writes are performed.
-    CampaignListResponse:
+    EnterpriseBillingConfigCreate:
       properties:
-        campaigns:
-          items:
-            $ref: '#/components/schemas/CampaignListItem'
-          type: array
-          title: Campaigns
-        total:
+        next_true_up_date:
+          type: string
+          format: date-time
+          title: Next True Up Date
+        true_up_period_days:
           type: integer
-          title: Total
-      type: object
-      required:
-      - campaigns
-      - total
-      title: CampaignListResponse
-      description: A page of promo campaigns with a total count.
-    TranscriptSpeaker:
-      properties:
-        id:
-          type: integer
-          title: Id
-        source:
-          $ref: '#/components/schemas/TranscriptSpeakerSource'
-        name:
+          enum:
+          - 30
+          - 90
+          - 365
+          title: True Up Period Days
+          description: Billing period in days (monthly, quarterly, annual)
+        stripe_price_id:
           anyOf:
           - type: string
           - type: 'null'
-          title: Name
-      additionalProperties: false
-      type: object
-      required:
-      - id
-      - source
-      - name
-      title: TranscriptSpeaker
-      description: Canonical speaker identity; source and ID form the stable key.
-    AddEnterpriseDomainRequest:
-      properties:
+          title: Stripe Price Id
+          description: Stripe price ID. If omitted, resolved from product_name + currency.
+        product_name:
+          type: string
+          minLength: 1
+          title: Product Name
+        payment_terms_days:
+          type: integer
+          minimum: 1.0
+          title: Payment Terms Days
+          default: 7
+        custom_unit_price_cents:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Custom Unit Price Cents
+        pricing_tiers:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/PricingTierSchema'
+            type: array
+          - type: 'null'
+          title: Pricing Tiers
+        currency:
+          $ref: '#/components/schemas/Currency'
+          default: usd
+        seat_cap:
+          anyOf:
+          - type: integer
+            minimum: 1.0
+          - type: 'null'
+          title: Seat Cap
+          description: Maximum seats allowed for this enterprise
+        contract_end_date:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Contract End Date
+        contract_period_days:
+          anyOf:
+          - type: integer
+            minimum: 1.0
+          - type: 'null'
+          title: Contract Period Days
         enterprise_id:
           type: string
           format: uuid
           title: Enterprise Id
-        domain:
-          type: string
-          minLength: 3
-          pattern: ^[^@\s]+\.[^@\s]+$
-          title: Domain
-          description: Domain to add (e.g. acme.com)
-        allow_forbidden_domain:
-          type: boolean
-          title: Allow Forbidden Domain
-          description: Allow adding forbidden domains (e.g. .edu)
-          default: false
       type: object
       required:
+      - next_true_up_date
+      - true_up_period_days
+      - product_name
       - enterprise_id
-      - domain
-      title: AddEnterpriseDomainRequest
-      description: Request model for adding a domain to an enterprise.
-    RedemptionListResponse:
+      title: EnterpriseBillingConfigCreate
+      description: Request model for creating a billing config.
+    Body_update_user_roles_file_upload_api_v1_internal_enterprises__enterprise_id__members_update_role_bulk_post:
       properties:
-        redemptions:
-          items:
-            $ref: '#/components/schemas/RedemptionListItem'
-          type: array
-          title: Redemptions
-        total:
-          type: integer
-          title: Total
-      type: object
-      required:
-      - redemptions
-      - total
-      title: RedemptionListResponse
-      description: A page of promo redemptions with a total count.
-    AllEnterprisesResponse:
-      properties:
-        enterprises:
-          items:
-            $ref: '#/components/schemas/EnterpriseListItem'
-          type: array
-          title: Enterprises
-        total:
-          type: integer
-          title: Total
-        limit:
-          type: integer
-          title: Limit
-        offset:
-          type: integer
-          title: Offset
-      type: object
-      required:
-      - enterprises
-      - total
-      - limit
-      - offset
-      title: AllEnterprisesResponse
-      description: Response model for list of all enterprises with pagination
-    AdminMemoryListResult:
-      properties:
-        email:
+        file:
           type: string
-          title: Email
-        user_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Id
-        status:
-          type: string
-          enum:
-          - ok
-          - no_memories
-          - user_not_found
-          - error
-          title: Status
-        episodes:
-          items:
-            type: object
-          type: array
-          title: Episodes
-        error_code:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Error Code
+          contentMediaType: application/octet-stream
+          title: File
       type: object
       required:
-      - email
-      - status
-      title: AdminMemoryListResult
-      description: Per-user list result. Payload dicts are stripped of internal Graphiti identifiers.
-    AdminMemoryListRequest:
+      - file
+      title: Body_update_user_roles_file_upload_api_v1_internal_enterprises__enterprise_id__members_update_role_bulk_post
+    PublicDomainsListResponse:
       properties:
-        emails:
+        domains:
           items:
             type: string
-            format: email
           type: array
-          maxItems: 25
-          minItems: 1
-          title: Emails
-        reason:
-          type: string
-          maxLength: 500
-          minLength: 3
-          title: Reason
-          description: Required justification for accessing these users' private memory; recorded in the audit log.
-        limit:
+          title: Domains
+        total:
           type: integer
-          maximum: 500.0
-          minimum: 1.0
-          title: Limit
-          default: 100
+          title: Total
       type: object
       required:
-      - emails
-      - reason
-      title: AdminMemoryListRequest
-      description: 'Super-admin request: list all stored voice memories for each user.'
-    DomainVerificationInitiateResponse:
+      - domains
+      - total
+      title: PublicDomainsListResponse
+      description: Response model for the static public/webmail domain list.
+    CreateEnterpriseFromAdminRequest:
+      properties:
+        admin_email:
+          type: string
+          format: email
+          title: Admin Email
+        enterprise_domain:
+          type: string
+          minLength: 1
+          title: Enterprise Domain
+          description: Domain cannot be empty
+        enterprise_name:
+          type: string
+          minLength: 1
+          title: Enterprise Name
+          description: Name cannot be empty
+        preserve_contracted_seats:
+          type: boolean
+          title: Preserve Contracted Seats
+          description: If true, seats are never automatically reduced
+          default: false
+        billing_info:
+          anyOf:
+          - $ref: '#/components/schemas/BillingInfo'
+          - type: 'null'
+          description: Optional Stripe billing contact email + address. Stripe customer name is always enterprise_name.
+        create_admin_user_if_missing:
+          type: boolean
+          title: Create Admin User If Missing
+          description: If true and admin_email has no Wispr user, provision one (requires admin_first_name and admin_last_name).
+          default: false
+        admin_first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Admin First Name
+          description: First name for the new admin user (required if create_admin_user_if_missing).
+        admin_last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Admin Last Name
+          description: Last name for the new admin user (required if create_admin_user_if_missing).
+      type: object
+      required:
+      - admin_email
+      - enterprise_domain
+      - enterprise_name
+      title: CreateEnterpriseFromAdminRequest
+      description: Request model for creating an enterprise with an admin user.
+    UpdateEnterpriseGatesRequest:
+      properties:
+        gates:
+          additionalProperties:
+            type: boolean
+          type: object
+          title: Gates
+      type: object
+      required:
+      - gates
+      title: UpdateEnterpriseGatesRequest
+    CodeListItem:
+      properties:
+        id:
+          type: string
+          title: Id
+        code:
+          type: string
+          title: Code
+        is_active:
+          type: boolean
+          title: Is Active
+        max_redemptions:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Redemptions
+        total_redemptions:
+          type: integer
+          title: Total Redemptions
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+      type: object
+      required:
+      - id
+      - code
+      - is_active
+      - max_redemptions
+      - total_redemptions
+      - created_at
+      title: CodeListItem
+      description: A promo code summary row for the admin list view.
+    EnterprisePilotsResponse:
+      properties:
+        pilots:
+          items:
+            $ref: '#/components/schemas/EnterprisePilotItem'
+          type: array
+          title: Pilots
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - pilots
+      - total
+      title: EnterprisePilotsResponse
+      description: Response model for listing enterprise pilots.
+    DomainVerificationRecord:
+      properties:
+        type:
+          type: string
+          title: Type
+          description: DNS record type. Always ``"TXT"`` for this flow.
+        host:
+          type: string
+          title: Host
+          description: Fully-qualified DNS name to publish the TXT record at.
+        value:
+          type: string
+          title: Value
+          description: Exact TXT record value to publish (our DNS token).
+      type: object
+      required:
+      - type
+      - host
+      - value
+      title: DomainVerificationRecord
+      description: TXT record the customer must publish to prove ownership of a domain.
+    Currency:
+      type: string
+      enum:
+      - usd
+      - gbp
+      - eur
+      - inr
+      - cad
+      - cny
+      - aud
+      - rub
+      - pln
+      - brl
+      - ils
+      - try
+      - jpy
+      - chf
+      - mxn
+      - aed
+      - sek
+      - sgd
+      - zar
+      - nzd
+      - thb
+      - twd
+      - czk
+      - krw
+      title: Currency
+      description: Supported billing currencies as lowercase ISO 4217 codes.
+    ConsensusPreviewRequest:
+      properties:
+        algorithm_id:
+          $ref: '#/components/schemas/AlgorithmId'
+      type: object
+      required:
+      - algorithm_id
+      title: ConsensusPreviewRequest
+      description: Explicit consensus implementation selection.
+    AdminMemorySearchResponse:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/AdminMemorySearchResult'
+          type: array
+          title: Results
+      type: object
+      required:
+      - results
+      title: AdminMemorySearchResponse
+    DomainVerificationStatus:
       properties:
         domain_id:
           type: string
@@ -4468,15 +5118,35 @@ components:
           - type: string
           - type: 'null'
           title: Verified At
+          description: ISO-8601 timestamp of verification, or ``null`` if unverified.
         verification_initiated_at:
           anyOf:
           - type: string
           - type: 'null'
           title: Verification Initiated At
+          description: ISO-8601 timestamp of when the token was first issued, or ``null`` if never initiated.
+        last_verification_check_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Verification Check At
+          description: ISO-8601 timestamp of the last DNS poll, or ``null`` if never polled.
+        verification_attempts:
+          type: integer
+          title: Verification Attempts
+          description: Number of DNS check attempts made against this domain.
+        token_active:
+          type: boolean
+          title: Token Active
+          description: True iff a verification token is currently issued and the domain is not yet verified.
         record:
           anyOf:
           - $ref: '#/components/schemas/DomainVerificationRecord'
           - type: 'null'
+          description: The TXT record to publish. Populated only on superadmin reads while unverified; always ``null`` on admin-facing reads.
+        domain_capture_policy:
+          $ref: '#/components/schemas/DomainCapturePolicy'
+          description: Per-domain capture policy. ``unset`` while unverified; ``off``/``require`` once verified.
       type: object
       required:
       - domain_id
@@ -4485,85 +5155,18 @@ components:
       - verified
       - verified_at
       - verification_initiated_at
+      - last_verification_check_at
+      - verification_attempts
+      - token_active
       - record
-      title: DomainVerificationInitiateResponse
-      description: 'Response returned by the superadmin ``initiate-verification`` endpoint.
+      - domain_capture_policy
+      title: DomainVerificationStatus
+      description: 'Per-domain verification state returned by the enterprise and internal APIs.
 
 
-        Narrower than :class:`DomainVerificationStatus` — does not expose check
+        The ``record`` field is populated only on superadmin (internal) reads while
 
-        counters or capture policy, only what is needed to issue the TXT record.'
-    AddUsersToEnterpriseResponse:
-      properties:
-        added_count:
-          type: integer
-          title: Added Count
-        created_count:
-          type: integer
-          title: Created Count
-          default: 0
-        skipped_count:
-          type: integer
-          title: Skipped Count
-          default: 0
-        failed:
-          items:
-            $ref: '#/components/schemas/FailedAddUserItem'
-          type: array
-          title: Failed
-          default: []
-      type: object
-      required:
-      - added_count
-      title: AddUsersToEnterpriseResponse
-      description: Response model for bulk add users operation
-    OperationDescriptor:
-      properties:
-        kind:
-          type: string
-          title: Kind
-        description:
-          type: string
-          title: Description
-        enabled:
-          type: boolean
-          title: Enabled
-        input_schema_json:
-          type: object
-          title: Input Schema Json
-      type: object
-      required:
-      - kind
-      - description
-      - enabled
-      - input_schema_json
-      title: OperationDescriptor
-      description: Metadata for a single registered op, surfaced to the operator UI.
-    DirectorySyncUserAction:
-      properties:
-        email:
-          type: string
-          title: Email
-        action:
-          type: string
-          enum:
-          - linked_workos_id
-          - provisioned
-          - removed
-          - skipped
-          - error
-          title: Action
-        detail:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Detail
-      type: object
-      required:
-      - email
-      - action
-      title: DirectorySyncUserAction
-      description: A single user action from a directory sync operation.
+        the domain is still unverified. Admin-facing reads always set it to ``None``.'
     EnterpriseDetailsResponse:
       properties:
         id:
@@ -4687,507 +5290,24 @@ components:
       - workos_directory_id
       title: EnterpriseDetailsResponse
       description: Response model for enterprise details.
-    EnterprisePilotItem:
+    DisbandEnterpriseResponse:
       properties:
+        message:
+          type: string
+          title: Message
         enterprise_id:
           type: string
           title: Enterprise Id
         enterprise_name:
           type: string
           title: Enterprise Name
-        pilot_end:
-          type: string
-          format: date-time
-          title: Pilot End
-        stripe_subscription_id:
-          type: string
-          title: Stripe Subscription Id
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        status:
-          type: string
-          title: Status
       type: object
       required:
+      - message
       - enterprise_id
       - enterprise_name
-      - pilot_end
-      - stripe_subscription_id
-      - created_at
-      - status
-      title: EnterprisePilotItem
-      description: Single enterprise pilot item for list response.
-    AddEnterpriseDomainResponse:
-      properties:
-        message:
-          type: string
-          title: Message
-        workos_synced:
-          type: boolean
-          title: Workos Synced
-          description: Whether the domain was successfully synced to WorkOS (only relevant for SSO-enabled enterprises)
-          default: true
-      type: object
-      required:
-      - message
-      title: AddEnterpriseDomainResponse
-      description: Response model for adding a domain to an enterprise.
-    CostCenterListItem:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-        name:
-          type: string
-          title: Name
-        status:
-          type: string
-          title: Status
-        stripe_customer_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Stripe Customer Id
-        stripe_subscription_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Stripe Subscription Id
-      type: object
-      required:
-      - id
-      - name
-      - status
-      - stripe_customer_id
-      - stripe_subscription_id
-      title: CostCenterListItem
-      description: 'One row in the cost-center picker the operator UI renders.
-
-
-        ``name`` comes from ``CostCenter.name`` (default ``"Default"`` for legacy
-
-        single-CC enterprises). ``status`` is the cost_center.status string
-
-        (``active``, ``inactive``, ``trialing``, ``past_due``, etc.). The Stripe
-
-        ids surface so the UI can show whether a cost_center has been wired up to
-
-        Stripe before letting an operator queue an op against it.'
-    ErrorDetail:
-      properties:
-        detail:
-          type: string
-          title: Detail
-      type: object
-      required:
-      - detail
-      title: ErrorDetail
-      description: 'Standard FastAPI HTTPException envelope: `{"detail": "..."}`.'
-    UpdatePilotEndResponse:
-      properties:
-        enterprise_id:
-          type: string
-          title: Enterprise Id
-        new_pilot_end:
-          type: string
-          format: date-time
-          title: New Pilot End
-      type: object
-      required:
-      - enterprise_id
-      - new_pilot_end
-      title: UpdatePilotEndResponse
-      description: Response model for updating an enterprise pilot end date.
-    AdminMemoryListResponse:
-      properties:
-        results:
-          items:
-            $ref: '#/components/schemas/AdminMemoryListResult'
-          type: array
-          title: Results
-      type: object
-      required:
-      - results
-      title: AdminMemoryListResponse
-    CommitRequest:
-      properties:
-        cost_center_id:
-          type: string
-          format: uuid
-          title: Cost Center Id
-          description: Cost center the operation targets. Stripe customer/subscription artifacts are keyed on cost_center, not enterprise.
-        operation_kind:
-          type: string
-          title: Operation Kind
-        input:
-          type: object
-          title: Input
-        idempotency_root:
-          type: string
-          maxLength: 64
-          minLength: 1
-          title: Idempotency Root
-          description: Client-generated key (typically a UUID hex) mixed into every Stripe idempotency key emitted by this commit. The UI must generate it once per commit attempt and reuse it on retries so Stripe dedupes.
-      type: object
-      required:
-      - cost_center_id
-      - operation_kind
-      - input
-      - idempotency_root
-      title: CommitRequest
-    SignalQuality:
-      properties:
-        vote_margin:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Vote Margin
-        tile_agreement:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Tile Agreement
-        tile_log_event_count:
-          type: integer
-          title: Tile Log Event Count
-        tile_log_cadence_ms:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Tile Log Cadence Ms
-        tile_log_longest_gap_ms:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Tile Log Longest Gap Ms
-        cluster_count:
-          type: integer
-          title: Cluster Count
-        token_confidence_avg:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Token Confidence Avg
-        token_confidence_min:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Token Confidence Min
-        token_count:
-          type: integer
-          title: Token Count
-      type: object
-      required:
-      - tile_log_event_count
-      - cluster_count
-      - token_count
-      title: SignalQuality
-      description: Bounded diagnostics emitted by the consensus engine.
-    EnterpriseMember:
-      properties:
-        userId:
-          type: string
-          title: Userid
-        firstName:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Firstname
-        lastName:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Lastname
-        email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Email
-        role:
-          anyOf:
-          - $ref: '#/components/schemas/EnterpriseRole'
-          - type: 'null'
-        joinedAt:
-          anyOf:
-          - type: integer
-            format: int64
-          - type: 'null'
-          title: Joinedat
-      type: object
-      required:
-      - userId
-      - firstName
-      - lastName
-      - email
-      - role
-      - joinedAt
-      title: EnterpriseMember
-      description: 'Response model for an enterprise member.
-
-
-        ``firstName``, ``lastName``, ``email`` are nullable because the underlying
-
-        ``User`` columns are nullable (see ``models/user.py``). ``role`` is nullable
-
-        because the column is free-text and may contain stray strings outside the
-
-        canonical ``EnterpriseRole`` enum (FLOW-BACKEND-8NW); the validator below
-
-        silently coerces those to ``None``.
-
-
-        ``joinedAt`` is unix seconds of ``MIN(user_team_membership.added_at)`` across
-
-        all the user''s memberships in this enterprise (active + soft-deleted).
-
-        ``None`` when the user has no membership row (edge case).'
-    AddBlockedDomainRequest:
-      properties:
-        domain:
-          type: string
-          minLength: 1
-          title: Domain
-          description: Domain to block
-        notes:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Notes
-          description: Optional notes/reason for blocking
-      type: object
-      required:
-      - domain
-      title: AddBlockedDomainRequest
-      description: Request model for adding a domain to the block list.
-    AddUsersToEnterpriseRequest:
-      properties:
-        users:
-          items:
-            $ref: '#/components/schemas/UserInput'
-          type: array
-          maxItems: 100
-          title: Users
-          description: List of users to add (max 100)
-        role:
-          $ref: '#/components/schemas/EnterpriseRole'
-          default: member
-        create_missing_users:
-          type: boolean
-          title: Create Missing Users
-          default: false
-      type: object
-      required:
-      - users
-      title: AddUsersToEnterpriseRequest
-      description: Request model for bulk adding users to an enterprise.
-    UpdateCampaignRequest:
-      properties:
-        name:
-          anyOf:
-          - type: string
-            maxLength: 255
-            minLength: 1
-          - type: 'null'
-          title: Name
-        campaign_type:
-          anyOf:
-          - $ref: '#/components/schemas/CampaignType'
-          - type: 'null'
-        status:
-          anyOf:
-          - $ref: '#/components/schemas/CampaignStatus'
-          - type: 'null'
-        trial_days:
-          anyOf:
-          - type: integer
-            maximum: 365.0
-            minimum: 1.0
-          - type: 'null'
-          title: Trial Days
-        source_name:
-          anyOf:
-          - type: string
-            maxLength: 255
-            minLength: 1
-          - type: 'null'
-          title: Source Name
-        attribution_message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Attribution Message
-        max_redemptions:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Max Redemptions
-        starts_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Starts At
-        expires_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Expires At
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-      type: object
-      title: UpdateCampaignRequest
-      description: Partial-update request for an existing promo campaign.
-    DomainVerificationRecord:
-      properties:
-        type:
-          type: string
-          title: Type
-          description: DNS record type. Always ``"TXT"`` for this flow.
-        host:
-          type: string
-          title: Host
-          description: Fully-qualified DNS name to publish the TXT record at.
-        value:
-          type: string
-          title: Value
-          description: Exact TXT record value to publish (our DNS token).
-      type: object
-      required:
-      - type
-      - host
-      - value
-      title: DomainVerificationRecord
-      description: TXT record the customer must publish to prove ownership of a domain.
-    InternalCostCenterProvisionResponse:
-      properties:
-        cost_center:
-          $ref: '#/components/schemas/ProvisionedCostCenterSummary'
-        team:
-          $ref: '#/components/schemas/ProvisionedTeamSummary'
-        invoice:
-          $ref: '#/components/schemas/ProvisionedInvoiceSummary'
-        stripe_subscription_id:
-          type: string
-          title: Stripe Subscription Id
-      type: object
-      required:
-      - cost_center
-      - team
-      - invoice
-      - stripe_subscription_id
-      title: InternalCostCenterProvisionResponse
-      description: 'Successful-provision result: the created cost center, team, and invoice.'
-    CreateSalesLedEnterpriseResponse:
-      properties:
-        enterprise_id:
-          type: string
-          title: Enterprise Id
-        message:
-          type: string
-          title: Message
-      type: object
-      required:
-      - enterprise_id
-      - message
-      title: CreateSalesLedEnterpriseResponse
-      description: Response model for creating a sales-led enterprise.
-    Body_update_user_roles_file_upload_api_v1_internal_enterprises__enterprise_id__members_update_role_bulk_post:
-      properties:
-        file:
-          type: string
-          contentMediaType: application/octet-stream
-          title: File
-      type: object
-      required:
-      - file
-      title: Body_update_user_roles_file_upload_api_v1_internal_enterprises__enterprise_id__members_update_role_bulk_post
-    ToggleDomainDeletedRequest:
-      properties:
-        deleted:
-          type: boolean
-          title: Deleted
-      type: object
-      required:
-      - deleted
-      title: ToggleDomainDeletedRequest
-      description: Request model for toggling domain deleted status.
-    CodeListItem:
-      properties:
-        id:
-          type: string
-          title: Id
-        code:
-          type: string
-          title: Code
-        is_active:
-          type: boolean
-          title: Is Active
-        max_redemptions:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Max Redemptions
-        total_redemptions:
-          type: integer
-          title: Total Redemptions
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-      type: object
-      required:
-      - id
-      - code
-      - is_active
-      - max_redemptions
-      - total_redemptions
-      - created_at
-      title: CodeListItem
-      description: A promo code summary row for the admin list view.
-    UpdateUserTrialEndRequest:
-      properties:
-        user_email:
-          type: string
-          format: email
-          title: User Email
-        trial_end:
-          type: string
-          format: date
-          title: Trial End
-          description: New trial end date (YYYY-MM-DD). The date is interpreted as 23:59:59 UTC on that day; the server rejects dates whose end-of-day UTC has already passed, and caps the value at 365 days from now (UTC).
-      type: object
-      required:
-      - user_email
-      - trial_end
-      title: UpdateUserTrialEndRequest
-      description: Request model for updating a user's personal trial end date (internal admin).
-    UpdateUserTrialEndResponse:
-      properties:
-        user_id:
-          type: string
-          title: User Id
-        user_email:
-          type: string
-          title: User Email
-        trial_ends_at:
-          type: integer
-          format: int64
-          title: Trial Ends At
-          description: New trial end time as a Unix timestamp (seconds).
-      type: object
-      required:
-      - user_id
-      - user_email
-      - trial_ends_at
-      title: UpdateUserTrialEndResponse
-      description: Response model for updating a user's personal trial end date.
+      title: DisbandEnterpriseResponse
+      description: Response model for disbanding an enterprise.
     CampaignListItem:
       properties:
         id:
@@ -5263,63 +5383,107 @@ components:
       - code_count
       title: CampaignListItem
       description: A promo campaign summary row for the admin list view.
-    UpdateUsersRoleRequest:
+    OperationDescriptor:
       properties:
-        email:
+        kind:
           type: string
-          format: email
-          title: Email
-        role:
-          $ref: '#/components/schemas/EnterpriseRole'
+          title: Kind
+        description:
+          type: string
+          title: Description
+        enabled:
+          type: boolean
+          title: Enabled
+        input_schema_json:
+          type: object
+          title: Input Schema Json
       type: object
       required:
-      - email
-      - role
-      title: UpdateUsersRoleRequest
-      description: Request model for updating user roles in an enterprise.
-    PublicDomainsListResponse:
+      - kind
+      - description
+      - enabled
+      - input_schema_json
+      title: OperationDescriptor
+      description: Metadata for a single registered op, surfaced to the operator UI.
+    StripeProductOption:
+      type: string
+      enum:
+      - FLOW_PRO_MONTHLY
+      - FLOW_PRO_YEARLY
+      - FLOW_STUDENT_MONTHLY
+      - FLOW_STUDENT_YEARLY
+      - FLOW_TEAM_MONTHLY
+      - FLOW_TEAM_YEARLY
+      - FLOW_BUSINESS_MONTHLY
+      - FLOW_BUSINESS_YEARLY
+      title: StripeProductOption
+    CampaignStatus:
+      type: string
+      enum:
+      - active
+      - paused
+      - ended
+      - archived
+      title: CampaignStatus
+      description: Lifecycle status of a promotional campaign.
+    RedemptionListResponse:
       properties:
-        domains:
+        redemptions:
           items:
-            type: string
+            $ref: '#/components/schemas/RedemptionListItem'
           type: array
-          title: Domains
+          title: Redemptions
         total:
           type: integer
           title: Total
       type: object
       required:
-      - domains
+      - redemptions
       - total
-      title: PublicDomainsListResponse
-      description: Response model for the static public/webmail domain list.
-    ProvisionedTeamSummary:
+      title: RedemptionListResponse
+      description: A page of promo redemptions with a total count.
+    FlowStatePreviewRequest:
       properties:
-        name:
+        reporting_month:
           type: string
-          title: Name
+          format: date
+          title: Reporting Month
+        emails:
+          anyOf:
+          - items:
+              type: string
+              format: email
+            type: array
+          - type: 'null'
+          title: Emails
+        domain:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Domain
+        user_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: User Ids
+        limit:
+          type: integer
+          maximum: 500.0
+          minimum: 1.0
+          title: Limit
+          default: 100
+        offset:
+          type: integer
+          minimum: 0.0
+          title: Offset
+          default: 0
       type: object
       required:
-      - name
-      title: ProvisionedTeamSummary
-      description: The team created by a successful provision.
-    DomainCapturePolicy:
-      type: string
-      enum:
-      - unset
-      - 'off'
-      - require
-      title: DomainCapturePolicy
-      description: 'Whether unclaimed users on a verified domain are required to request to join the enterprise.
-
-
-        ``unset`` indicates the admin has not chosen a policy — distinct from explicitly ``off``.
-
-        Both ``off`` and ``require`` require a DNS-verified domain before they may be set;
-
-        ``unset`` is the only value allowed when no domain has been verified yet.
-
-        ``off`` means that they have intentionally turned off domain capture so users can keep using flow without being prompted to join the enterprise.'
+      - reporting_month
+      title: FlowStatePreviewRequest
+      description: Request body for previewing generated profiles before send.
     SendInvoiceResponse:
       properties:
         invoice_id:
@@ -5338,166 +5502,21 @@ components:
       - message
       title: SendInvoiceResponse
       description: Response model for sending an invoice.
-    CreateSalesLedEnterpriseRequest:
+    SyncDomainsToWorkosResponse:
       properties:
-        email:
+        message:
           type: string
-          format: email
-          title: Email
-        domain:
-          type: string
-          minLength: 1
-          title: Domain
-          description: Enterprise domain
-        enterprise_name:
-          type: string
-          minLength: 1
-          title: Enterprise Name
-          description: Enterprise name
-        plan:
-          $ref: '#/components/schemas/StripeProductOption'
-          description: Stripe plan (e.g. FLOW_BUSINESS_YEARLY)
-        seats:
-          type: integer
-          exclusiveMinimum: 0.0
-          title: Seats
-          description: Number of seats
-        platform_fee_monthly_rate:
-          type: integer
-          minimum: 0.0
-          title: Platform Fee Monthly Rate
-          description: Platform fee rate in $/month. For yearly plans, charged as 12x upfront. Must match a configured Stripe price.
-          default: 0
-        days_until_due:
-          type: integer
-          exclusiveMinimum: 0.0
-          title: Days Until Due
-          description: Payment terms in days (e.g., 30 for Net30)
-          default: 30
-        preserve_contracted_seats:
+          title: Message
+        workos_synced:
           type: boolean
-          title: Preserve Contracted Seats
-          description: If true, seats are never automatically reduced
-          default: false
-        billing_info:
-          $ref: '#/components/schemas/BillingInfo'
-          description: 'Stripe billing contact email + address. Required for sales-led: contact + address.line1, city, postal_code, country must all be present; state is additionally required for US/CA.'
-        create_admin_user_if_missing:
-          type: boolean
-          title: Create Admin User If Missing
-          description: If true and email has no Wispr user, provision one (requires admin_first_name and admin_last_name).
-          default: false
-        admin_first_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Admin First Name
-          description: First name for the new admin user (required if create_admin_user_if_missing).
-        admin_last_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Admin Last Name
-          description: Last name for the new admin user (required if create_admin_user_if_missing).
+          title: Workos Synced
+          description: Whether the domains were successfully synced to WorkOS
       type: object
       required:
-      - email
-      - domain
-      - enterprise_name
-      - plan
-      - seats
-      - billing_info
-      title: CreateSalesLedEnterpriseRequest
-      description: Request model for creating a sales-led enterprise with deferred invoicing.
-    FlowStateMonthSummaryResponse:
-      properties:
-        reporting_month:
-          type: string
-          format: date
-          title: Reporting Month
-          description: First day of the reporting month.
-        generated_total:
-          type: integer
-          title: Generated Total
-          description: Profiles generated for this reporting month.
-        pending_send_total:
-          type: integer
-          title: Pending Send Total
-          description: Generated profiles still pending send.
-        sent_total:
-          type: integer
-          title: Sent Total
-          description: Profiles already sent.
-        failed_send_total:
-          type: integer
-          title: Failed Send Total
-          description: Profiles whose send failed.
-        sending_total:
-          type: integer
-          title: Sending Total
-          description: Profiles currently claimed for send.
-        skipped_total:
-          type: integer
-          title: Skipped Total
-          description: Profiles skipped during send.
-        active_job:
-          anyOf:
-          - $ref: '#/components/schemas/MarketingJobStatusResponse'
-          - type: 'null'
-          description: Pending or running job for this reporting month.
-        latest_job:
-          anyOf:
-          - $ref: '#/components/schemas/MarketingJobStatusResponse'
-          - type: 'null'
-          description: Most recent job for this reporting month.
-        can_send_existing:
-          type: boolean
-          title: Can Send Existing
-          description: Whether already generated profiles can be sent.
-        can_regenerate_send:
-          type: boolean
-          title: Can Regenerate Send
-          description: Whether regenerate-and-send can be enqueued.
-      type: object
-      required:
-      - reporting_month
-      - generated_total
-      - pending_send_total
-      - sent_total
-      - failed_send_total
-      - sending_total
-      - skipped_total
-      - can_send_existing
-      - can_regenerate_send
-      title: FlowStateMonthSummaryResponse
-      description: Month-level Flow State generation/send state for the admin portal.
-    EnterpriseStatus:
-      type: string
-      enum:
-      - active
-      - disbanded
-      title: EnterpriseStatus
-      description: Whether an enterprise or team is active or disbanded.
-    UpdateUsersRoleResponse:
-      properties:
-        updated_count:
-          type: integer
-          title: Updated Count
-        skipped_count:
-          type: integer
-          title: Skipped Count
-          default: 0
-        failed:
-          items:
-            $ref: '#/components/schemas/FailedUpdateUserItem'
-          type: array
-          title: Failed
-          default: []
-      type: object
-      required:
-      - updated_count
-      title: UpdateUsersRoleResponse
-      description: Response model for bulk update users role operation.
+      - message
+      - workos_synced
+      title: SyncDomainsToWorkosResponse
+      description: Response model for syncing enterprise domains to WorkOS.
     CampaignType:
       type: string
       enum:
@@ -5508,85 +5527,66 @@ components:
       - internal
       title: CampaignType
       description: Category of a promotional campaign.
-    Body_remove_users_from_enterprise_file_upload_api_v1_internal_enterprises__enterprise_id__members_remove_upload_post:
+    CreateEnterprisePilotRequest:
       properties:
-        file:
+        email:
           type: string
-          contentMediaType: application/octet-stream
-          title: File
-      type: object
-      required:
-      - file
-      title: Body_remove_users_from_enterprise_file_upload_api_v1_internal_enterprises__enterprise_id__members_remove_upload_post
-    InternalCostCenterProvisionRequest:
-      properties:
-        enterprise_id:
+          format: email
+          title: Email
+        domain:
           type: string
-          format: uuid
-          title: Enterprise Id
-        user_id:
-          type: string
-          format: uuid
-          title: User Id
-          description: 'Picked user: becomes the cost center''s billing owner and invoice recipient'
-        team_name:
-          type: string
-          maxLength: 100
-          minLength: 1
-          title: Team Name
-        committed_seats:
-          type: integer
-          maximum: 10000.0
-          minimum: 1.0
-          title: Committed Seats
-          description: Committed seat count (high-water mark) the subscription is created with
-        idempotency_root:
-          type: string
-          maxLength: 128
-          minLength: 1
-          title: Idempotency Root
-          description: Client-minted per commit; keys the Stripe create calls so a double submit can't duplicate them
-      type: object
-      required:
-      - enterprise_id
-      - user_id
-      - team_name
-      - committed_seats
-      - idempotency_root
-      title: InternalCostCenterProvisionRequest
-      description: Shared body for preview-provision and provision (same payload for both).
-    RemoveUsersFromEnterpriseResponse:
-      properties:
-        message:
-          type: string
-          title: Message
-        removed_count:
-          type: integer
-          title: Removed Count
-      type: object
-      required:
-      - message
-      - removed_count
-      title: RemoveUsersFromEnterpriseResponse
-      description: Response model for remove users operation
-    DisbandEnterpriseResponse:
-      properties:
-        message:
-          type: string
-          title: Message
-        enterprise_id:
-          type: string
-          title: Enterprise Id
+          title: Domain
         enterprise_name:
           type: string
           title: Enterprise Name
+        trial_end:
+          type: string
+          format: date
+          title: Trial End
       type: object
       required:
-      - message
-      - enterprise_id
+      - email
+      - domain
       - enterprise_name
-      title: DisbandEnterpriseResponse
-      description: Response model for disbanding an enterprise.
+      - trial_end
+      title: CreateEnterprisePilotRequest
+      description: Request model for creating an enterprise pilot.
+    MeetingAudioUrlResponse:
+      properties:
+        url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Url
+      type: object
+      title: MeetingAudioUrlResponse
+      description: Presigned GET URL for one meeting's audio, if present.
+    AdminApplyReferralRequest:
+      properties:
+        user_email:
+          type: string
+          format: email
+          title: User Email
+        referral_code:
+          type: string
+          maxLength: 50
+          minLength: 1
+          title: Referral Code
+      type: object
+      required:
+      - user_email
+      - referral_code
+      title: AdminApplyReferralRequest
+      description: Request model for applying a referral code to a user on their behalf.
+    PreviewResponse:
+      properties:
+        preview:
+          type: object
+          title: Preview
+      type: object
+      required:
+      - preview
+      title: PreviewResponse
     TranscriptMarkerType:
       type: string
       enum:
@@ -5597,299 +5597,6 @@ components:
       - sleep_gap
       title: TranscriptMarkerType
       description: Persisted non-speech transcript marker types.
-    EnterpriseBillingConfigResponse:
-      properties:
-        next_true_up_date:
-          type: string
-          format: date-time
-          title: Next True Up Date
-        true_up_period_days:
-          type: integer
-          enum:
-          - 30
-          - 90
-          - 365
-          title: True Up Period Days
-          description: Billing period in days (monthly, quarterly, annual)
-        stripe_price_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Stripe Price Id
-          description: Stripe price ID. If omitted, resolved from product_name + currency.
-        product_name:
-          type: string
-          minLength: 1
-          title: Product Name
-        payment_terms_days:
-          type: integer
-          minimum: 1.0
-          title: Payment Terms Days
-          default: 7
-        custom_unit_price_cents:
-          anyOf:
-          - type: integer
-            minimum: 0.0
-          - type: 'null'
-          title: Custom Unit Price Cents
-        pricing_tiers:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/PricingTierSchema'
-            type: array
-          - type: 'null'
-          title: Pricing Tiers
-        currency:
-          $ref: '#/components/schemas/Currency'
-          default: usd
-        seat_cap:
-          anyOf:
-          - type: integer
-            minimum: 1.0
-          - type: 'null'
-          title: Seat Cap
-          description: Maximum seats allowed for this enterprise
-        contract_end_date:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Contract End Date
-        contract_period_days:
-          anyOf:
-          - type: integer
-            minimum: 1.0
-          - type: 'null'
-          title: Contract Period Days
-        id:
-          type: string
-          format: uuid
-          title: Id
-        enterprise_id:
-          type: string
-          format: uuid
-          title: Enterprise Id
-        enterprise_name:
-          type: string
-          title: Enterprise Name
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-      type: object
-      required:
-      - next_true_up_date
-      - true_up_period_days
-      - product_name
-      - id
-      - enterprise_id
-      - enterprise_name
-      - created_at
-      title: EnterpriseBillingConfigResponse
-      description: Response model for a billing config.
-    EnterpriseBillingConfigUpdate:
-      properties:
-        next_true_up_date:
-          type: string
-          format: date-time
-          title: Next True Up Date
-        true_up_period_days:
-          type: integer
-          enum:
-          - 30
-          - 90
-          - 365
-          title: True Up Period Days
-          description: Billing period in days (monthly, quarterly, annual)
-        stripe_price_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Stripe Price Id
-          description: Stripe price ID. If omitted, resolved from product_name + currency.
-        product_name:
-          type: string
-          minLength: 1
-          title: Product Name
-        payment_terms_days:
-          type: integer
-          minimum: 1.0
-          title: Payment Terms Days
-          default: 7
-        custom_unit_price_cents:
-          anyOf:
-          - type: integer
-            minimum: 0.0
-          - type: 'null'
-          title: Custom Unit Price Cents
-        pricing_tiers:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/PricingTierSchema'
-            type: array
-          - type: 'null'
-          title: Pricing Tiers
-        currency:
-          $ref: '#/components/schemas/Currency'
-          default: usd
-        seat_cap:
-          anyOf:
-          - type: integer
-            minimum: 1.0
-          - type: 'null'
-          title: Seat Cap
-          description: Maximum seats allowed for this enterprise
-        contract_end_date:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Contract End Date
-        contract_period_days:
-          anyOf:
-          - type: integer
-            minimum: 1.0
-          - type: 'null'
-          title: Contract Period Days
-      type: object
-      required:
-      - next_true_up_date
-      - true_up_period_days
-      - product_name
-      title: EnterpriseBillingConfigUpdate
-      description: Request model for updating a billing config.
-    MarketingJobResponse:
-      properties:
-        job_id:
-          type: string
-          format: uuid
-          title: Job Id
-        message:
-          type: string
-          title: Message
-        log_query:
-          type: string
-          title: Log Query
-      type: object
-      required:
-      - job_id
-      - message
-      - log_query
-      title: MarketingJobResponse
-      description: Response returned after kicking off a generate-or-send job.
-    PreviewRequest:
-      properties:
-        cost_center_id:
-          type: string
-          format: uuid
-          title: Cost Center Id
-          description: Cost center the operation targets. Stripe customer/subscription artifacts are keyed on cost_center, not enterprise.
-        operation_kind:
-          type: string
-          title: Operation Kind
-        input:
-          type: object
-          title: Input
-      type: object
-      required:
-      - cost_center_id
-      - operation_kind
-      - input
-      title: PreviewRequest
-    DirectorySyncPreview:
-      properties:
-        enterprise_id:
-          type: string
-          format: uuid
-          title: Enterprise Id
-        enterprise_name:
-          type: string
-          title: Enterprise Name
-        workos_directory_user_count:
-          type: integer
-          title: Workos Directory User Count
-        db_user_count:
-          type: integer
-          title: Db User Count
-        to_provision:
-          items:
-            $ref: '#/components/schemas/DirectorySyncUserAction'
-          type: array
-          title: To Provision
-        to_remove:
-          items:
-            $ref: '#/components/schemas/DirectorySyncUserAction'
-          type: array
-          title: To Remove
-        to_link:
-          items:
-            $ref: '#/components/schemas/DirectorySyncUserAction'
-          type: array
-          title: To Link
-      type: object
-      required:
-      - enterprise_id
-      - enterprise_name
-      - workos_directory_user_count
-      - db_user_count
-      - to_provision
-      - to_remove
-      - to_link
-      title: DirectorySyncPreview
-      description: Dry-run diff of a directory sync, shown to the admin before confirming.
-    DirectorySyncStartedResponse:
-      properties:
-        message:
-          type: string
-          title: Message
-        log_query:
-          type: string
-          title: Log Query
-      type: object
-      required:
-      - message
-      - log_query
-      title: DirectorySyncStartedResponse
-      description: Response for async directory sync endpoints (202 Accepted).
-    AdminMemorySearchResult:
-      properties:
-        email:
-          type: string
-          title: Email
-        user_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Id
-        status:
-          type: string
-          enum:
-          - ok
-          - no_memories
-          - user_not_found
-          - error
-          title: Status
-        facts:
-          items:
-            type: object
-          type: array
-          title: Facts
-        nodes:
-          items:
-            type: object
-          type: array
-          title: Nodes
-        error_code:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Error Code
-      type: object
-      required:
-      - email
-      - status
-      title: AdminMemorySearchResult
-      description: Per-user search result. Payload dicts are stripped of internal Graphiti identifiers.
     ValidationError:
       properties:
         loc:
@@ -5916,108 +5623,6 @@ components:
       - msg
       - type
       title: ValidationError
-    RedemptionListItem:
-      properties:
-        id:
-          type: string
-          title: Id
-        user_id:
-          type: string
-          title: User Id
-        campaign_name:
-          type: string
-          title: Campaign Name
-        code_string:
-          type: string
-          title: Code String
-        outcome:
-          type: string
-          title: Outcome
-        trial_days_granted:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Trial Days Granted
-        stripe_subscription_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Stripe Subscription Id
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-      type: object
-      required:
-      - id
-      - user_id
-      - campaign_name
-      - code_string
-      - outcome
-      - trial_days_granted
-      - stripe_subscription_id
-      - created_at
-      title: RedemptionListItem
-      description: A promo redemption summary row for the admin list view.
-    ConsensusPreviewResponse:
-      properties:
-        meeting_id:
-          type: string
-          format: uuid
-          title: Meeting Id
-        requested_algorithm_id:
-          $ref: '#/components/schemas/AlgorithmId'
-        consensus_mode:
-          $ref: '#/components/schemas/ConsensusActualMode'
-        algorithm_version:
-          type: integer
-          title: Algorithm Version
-        reason:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Reason
-        signal_quality:
-          $ref: '#/components/schemas/SignalQuality'
-        speaker_map:
-          anyOf:
-          - type: object
-          - type: 'null'
-          title: Speaker Map
-        entries:
-          items:
-            $ref: '#/components/schemas/TranscriptEntry'
-          type: array
-          title: Entries
-      type: object
-      required:
-      - meeting_id
-      - requested_algorithm_id
-      - consensus_mode
-      - algorithm_version
-      - signal_quality
-      title: ConsensusPreviewResponse
-      description: Ephemeral, non-persisted consensus preview result.
-    StripeProductOption:
-      type: string
-      enum:
-      - FLOW_PRO_MONTHLY
-      - FLOW_PRO_YEARLY
-      - FLOW_STUDENT_MONTHLY
-      - FLOW_STUDENT_YEARLY
-      - FLOW_TEAM_MONTHLY
-      - FLOW_TEAM_YEARLY
-      - FLOW_BUSINESS_MONTHLY
-      - FLOW_BUSINESS_YEARLY
-      title: StripeProductOption
-    TranscriptSpeakerSource:
-      type: string
-      enum:
-      - mic
-      - system
-      - refined
-      title: TranscriptSpeakerSource
-      description: The transcript identity namespace that produced a speaker ID.
     FailedUpdateUserItem:
       properties:
         email:
@@ -6032,14 +5637,430 @@ components:
       - reason
       title: FailedUpdateUserItem
       description: Details about a user that failed to have their role updated.
-    EnterpriseRole:
+    AllEnterprisesResponse:
+      properties:
+        enterprises:
+          items:
+            $ref: '#/components/schemas/EnterpriseListItem'
+          type: array
+          title: Enterprises
+        total:
+          type: integer
+          title: Total
+        limit:
+          type: integer
+          title: Limit
+        offset:
+          type: integer
+          title: Offset
+      type: object
+      required:
+      - enterprises
+      - total
+      - limit
+      - offset
+      title: AllEnterprisesResponse
+      description: Response model for list of all enterprises with pagination
+    AdminUpdateStripeCustomerIdResponse:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        old_stripe_customer_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Old Stripe Customer Id
+        new_stripe_customer_id:
+          type: string
+          title: New Stripe Customer Id
+        stripe_customer_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stripe Customer Email
+        applied:
+          type: boolean
+          title: Applied
+        warnings:
+          items:
+            type: string
+          type: array
+          title: Warnings
+      type: object
+      required:
+      - user_id
+      - old_stripe_customer_id
+      - new_stripe_customer_id
+      - stripe_customer_email
+      - applied
+      - warnings
+      title: AdminUpdateStripeCustomerIdResponse
+    UpdatePreserveContractedSeatsRequest:
+      properties:
+        preserve_contracted_seats:
+          type: boolean
+          title: Preserve Contracted Seats
+      type: object
+      required:
+      - preserve_contracted_seats
+      title: UpdatePreserveContractedSeatsRequest
+      description: Request model for toggling preserve_contracted_seats on an enterprise.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    UpdateCampaignRequest:
+      properties:
+        name:
+          anyOf:
+          - type: string
+            maxLength: 255
+            minLength: 1
+          - type: 'null'
+          title: Name
+        campaign_type:
+          anyOf:
+          - $ref: '#/components/schemas/CampaignType'
+          - type: 'null'
+        status:
+          anyOf:
+          - $ref: '#/components/schemas/CampaignStatus'
+          - type: 'null'
+        trial_days:
+          anyOf:
+          - type: integer
+            maximum: 365.0
+            minimum: 1.0
+          - type: 'null'
+          title: Trial Days
+        source_name:
+          anyOf:
+          - type: string
+            maxLength: 255
+            minLength: 1
+          - type: 'null'
+          title: Source Name
+        attribution_message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Attribution Message
+        max_redemptions:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Redemptions
+        starts_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Starts At
+        expires_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Expires At
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+      type: object
+      title: UpdateCampaignRequest
+      description: Partial-update request for an existing promo campaign.
+    EnterpriseStatus:
       type: string
       enum:
-      - admin
-      - member
-      - superadmin
-      - it_admin
-      title: EnterpriseRole
+      - active
+      - disbanded
+      title: EnterpriseStatus
+      description: Whether an enterprise or team is active or disbanded.
+    UpdateUserTrialEndResponse:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        user_email:
+          type: string
+          title: User Email
+        trial_ends_at:
+          type: integer
+          format: int64
+          title: Trial Ends At
+          description: New trial end time as a Unix timestamp (seconds).
+      type: object
+      required:
+      - user_id
+      - user_email
+      - trial_ends_at
+      title: UpdateUserTrialEndResponse
+      description: Response model for updating a user's personal trial end date.
+    CostCenterListItem:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        name:
+          type: string
+          title: Name
+        status:
+          type: string
+          title: Status
+        stripe_customer_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stripe Customer Id
+        stripe_subscription_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stripe Subscription Id
+      type: object
+      required:
+      - id
+      - name
+      - status
+      - stripe_customer_id
+      - stripe_subscription_id
+      title: CostCenterListItem
+      description: 'One row in the cost-center picker the operator UI renders.
+
+
+        ``name`` comes from ``CostCenter.name`` (default ``"Default"`` for legacy
+
+        single-CC enterprises). ``status`` is the cost_center.status string
+
+        (``active``, ``inactive``, ``trialing``, ``past_due``, etc.). The Stripe
+
+        ids surface so the UI can show whether a cost_center has been wired up to
+
+        Stripe before letting an operator queue an op against it.'
+    DirectorySyncUserAction:
+      properties:
+        email:
+          type: string
+          title: Email
+        action:
+          type: string
+          enum:
+          - linked_workos_id
+          - provisioned
+          - removed
+          - skipped
+          - error
+          title: Action
+        detail:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Detail
+      type: object
+      required:
+      - email
+      - action
+      title: DirectorySyncUserAction
+      description: A single user action from a directory sync operation.
+    AdminMemoryListResult:
+      properties:
+        email:
+          type: string
+          title: Email
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        status:
+          type: string
+          enum:
+          - ok
+          - no_memories
+          - user_not_found
+          - error
+          title: Status
+        episodes:
+          items:
+            type: object
+          type: array
+          title: Episodes
+        error_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error Code
+      type: object
+      required:
+      - email
+      - status
+      title: AdminMemoryListResult
+      description: Per-user list result. Payload dicts are stripped of internal Graphiti identifiers.
+    UpdateUsersRoleRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        role:
+          $ref: '#/components/schemas/EnterpriseRole'
+      type: object
+      required:
+      - email
+      - role
+      title: UpdateUsersRoleRequest
+      description: Request model for updating user roles in an enterprise.
+    UpdateWorkosDirectoryIdRequest:
+      properties:
+        workos_directory_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Workos Directory Id
+      type: object
+      required:
+      - workos_directory_id
+      title: UpdateWorkosDirectoryIdRequest
+      description: Request model for setting or unlinking workos_directory_id on an enterprise.
+    ListCostCentersResponse:
+      properties:
+        cost_centers:
+          items:
+            $ref: '#/components/schemas/CostCenterListItem'
+          type: array
+          title: Cost Centers
+      type: object
+      required:
+      - cost_centers
+      title: ListCostCentersResponse
+      description: 'Cost centers under an enterprise, sorted by ``created_at`` ascending.
+
+
+        The UI uses this to populate a picker before running a billing op: when an
+
+        enterprise has exactly one cost_center the picker auto-selects it; with
+
+        multiple, the operator must choose explicitly.'
+    CustomBillingConfigInput:
+      properties:
+        custom_unit_price_cents:
+          type: integer
+          minimum: 1.0
+          title: Custom Unit Price Cents
+          description: Per-seat USD price in cents over the plan's billing period (year for *_YEARLY plans, month for *_MONTHLY).
+      type: object
+      required:
+      - custom_unit_price_cents
+      title: CustomBillingConfigInput
+      description: 'Custom-pricing fields collected inline during sales-led enterprise creation.
+
+
+        All other billing-config fields are derived server-side: product_name from plan,
+
+        true_up_period_days from plan cadence, payment_terms_days from days_until_due,
+
+        currency is always USD (the sales-led subscription path is USD-only end-to-end —
+
+        platform-fee prices and the subscription currency arg are both USD).'
+    BlockedDomainItem:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        domain:
+          type: string
+          title: Domain
+        notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Notes
+        created_by:
+          type: string
+          title: Created By
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+      type: object
+      required:
+      - id
+      - domain
+      - notes
+      - created_by
+      - created_at
+      title: BlockedDomainItem
+      description: Response model for a blocked domain.
+    ToggleDomainDeletedResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+        workos_synced:
+          type: boolean
+          title: Workos Synced
+          description: Whether active domains were successfully synced to WorkOS
+          default: true
+      type: object
+      required:
+      - message
+      title: ToggleDomainDeletedResponse
+      description: Response model for toggling domain deleted status.
+    CreateCodesRequest:
+      properties:
+        codes:
+          items:
+            type: string
+          type: array
+          minItems: 1
+          title: Codes
+        max_redemptions:
+          anyOf:
+          - type: integer
+            minimum: 1.0
+          - type: 'null'
+          title: Max Redemptions
+      type: object
+      required:
+      - codes
+      title: CreateCodesRequest
+      description: Request to create one or more promo codes for a campaign.
+    UpdateEnterpriseSettingsRequest:
+      properties:
+        settings:
+          type: object
+          title: Settings
+      type: object
+      required:
+      - settings
+      title: UpdateEnterpriseSettingsRequest
+    PricingTierSchema:
+      properties:
+        max_seats:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Seats
+          description: Maximum seats in this tier (None = unlimited)
+        price_cents_per_seat_per_year:
+          type: integer
+          minimum: 0.0
+          title: Price Cents Per Seat Per Year
+          description: Price per seat per year in cents
+      type: object
+      required:
+      - price_cents_per_seat_per_year
+      title: PricingTierSchema
+      description: Schema for a single pricing tier.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

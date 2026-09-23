@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wispr Backend Analytics Analytics Registry API
+  title: Wispr Backend Analytics Registry API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -157,179 +157,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    AnalyticsPlatform:
-      type: string
-      enum:
-      - desktop
-      - ios
-      - android
-      title: AnalyticsPlatform
-      description: Client platform an analytics event is emitted from.
-    AnalyticsEventUpdate:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: Event ID to update
-        name:
-          anyOf:
-          - type: string
-            maxLength: 255
-            minLength: 1
-          - type: 'null'
-          title: Name
-          description: Display name for the event
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of the event
-        trigger:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Trigger
-          description: Description of when this event fires
-        properties_schema:
-          anyOf:
-          - type: object
-          - type: 'null'
-          title: Properties Schema
-          description: JSON schema for event properties
-        platforms:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/AnalyticsPlatform'
-            type: array
-          - type: 'null'
-          title: Platforms
-          description: Platforms where this event is used
-        lifecycle_state:
-          anyOf:
-          - $ref: '#/components/schemas/AnalyticsLifecycleState'
-          - type: 'null'
-          description: Lifecycle state of the event
-      type: object
-      required:
-      - id
-      title: AnalyticsEventUpdate
-      description: Partial-update payload for an existing analytics event, keyed by id.
-    ChangeSetStatus:
-      type: string
-      enum:
-      - created
-      - published
-      - merged
-      title: ChangeSetStatus
-      description: Status of a change set within the publish pipeline.
-    AnalyticsEventStatus:
-      type: string
-      enum:
-      - needs_publish
-      - not_implemented
-      - implemented
-      title: AnalyticsEventStatus
-      description: Client-implementation status of an analytics event.
-    BatchSaveRequest:
-      properties:
-        creates:
-          items:
-            $ref: '#/components/schemas/AnalyticsEventBase'
-          type: array
-          title: Creates
-          description: New events to create
-        updates:
-          items:
-            $ref: '#/components/schemas/AnalyticsEventUpdate'
-          type: array
-          title: Updates
-          description: Existing events to update
-      type: object
-      title: BatchSaveRequest
-      description: Batch of event creates and updates to apply in one request.
-    AnalyticsLifecycleState:
-      type: string
-      enum:
-      - draft
-      - active
-      - deprecated
-      title: AnalyticsLifecycleState
-      description: Lifecycle stage of an analytics event definition.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    AnalyticsEventBase:
-      properties:
-        event_key:
-          anyOf:
-          - type: string
-            maxLength: 255
-            minLength: 1
-          - type: 'null'
-          title: Event Key
-          description: Immutable internal identifier; auto-generated from name if omitted
-        name:
-          type: string
-          maxLength: 255
-          minLength: 1
-          title: Name
-          description: Display name for the event
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of the event
-        trigger:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Trigger
-          description: Description of when this event fires
-        properties_schema:
-          type: object
-          title: Properties Schema
-          description: JSON schema for event properties
-        platforms:
-          items:
-            $ref: '#/components/schemas/AnalyticsPlatform'
-          type: array
-          title: Platforms
-          description: Platforms where this event is used
-        lifecycle_state:
-          $ref: '#/components/schemas/AnalyticsLifecycleState'
-          description: Lifecycle state of the event
-          default: draft
-      type: object
-      required:
-      - name
-      title: AnalyticsEventBase
-      description: Shared analytics event fields used as the create payload.
     ChangeSetResponse:
       properties:
         change_set_id:
@@ -376,6 +203,14 @@ components:
       - modified_at
       title: ChangeSetResponse
       description: A registry change set with its status, snapshot, and audit fields.
+    AnalyticsLifecycleState:
+      type: string
+      enum:
+      - draft
+      - active
+      - deprecated
+      title: AnalyticsLifecycleState
+      description: Lifecycle stage of an analytics event definition.
     AnalyticsEventResponse:
       properties:
         id:
@@ -456,6 +291,22 @@ components:
       - status
       title: AnalyticsEventResponse
       description: A fully hydrated analytics event, including audit and status fields.
+    ChangeSetStatus:
+      type: string
+      enum:
+      - created
+      - published
+      - merged
+      title: ChangeSetStatus
+      description: Status of a change set within the publish pipeline.
+    AnalyticsPlatform:
+      type: string
+      enum:
+      - desktop
+      - ios
+      - android
+      title: AnalyticsPlatform
+      description: Client platform an analytics event is emitted from.
     BatchSaveResponse:
       properties:
         created:
@@ -479,6 +330,40 @@ components:
       type: object
       title: BatchSaveResponse
       description: 'Result of a batch save: created and updated events plus any errors.'
+    AnalyticsEventStatus:
+      type: string
+      enum:
+      - needs_publish
+      - not_implemented
+      - implemented
+      title: AnalyticsEventStatus
+      description: Client-implementation status of an analytics event.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     HTTPValidationError:
       properties:
         detail:
@@ -488,6 +373,121 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    BatchSaveRequest:
+      properties:
+        creates:
+          items:
+            $ref: '#/components/schemas/AnalyticsEventBase'
+          type: array
+          title: Creates
+          description: New events to create
+        updates:
+          items:
+            $ref: '#/components/schemas/AnalyticsEventUpdate'
+          type: array
+          title: Updates
+          description: Existing events to update
+      type: object
+      title: BatchSaveRequest
+      description: Batch of event creates and updates to apply in one request.
+    AnalyticsEventBase:
+      properties:
+        event_key:
+          anyOf:
+          - type: string
+            maxLength: 255
+            minLength: 1
+          - type: 'null'
+          title: Event Key
+          description: Immutable internal identifier; auto-generated from name if omitted
+        name:
+          type: string
+          maxLength: 255
+          minLength: 1
+          title: Name
+          description: Display name for the event
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the event
+        trigger:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Trigger
+          description: Description of when this event fires
+        properties_schema:
+          type: object
+          title: Properties Schema
+          description: JSON schema for event properties
+        platforms:
+          items:
+            $ref: '#/components/schemas/AnalyticsPlatform'
+          type: array
+          title: Platforms
+          description: Platforms where this event is used
+        lifecycle_state:
+          $ref: '#/components/schemas/AnalyticsLifecycleState'
+          description: Lifecycle state of the event
+          default: draft
+      type: object
+      required:
+      - name
+      title: AnalyticsEventBase
+      description: Shared analytics event fields used as the create payload.
+    AnalyticsEventUpdate:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Event ID to update
+        name:
+          anyOf:
+          - type: string
+            maxLength: 255
+            minLength: 1
+          - type: 'null'
+          title: Name
+          description: Display name for the event
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the event
+        trigger:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Trigger
+          description: Description of when this event fires
+        properties_schema:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Properties Schema
+          description: JSON schema for event properties
+        platforms:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/AnalyticsPlatform'
+            type: array
+          - type: 'null'
+          title: Platforms
+          description: Platforms where this event is used
+        lifecycle_state:
+          anyOf:
+          - $ref: '#/components/schemas/AnalyticsLifecycleState'
+          - type: 'null'
+          description: Lifecycle state of the event
+      type: object
+      required:
+      - id
+      title: AnalyticsEventUpdate
+      description: Partial-update payload for an existing analytics event, keyed by id.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

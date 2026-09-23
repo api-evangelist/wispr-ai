@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wispr Backend Analytics Transform API
+  title: Wispr Backend Transform API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -274,6 +274,44 @@ components:
         The server validates that `old_string` occurs exactly once in the target
 
         before applying.'
+    TransformSuggestion:
+      properties:
+        id:
+          type: string
+          title: Id
+        label:
+          type: string
+          title: Label
+        category:
+          $ref: '#/components/schemas/TransformCategory'
+        prompt:
+          type: string
+          title: Prompt
+        response_target:
+          $ref: '#/components/schemas/ResponseTarget'
+        section_title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Section Title
+        empty_result_message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Empty Result Message
+        model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model
+      type: object
+      required:
+      - id
+      - label
+      - category
+      - prompt
+      - response_target
+      title: TransformSuggestion
     TransformApplyResponse:
       properties:
         steps:
@@ -321,62 +359,110 @@ components:
       - transformed_text
       - response_target
       title: TransformApplyResponse
-    TransformSuggestionsRequest:
+    TransformStreamErrorPayload:
       properties:
-        content:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Content
-        count:
-          type: integer
-          maximum: 10.0
-          minimum: 1.0
-          title: Count
-          default: 6
-      type: object
-      title: TransformSuggestionsRequest
-    TransformApplySuggestionRequest:
-      properties:
-        source:
-          $ref: '#/components/schemas/src__backend_service__services__llm__cost__Source'
-          default: unknown
-        content:
-          $ref: '#/components/schemas/TransformContent'
-        trajectory:
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/UserPromptStep'
-            - $ref: '#/components/schemas/ChatStep'
-            - $ref: '#/components/schemas/RewriteStep'
-            - $ref: '#/components/schemas/ReplaceStep'
-            - $ref: '#/components/schemas/NewTabStep'
-            discriminator:
-              propertyName: kind
-              mapping:
-                chat: '#/components/schemas/ChatStep'
-                new_tab: '#/components/schemas/NewTabStep'
-                replace: '#/components/schemas/ReplaceStep'
-                rewrite: '#/components/schemas/RewriteStep'
-                user_prompt: '#/components/schemas/UserPromptStep'
-          type: array
-          title: Trajectory
-        suggestion_id:
+        detail:
           type: string
-          title: Suggestion Id
-        suggestions_count:
-          anyOf:
-          - type: integer
-            maximum: 10.0
-            minimum: 1.0
-          - type: 'null'
-          title: Suggestions Count
+          title: Detail
       type: object
       required:
+      - detail
+      title: TransformStreamErrorPayload
+      description: Terminal SSE ``error`` frame payload for ``POST /api/v1/transform/apply/stream``.
+    TransformSuggestionsResponse:
+      properties:
+        suggestions:
+          items:
+            $ref: '#/components/schemas/TransformSuggestion'
+          type: array
+          title: Suggestions
+      type: object
+      required:
+      - suggestions
+      title: TransformSuggestionsResponse
+    TransformContent:
+      properties:
+        read_only:
+          items:
+            $ref: '#/components/schemas/Content'
+          type: array
+          title: Read Only
+        editable:
+          items:
+            $ref: '#/components/schemas/Content'
+          type: array
+          title: Editable
+      type: object
+      required:
+      - read_only
+      - editable
+      title: TransformContent
+    ReplaceStep:
+      properties:
+        kind:
+          type: string
+          const: replace
+          title: Kind
+          default: replace
+        edits:
+          items:
+            $ref: '#/components/schemas/ReplaceEdit'
+          type: array
+          title: Edits
+      type: object
+      required:
+      - edits
+      title: ReplaceStep
+      description: 'An assistant turn where the model edited editable documents with targeted
+
+        (old_string -> new_string) replacements instead of full rewrites — cheaper
+
+        on tokens and, on the client, applied as a precise editor edit rather than a
+
+        whole-document re-render.
+
+
+        Free-form-tool-only. The server validates each edit (`old_string` must occur
+
+        exactly once in the named editable doc) and returns the `ReplaceStep` for the
+
+        client to apply by `name`. The deprecated `transformed_text` mirror still
+
+        carries the full post-edit content for older clients that can''t apply a
+
+        `ReplaceStep`.'
+    Content:
+      properties:
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+        content:
+          type: string
+          maxLength: 1000000
+          title: Content
+      type: object
+      required:
+      - name
+      - description
       - content
-      - trajectory
-      - suggestion_id
-      title: TransformApplySuggestionRequest
+      title: Content
+      description: 'A named document passed to / returned from the transform endpoint.
+
+
+        ``read_only_content`` items are grounding the model reads but never outputs;
+
+        ``editable_content`` items are documents the model may rewrite or append to
+
+        (and are returned, updated, keyed by ``name``). ``description`` is the
+
+        per-document prompting hook — it tells the model what the document is and
+
+        what to include/exclude in the output (e.g. "this is the title, don''t repeat
+
+        it as a heading in the body").'
     TransformApplySuggestionResponse:
       properties:
         steps:
@@ -412,161 +498,6 @@ components:
       required:
       - steps
       title: TransformApplySuggestionResponse
-    RewriteStep:
-      properties:
-        kind:
-          type: string
-          const: rewrite
-          title: Kind
-          default: rewrite
-        documents:
-          items:
-            $ref: '#/components/schemas/RewriteDocument'
-          type: array
-          title: Documents
-      type: object
-      required:
-      - documents
-      title: RewriteStep
-      description: 'An assistant turn where the model rewrote one or more editable documents.
-
-
-        `documents` holds the new content for each document the model changed (a
-
-        subset of the request''s `editable_content`, keyed by `name`). APPEND
-
-        suggestions also surface as a rewrite — the server stitches the section into
-
-        the target document and returns its full new content here.'
-    TransformSuggestion:
-      properties:
-        id:
-          type: string
-          title: Id
-        label:
-          type: string
-          title: Label
-        category:
-          $ref: '#/components/schemas/TransformCategory'
-        prompt:
-          type: string
-          title: Prompt
-        response_target:
-          $ref: '#/components/schemas/ResponseTarget'
-        section_title:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Section Title
-        empty_result_message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Empty Result Message
-        model:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Model
-      type: object
-      required:
-      - id
-      - label
-      - category
-      - prompt
-      - response_target
-      title: TransformSuggestion
-    ToastVariant:
-      type: string
-      enum:
-      - info
-      - error
-      title: ToastVariant
-      description: 'Visual style of a server-emitted toast on the client. `info` is a neutral
-
-        confirmation/notice; `error` is the styled error variant. The desktop
-
-        meeting-recorder store''s `showToast` accepts the same `''info'' | ''error''`
-
-        union, so the variant flows through 1:1 without translation.'
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    VoiceProfilePromptEntry:
-      properties:
-        name:
-          type: string
-          title: Name
-        description:
-          type: string
-          title: Description
-        prompt:
-          type: string
-          title: Prompt
-      type: object
-      required:
-      - name
-      - description
-      - prompt
-      title: VoiceProfilePromptEntry
-      description: A resolved team or personal Transforms voice profile for the requesting user.
-    TransformStreamErrorPayload:
-      properties:
-        detail:
-          type: string
-          title: Detail
-      type: object
-      required:
-      - detail
-      title: TransformStreamErrorPayload
-      description: Terminal SSE ``error`` frame payload for ``POST /api/v1/transform/apply/stream``.
-    ChatStep:
-      properties:
-        kind:
-          type: string
-          const: chat
-          title: Kind
-          default: chat
-        text:
-          type: string
-          title: Text
-      type: object
-      required:
-      - text
-      title: ChatStep
-      description: An assistant turn where the model answered via the `chat` tool.
-    Toast:
-      properties:
-        variant:
-          $ref: '#/components/schemas/ToastVariant'
-        message:
-          type: string
-          title: Message
-      type: object
-      required:
-      - variant
-      - message
-      title: Toast
-      description: 'A user-facing toast the server asks the client to show. Used today for
-
-        the empty-result case (an APPEND suggestion whose model output is empty);
-
-        the `error` variant is reserved for known recoverable failures the server
-
-        wants to surface with suggestion-specific copy in a 200 response.
-
-
-        HTTP errors (timeouts, rate limits, unexpected exceptions) still flow as
-
-        HTTPException responses — those don''t carry a Toast and the client falls
-
-        back to its generic "transform failed" copy.'
     TransformApplyDynamicRequest:
       properties:
         source:
@@ -610,6 +541,131 @@ components:
       - content
       - trajectory
       title: TransformApplyDynamicRequest
+    ToastVariant:
+      type: string
+      enum:
+      - info
+      - error
+      title: ToastVariant
+      description: 'Visual style of a server-emitted toast on the client. `info` is a neutral
+
+        confirmation/notice; `error` is the styled error variant. The desktop
+
+        meeting-recorder store''s `showToast` accepts the same `''info'' | ''error''`
+
+        union, so the variant flows through 1:1 without translation.'
+    RewriteStep:
+      properties:
+        kind:
+          type: string
+          const: rewrite
+          title: Kind
+          default: rewrite
+        documents:
+          items:
+            $ref: '#/components/schemas/RewriteDocument'
+          type: array
+          title: Documents
+      type: object
+      required:
+      - documents
+      title: RewriteStep
+      description: 'An assistant turn where the model rewrote one or more editable documents.
+
+
+        `documents` holds the new content for each document the model changed (a
+
+        subset of the request''s `editable_content`, keyed by `name`). APPEND
+
+        suggestions also surface as a rewrite — the server stitches the section into
+
+        the target document and returns its full new content here.'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ChatStep:
+      properties:
+        kind:
+          type: string
+          const: chat
+          title: Kind
+          default: chat
+        text:
+          type: string
+          title: Text
+      type: object
+      required:
+      - text
+      title: ChatStep
+      description: An assistant turn where the model answered via the `chat` tool.
+    NewTabStep:
+      properties:
+        kind:
+          type: string
+          const: new_tab
+          title: Kind
+          default: new_tab
+        text:
+          type: string
+          title: Text
+        summary:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Summary
+      type: object
+      required:
+      - text
+      title: NewTabStep
+      description: 'An assistant turn that produced a complete standalone document (an
+
+        artifact) to open in a new tab (e.g. a PRD or follow-up email). `text` is the
+
+        document content; `summary` is a 1-2 word name the model gives it, used as
+
+        the artifact''s section/pill title on the client. `summary` is `None` on the
+
+        text-mode catalog paths that reuse this step without a tool schema.'
+    ResponseTarget:
+      type: string
+      enum:
+      - chat
+      - append
+      - rewrite
+      - replace
+      - new_tab
+      title: ResponseTarget
+      description: "Where a suggestion's output lands in the client.\n\nThe backend is the single source of truth — each suggestion declares what kind\nof artifact its prompt produces, and the client dispatches accordingly. Prompts\nand targets are tightly coupled (an email draft IS a new document; a \"more\nconcise\" rewrite IS a replacement of the current doc), so they live together.\n\nContract with the backend:\n  - CHAT:     `transformed_text` is the assistant's reply message.\n  - APPEND:   `transformed_text` is a fragment to concatenate onto the current doc.\n  - REWRITE:  `transformed_text` is the full replacement for the current doc.\n  - REPLACE:  a targeted (old_string -> new_string) edit returned as a\n              `ReplaceStep`. Used only as a free-form tool; the server\n              validates each edit (old_string unique in its target) and the\n              client applies the precise edit. `transformed_text` mirrors the\n              full post-edit content for older clients.\n  - NEW_TAB:  `transformed_text` is a complete new document (opened in a new tab).\n\nDeprecated on the response in favour of the discriminated-union ``result``\n(``TransformApplyResult``); still populated for older clients."
+    TransformCategory:
+      type: string
+      enum:
+      - tone
+      - structural
+      - meeting
+      title: TransformCategory
     RewriteDocument:
       properties:
         name:
@@ -626,13 +682,136 @@ components:
       description: 'A single named document edit: replace the editable document `name` with
 
         `text`. The client applies it by `name`.'
-    TransformCategory:
-      type: string
-      enum:
-      - tone
-      - structural
-      - meeting
-      title: TransformCategory
+    VoiceProfilePromptsResponse:
+      properties:
+        team:
+          anyOf:
+          - $ref: '#/components/schemas/VoiceProfilePromptEntry'
+          - type: 'null'
+        personal:
+          anyOf:
+          - $ref: '#/components/schemas/VoiceProfilePromptEntry'
+          - type: 'null'
+      type: object
+      title: VoiceProfilePromptsResponse
+      description: 'Per-user Transforms voice profiles (prompt + display metadata).
+
+
+        ``team`` / ``personal`` are the resolved profiles for the requesting user, or
+
+        ``None`` when they don''t belong to a configured profile. The desktop
+
+        ``transforms-personal-profile`` flag is a boolean gate only — when on, the
+
+        client fetches this endpoint and shows whichever of ``team`` / ``personal``
+
+        are non-null (both when the user matches both).'
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    Toast:
+      properties:
+        variant:
+          $ref: '#/components/schemas/ToastVariant'
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - variant
+      - message
+      title: Toast
+      description: 'A user-facing toast the server asks the client to show. Used today for
+
+        the empty-result case (an APPEND suggestion whose model output is empty);
+
+        the `error` variant is reserved for known recoverable failures the server
+
+        wants to surface with suggestion-specific copy in a 200 response.
+
+
+        HTTP errors (timeouts, rate limits, unexpected exceptions) still flow as
+
+        HTTPException responses — those don''t carry a Toast and the client falls
+
+        back to its generic "transform failed" copy.'
+    TransformApplySuggestionRequest:
+      properties:
+        source:
+          $ref: '#/components/schemas/src__backend_service__services__llm__cost__Source'
+          default: unknown
+        content:
+          $ref: '#/components/schemas/TransformContent'
+        trajectory:
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/UserPromptStep'
+            - $ref: '#/components/schemas/ChatStep'
+            - $ref: '#/components/schemas/RewriteStep'
+            - $ref: '#/components/schemas/ReplaceStep'
+            - $ref: '#/components/schemas/NewTabStep'
+            discriminator:
+              propertyName: kind
+              mapping:
+                chat: '#/components/schemas/ChatStep'
+                new_tab: '#/components/schemas/NewTabStep'
+                replace: '#/components/schemas/ReplaceStep'
+                rewrite: '#/components/schemas/RewriteStep'
+                user_prompt: '#/components/schemas/UserPromptStep'
+          type: array
+          title: Trajectory
+        suggestion_id:
+          type: string
+          title: Suggestion Id
+        suggestions_count:
+          anyOf:
+          - type: integer
+            maximum: 10.0
+            minimum: 1.0
+          - type: 'null'
+          title: Suggestions Count
+      type: object
+      required:
+      - content
+      - trajectory
+      - suggestion_id
+      title: TransformApplySuggestionRequest
+    UserPromptStep:
+      properties:
+        kind:
+          type: string
+          const: user_prompt
+          title: Kind
+          default: user_prompt
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - message
+      title: UserPromptStep
+      description: A user turn in a transform trajectory.
+    TransformSuggestionsRequest:
+      properties:
+        content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Content
+        count:
+          type: integer
+          maximum: 10.0
+          minimum: 1.0
+          title: Count
+          default: 6
+      type: object
+      title: TransformSuggestionsRequest
     TransformApplyRequest:
       properties:
         source:
@@ -717,110 +896,24 @@ components:
           title: Allowed Tools
       type: object
       title: TransformApplyRequest
-    TransformSuggestionsResponse:
+    VoiceProfilePromptEntry:
       properties:
-        suggestions:
-          items:
-            $ref: '#/components/schemas/TransformSuggestion'
-          type: array
-          title: Suggestions
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+        prompt:
+          type: string
+          title: Prompt
       type: object
       required:
-      - suggestions
-      title: TransformSuggestionsResponse
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    UserPromptStep:
-      properties:
-        kind:
-          type: string
-          const: user_prompt
-          title: Kind
-          default: user_prompt
-        message:
-          type: string
-          title: Message
-      type: object
-      required:
-      - message
-      title: UserPromptStep
-      description: A user turn in a transform trajectory.
-    VoiceProfilePromptsResponse:
-      properties:
-        team:
-          anyOf:
-          - $ref: '#/components/schemas/VoiceProfilePromptEntry'
-          - type: 'null'
-        personal:
-          anyOf:
-          - $ref: '#/components/schemas/VoiceProfilePromptEntry'
-          - type: 'null'
-      type: object
-      title: VoiceProfilePromptsResponse
-      description: 'Per-user Transforms voice profiles (prompt + display metadata).
-
-
-        ``team`` / ``personal`` are the resolved profiles for the requesting user, or
-
-        ``None`` when they don''t belong to a configured profile. The desktop
-
-        ``transforms-personal-profile`` flag is a boolean gate only — when on, the
-
-        client fetches this endpoint and shows whichever of ``team`` / ``personal``
-
-        are non-null (both when the user matches both).'
-    NewTabStep:
-      properties:
-        kind:
-          type: string
-          const: new_tab
-          title: Kind
-          default: new_tab
-        text:
-          type: string
-          title: Text
-        summary:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Summary
-      type: object
-      required:
-      - text
-      title: NewTabStep
-      description: 'An assistant turn that produced a complete standalone document (an
-
-        artifact) to open in a new tab (e.g. a PRD or follow-up email). `text` is the
-
-        document content; `summary` is a 1-2 word name the model gives it, used as
-
-        the artifact''s section/pill title on the client. `summary` is `None` on the
-
-        text-mode catalog paths that reuse this step without a tool schema.'
+      - name
+      - description
+      - prompt
+      title: VoiceProfilePromptEntry
+      description: A resolved team or personal Transforms voice profile for the requesting user.
     TransformApplyDynamicResponse:
       properties:
         steps:
@@ -870,99 +963,6 @@ components:
         Observability-only: never let a ``Source`` value influence routing,
 
         pricing, or attribution. Bounded so it''s safe to use as a metric tag.'
-    TransformContent:
-      properties:
-        read_only:
-          items:
-            $ref: '#/components/schemas/Content'
-          type: array
-          title: Read Only
-        editable:
-          items:
-            $ref: '#/components/schemas/Content'
-          type: array
-          title: Editable
-      type: object
-      required:
-      - read_only
-      - editable
-      title: TransformContent
-    ReplaceStep:
-      properties:
-        kind:
-          type: string
-          const: replace
-          title: Kind
-          default: replace
-        edits:
-          items:
-            $ref: '#/components/schemas/ReplaceEdit'
-          type: array
-          title: Edits
-      type: object
-      required:
-      - edits
-      title: ReplaceStep
-      description: 'An assistant turn where the model edited editable documents with targeted
-
-        (old_string -> new_string) replacements instead of full rewrites — cheaper
-
-        on tokens and, on the client, applied as a precise editor edit rather than a
-
-        whole-document re-render.
-
-
-        Free-form-tool-only. The server validates each edit (`old_string` must occur
-
-        exactly once in the named editable doc) and returns the `ReplaceStep` for the
-
-        client to apply by `name`. The deprecated `transformed_text` mirror still
-
-        carries the full post-edit content for older clients that can''t apply a
-
-        `ReplaceStep`.'
-    Content:
-      properties:
-        name:
-          type: string
-          title: Name
-        description:
-          type: string
-          title: Description
-        content:
-          type: string
-          maxLength: 1000000
-          title: Content
-      type: object
-      required:
-      - name
-      - description
-      - content
-      title: Content
-      description: 'A named document passed to / returned from the transform endpoint.
-
-
-        ``read_only_content`` items are grounding the model reads but never outputs;
-
-        ``editable_content`` items are documents the model may rewrite or append to
-
-        (and are returned, updated, keyed by ``name``). ``description`` is the
-
-        per-document prompting hook — it tells the model what the document is and
-
-        what to include/exclude in the output (e.g. "this is the title, don''t repeat
-
-        it as a heading in the body").'
-    ResponseTarget:
-      type: string
-      enum:
-      - chat
-      - append
-      - rewrite
-      - replace
-      - new_tab
-      title: ResponseTarget
-      description: "Where a suggestion's output lands in the client.\n\nThe backend is the single source of truth — each suggestion declares what kind\nof artifact its prompt produces, and the client dispatches accordingly. Prompts\nand targets are tightly coupled (an email draft IS a new document; a \"more\nconcise\" rewrite IS a replacement of the current doc), so they live together.\n\nContract with the backend:\n  - CHAT:     `transformed_text` is the assistant's reply message.\n  - APPEND:   `transformed_text` is a fragment to concatenate onto the current doc.\n  - REWRITE:  `transformed_text` is the full replacement for the current doc.\n  - REPLACE:  a targeted (old_string -> new_string) edit returned as a\n              `ReplaceStep`. Used only as a free-form tool; the server\n              validates each edit (old_string unique in its target) and the\n              client applies the precise edit. `transformed_text` mirrors the\n              full post-edit content for older clients.\n  - NEW_TAB:  `transformed_text` is a complete new document (opened in a new tab).\n\nDeprecated on the response in favour of the discriminated-union ``result``\n(``TransformApplyResult``); still populated for older clients."
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

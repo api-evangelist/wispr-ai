@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wispr Backend Analytics Enterpret API
+  title: Wispr Backend Enterpret API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -37,36 +37,32 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    EnterpretWebhookRequest:
+    EnterpretConversation:
       properties:
-        webhook_target:
+        message_id:
           anyOf:
           - type: string
           - type: 'null'
-          title: Webhook Target
-        request_id:
+          title: Message Id
+        author_name:
           anyOf:
           - type: string
           - type: 'null'
-          title: Request Id
-        webhook_id:
+          title: Author Name
+        body:
           anyOf:
           - type: string
           - type: 'null'
-          title: Webhook Id
-        webhook_payload:
-          $ref: '#/components/schemas/EnterpretWebhookPayload'
-        metadata:
+          title: Body
+        ccs:
           anyOf:
-          - type: object
+          - type: string
           - type: 'null'
-          title: Metadata
+          title: Ccs
       additionalProperties: true
       type: object
-      required:
-      - webhook_payload
-      title: EnterpretWebhookRequest
-      description: The outer Enterpret webhook request wrapping its payload and metadata.
+      title: EnterpretConversation
+      description: A single conversation message from an Enterpret issue.
     EnterpretWebhookPayload:
       properties:
         issue_id:
@@ -335,6 +331,36 @@ components:
       - issue_number
       title: EnterpretWebhookPayload
       description: The issue payload delivered by an Enterpret webhook.
+    EnterpretWebhookRequest:
+      properties:
+        webhook_target:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Webhook Target
+        request_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Request Id
+        webhook_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Webhook Id
+        webhook_payload:
+          $ref: '#/components/schemas/EnterpretWebhookPayload'
+        metadata:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Metadata
+      additionalProperties: true
+      type: object
+      required:
+      - webhook_payload
+      title: EnterpretWebhookRequest
+      description: The outer Enterpret webhook request wrapping its payload and metadata.
     ValidationError:
       properties:
         loc:
@@ -392,32 +418,6 @@ components:
       type: object
       title: EnterpretDeviceDetails
       description: Device metadata attached to an Enterpret issue.
-    EnterpretConversation:
-      properties:
-        message_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Message Id
-        author_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Author Name
-        body:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Body
-        ccs:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Ccs
-      additionalProperties: true
-      type: object
-      title: EnterpretConversation
-      description: A single conversation message from an Enterpret issue.
     HTTPValidationError:
       properties:
         detail:

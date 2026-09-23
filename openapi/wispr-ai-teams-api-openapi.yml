@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wispr Backend Analytics Teams API
+  title: Wispr Backend Teams API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -404,53 +404,17 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    TeamResponse:
+    MoveTeamToCostCenterRequest:
       properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-        name:
-          type: string
-          title: Name
         cost_center_id:
           type: string
           format: uuid
           title: Cost Center Id
-        cost_center_name:
-          type: string
-          title: Cost Center Name
-        enterprise_id:
-          type: string
-          format: uuid
-          title: Enterprise Id
-        status:
-          type: string
-          title: Status
-        member_count:
-          type: integer
-          title: Member Count
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        billing_owner_email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Billing Owner Email
       type: object
       required:
-      - id
-      - name
       - cost_center_id
-      - cost_center_name
-      - enterprise_id
-      - status
-      - member_count
-      - created_at
-      title: TeamResponse
-      description: Team details with live member count.
+      title: MoveTeamToCostCenterRequest
+      description: Reassign a team to a different cost center within the same enterprise.
     ActiveCostCenterMemberResponse:
       properties:
         user_id:
@@ -513,99 +477,53 @@ components:
         ``team_id`` is the member''s *current* team within the CC, used to filter
 
         successor-admin candidates to caller''s old teammates.'
-    MoveMemberRequest:
+    TeamResponse:
       properties:
-        user_id:
+        id:
           type: string
-          maxLength: 80
-          minLength: 1
-          title: User Id
-      type: object
-      required:
-      - user_id
-      title: MoveMemberRequest
-      description: Pull an existing enterprise user into this team from whichever team they're on now.
-    UpdateTeamRequest:
-      properties:
+          format: uuid
+          title: Id
         name:
           type: string
-          maxLength: 120
-          minLength: 1
           title: Name
-      type: object
-      required:
-      - name
-      title: UpdateTeamRequest
-    TeamListResponse:
-      properties:
-        teams:
-          items:
-            $ref: '#/components/schemas/TeamResponse'
-          type: array
-          title: Teams
-      type: object
-      required:
-      - teams
-      title: TeamListResponse
-    CreateTeamRequest:
-      properties:
-        name:
-          type: string
-          maxLength: 120
-          minLength: 1
-          title: Name
-        member_user_ids:
-          items:
-            type: string
-          type: array
-          maxItems: 500
-          title: Member User Ids
-        successor_admin_email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Successor Admin Email
-      type: object
-      required:
-      - name
-      title: CreateTeamRequest
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    MoveTeamToCostCenterRequest:
-      properties:
         cost_center_id:
           type: string
           format: uuid
           title: Cost Center Id
+        cost_center_name:
+          type: string
+          title: Cost Center Name
+        enterprise_id:
+          type: string
+          format: uuid
+          title: Enterprise Id
+        status:
+          type: string
+          title: Status
+        member_count:
+          type: integer
+          title: Member Count
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        billing_owner_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Billing Owner Email
       type: object
       required:
+      - id
+      - name
       - cost_center_id
-      title: MoveTeamToCostCenterRequest
-      description: Reassign a team to a different cost center within the same enterprise.
+      - cost_center_name
+      - enterprise_id
+      - status
+      - member_count
+      - created_at
+      title: TeamResponse
+      description: Team details with live member count.
     ActiveCostCenterResponse:
       properties:
         cost_center_id:
@@ -643,20 +561,6 @@ components:
         uses ``members`` (excluding the caller) to populate the picker. Successor
 
         admins are filtered client-side to members with ``team_id == caller_team_id``.'
-    TeamMemberRole:
-      type: string
-      enum:
-      - admin
-      - member
-      title: TeamMemberRole
-      description: 'Per-team membership role stored in ``UserTeamMembership.role``.
-
-
-        Distinct from the enterprise-level role on ``User.enterprise_role`` — a user
-
-        can be an enterprise ``superadmin`` while being a team-level ``member``, or
-
-        vice versa.'
     UpdateTeamMemberRoleRequest:
       properties:
         role:
@@ -686,6 +590,80 @@ components:
       - role
       title: TeamMembershipResponse
       description: A single ``UserTeamMembership`` row exposed to admin clients.
+    UpdateTeamRequest:
+      properties:
+        name:
+          type: string
+          maxLength: 120
+          minLength: 1
+          title: Name
+      type: object
+      required:
+      - name
+      title: UpdateTeamRequest
+    TeamListResponse:
+      properties:
+        teams:
+          items:
+            $ref: '#/components/schemas/TeamResponse'
+          type: array
+          title: Teams
+      type: object
+      required:
+      - teams
+      title: TeamListResponse
+    MoveMemberRequest:
+      properties:
+        user_id:
+          type: string
+          maxLength: 80
+          minLength: 1
+          title: User Id
+      type: object
+      required:
+      - user_id
+      title: MoveMemberRequest
+      description: Pull an existing enterprise user into this team from whichever team they're on now.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    TeamMemberRole:
+      type: string
+      enum:
+      - admin
+      - member
+      title: TeamMemberRole
+      description: 'Per-team membership role stored in ``UserTeamMembership.role``.
+
+
+        Distinct from the enterprise-level role on ``User.enterprise_role`` — a user
+
+        can be an enterprise ``superadmin`` while being a team-level ``member``, or
+
+        vice versa.'
     HTTPValidationError:
       properties:
         detail:
@@ -695,6 +673,28 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    CreateTeamRequest:
+      properties:
+        name:
+          type: string
+          maxLength: 120
+          minLength: 1
+          title: Name
+        member_user_ids:
+          items:
+            type: string
+          type: array
+          maxItems: 500
+          title: Member User Ids
+        successor_admin_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Successor Admin Email
+      type: object
+      required:
+      - name
+      title: CreateTeamRequest
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

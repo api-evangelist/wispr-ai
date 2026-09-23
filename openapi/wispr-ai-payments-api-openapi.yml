@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wispr Backend Analytics Payments API
+  title: Wispr Backend Payments API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -766,7 +766,14 @@ paths:
       tags:
       - Payments
       summary: Migrate Subscription
-      description: "Migrate the current user's subscription (personal or enterprise) to a new currency.\n\n- If the user belongs to an enterprise (has `enterprise_id`), attempt to migrate\n  the enterprise subscription.\n- Otherwise, migrate the user's personal subscription."
+      description: 'Migrate the current user''s subscription (personal or enterprise) to a new currency.
+
+
+        - If the user belongs to an enterprise (has `enterprise_id`), attempt to migrate
+
+        the enterprise subscription.
+
+        - Otherwise, migrate the user''s personal subscription.'
       operationId: migrate_subscription
       security:
       - APIKeyHeader: []
@@ -797,6 +804,138 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    Currency:
+      type: string
+      enum:
+      - usd
+      - gbp
+      - eur
+      - inr
+      - cad
+      - cny
+      - aud
+      - rub
+      - pln
+      - brl
+      - ils
+      - try
+      - jpy
+      - chf
+      - mxn
+      - aed
+      - sek
+      - sgd
+      - zar
+      - nzd
+      - thb
+      - twd
+      - czk
+      - krw
+      title: Currency
+      description: Supported billing currencies as lowercase ISO 4217 codes.
+    CreateEnterpriseCheckoutRequest:
+      properties:
+        plan:
+          $ref: '#/components/schemas/StripeProductOption'
+        seats:
+          type: integer
+          title: Seats
+        add_billing_info:
+          type: boolean
+          title: Add Billing Info
+          default: false
+      type: object
+      required:
+      - plan
+      - seats
+      title: CreateEnterpriseCheckoutRequest
+    StripeProductOption:
+      type: string
+      enum:
+      - FLOW_PRO_MONTHLY
+      - FLOW_PRO_YEARLY
+      - FLOW_STUDENT_MONTHLY
+      - FLOW_STUDENT_YEARLY
+      - FLOW_TEAM_MONTHLY
+      - FLOW_TEAM_YEARLY
+      - FLOW_BUSINESS_MONTHLY
+      - FLOW_BUSINESS_YEARLY
+      title: StripeProductOption
+    ProductPricingResponse:
+      properties:
+        product_id:
+          type: string
+          title: Product Id
+        price_id:
+          type: string
+          title: Price Id
+        price:
+          type: integer
+          title: Price
+        currency_factor:
+          type: integer
+          title: Currency Factor
+      type: object
+      required:
+      - product_id
+      - price_id
+      - price
+      - currency_factor
+      title: ProductPricingResponse
+      description: Stripe pricing details for a single product.
+    PricingByIpResponse:
+      properties:
+        ip:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ip
+        location:
+          anyOf:
+          - $ref: '#/components/schemas/IPLocation'
+          - type: 'null'
+        currency:
+          type: string
+          title: Currency
+        flag:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Flag
+        pricing:
+          $ref: '#/components/schemas/CurrencyPricingResponse'
+      type: object
+      required:
+      - currency
+      - pricing
+      title: PricingByIpResponse
+      description: Full response for the GET /pricing/by-ip endpoint.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     CurrencyPricingResponse:
       properties:
         currency:
@@ -835,6 +974,32 @@ components:
       - ES
       - IE
       title: EUCountry
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    SubscriptionWatchStartResponse:
+      properties:
+        watch_token:
+          type: string
+          title: Watch Token
+          description: Opaque token; send as ``X-Billing-Watch-Token`` on the SSE stream.
+        expires_at:
+          type: string
+          format: date-time
+          title: Expires At
+          description: UTC wall-clock time when the watch session ends.
+      type: object
+      required:
+      - watch_token
+      - expires_at
+      title: Subscription watch start response
+      description: Response from ``POST /api/v1/payment/subscription-watch/start``.
     IPLocation:
       properties:
         ip:
@@ -855,155 +1020,6 @@ components:
       type: object
       title: IPLocation
       description: Geographic location resolved from an IP address.
-    CreateEnterpriseCheckoutRequest:
-      properties:
-        plan:
-          $ref: '#/components/schemas/StripeProductOption'
-        seats:
-          type: integer
-          title: Seats
-        add_billing_info:
-          type: boolean
-          title: Add Billing Info
-          default: false
-      type: object
-      required:
-      - plan
-      - seats
-      title: CreateEnterpriseCheckoutRequest
-    StripeProductOption:
-      type: string
-      enum:
-      - FLOW_PRO_MONTHLY
-      - FLOW_PRO_YEARLY
-      - FLOW_STUDENT_MONTHLY
-      - FLOW_STUDENT_YEARLY
-      - FLOW_TEAM_MONTHLY
-      - FLOW_TEAM_YEARLY
-      - FLOW_BUSINESS_MONTHLY
-      - FLOW_BUSINESS_YEARLY
-      title: StripeProductOption
-    SubscriptionWatchStartResponse:
-      properties:
-        watch_token:
-          type: string
-          title: Watch Token
-          description: Opaque token; send as ``X-Billing-Watch-Token`` on the SSE stream.
-        expires_at:
-          type: string
-          format: date-time
-          title: Expires At
-          description: UTC wall-clock time when the watch session ends.
-      type: object
-      required:
-      - watch_token
-      - expires_at
-      title: Subscription watch start response
-      description: Response from ``POST /api/v1/payment/subscription-watch/start``.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    Currency:
-      type: string
-      enum:
-      - usd
-      - gbp
-      - eur
-      - inr
-      - cad
-      - cny
-      - aud
-      - rub
-      - pln
-      - brl
-      - ils
-      - try
-      - jpy
-      - chf
-      - mxn
-      - aed
-      - sek
-      - sgd
-      - zar
-      - nzd
-      - thb
-      - twd
-      - czk
-      - krw
-      title: Currency
-      description: Supported billing currencies as lowercase ISO 4217 codes.
-    PricingByIpResponse:
-      properties:
-        ip:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Ip
-        location:
-          anyOf:
-          - $ref: '#/components/schemas/IPLocation'
-          - type: 'null'
-        currency:
-          type: string
-          title: Currency
-        flag:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Flag
-        pricing:
-          $ref: '#/components/schemas/CurrencyPricingResponse'
-      type: object
-      required:
-      - currency
-      - pricing
-      title: PricingByIpResponse
-      description: Full response for the GET /pricing/by-ip endpoint.
-    ProductPricingResponse:
-      properties:
-        product_id:
-          type: string
-          title: Product Id
-        price_id:
-          type: string
-          title: Price Id
-        price:
-          type: integer
-          title: Price
-        currency_factor:
-          type: integer
-          title: Currency Factor
-      type: object
-      required:
-      - product_id
-      - price_id
-      - price
-      - currency_factor
-      title: ProductPricingResponse
-      description: Stripe pricing details for a single product.
     SwitchPlanRequest:
       properties:
         plan:
@@ -1014,15 +1030,6 @@ components:
       - plan
       title: Switch Plan Request
       description: Request model for switching enterprise plans.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
